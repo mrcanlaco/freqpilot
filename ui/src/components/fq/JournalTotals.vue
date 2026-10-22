@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { useLocalStorage } from '@vueuse/core';
 import { computed, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -16,13 +17,14 @@ import { PENDING, READY, unavailable, type Slot } from './lib/valueState';
  * Filtered totals of the Journal (02 sections 3.4 and 12, 05 section 2.6). Four figures in the
  * strip: net P&L (a trade without a result is counted but left out of the sum), win rate, average
  * win and average loss, worst trade. "More figures" opens the rest: profit factor, expectancy,
- * worst adverse move in absolute USDC (never a percentage: it confuses risk and profit), median
+ * worst adverse move in the bot's stake currency, median
  * and P90 duration, trades per day. The headline figures come from the gateway totals of the WHOLE
  * filtered set when there are some; the rest is computed on the trades loaded for the analysis.
  * A figure the source cannot give is "not available", never a zero.
  */
 const props = defineProps<{
   stats: JournalStats | null;
+  botKeys?: string[];
   /** Totals of the whole filtered set (gateway). */
   totals?: TradeTotals | null;
   /** The figures only cover the history loaded so far (direct mode, or more rows than the cap). */
@@ -31,6 +33,7 @@ const props = defineProps<{
   botName?: (key: string) => string;
 }>();
 
+const unit = useStakeCurrency(() => ({ botKeys: props.botKeys }));
 const { t } = useI18n();
 const moreId = useId();
 /** The second strip stays open (or closed) from one visit to the next. */
@@ -42,7 +45,7 @@ const slotOf = (v: number | null | undefined): Slot =>
   v !== null && v !== undefined ? READY : props.loading ? PENDING : unavailable('noSample');
 
 const s = computed(() => props.stats);
-const net = computed(() => props.totals?.sum ?? s.value?.net ?? null);
+const net = computed(() => (unit.value ? (props.totals?.sum ?? s.value?.net ?? null) : null));
 const count = computed(() =>
   props.totals ? props.totals.count + props.totals.unknown : (s.value?.trades ?? 0),
 );
@@ -51,9 +54,11 @@ const wins = computed(() => props.totals?.wins ?? s.value?.wins ?? 0);
 const losses = computed(() => props.totals?.losses ?? s.value?.losses ?? 0);
 const winrate = computed(() => (props.totals ? props.totals.winrate : (s.value?.winrate ?? null)));
 const factor = computed(() =>
-  props.totals ? props.totals.profit_factor : (s.value?.profitFactor ?? null),
+  unit.value ? (props.totals ? props.totals.profit_factor : (s.value?.profitFactor ?? null)) : null,
 );
-const worstAbs = computed(() => props.totals?.worst_abs ?? s.value?.worstTrade?.profit ?? null);
+const worstAbs = computed(() =>
+  unit.value ? (props.totals?.worst_abs ?? s.value?.worstTrade?.profit ?? null) : null,
+);
 const expectancy = computed(() => {
   const known = count.value - unknown.value;
   if (net.value === null || known <= 0) return null;
@@ -65,9 +70,9 @@ const netSub = computed(() =>
     ? t('fq.jr.totals.netSubUnknown', { n: count.value, u: unknown.value }, count.value)
     : t('fq.jr.totals.netSub', { n: count.value }, count.value),
 );
-const avgWin = computed(() => s.value?.avgWin ?? null);
-const avgLoss = computed(() => s.value?.avgLoss ?? null);
-const worstDd = computed(() => s.value?.worstDrawdown ?? null);
+const avgWin = computed(() => (unit.value ? (s.value?.avgWin ?? null) : null));
+const avgLoss = computed(() => (unit.value ? (s.value?.avgLoss ?? null) : null));
+const worstDd = computed(() => (unit.value ? (s.value?.worstDrawdown ?? null) : null));
 const worstSub = computed(() => {
   const w = s.value?.worstTrade;
   if (!w || (props.totals && props.totals.worst_abs !== w.profit)) return undefined;
@@ -90,7 +95,9 @@ const worstSub = computed(() => {
           data-testid="jt-net"
           v-bind="vs(slotOf(net))"
         >
-          <template #value> <PnlValue :value="net" :decimals="2" /><small> USDC</small> </template>
+          <template #value>
+            <PnlValue :value="net" :decimals="2" /><small> {{ unit }}</small>
+          </template>
         </KpiTile>
         <KpiTile
           :label="t('fq.jr.totals.winrate')"
@@ -169,7 +176,7 @@ const worstSub = computed(() => {
           <template #value>
             <PnlValue v-if="worstDd !== null" :value="worstDd" :decimals="2" />
             <PnlValue v-else :value="Math.min(0, worstAbs ?? 0)" :decimals="2" muted />
-            <small> USDC</small>
+            <small> {{ unit }}</small>
           </template>
         </KpiTile>
         <KpiTile

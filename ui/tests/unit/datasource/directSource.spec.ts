@@ -83,6 +83,8 @@ interface World {
   history?: unknown;
   /** Hosts whose /show_config is not readable yet (the mode of the bot is then unknown). */
   noConfig?: Set<string>;
+  currencies?: Record<string, string>;
+  dryModes?: Record<string, boolean>;
 }
 
 function bot(host: string, world: World): FakeHandler {
@@ -91,7 +93,7 @@ function bot(host: string, world: World): FakeHandler {
     if (url.host !== host) return status(404);
     if (world.offline?.has(host)) return 'network';
     const path = url.pathname.replace('/api/v1', '');
-    const dry = host.startsWith('dry');
+    const dry = world.dryModes?.[host] ?? host.startsWith('dry');
     if (req.method === 'POST' && path === '/forcesell') {
       return world.forceSell
         ? world.forceSell(host)
@@ -105,7 +107,7 @@ function bot(host: string, world: World): FakeHandler {
           bot_name: dry ? 'dry_one' : 'hippo_live',
           dry_run: dry,
           trading_mode: 'futures',
-          stake_currency: 'USDC',
+          stake_currency: world.currencies?.[host] ?? 'USDC',
           exchange: 'hyperliquid',
           strategy: 'TestStrat',
           timeframe: '30m',
@@ -232,19 +234,28 @@ const botsOf = (fleet: Array<StateUpdate | UnavailableUpdate>): Record<string, a
 
 describe('DirectSource polling', () => {
   it('publishes a newly registered local bot before the next scheduler tick', async () => {
-    const {src,auth,fleet}=await started();
-    auth.data.push({id:'freqpilot.research-paper',botName:'research paper',apiUrl:'http://localhost:8095',accessToken:TOKEN,refreshToken:'refresh-paper'});
+    const { src, auth, fleet } = await started();
+    auth.data.push({
+      id: 'freqpilot.research-paper',
+      botName: 'research paper',
+      apiUrl: 'http://localhost:8095',
+      accessToken: TOKEN,
+      refreshToken: 'refresh-paper',
+    });
     await src.registry.list();
-    const row=botsOf(fleet)['local:8095'];
+    const row = botsOf(fleet)['local:8095'];
     expect(row.identity.name).toBe('research paper');
     expect(row.state.status).toBe('starting');
     src.stop();
   });
   it('hides only the local paper reload generation from display names', () => {
-    const rt=newRuntime('paper','local:8095','research',null,8095,0);
-    rt.config={data:{strategy:'FPPaper_123',bot_name:'FreqPilot paper · sample #1234abcd'} as any,atMs:NOW};
+    const rt = newRuntime('paper', 'local:8095', 'research', null, 8095, 0);
+    rt.config = {
+      data: { strategy: 'FPPaper_123', bot_name: 'FreqPilot paper · sample #1234abcd' } as any,
+      atMs: NOW,
+    };
     expect(nameOf(rt)).toBe('FreqPilot paper · sample');
-    rt.config.data.strategy='OtherStrategy';
+    rt.config.data.strategy = 'OtherStrategy';
     expect(nameOf(rt)).toBe('FreqPilot paper · sample #1234abcd');
   });
   it('keeps a webserver out of trading balances and does not poll its trading-only status', async () => {
@@ -252,21 +263,54 @@ describe('DirectSource polling', () => {
     const fake = createFakeHttp((req, n) => {
       const url = new URL(req.url);
       if (url.host === 'dry-bot.test:9056' && url.pathname.endsWith('/show_config'))
-        return ok({runmode:'webserver', dry_run:true, bot_name:'research', trading_mode:'futures'});
-      return fallback(req,n);
+        return ok({
+          runmode: 'webserver',
+          dry_run: true,
+          bot_name: 'research',
+          trading_mode: 'futures',
+        });
+      return fallback(req, n);
     });
-    const src = new DirectSource({auth:createMemoryAuthStore(entries()),http:fake.http,
-      now:()=>NOW,localHosts:LOCAL,maxConcurrent:100,setTimeout:()=>0,clearTimeout:()=>undefined});
+    const src = new DirectSource({
+      auth: createMemoryAuthStore(entries()),
+      http: fake.http,
+      now: () => NOW,
+      localHosts: LOCAL,
+      maxConcurrent: 100,
+      setTimeout: () => 0,
+      clearTimeout: () => undefined,
+    });
     const fleet: Array<StateUpdate | UnavailableUpdate> = [];
-    src.subscribe('fleet',undefined,u=>fleet.push(u));
-    await src.start();await src.settle();src.flush();
+    src.subscribe('fleet', undefined, (u) => fleet.push(u));
+    await src.start();
+    await src.settle();
+    src.flush();
     expect(Object.keys(botsOf(fleet))).toEqual(['local:9400']);
-    expect(fake.calls.filter(c=>c.url.includes('dry-bot.test:9056')&&c.url.endsWith('/status'))).toHaveLength(0);
+    expect(
+      fake.calls.filter((c) => c.url.includes('dry-bot.test:9056') && c.url.endsWith('/status')),
+    ).toHaveLength(0);
     src.stop();
   });
   it('only reads while polling: no write ever leaves during start-up', async () => {
     const { fake, src } = await started();
     expect(fake.calls.length).toBeGreaterThan(4);
+    expect(fake.writes()).toEqual([]);
+    src.stop();
+  });
+
+  it('refuses mixed-currency aggregates while retaining single-bot queries', async () => {
+    const world = makeWorld();
+    world.currencies = { 'dry-bot.test:9056': 'USDT' };
+    world.closedTrades['dry-bot.test:9056'] = [closed(12, 3, 2)];
+    world.dryModes = { 'dry-bot.test:9056': false };
+    const { src, fake } = await started(world);
+    await expect(src.query.scope({ kind: 'fleet' })).rejects.toThrow('đơn vị tiền');
+    await expect(src.query.equity({ scope: { kind: 'fleet' }, mode: 'realized' })).rejects.toThrow(
+      'đơn vị tiền',
+    );
+    await expect(src.query.trades({ status: 'closed' })).rejects.toThrow('đơn vị tiền');
+    const single = await src.query.trades({ status: 'closed', bots: ['local:9056'] });
+    expect(single.items.length).toBeGreaterThan(0);
     expect(fake.writes()).toEqual([]);
     src.stop();
   });

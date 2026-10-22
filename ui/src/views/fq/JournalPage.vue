@@ -203,6 +203,7 @@ const noBots = computed(() => fleet.loaded && j.botKeys.value.length === 0);
   <div class="journal" data-testid="journal-page">
     <component :is="phone ? 'div' : ShellSlot" :name="phone ? undefined : 'strip'">
       <JournalTotals
+        :bot-keys="j.botKeys.value"
         :stats="j.stats.value"
         :totals="j.totals.value"
         :partial="j.partial.value"

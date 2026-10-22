@@ -27,6 +27,10 @@ FreqPilot đã áp dụng thư viện thẻ/danh sách, tìm mô tả/nhãn, yê
 
 Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, chatbot riêng hoặc bước compile như `.rq`. Freqtrade dùng Python và kiểm tra cú pháp khi lưu; không giả lập compiler/sandbox của RoboQuant. Các phần này cần khảo sát khả năng native trước khi bổ sung.
 
+Đã tách trạng thái thực thi khỏi nhận định kiểm định: lookahead ghi rõ số tín hiệu thực sự xét và giới hạn mẫu; recursive phân biệt ô không tính được, ô engine không báo cáo và chênh lệch bằng 0. Bảng đổi tỷ lệ native sang phần trăm, không tự đặt ngưỡng đạt. Mỗi kết quả đối chiếu mã chính, JSON tham số, khung và ngày với biểu mẫu hiện tại; đổi cấu hình vẫn giữ kết quả cũ và chỉ rõ khác biệt. Đối chiếu này không khẳng định dữ liệu/helper/môi trường bên ngoài cũng khớp.
+
+Các màn hình tiền tệ kế thừa đã dùng stake_currency của bot hoặc đồng thanh toán của cặp lịch sử, thay cho nhãn USDC cố định. Nguồn Direct từ chối cộng các đơn vị khác nhau hoặc chưa rõ; các panel thống kê có dữ liệu truyền trực tiếp cũng không hiển thị tổng tiền thiếu đơn vị chung. Vốn bot quản lý có giải thích phần phân bổ và dự phòng, tách với lợi nhuận. Lệnh thoát một phần bằng tay trên Binance chưa được mở khi chưa nạp bộ lọc giới hạn sàn; mức tối thiểu 10 của Hyperliquid không được áp đặt cho Binance. Việc thoát tự động của engine/chiến lược không bị đổi.
+
 Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquant.dev/docs/python-strategies .
 
 ## Nguyên tắc phát triển
@@ -42,11 +46,11 @@ Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquan
 
 Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 
-1. Hoàn thiện diễn giải kết quả kiểm định và chuẩn hóa tiêu chí chọn mẫu; API/job/lịch sử lookahead/recursive đã được nối trên UI.
-2. Luồng paper một worker đã có trên UI bằng Compose/API native. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Không bật live.
+1. Diễn giải lookahead/recursive và đối chiếu ngữ cảnh đã có. Còn hướng dẫn chọn mẫu đủ lớn theo từng chiến lược; không dùng ngưỡng số lệnh chung để chứng nhận chất lượng.
+2. Luồng paper một worker đã có trên UI bằng Compose/API native. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Màn hình giám sát Bot kế thừa hiện dùng Online cho kết nối API, chưa phân biệt đầy đủ trạng thái thực thi STOPPED/PAUSED; xem trạng thái worker tại tab 06 · Paper. Cần chuẩn hóa phần này trước khi coi trang giám sát là màn hình điều khiển đầy đủ. Không bật live.
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run và kiểm tra toàn vẹn trên UI. Còn luồng phát lại tự động từ gói, ghim metadata sàn và cơ chế quản lý dung lượng.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
-5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Màn hình Bot đã xử lý đăng ký bot mới và trạng thái đang kết nối; còn các nhãn tiền USDC từ Ultimate cần chuyển sang stake_currency của bot, cùng việc diễn giải vốn khả dụng so với vốn ban đầu.
+5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.
 6. Chuẩn hóa cài đặt độc lập, CI, cấu hình ví dụ và kiểm tra trước khi xuất bản GitHub.
 
 Không lấy số lượng tính năng như tick/L2 hoặc AI chat làm tiêu chí để thay engine đang được yêu cầu giữ nguyên.

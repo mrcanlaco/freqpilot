@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -24,6 +25,7 @@ const props = defineProps<{
   source?: DataSource | null;
 }>();
 
+const unit = useStakeCurrency(() => ({ botKeys: rows.value.map((r) => r.bot_key) }));
 const { t } = useI18n();
 const fmt = useFormat();
 const connection = useFqConnectionStore();
@@ -62,6 +64,12 @@ const widthOf = (r: DepthRow) =>
 <template>
   <div class="dd" data-testid="dca-depth">
     <Skeleton v-if="loading" shape="row" :count="4" />
+    <EmptyState
+      v-else-if="rows.length > 0 && !unit"
+      icon="activity"
+      :title="t('fq.currency.unavailable')"
+      :hint="t('fq.currency.hint')"
+    />
     <template v-else-if="summary.rows.length > 0 || summary.unknownDepth">
       <p
         v-if="
@@ -83,7 +91,7 @@ const widthOf = (r: DepthRow) =>
         <b :class="summary.deep.deep.pnl < 0 ? 'down' : 'up'">{{
           fmt.signed(summary.deep.deep.pnl, 2)
         }}</b>
-        USDC.
+        {{ unit }}.
       </p>
       <p v-else class="sent">{{ t('fq.jr.depth.intro') }}</p>
       <p v-if="noDepth" class="note" data-testid="depth-missing">{{ t(missingKey) }}</p>

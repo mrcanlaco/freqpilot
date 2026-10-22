@@ -1,0 +1,130 @@
+{
+  "checked_at": "2026-10-22T11:07:19.6873847+07:00",
+  "strategy": "FAdxSmaStrategy",
+  "purpose": "Read existing native diagnostics and verify UI interpretation; no new research run or paper start",
+  "checks": [
+    {
+      "id": "e0c29baa-7d09-41b4-8f93-c2a996beb10e",
+      "kind": "recursive",
+      "status": "success",
+      "revision": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+      "settings": {
+        "strategy": "FAdxSmaStrategy",
+        "timeframe": "1h",
+        "timerange": "20260918-20261022",
+        "startup_candle": [
+          100,
+          200,
+          500,
+          1000
+        ]
+      },
+      "preset": {
+        "id": "b34bb29f937f42068b66428f86ef65d0",
+        "strategy": "FAdxSmaStrategy",
+        "label": "Gốc · đối chiếu 18/09–22/10",
+        "revision": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+        "schema_revision": "f1aea5ca2161bc8edcf25a29465fec0933f120c00229d967f49792751bbe0b3a",
+        "parameter_revision": "none",
+        "values": {
+          "adx_period": 14,
+          "pos_entry_adx": 30,
+          "sma_long_period": 48,
+          "sma_short_period": 12,
+          "pos_exit_adx": 30
+        },
+        "created_at": "2026-10-22T10:08:18.964528+07:00",
+        "native_sha256": "0dc12550062a75b4734885a4151ebd8515610af072b89ae335aa7b1d68937ffb"
+      },
+      "result": {
+        "strategy": "FAdxSmaStrategy",
+        "startup_candles": [
+          14,
+          100,
+          200,
+          500,
+          1000
+        ],
+        "strategy_scc": 14,
+        "results": {
+          "adx_14": {
+            "14": null,
+            "100": -0.000900395413,
+            "200": 1.859427E-06,
+            "500": -0.0
+          },
+          "sma_short_12": {
+            "14": null
+          },
+          "sma_long_48": {
+            "14": null,
+            "100": -0.0,
+            "200": -0.0,
+            "1000": -0.0
+          }
+        }
+      }
+    },
+    {
+      "id": "211dbc0b-958c-45ec-a313-00dd1a0fd911",
+      "kind": "lookahead",
+      "status": "success",
+      "revision": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+      "settings": {
+        "strategy": "FAdxSmaStrategy",
+        "timeframe": "1h",
+        "timerange": "20260918-20261022",
+        "minimum_trade_amount": 1,
+        "targeted_trade_amount": 2
+      },
+      "preset": {
+        "id": "b34bb29f937f42068b66428f86ef65d0",
+        "strategy": "FAdxSmaStrategy",
+        "label": "Gốc · đối chiếu 18/09–22/10",
+        "revision": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+        "schema_revision": "f1aea5ca2161bc8edcf25a29465fec0933f120c00229d967f49792751bbe0b3a",
+        "parameter_revision": "none",
+        "values": {
+          "adx_period": 14,
+          "pos_entry_adx": 30,
+          "sma_long_period": 48,
+          "sma_short_period": 12,
+          "pos_exit_adx": 30
+        },
+        "created_at": "2026-10-22T10:08:18.964528+07:00",
+        "native_sha256": "0dc12550062a75b4734885a4151ebd8515610af072b89ae335aa7b1d68937ffb"
+      },
+      "result": {
+        "strategy": "FAdxSmaStrategy",
+        "has_bias": false,
+        "total_signals": 2,
+        "biased_entry_signals": 0,
+        "biased_exit_signals": 0,
+        "biased_indicators": []
+      }
+    }
+  ],
+  "ui_observations": [
+    "lookahead: only 2 examined signals, limited conclusion",
+    "recursive: 3 explicit non-computable cells, absent cells kept separate from zero",
+    "native relative ratio converted to percent: -0.09003954%",
+    "matching selected preset/timeframe/date context confirmed",
+    "source-default selection warns different parameter configuration; restored preset after checking",
+    "paper monitor uses USDT for capital 950 and P&L 0; no positions"
+  ],
+  "verification": {
+    "build": "passed",
+    "binance_trading_keys_present": false,
+    "ui_tests": 1673,
+    "ui_test_files": 110,
+    "typecheck": "passed",
+    "research_paper_state": "stopped",
+    "main_paper_restarted": false,
+    "backend_tests": 38,
+    "engine_core_files_identical": 5
+  },
+  "screenshots": [
+    "screenshots/checks-review.png",
+    "screenshots/paper-currency.png"
+  ]
+}

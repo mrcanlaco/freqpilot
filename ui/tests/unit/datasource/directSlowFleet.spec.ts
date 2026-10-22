@@ -6,6 +6,7 @@
  * virtual clock and a latency per request, so the scenario of the real fleet (24 bots answering in
  * seconds, a quarter of them with an expired token) runs in a few milliseconds.
  */
+import { setImmediate } from 'node:timers';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { createMemoryAuthStore } from '@/datasource/direct/auth';
@@ -13,7 +14,10 @@ import { DirectSource } from '@/datasource/direct/DirectSource';
 import { HttpTransportError, type HttpRequest, type HttpResponse } from '@/datasource/direct/http';
 import type { StateUpdate } from '@/datasource/types';
 
-import { makeJwt, ok, status, tick } from './helpers';
+import { makeJwt, ok, status } from './helpers';
+
+// Virtual network time is advanced explicitly; yield without Windows timer granularity.
+const tick = () => new Promise<void>((resolve) => setImmediate(resolve));
 
 const NOW = 1_800_000_000_000;
 const FRESH = makeJwt(NOW + 3_600_000);
@@ -179,7 +183,8 @@ async function run(opts: {
     const s = u as StateUpdate;
     if (s.kind !== 'snapshot' && s.kind !== 'delta') return;
     for (const [k, v] of Object.entries(s.upsert?.bots ?? {})) {
-      states.set(k, (v as { state: { status: string } }).state.status);
+      const status = (v as { state?: { status?: string } }).state?.status;
+      if (status !== undefined) states.set(k, status);
     }
   });
   if (opts.focus) src.subscribe('bot', { botKey: opts.focus }, () => undefined);
@@ -236,12 +241,18 @@ describe('direct mode on a slow fleet (B230)', () => {
 
   it('serves the bot on screen first, even when it is the last of the registry', async () => {
     const last = `local:${9100 + BOTS - 1}`;
-    const { net } = await run({ latency: () => 6_000, focus: last, seconds: 2 });
+    const { net } = await run({ latency: () => 6_000, focus: last, seconds: 8 });
     const first = net.calls.find(
       (c) => c.path === '/status' && c.host === `bot${BOTS - 1}.test:${9100 + BOTS - 1}`,
     );
     expect(first).toBeDefined();
-    expect(first!.at - NOW).toBeLessThanOrEqual(1_000);
+    const config = net.calls.find(
+      (c) => c.path === '/show_config' && c.host === `bot${BOTS - 1}.test:${9100 + BOTS - 1}`,
+    )!;
+    expect(config.at - NOW).toBeLessThanOrEqual(1_000);
+    // A target is first classified as a trading bot; webservers receive no /status.
+    expect(first!.at - config.at).toBeGreaterThanOrEqual(6_000);
+    expect(first!.at - config.at).toBeLessThanOrEqual(7_000);
   });
 
   it('does not let the background reads take the slots of the positions', async () => {

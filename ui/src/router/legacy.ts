@@ -70,7 +70,7 @@ export type ToolId = keyof typeof TOOL_PATHS;
 
 /** Old path to its new home, for the paths that do not need a bot to be resolved. */
 export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
-  '/': '/dashboard',
+  '/': '/studio',
   '/open_trades': '/dashboard',
   '/trade_history': '/journal',
   '/logs': TOOL_PATHS.logs,

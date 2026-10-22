@@ -23,6 +23,15 @@ class StudioChecks(unittest.TestCase):
         self.assertEqual(version('ResearchSample',old,self.config)['content'],self.doc['content'])
         with self.assertRaises(HTTPException):version('ResearchSample','../config.json',self.config)
 
+    def test_library_reads_parameter_hash_without_executing_source(self):
+        import hashlib
+        self.assertEqual(library(self.config)['strategies'][0]['parameter_revision'],'none')
+        folder=Path(self.tmp.name)/'strategies'
+        (folder/'ResearchSample.py').write_text(self.doc['content']+'\nraise RuntimeError("must not execute")')
+        (folder/'ResearchSample.json').write_text('{"params":{}}')
+        row=library(self.config)['strategies'][0]
+        self.assertEqual(row['parameter_revision'],hashlib.sha256(b'{"params":{}}').hexdigest())
+
     def test_library_favorite_action_preserves_research_and_normalized_tags(self):
         save_research('ResearchSample',Research(idea='Giữ ý tưởng',notes='Không mất ghi chú',tags=[' short ','Short','fibonacci']),self.config)
         result=save_research('ResearchSample',Research(is_favorite=True),self.config)

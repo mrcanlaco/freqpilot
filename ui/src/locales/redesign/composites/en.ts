@@ -208,16 +208,18 @@ export default {
       lock_delete: 'The bot may enter this pair again.',
     },
     subtitle:
-      '{pair} {side} ×{lev} · {n} entry · stake {stake} USDC | {pair} {side} ×{lev} · {n} entries · stake {stake} USDC',
+      '{pair} {side} ×{lev} · {n} entry · stake {stake} {currency} | {pair} {side} ×{lev} · {n} entries · stake {stake} {currency}',
     trade: 'trade',
     allPositions: 'all positions',
     quantity: 'Quantity',
     other: 'Other',
     direction: 'Direction',
     directionHint: 'Choose Long or Short: nothing is assumed.',
-    amountUsdc: 'Amount in USDC',
-    quantityAmount: 'Exit value ≈ {v} USDC (leverage ×{lev})',
-    quantityMin: 'minimum {min} USDC for a partial exit',
+    amountUsdc: 'Amount in {currency}',
+    quantityAmount: 'Exit value ≈ {v} {currency} (leverage ×{lev})',
+    minimumUnknown:
+      'The exchange minimum has not been loaded here. Only a full exit is supported in this dialog.',
+    quantityMin: 'minimum {min} {currency} for a partial exit',
     pair: 'Pair',
     stake: 'Stake',
     order: 'Order',
@@ -251,9 +253,9 @@ export default {
       netted:
         'The pair is netted with other bots on this wallet ({bots}): only the quantity of this trade is reduced.',
       belowMin:
-        'A partial exit under {min} USDC of notional would be refused by the exchange: the form blocks it.',
+        'A partial exit under {min} {currency} of notional would be refused by the exchange: the form blocks it.',
       remainingBelowMin:
-        'What would remain (about {rest} USDC) is under the {min} USDC minimum: it could no longer be sold.',
+        'What would remain (about {rest} {currency}) is under the {min} {currency} minimum: it could no longer be sold.',
       stopLaunchScript:
         'A /stop through the API relaunches a bot started by launch_bot.sh. A real stop goes through its screen session.',
       exitAllNoPause:
@@ -344,7 +346,7 @@ export default {
       '{n} entry filled. The orders are not available. | {n} entries filled. The orders are not available.',
     maintenance: 'Maintenance of this trade (bot database)',
     deleteNote: 'Does not close the position: it would become an orphan.',
-    minNotional: 'min. {min} USDC',
+    minNotional: 'min. {min} {currency}',
     sentence: {
       target: 'Target exit',
       targetAt: 'Target exit at {price}',
@@ -483,7 +485,7 @@ export default {
     winrate: '{n} win rate',
     capitalNote: 'available capital',
     exposure: 'Exposure L / S',
-    net: 'net {n} USDC',
+    net: 'net {n} {currency}',
     threshold: 'limit {n}',
     backoff: 'Hyperliquid is limiting calls',
     market: { crypto: 'Crypto', hip3: 'Stocks, commodities', mixed: 'Crypto + stocks' },

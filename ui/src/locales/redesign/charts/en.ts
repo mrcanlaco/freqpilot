@@ -139,7 +139,7 @@ export default {
       avgLoss: 'avg. loss {v}',
       worst: 'Worst trade',
       worstDd: 'Worst absolute adverse move',
-      worstDdSub: 'max MAE, in USDC',
+      worstDdSub: 'max MAE, in the stake currency',
       worstDdNoMae: 'worst realized loss (MAE not available)',
       duration: 'Median duration',
       p90: '9 in 10 last under {v}',

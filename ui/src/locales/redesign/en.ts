@@ -13,6 +13,10 @@ export default {
   ...charts,
   ...tools,
   ...pages,
+  currency: {
+    unavailable: 'A common stake currency is unavailable',
+    hint: 'Select bots using one known currency. Monetary amounts are not converted or combined across currencies.',
+  },
   nav: {
     fleet: 'Fleet',
     bot: 'Bot',
@@ -90,7 +94,7 @@ export default {
       duration_pct:
         'Duration compared with the closed trades of this bot (percentile): beyond P98, longer than 98 % of the trades.',
       mae_mfe: 'MAE / MFE: worst (MAE) and best (MFE) point reached during the trade.',
-      pnl_abs: 'Result (P&L): gain or loss in USDC.',
+      pnl_abs: 'Result (P&L): gain or loss in the bot’s stake currency.',
     },
   },
   status: {

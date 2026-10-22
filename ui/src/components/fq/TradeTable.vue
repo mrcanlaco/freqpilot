@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { currencyFromPair, normalizeCurrency } from '@/utils/stakeCurrency';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -620,6 +621,11 @@ defineExpose({ sorted: () => sorted.value.map((l) => l.key) });
       <template #cell-pnl_abs="{ row }">
         <PnlValue
           :value="row.pnlAbs"
+          :unit="
+            normalizeCurrency(fleet.bots[row.botKey]?.identity.stake_currency) ??
+            currencyFromPair(row.pair) ??
+            ''
+          "
           :muted="row.stale"
           v-bind="slotOf(row, row.pnlAbs, row.open ? 'prices' : 'profit')"
         />

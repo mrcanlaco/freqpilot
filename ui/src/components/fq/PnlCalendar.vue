@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -47,6 +48,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:month': [month: MonthKey]; selectDay: [bucket: PnlBucket] }>();
 
+const unit = useStakeCurrency(() => ({ scope: props.scope, mode: props.mode }));
 const { t, locale } = useI18n();
 const fmt = useFormat();
 const prefs = useFqPrefsStore();
@@ -113,7 +115,7 @@ function cellLabel(c: CalCell): string {
   const day = `${c.day} ${title.value}`;
   if (c.future) return day;
   if (!c.bucket) return `${day}: ${t('fq.cal.unknownDay')}`;
-  const base = `${day}: ${fmt.signed(c.bucket.profit_abs, 2)} USDC, ${tradesLabel(c.bucket.trades)}`;
+  const base = `${day}: ${fmt.signed(c.bucket.profit_abs, 2)} ${unit.value}, ${tradesLabel(c.bucket.trades)}`;
   return c.dstHours !== null ? `${base}, ${t('fq.cal.dstDay', { h: c.dstHours })}` : base;
 }
 
@@ -160,7 +162,7 @@ const isEmptyMonth = computed(
     <template v-else>
       <div class="sum" data-testid="cal-sum">
         <span class="k">{{ t('fq.cal.monthTotal') }}</span>
-        <PnlValue :value="grid.total" :decimals="2" unit="USDC" />
+        <PnlValue :value="grid.total" :decimals="2" :unit="unit" />
         <span class="mut"
           >{{ t('fq.cal.days', { w: grid.winningDays, l: grid.losingDays }) }} ·
           {{ tradesLabel(grid.trades) }}</span

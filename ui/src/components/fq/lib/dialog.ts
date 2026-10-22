@@ -41,14 +41,18 @@ function roundAmount(v: number): number {
   return Math.floor(v * 1e8) / 1e8;
 }
 
-export function exitPlan(p: ExitPosition, fraction: number): ExitPlan {
+export function exitPlan(
+  p: ExitPosition,
+  fraction: number,
+  minNotional: number | null = MIN_NOTIONAL,
+): ExitPlan {
   const f = Number.isFinite(fraction) ? Math.min(1, Math.max(0, fraction)) : 0;
   const full = f >= 1;
   const notional = p.notional == null ? null : p.notional * f;
   const remaining = p.notional == null ? null : p.notional * (1 - f);
-  const belowMin = !full && notional !== null && notional < MIN_NOTIONAL;
+  const belowMin = !full && minNotional !== null && notional !== null && notional < minNotional;
   const remainingBelowMin =
-    !full && remaining !== null && remaining > 0 && remaining < MIN_NOTIONAL;
+    !full && minNotional !== null && remaining !== null && remaining > 0 && remaining < minNotional;
   return {
     fraction: f,
     amount: full ? undefined : roundAmount(p.amount * f),
@@ -57,7 +61,7 @@ export function exitPlan(p: ExitPosition, fraction: number): ExitPlan {
     remaining,
     belowMin,
     remainingBelowMin,
-    valid: f > 0 && !belowMin && (full || roundAmount(p.amount * f) > 0),
+    valid: f > 0 && !belowMin && (full || (minNotional !== null && roundAmount(p.amount * f) > 0)),
   };
 }
 

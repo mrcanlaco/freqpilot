@@ -140,7 +140,7 @@ export default {
       avgLoss: 'perte moy. {v}',
       worst: 'Pire trade',
       worstDd: 'Pire moins-value absolue',
-      worstDdSub: 'MAE max, en USDC',
+      worstDdSub: 'MAE max, dans la devise de mise',
       worstDdNoMae: 'pire perte réalisée (MAE indisponible)',
       duration: 'Durée médiane',
       p90: '9 sur 10 durent moins de {v}',

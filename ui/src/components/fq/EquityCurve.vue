@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -79,6 +80,7 @@ const emit = defineEmits<{
   'update:definition': [definition: EquityDefinition];
 }>();
 
+const unit = useStakeCurrency(() => ({ scope: props.scope, mode: props.mode }));
 const { t, locale } = useI18n();
 const fmt = useFormat();
 const { vs } = useValueSlot();
@@ -107,8 +109,7 @@ const eq = useSourceQuery<EquitySeries>(
           mode: props.definition,
           tradingMode: props.mode,
         }),
-  () =>
-    `${scopeKey(props.scope)}|${props.period}|${props.definition}|${props.mode}`,
+  () => `${scopeKey(props.scope)}|${props.period}|${props.definition}|${props.mode}`,
   { refreshMs: 30_000, source: () => props.source },
 );
 const dd = useSourceQuery<DrawdownResult | null>(
@@ -229,7 +230,7 @@ const chartLabel = computed(() =>
         data-testid="eq-sentence"
         :title="t('fq.pg.fleet.eq.hint')"
       >
-        <span class="big"><PnlValue :value="change" unit="USDC" :decimals="2" /></span>
+        <span class="big"><PnlValue :value="change" :unit="unit" :decimals="2" /></span>
         <span class="lab">{{
           t('fq.pg.fleet.eq.over', { p: t(`fq.pg.fleet.eq.period.${period}`) })
         }}</span>
@@ -237,13 +238,13 @@ const chartLabel = computed(() =>
       <div v-else class="head">
         <div class="fig">
           <span class="lab">{{ t('fq.eq.variation', { p: t(`fq.eq.period.${period}`) }) }}</span>
-          <span class="big"><PnlValue :value="change" unit="USDC" :decimals="2" /></span>
+          <span class="big"><PnlValue :value="change" :unit="unit" :decimals="2" /></span>
         </div>
         <div class="fig" data-testid="eq-drawdown">
           <span class="lab">{{ t('fq.eq.drawdownMax') }}</span>
           <span class="big">
             <template v-if="ddAbs !== null">
-              <PnlValue :value="-ddAbs" unit="USDC" :decimals="0" />
+              <PnlValue :value="-ddAbs" :unit="unit" :decimals="0" />
               <small v-if="drawdownPct(ddValue) !== null" class="pct">
                 &nbsp;{{ fmt.percent(-(drawdownPct(ddValue) as number), 1) }}</small
               >

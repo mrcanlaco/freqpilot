@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -22,6 +23,11 @@ import { pairLabel } from './lib/trades';
 const props = defineProps<{ since?: number; nowMs?: number }>();
 const emit = defineEmits<{ seen: [atMs: number] }>();
 
+const unit = useStakeCurrency(() => ({
+  botKeys: events.events
+    .filter((e) => e.ts_ms >= sinceMs.value && e.profit_abs != null)
+    .flatMap((e) => (e.bot_key ? [e.bot_key] : [])),
+}));
 const { t, locale } = useI18n();
 const events = useFqEventsStore();
 const fleet = useFqFleetStore();
@@ -56,7 +62,7 @@ function markSeen() {
     <dl v-else class="grid">
       <div>
         <dt>{{ t('fq.since.realized') }}</dt>
-        <dd><PnlValue :value="digest.realized" unit="USDC" /></dd>
+        <dd><PnlValue :value="digest.realized" :unknown="!unit" :unit="unit" /></dd>
       </div>
       <div>
         <dt>{{ t('fq.since.trades') }}</dt>
@@ -79,7 +85,7 @@ function markSeen() {
       <div v-if="digest.worst">
         <dt>{{ t('fq.since.worst') }}</dt>
         <dd>
-          <PnlValue :value="digest.worst.profit_abs" unit="USDC" />
+          <PnlValue :value="digest.worst.profit_abs" :unit="unit" />
           <span class="sub"
             >{{ digest.worst.pair ? pairLabel(digest.worst.pair) : '' }} {{ worstBot }}</span
           >

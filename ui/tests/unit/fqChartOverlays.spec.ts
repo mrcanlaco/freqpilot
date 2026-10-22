@@ -42,6 +42,7 @@ const labels = {
   exit: 'Sortie',
   dcaTag: 'R',
   closedTrade: 'Trade fermé',
+  tip: { unit: 'USDC' },
   pending: { dca: 'Ordre', tp: 'Take profit', stop: 'Stop', exit: 'Sortie', entry: 'Entrée' },
 };
 

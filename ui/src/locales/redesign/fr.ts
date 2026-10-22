@@ -13,6 +13,10 @@ export default {
   ...charts,
   ...tools,
   ...pages,
+  currency: {
+    unavailable: 'Devise de mise commune indisponible',
+    hint: 'Choisissez des bots utilisant une même devise connue. Les montants ne sont ni convertis ni additionnés entre devises.',
+  },
   nav: {
     fleet: 'Flotte',
     bot: 'Bot',
@@ -93,7 +97,7 @@ export default {
       duration_pct:
         'Durée comparée aux trades fermés de ce bot (percentile) : au-delà de P98, plus long que 98 % des trades.',
       mae_mfe: 'MAE / MFE : plus mauvais (MAE) et meilleur (MFE) point atteint pendant le trade.',
-      pnl_abs: 'Résultat (P&L) : gain ou perte en USDC.',
+      pnl_abs: 'Résultat (P&L) : gain ou perte dans la devise de mise du bot.',
     },
   },
   status: {

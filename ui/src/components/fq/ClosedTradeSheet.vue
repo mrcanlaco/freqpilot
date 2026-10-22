@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -61,6 +62,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{ close: []; openBot: [botKey: BotKey] }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.botKey, pair: row.value?.pair }));
 const { t, locale } = useI18n();
 const fmt = useFormat();
 const { vs } = useValueSlot();
@@ -222,7 +224,7 @@ const title = computed(() =>
 
         <section class="pnl">
           <span class="big">
-            <PnlValue :value="row.profit_abs" :unknown="row.profit_unknown" unit="USDC" />
+            <PnlValue :value="row.profit_abs" :unknown="row.profit_unknown" :unit="unit" />
           </span>
           <span v-if="pct !== null" class="pct"><PnlValue :value="pct" unit="%" /></span>
           <span class="dur num">

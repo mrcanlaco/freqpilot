@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { useLocalStorage } from '@vueuse/core';
 import DatePicker from 'primevue/datepicker';
 import { computed, ref, watch } from 'vue';
@@ -64,6 +65,7 @@ const props = withDefaults(
   { mode: 'live', liveOnly: false, latent: null, latentState: 'ready', height: '320px' },
 );
 
+const unit = useStakeCurrency(() => ({ scope: props.scope, mode: props.mode }));
 const { t, locale } = useI18n();
 const fmt = useFormat();
 const prefs = useFqPrefsStore();
@@ -299,7 +301,7 @@ const trackedText = computed(() =>
         <span class="big"
           ><PnlValue
             :value="curves.profit"
-            unit="USDC"
+            :unit="unit"
             :decimals="2"
             :state="loading ? 'pending' : 'ready'"
             :unknown="!loading && curves.profit === null"
@@ -310,7 +312,7 @@ const trackedText = computed(() =>
         <span class="big"
           ><PnlValue
             :value="curves.realizedProfit"
-            unit="USDC"
+            :unit="unit"
             :decimals="2"
             :state="loading ? 'pending' : 'ready'"
             :unknown="!loading && curves.realizedProfit === null"
@@ -321,7 +323,7 @@ const trackedText = computed(() =>
         <span class="big"
           ><PnlValue
             :value="latent"
-            unit="USDC"
+            :unit="unit"
             :decimals="2"
             :state="latentState"
             :unknown="latentState === 'ready' && latent === null"

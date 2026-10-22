@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { commonCurrency } from '@/utils/stakeCurrency';
 import { useMediaQuery } from '@vueuse/core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -117,6 +118,15 @@ function excludedRefs(m: FleetKpiModel): BotRef[] {
 }
 
 const SKELETON = ['equityOpen', 'realized30d', 'drawdownOpen', 'margin'] as const;
+function unitFor(mode: string) {
+  return (
+    commonCurrency(
+      data.value?.bots
+        .filter((b) => b.identity.mode === mode)
+        .map((b) => b.identity.stake_currency) ?? [],
+    ) ?? ''
+  );
+}
 </script>
 
 <template>
@@ -139,7 +149,7 @@ const SKELETON = ['equityOpen', 'realized30d', 'drawdownOpen', 'margin'] as cons
           v-bind="vs(m.slots.equityOpen, `${m.mode}/equityOpen`)"
         >
           <template #value>
-            {{ fmt.number(m.equityOpen as number, 2) }}<small> USDC</small>
+            {{ fmt.number(m.equityOpen as number, 2) }}<small> {{ unitFor(m.mode) }}</small>
           </template>
           <template #sub>
             <span data-testid="kpi-open">
@@ -187,7 +197,7 @@ const SKELETON = ['equityOpen', 'realized30d', 'drawdownOpen', 'margin'] as cons
           v-bind="vs(m.slots.drawdown, `${m.mode}/drawdown`)"
         >
           <template #value>
-            <PnlValue :value="-(m.drawdown?.abs as number)" :decimals="0" unit="USDC" />
+            <PnlValue :value="-(m.drawdown?.abs as number)" :decimals="0" :unit="unitFor(m.mode)" />
           </template>
         </KpiTile>
         <KpiTile

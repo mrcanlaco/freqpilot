@@ -10,7 +10,7 @@ import { createFakeHttp, fakeWsFactory, ManualTimers, ok, status } from './helpe
 /** The real shapes of the gateway (fg-server routes/data.rs, alerts.rs), not the ones we hoped for. */
 const row = (key: string, mode: 'live' | 'dry', extra: Record<string, unknown> = {}) => ({
   bot_key: key,
-  identity: { name: key, mode },
+  identity: { name: key, mode, stake_currency: 'USDC' },
   freshness: { metrics: { stale: false }, positions: { stale: false } },
   metrics: {
     realized_1d: 1,

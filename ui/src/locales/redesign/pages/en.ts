@@ -75,6 +75,8 @@ export default {
         winners: '{n} winners',
         capital: 'Bot capital',
         capitalShort: 'Capital',
+        capitalHint:
+          'Base allocation reported by the bot, from configuration or managed balance adjusted for profit. It can exclude a wallet reserve; for example 1,000 × 95% = 950. Profit and loss are shown separately.',
         exposed: 'exposed {total} (long {long}, short {short})',
       },
       config: {

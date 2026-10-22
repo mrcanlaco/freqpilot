@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -34,6 +35,10 @@ const props = defineProps<{
   hideTitle?: boolean;
 }>();
 
+const unit = useStakeCurrency(() => ({
+  botKey: props.position.bot_key,
+  pair: props.position.pair,
+}));
 const { t } = useI18n();
 const fmt = useFormat();
 const { vs, reason: reasonOf } = useValueSlot();
@@ -235,7 +240,7 @@ const ordersSummary = computed(() => {
         <PnlValue
           :value="position.profit_abs"
           :muted="position.freshness.stale"
-          unit="USDC"
+          :unit="unit"
           v-bind="vs(lineSlot(line, position.profit_abs))"
         />
       </span>

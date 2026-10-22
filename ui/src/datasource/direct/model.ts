@@ -111,13 +111,13 @@ export interface Cadences {
 
 /** Display name: what the bot reported, then the digest, then the label given in the login. */
 export function nameOf(rt: BotRuntime): string {
-  const name = (
-    rt.config?.data.bot_name || rt.overview?.data.bot_name || rt.digest?.data.bot_name || rt.name
-  );
+  const name =
+    rt.config?.data.bot_name || rt.overview?.data.bot_name || rt.digest?.data.bot_name || rt.name;
   // The local adapter uses a reload generation in native bot_name as a lifecycle barrier.
   // It is operational metadata; the research label stays the user-facing name.
   return rt.config?.data.strategy?.startsWith('FPPaper') && name.startsWith('FreqPilot paper · ')
-    ? name.replace(/ #[0-9a-f]{8}$/, '') : name;
+    ? name.replace(/ #[0-9a-f]{8}$/, '')
+    : name;
 }
 
 function dryFlag(rt: BotRuntime): boolean | undefined {
@@ -271,7 +271,7 @@ export function buildBotRow(rt: BotRuntime, ctx: RowContext): BotRow {
     strategy: cfg?.strategy ?? ov?.strategy ?? dg?.strategy ?? null,
     exchange: exchangeOf(rt),
     market: wl.length > 0 ? (whitelistMarket(wl) ?? 'crypto') : 'crypto',
-    stake_currency: cfg?.stake_currency ?? dg?.stake_currency ?? 'USDC',
+    stake_currency: cfg?.stake_currency ?? dg?.stake_currency ?? '',
     port: rt.port,
     timeframe: cfg?.timeframe || null,
     ui_ids: [rt.id],

@@ -14,6 +14,7 @@
  * destructive actions.
  */
 import { ref, type Ref } from 'vue';
+import { requireCommonCurrency, currencyFromPair } from '@/utils/stakeCurrency';
 
 import type {
   Alert,
@@ -1416,6 +1417,14 @@ export class DirectSource implements DataSource {
         rows = bots.flatMap((rt) => rt.closed?.rows ?? []);
         complete = bots.every((rt) => rt.closed?.complete === true);
       }
+      requireCommonCurrency(
+        rows.map(
+          (r) =>
+            this.rts.get(r.bot_key)?.config?.data.stake_currency ??
+            this.rts.get(r.bot_key)?.digest?.data.stake_currency ??
+            currencyFromPair(r.pair),
+        ),
+      );
       return pageTradeRows(rows, q, complete);
     },
 
@@ -1423,6 +1432,9 @@ export class DirectSource implements DataSource {
       const bots = this.filterMode(
         this.scopeBots(q.scope),
         q.tradingMode ? [q.tradingMode] : undefined,
+      );
+      requireCommonCurrency(
+        bots.map((rt) => rt.config?.data.stake_currency ?? rt.digest?.data.stake_currency),
       );
       await this.loadClosedFor(bots);
       const trades: ClosedPnl[] = bots.flatMap((rt) =>
@@ -1437,6 +1449,9 @@ export class DirectSource implements DataSource {
       const bots = this.filterMode(
         this.scopeBots(q.scope),
         q.tradingMode ? [q.tradingMode] : undefined,
+      );
+      requireCommonCurrency(
+        bots.map((rt) => rt.config?.data.stake_currency ?? rt.digest?.data.stake_currency),
       );
       if (q.mode === 'with_open') {
         // Needs the sampled ledgers of the fork (`/fleetview/profit_history`); without them there is
@@ -1479,6 +1494,9 @@ export class DirectSource implements DataSource {
       const bots = this.filterMode(
         this.scopeBots(q.scope),
         q.tradingMode ? [q.tradingMode] : undefined,
+      );
+      requireCommonCurrency(
+        bots.map((rt) => rt.config?.data.stake_currency ?? rt.digest?.data.stake_currency),
       );
       await this.loadClosedFor(bots);
       if (bots.length === 0 || !bots.every((rt) => rt.closed?.complete === true)) return null;

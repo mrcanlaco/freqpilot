@@ -9,6 +9,7 @@ import type { ScopeTotals } from '../types';
 import { sumStartingCapital } from './capital';
 import { exposure } from './exposure';
 import { sumFresh } from './freshness';
+import { requireCommonCurrency } from '@/utils/stakeCurrency';
 
 export const SCOPE_MODES: readonly BotMode[] = ['live', 'dry', 'replay'];
 
@@ -25,6 +26,17 @@ export function scopeTotalsByMode(
   for (const mode of SCOPE_MODES) {
     const mrows = rows.filter((r) => r.identity.mode === mode);
     if (mrows.length === 0) continue;
+    requireCommonCurrency(
+      mrows
+        .filter(
+          (r) =>
+            r.identity.stake_currency ||
+            r.metrics.starting_capital != null ||
+            r.metrics.realized_total != null ||
+            r.metrics.open_profit_abs != null,
+        )
+        .map((r) => r.identity.stake_currency),
+    );
     const sumOf = (
       pick: (r: BotRow) => number | null | undefined,
       group: 'metrics' | 'positions',

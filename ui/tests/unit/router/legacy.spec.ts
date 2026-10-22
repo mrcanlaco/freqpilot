@@ -29,6 +29,7 @@ vi.mock('@/views/fq/tools/ReplayPage.vue', () => ({ default: { render: () => nul
 vi.mock('@/views/fq/tools/VolumePage.vue', () => ({ default: { render: () => null } }));
 vi.mock('@/views/fq/ToolsIndex.vue', () => ({ default: { render: () => null } }));
 vi.mock('@/views/LogView.vue', () => ({ default: { render: () => null } }));
+vi.mock('@/views/FreqPilotStudio.vue', () => ({ default: { render: () => null } }));
 vi.mock('@/views/StrategyDevView.vue', () => ({ default: { render: () => null } }));
 vi.mock('@/views/BacktestingView.vue', () => ({ default: { render: () => null } }));
 vi.mock('@/views/DownloadDataView.vue', () => ({ default: { render: () => null } }));

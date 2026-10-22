@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { useMediaQuery } from '@vueuse/core';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -52,6 +53,7 @@ const emit = defineEmits<{
   openBot: [botKey: string];
 }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.line.botKey, pair: props.line.pair }));
 const { t } = useI18n();
 const fmt = useFormat();
 const phone = useMediaQuery('(max-width: 599px)');
@@ -147,7 +149,7 @@ const liqSlot = computed(() =>
       <div class="m1">
         <span class="k">{{ t('fq.col.pnl_abs') }}</span>
         <span class="v big">
-          <PnlValue :value="line.pnlAbs" :muted="line.stale" unit="USDC" v-bind="pnlSlot" />
+          <PnlValue :value="line.pnlAbs" :muted="line.stale" :unit="unit" v-bind="pnlSlot" />
         </span>
         <span class="sub">
           <PnlValue :value="line.pnlPct" unit="%" :muted="line.stale" v-bind="pctSlot" />

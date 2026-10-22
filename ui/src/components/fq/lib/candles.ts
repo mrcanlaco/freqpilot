@@ -667,7 +667,7 @@ const TIP_EN: TipLabels = {
   result: 'Result',
   opened: 'Opened',
   closed: 'Closed',
-  unit: 'USDC',
+  unit: '',
 };
 
 const FMT_DEFAULT: ChartFmt = {

@@ -65,6 +65,7 @@ def library(config=Depends(get_config)):
                         try:attrs[key]=ast.literal_eval(n.value)
                         except (ValueError,TypeError):pass
             out.append({'name':p.stem,'revision':doc['revision'],'modified':p.stat().st_mtime,
+                        'parameter_revision': hashlib.sha256(p.with_suffix('.json').read_bytes()).hexdigest() if p.with_suffix('.json').is_file() and not p.with_suffix('.json').is_symlink() else 'none',
                         'protected':p.stem=='StarterFutures','research':metadata(p.stem,config),**attrs})
         except (HTTPException,SyntaxError,UnicodeError):
             out.append({'name':p.stem,'invalid':True})

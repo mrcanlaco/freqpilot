@@ -381,7 +381,7 @@ describe('AppShell', () => {
 
   it('no longer names the product variant, nor offers the theme or the density in the bars', () => {
     const w = shell();
-    expect(w.get('.logo').text()).toBe('FreqUI');
+    expect(w.get('.logo').text()).toBe('FreqPilot');
     expect(w.text()).not.toContain('Ultimate');
     expect(w.find('.top [aria-label^="Theme"]').exists()).toBe(false);
     expect(w.get('.statusbar').text()).not.toMatch(/Compact|Airy|Comfortable/);

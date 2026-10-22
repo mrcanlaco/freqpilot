@@ -47,6 +47,7 @@ declare global {
   const applyDisplayPrefs: typeof import('./composables/useDisplayPrefs').applyDisplayPrefs
   const applyImportData: typeof import('./composables/useConfigExport').applyImportData
   const applyThemeToDocument: typeof import('./utils/theme').applyThemeToDocument
+  const assessCheck: typeof import('./utils/researchChecks').assessCheck
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
   const availableBacktestMetrics: typeof import('./utils/backtestMetrics').availableBacktestMetrics
@@ -60,12 +61,14 @@ declare global {
   const buildPrefillFromLiveBot: typeof import('./utils/reconstitute').buildPrefillFromLiveBot
   const buildPrefillFromWfa: typeof import('./utils/reconstitute').buildPrefillFromWfa
   const calculateDiff: typeof import('./utils/charts/areaPlotDataset').calculateDiff
+  const checkContext: typeof import('./utils/researchChecks').checkContext
   const classifyReconFailure: typeof import('./composables/useReconciliation').classifyReconFailure
   const clearBenchmarkCache: typeof import('./utils/benchmarkData').clearBenchmarkCache
   const clone: typeof import('./utils/configEditorObject').clone
   const closedTradesDemand: typeof import('./stores/closedTradesPolicy').closedTradesDemand
   const closedTradesWanted: typeof import('./stores/closedTradesPolicy').closedTradesWanted
   const collectExportData: typeof import('./composables/useConfigExport').collectExportData
+  const commonCurrency: typeof import('./utils/stakeCurrency').commonCurrency
   const computed: typeof import('vue').computed
   const computedAsync: typeof import('@vueuse/core').computedAsync
   const computedEager: typeof import('@vueuse/core').computedEager
@@ -88,6 +91,7 @@ declare global {
   const createSharedComposable: typeof import('@vueuse/core').createSharedComposable
   const createTemplatePromise: typeof import('@vueuse/core').createTemplatePromise
   const createUnrefFn: typeof import('@vueuse/core').createUnrefFn
+  const currencyFromPair: typeof import('./utils/stakeCurrency').currencyFromPair
   const customRef: typeof import('vue').customRef
   const dataZoomPartial: typeof import('./utils/charts/chartZoom').dataZoomPartial
   const dateFromString: typeof import('./utils/formatters/timeformat').dateFromString
@@ -189,6 +193,7 @@ declare global {
   const newIdempotencyKey: typeof import('./composables/useBotAction').newIdempotencyKey
   const nextThemeMode: typeof import('./utils/theme').nextThemeMode
   const nextTick: typeof import('vue').nextTick
+  const normalizeCurrency: typeof import('./utils/stakeCurrency').normalizeCurrency
   const normalizeToPercent: typeof import('./utils/benchmarkData').normalizeToPercent
   const onActivated: typeof import('vue').onActivated
   const onBeforeMount: typeof import('vue').onBeforeMount
@@ -234,6 +239,7 @@ declare global {
   const readCssToken: typeof import('./utils/designTokens').readCssToken
   const readLoginInfos: typeof import('./composables/loginInfo').readLoginInfos
   const readonly: typeof import('vue').readonly
+  const recordObject: typeof import('./utils/researchChecks').recordObject
   const ref: typeof import('vue').ref
   const refAutoReset: typeof import('@vueuse/core').refAutoReset
   const refDebounced: typeof import('@vueuse/core').refDebounced
@@ -246,6 +252,7 @@ declare global {
   const rememberBotName: typeof import('./stores/botNameRegistry').rememberBotName
   const reportedBotName: typeof import('./stores/botNameRegistry').reportedBotName
   const requestAction: typeof import('./composables/useActionDialog').requestAction
+  const requireCommonCurrency: typeof import('./utils/stakeCurrency').requireCommonCurrency
   const resetActionDialog: typeof import('./composables/useActionDialog').resetActionDialog
   const resetBotActionState: typeof import('./composables/useBotAction').resetBotActionState
   const resolveColumns: typeof import('./composables/useColumns').resolveColumns
@@ -480,6 +487,7 @@ declare global {
   const useSourceQuery: typeof import('./composables/useSourceQuery').useSourceQuery
   const useSpeechRecognition: typeof import('@vueuse/core').useSpeechRecognition
   const useSpeechSynthesis: typeof import('@vueuse/core').useSpeechSynthesis
+  const useStakeCurrency: typeof import('./composables/useStakeCurrency').useStakeCurrency
   const useStepper: typeof import('@vueuse/core').useStepper
   const useStorage: typeof import('@vueuse/core').useStorage
   const useStorageAsync: typeof import('@vueuse/core').useStorageAsync
@@ -659,6 +667,9 @@ declare global {
   export type { LiveBotPrefillInput } from './utils/reconstitute'
   import('./utils/reconstitute')
   // @ts-ignore
+  export type { ResearchCheck, CheckContext, CheckAssessment } from './utils/researchChecks'
+  import('./utils/researchChecks')
+  // @ts-ignore
   export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset } from './utils/strategyLibrary'
   import('./utils/strategyLibrary')
   // @ts-ignore
@@ -712,6 +723,7 @@ declare module 'vue' {
     readonly applyDisplayPrefs: UnwrapRef<typeof import('./composables/useDisplayPrefs')['applyDisplayPrefs']>
     readonly applyImportData: UnwrapRef<typeof import('./composables/useConfigExport')['applyImportData']>
     readonly applyThemeToDocument: UnwrapRef<typeof import('./utils/theme')['applyThemeToDocument']>
+    readonly assessCheck: UnwrapRef<typeof import('./utils/researchChecks')['assessCheck']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly availableBacktestMetrics: UnwrapRef<typeof import('./utils/backtestMetrics')['availableBacktestMetrics']>
@@ -725,12 +737,14 @@ declare module 'vue' {
     readonly buildPrefillFromLiveBot: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromLiveBot']>
     readonly buildPrefillFromWfa: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromWfa']>
     readonly calculateDiff: UnwrapRef<typeof import('./utils/charts/areaPlotDataset')['calculateDiff']>
+    readonly checkContext: UnwrapRef<typeof import('./utils/researchChecks')['checkContext']>
     readonly classifyReconFailure: UnwrapRef<typeof import('./composables/useReconciliation')['classifyReconFailure']>
     readonly clearBenchmarkCache: UnwrapRef<typeof import('./utils/benchmarkData')['clearBenchmarkCache']>
     readonly clone: UnwrapRef<typeof import('./utils/configEditorObject')['clone']>
     readonly closedTradesDemand: UnwrapRef<typeof import('./stores/closedTradesPolicy')['closedTradesDemand']>
     readonly closedTradesWanted: UnwrapRef<typeof import('./stores/closedTradesPolicy')['closedTradesWanted']>
     readonly collectExportData: UnwrapRef<typeof import('./composables/useConfigExport')['collectExportData']>
+    readonly commonCurrency: UnwrapRef<typeof import('./utils/stakeCurrency')['commonCurrency']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -753,6 +767,7 @@ declare module 'vue' {
     readonly createSharedComposable: UnwrapRef<typeof import('@vueuse/core')['createSharedComposable']>
     readonly createTemplatePromise: UnwrapRef<typeof import('@vueuse/core')['createTemplatePromise']>
     readonly createUnrefFn: UnwrapRef<typeof import('@vueuse/core')['createUnrefFn']>
+    readonly currencyFromPair: UnwrapRef<typeof import('./utils/stakeCurrency')['currencyFromPair']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly dataZoomPartial: UnwrapRef<typeof import('./utils/charts/chartZoom')['dataZoomPartial']>
     readonly dateFromString: UnwrapRef<typeof import('./utils/formatters/timeformat')['dateFromString']>
@@ -854,6 +869,7 @@ declare module 'vue' {
     readonly newIdempotencyKey: UnwrapRef<typeof import('./composables/useBotAction')['newIdempotencyKey']>
     readonly nextThemeMode: UnwrapRef<typeof import('./utils/theme')['nextThemeMode']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
+    readonly normalizeCurrency: UnwrapRef<typeof import('./utils/stakeCurrency')['normalizeCurrency']>
     readonly normalizeToPercent: UnwrapRef<typeof import('./utils/benchmarkData')['normalizeToPercent']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -897,6 +913,7 @@ declare module 'vue' {
     readonly readCssToken: UnwrapRef<typeof import('./utils/designTokens')['readCssToken']>
     readonly readLoginInfos: UnwrapRef<typeof import('./composables/loginInfo')['readLoginInfos']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
+    readonly recordObject: UnwrapRef<typeof import('./utils/researchChecks')['recordObject']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly refAutoReset: UnwrapRef<typeof import('@vueuse/core')['refAutoReset']>
     readonly refDebounced: UnwrapRef<typeof import('@vueuse/core')['refDebounced']>
@@ -909,6 +926,7 @@ declare module 'vue' {
     readonly rememberBotName: UnwrapRef<typeof import('./stores/botNameRegistry')['rememberBotName']>
     readonly reportedBotName: UnwrapRef<typeof import('./stores/botNameRegistry')['reportedBotName']>
     readonly requestAction: UnwrapRef<typeof import('./composables/useActionDialog')['requestAction']>
+    readonly requireCommonCurrency: UnwrapRef<typeof import('./utils/stakeCurrency')['requireCommonCurrency']>
     readonly resetActionDialog: UnwrapRef<typeof import('./composables/useActionDialog')['resetActionDialog']>
     readonly resetBotActionState: UnwrapRef<typeof import('./composables/useBotAction')['resetBotActionState']>
     readonly resolveColumns: UnwrapRef<typeof import('./composables/useColumns')['resolveColumns']>
@@ -1142,6 +1160,7 @@ declare module 'vue' {
     readonly useSourceQuery: UnwrapRef<typeof import('./composables/useSourceQuery')['useSourceQuery']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>
     readonly useSpeechSynthesis: UnwrapRef<typeof import('@vueuse/core')['useSpeechSynthesis']>
+    readonly useStakeCurrency: UnwrapRef<typeof import('./composables/useStakeCurrency')['useStakeCurrency']>
     readonly useStepper: UnwrapRef<typeof import('@vueuse/core')['useStepper']>
     readonly useStorage: UnwrapRef<typeof import('@vueuse/core')['useStorage']>
     readonly useStorageAsync: UnwrapRef<typeof import('@vueuse/core')['useStorageAsync']>

@@ -88,7 +88,7 @@ describe('design tokens', () => {
   });
 
   it('mirrors the motion constants of utils/motion.ts', () => {
-    const root = block(':root {\n  --font-ui');
+    const root = block(':root {');
     expect(root['--d-instant']).toBe(`${DURATIONS.instant}ms`);
     expect(root['--d-fast']).toBe(`${DURATIONS.fast}ms`);
     expect(root['--d-base']).toBe(`${DURATIONS.base}ms`);
@@ -109,7 +109,7 @@ describe('design tokens', () => {
   });
 
   it('is airy by default: rows of 38 px, text of 14 px, panels of 10 px', () => {
-    const root = block(':root {\n  --font-ui');
+    const root = block(':root {');
     expect(root['--row']).toBe('38px');
     expect(root['--t-md']).toBe('14px');
     expect(root['--t-cell']).toBe('14px');
@@ -142,13 +142,13 @@ describe('design tokens', () => {
     expect(compact['--th-case']).toBeUndefined();
     expect(compact['--th-track']).toBeUndefined();
     expect(compact['--th-weight']).toBeUndefined();
-    expect(block(':root {\n  --font-ui')['--th-case']).toBe('none');
+    expect(block(':root {')['--th-case']).toBe('none');
     expect(compact['--t-xs']).toBe('11px');
   });
 
   it('keeps the hold-to-confirm label above AA contrast over its fill in every palette', () => {
     const mixOf = (name: string) => {
-      const m = block(':root {\n  --font-ui')[name]?.match(
+      const m = block(':root {')[name]?.match(
         /color-mix\(in srgb, var\(--([\w-]+)\) (\d+)%, var\(--([\w-]+)\)\)/,
       );
       expect(m, name).not.toBeNull();

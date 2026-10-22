@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -54,6 +55,7 @@ const emit = defineEmits<{
   navigate: [id: ActionId];
 }>();
 
+const unit = useStakeCurrency(() => ({ currencies: [props.bot.identity.stake_currency] }));
 const { t } = useI18n();
 const fmt = useFormat();
 const conn = useFqConnectionStore();
@@ -213,7 +215,11 @@ const stateSince = computed(
         v-bind="vs(latentSlot, key('latent'))"
       >
         <template #value
-          ><PnlValue :value="m.open_profit_abs" :muted="stale('positions')" :flash="true"
+          ><PnlValue
+            :unit="unit"
+            :value="m.open_profit_abs"
+            :muted="stale('positions')"
+            :flash="true"
         /></template>
         <template #sub>{{
           t('fq.pg.bot.kpi.onPositions', { n: bot.state.open_trades }, bot.state.open_trades)
@@ -226,14 +232,15 @@ const stateSince = computed(
         v-bind="vs(slotOf('metrics', m.realized_30d), key('d30'))"
       >
         <template #value
-          ><PnlValue :value="m.realized_30d" :decimals="0" :muted="stale('metrics')"
+          ><PnlValue :unit="unit" :value="m.realized_30d" :decimals="0" :muted="stale('metrics')"
         /></template>
         <template #sub>{{ realizedSub }}</template>
       </KpiTile>
       <KpiTile
         :label="t('fq.pg.bot.kpi.capital')"
+        :hint="t('fq.pg.bot.kpi.capitalHint')"
         :short-label="t('fq.pg.bot.kpi.capitalShort')"
-        :value="fmt.number(m.starting_capital ?? 0, 0)"
+        :value="fmt.number(m.starting_capital ?? 0, 0) + (unit ? ' ' + unit : '')"
         :sub="exposedSub"
         v-bind="vs(slotOf('capital', m.starting_capital, { settled: 'capital' }), key('capital'))"
       />
@@ -246,7 +253,8 @@ const stateSince = computed(
         v-bind="vs(ddSlot, key('drawdown'))"
       >
         <template #value>
-          <PnlValue :value="-(dd?.abs ?? 0)" :decimals="0" /><small v-if="ddPct !== null"
+          <PnlValue :unit="unit" :value="-(dd?.abs ?? 0)" :decimals="0" /><small
+            v-if="ddPct !== null"
             >&nbsp;{{ fmt.percent(-ddPct, 1) }}</small
           >
         </template>

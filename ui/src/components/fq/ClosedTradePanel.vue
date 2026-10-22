@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -20,6 +21,7 @@ import { pairLabel } from './lib/trades';
 const props = defineProps<{ trade: TradeRow }>();
 const emit = defineEmits<{ details: [] }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.trade.bot_key, pair: props.trade.pair }));
 const { t, locale } = useI18n();
 const fmt = useFormat();
 const prefs = useFqPrefsStore();
@@ -55,7 +57,7 @@ const botName = computed(
     <p class="bot">{{ botName }} · {{ t('fq.pg.bot.closedTrade') }}</p>
     <div class="pnl">
       <span class="big"
-        ><PnlValue :value="trade.profit_abs" :unknown="trade.profit_unknown" unit="USDC"
+        ><PnlValue :value="trade.profit_abs" :unknown="trade.profit_unknown" :unit="unit"
       /></span>
       <span v-if="pct !== null" class="pct"><PnlValue :value="pct" unit="%" /></span>
     </div>

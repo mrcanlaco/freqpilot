@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -20,6 +21,7 @@ const props = defineProps<{
   botMode?: 'live' | 'dry' | 'replay' | null;
 }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.event.bot_key, pair: props.event.pair }));
 const { t } = useI18n();
 const prefs = useFqPrefsStore();
 
@@ -69,7 +71,7 @@ const hasProfit = computed(
     <div class="b">
       <span class="what">{{ what }}</span>
       <span v-if="subject" class="subj num">{{ subject }}</span>
-      <PnlValue v-if="hasProfit" :value="event.profit_abs" unit="USDC" />
+      <PnlValue v-if="hasProfit" :value="event.profit_abs" :unit="unit" />
       <span v-if="botName || event.bot_key" class="bot">
         <ModeMark v-if="botMode" :mode="botMode" />{{ botName ?? event.bot_key }}
       </span>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { commonCurrency } from '@/utils/stakeCurrency';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -62,6 +63,15 @@ const emit = defineEmits<{
   alertAction: [id: string, alert: Alert];
 }>();
 
+function unitForMode(mode: string) {
+  return (
+    commonCurrency(
+      data.value?.bots
+        .filter((b) => b.identity.mode === mode)
+        .map((b) => b.identity.stake_currency) ?? [],
+    ) ?? ''
+  );
+}
 const { t } = useI18n();
 const fmt = useFormat();
 const fleet = useFqFleetStore();
@@ -210,7 +220,7 @@ const unavailable = computed(() => alertsStore.unavailable);
               :label="t('fq.header.exposure')"
               :sub="
                 models[blk.mode]!.slots.exposure.state === 'ready'
-                  ? `${t('fq.header.net', { n: fmt.signed(blk.exposure.net, 0) })}${blk.netted ? '' : ` · ${t('fq.fleet.notNetted')}`}`
+                  ? `${t('fq.header.net', { n: fmt.signed(blk.exposure.net, 0), currency: unitForMode(blk.mode) })}${blk.netted ? '' : ` · ${t('fq.fleet.notNetted')}`}`
                   : undefined
               "
               v-bind="vs(models[blk.mode]!.slots.exposure, `${blk.mode}/scope/exposure`)"

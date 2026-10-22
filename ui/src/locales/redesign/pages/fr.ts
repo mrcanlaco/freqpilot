@@ -76,6 +76,8 @@ export default {
         winners: '{n} gagnants',
         capital: 'Capital du bot',
         capitalShort: 'Capital',
+        capitalHint:
+          'Allocation de base rapportée par le bot, depuis sa configuration ou son solde géré ajusté du résultat. Une réserve peut être exclue : par exemple 1 000 × 95 % = 950. Le résultat est affiché séparément.',
         exposed: 'exposé {total} (long {long}, short {short})',
       },
       config: {

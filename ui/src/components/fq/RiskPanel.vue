@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -50,6 +51,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{ openBot: [botKey: BotKey]; openReconciliation: [] }>();
 
+const unit = useStakeCurrency(() => ({ scope: props.scope, mode: props.mode }));
 const { t } = useI18n();
 const fmt = useFormat();
 const fleet = useFqFleetStore();
@@ -195,7 +197,7 @@ const showCoins = computed(() => !props.summary || opened.value);
         </dl>
         <div v-if="opened" class="expo detail-expo">
           <span class="mut">
-            {{ t('fq.header.net', { n: fmt.signed(model.exposure.net, 0) }) }}
+            {{ t('fq.header.net', { n: fmt.signed(model.exposure.net, 0), currency: unit }) }}
             <template v-if="!model.exposure.netted"> · {{ t('fq.fleet.notNetted') }} </template>
           </span>
           <SplitBar :long="model.exposure.long" :short="model.exposure.short" />
@@ -242,7 +244,10 @@ const showCoins = computed(() => !props.summary || opened.value);
               {{ fmt.number(model.exposure.short, 0) }}</span
             >
             <span class="mut">
-              · {{ t('fq.header.net', { n: fmt.signed(model.exposure.net, 0) }) }}</span
+              ·
+              {{
+                t('fq.header.net', { n: fmt.signed(model.exposure.net, 0), currency: unit })
+              }}</span
             >
             <SplitBar :long="model.exposure.long" :short="model.exposure.short" />
           </template>

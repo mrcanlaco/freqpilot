@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import type { EChartsOption } from 'echarts';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -29,6 +30,7 @@ const props = withDefaults(
   { tailPct: -5, height: '230px' },
 );
 
+const unit = useStakeCurrency(() => ({ botKeys: rows.value.map((r) => r.bot_key) }));
 const { t } = useI18n();
 const fmt = useFormat();
 const { tokens } = useChartTokens();
@@ -105,11 +107,17 @@ const dominates = computed(() => (dist.value.tail.share ?? 0) >= 0.5);
 <template>
   <div class="dist" data-testid="distribution">
     <Skeleton v-if="loading" shape="row" :count="4" />
+    <EmptyState
+      v-else-if="rows.length > 0 && !unit"
+      icon="activity"
+      :title="t('fq.currency.unavailable')"
+      :hint="t('fq.currency.hint')"
+    />
     <template v-else-if="dist.drawn > 0">
       <p class="sent" data-testid="dist-sentence">
         <template v-if="dist.tail.count > 0 && tailShare !== null">
           {{ t('fq.jr.dist.tail', { n: dist.tail.count, pct: pctLabel(tailPct) }) }}
-          <b class="down">{{ fmt.signed(dist.tail.sum, 2) }} USDC</b
+          <b class="down">{{ fmt.signed(dist.tail.sum, 2) }} {{ unit }}</b
           >{{ t('fq.jr.dist.share', { share: tailShare }) }}
           {{ dominates ? t('fq.jr.dist.dominates') : t('fq.jr.dist.notDominant') }}
         </template>

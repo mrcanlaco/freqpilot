@@ -8,6 +8,7 @@ use([DatasetComponent]);
 </script>
 
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import type { ECharts } from 'echarts/core';
 import { useElementSize, useMediaQuery } from '@vueuse/core';
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
@@ -147,6 +148,7 @@ const emit = defineEmits<{
   ready: [chart: ECharts];
 }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.botKey, pair: props.pair }));
 const { t } = useI18n();
 const fmt = useFormat();
 const prefs = useFqPrefsStore();
@@ -813,6 +815,7 @@ const overlayLabels = computed(() => ({
     duration: t('fq.candle.tip.duration'),
     reason: t('fq.candle.tip.reason'),
     result: t('fq.candle.tip.result'),
+    unit: unit.value,
     opened: t('fq.candle.tip.opened'),
     closed: t('fq.candle.tip.closed'),
   },

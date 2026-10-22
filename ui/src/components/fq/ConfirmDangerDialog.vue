@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, nextTick, ref, useId, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -71,6 +72,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{ close: []; done: [outcome: ActionOutcome] }>();
 
+const unit = useStakeCurrency(() => ({ botKey: props.target.botKey, pair: props.position?.pair }));
 const { t } = useI18n();
 const fmt = useFormat();
 const { vs } = useValueSlot();
@@ -80,6 +82,10 @@ const titleId = useId();
 const descId = useId();
 
 const botAction = useBotAction(() => props.target.botKey);
+// The inherited floor is specific to Hyperliquid. Do not label it a Binance limit.
+const minNotional = computed(() =>
+  botAction.bot.value?.identity.exchange?.toLowerCase() === 'hyperliquid' ? MIN_NOTIONAL : null,
+);
 
 // ---- form state ----
 const choice = ref<QuantityChoice>(100);
@@ -135,6 +141,7 @@ const plan = computed(() => {
       currentRate: p.current_rate,
     },
     fraction,
+    minNotional.value,
   );
 });
 
@@ -201,7 +208,13 @@ const formOk = computed(() => {
 const blockedReason = computed(() => {
   if (submitting.value || locked.value) return t('fq.dialog.inFlight');
   if (!nameOk.value) return t('fq.dialog.typeNameFirst');
-  if (plan.value?.belowMin) return t('fq.dialog.warn.belowMin', { min: MIN_NOTIONAL });
+  if (single.value && plan.value && plan.value.fraction < 1 && minNotional.value === null)
+    return t('fq.dialog.minimumUnknown');
+  if (plan.value?.belowMin)
+    return t('fq.dialog.warn.belowMin', {
+      min: minNotional.value ?? MIN_NOTIONAL,
+      currency: unit.value,
+    });
   if (!formOk.value) return t('fq.dialog.fillForm');
   return undefined;
 });
@@ -248,6 +261,7 @@ const subtitle = computed(() => {
         lev: p.leverage,
         n: p.dca_entries,
         stake: fmt.number(p.stake_amount, 2),
+        currency: unit.value,
       },
       p.dca_entries,
     );
@@ -433,8 +447,8 @@ watch(
                 type="number"
                 mono
                 class="amt"
-                :label="t('fq.dialog.amountUsdc')"
-                :placeholder="`≥ ${MIN_NOTIONAL}`"
+                :label="t('fq.dialog.amountUsdc', { currency: unit })"
+                :placeholder="minNotional === null ? unit : `≥ ${minNotional}`"
               />
             </div>
             <!-- What the share represents, and the exchange minimum (it used to sit in the drawer) -->
@@ -443,9 +457,13 @@ watch(
                 t('fq.dialog.quantityAmount', {
                   v: fmt.number(plan.notional, 2),
                   lev: position?.leverage ?? 1,
+                  currency: unit,
                 })
               }}</span>
-              <span>{{ t('fq.dialog.quantityMin', { min: MIN_NOTIONAL }) }}</span>
+              <span v-if="minNotional !== null">{{
+                t('fq.dialog.quantityMin', { min: minNotional, currency: unit })
+              }}</span
+              ><span v-else>{{ t('fq.dialog.minimumUnknown') }}</span>
             </p>
           </template>
           <template v-if="action.kind === 'forceentry'">
@@ -480,7 +498,7 @@ watch(
                 type="number"
                 mono
                 :label="t('fq.dialog.stake')"
-                placeholder="USDC"
+                :placeholder="unit"
               />
             </div>
           </template>
@@ -509,7 +527,7 @@ watch(
               <span class="v"
                 ><PnlValue
                   :value="plan.pnl"
-                  unit="USDC"
+                  :unit="unit"
                   v-bind="vs(plan.pnl === null ? unavailable('prices', 1) : READY)"
               /></span>
             </div>
@@ -535,7 +553,7 @@ watch(
               <span class="v"
                 ><PnlValue
                   :value="allLatent"
-                  unit="USDC"
+                  :unit="unit"
                   v-bind="
                     vs(allLatent === null ? unavailable('prices', allPositions.length) : READY)
                   "
@@ -545,7 +563,7 @@ watch(
               <span class="k">{{ t('fq.dialog.notional') }}</span>
               <span class="v num"
                 ><ValueState v-bind="vs(allNotional === null ? unavailable('noData') : READY)"
-                  >{{ fmt.number(allNotional ?? 0, 0) }}<small> USDC</small></ValueState
+                  >{{ fmt.number(allNotional ?? 0, 0) }}<small> {{ unit }}</small></ValueState
                 ></span
               >
             </div>
@@ -554,7 +572,9 @@ watch(
           <ul v-if="warnings.length" class="warns">
             <li v-for="w in warnings" :key="w.key" :class="w.tone">
               <DsIcon :name="w.tone === 'warn' ? 'triangle-alert' : 'info'" :size="15" />
-              <span>{{ t(`fq.dialog.warn.${w.key}`, w.params ?? {}) }}</span>
+              <span>{{
+                t(`fq.dialog.warn.${w.key}`, { ...(w.params ?? {}), currency: unit })
+              }}</span>
             </li>
           </ul>
 

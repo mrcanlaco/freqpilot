@@ -8,6 +8,7 @@ export type ResearchMetadata = {
 export type LibraryStrategy = {
   name: string;
   revision?: string;
+  parameter_revision?: string;
   modified?: number;
   timeframe?: string;
   can_short?: boolean;

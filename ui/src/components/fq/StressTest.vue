@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useStakeCurrency } from '@/composables/useStakeCurrency';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -29,6 +30,10 @@ const props = defineProps<{
   mode: BotMode;
 }>();
 
+const unit = useStakeCurrency(() => ({
+  botKeys: counted.value.map((p) => p.bot_key),
+  mode: props.mode,
+}));
 const { t } = useI18n();
 const fmt = useFormat();
 const fleet = useFqFleetStore();
@@ -65,13 +70,19 @@ const shown = computed(() => result.value.rows.slice(0, 12));
       :title="t('fq.stress.empty')"
       :hint="t('fq.stress.emptyHint')"
     />
+    <EmptyState
+      v-else-if="!unit"
+      icon="shield-check"
+      :title="t('fq.currency.unavailable')"
+      :hint="t('fq.currency.hint')"
+    />
     <template v-else>
       <KpiStrip>
         <KpiTile
           :label="t('fq.stress.delta')"
           :sub="t('fq.stress.deltaSub', { n: result.counted }, result.counted)"
         >
-          <template #value><PnlValue :value="result.delta" :decimals="0" unit="USDC" /></template>
+          <template #value><PnlValue :value="result.delta" :decimals="0" :unit="unit" /></template>
         </KpiTile>
         <KpiTile
           :label="t('fq.stress.liquidated')"
@@ -82,7 +93,7 @@ const shown = computed(() => result.value.rows.slice(0, 12));
         <KpiTile
           :label="t('fq.stress.marginLost')"
           :value="fmt.number(result.marginLost, 0)"
-          sub="USDC"
+          :sub="unit"
         />
       </KpiStrip>
 
