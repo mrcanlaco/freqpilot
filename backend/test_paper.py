@@ -59,6 +59,27 @@ class PaperChecks(unittest.TestCase):
     def prepared(self):
         return prepare_paper(PreparePaper(run_id=self.uid), self.config)
 
+    def test_optimization_lineage_comes_from_verified_archive_and_train_is_explicit(self):
+        manifest = self.origin / 'inputs.json'
+        frozen = json.loads(manifest.read_text())
+        frozen['optimization'] = {'id': 'a' * 32, 'epoch': 3, 'mode': 'train'}
+        manifest.write_text(json.dumps(frozen))
+        with ZipFile(self.origin / 'artifact.zip') as bundle:
+            members = {name: bundle.read(name) for name in bundle.namelist() if name != 'inputs.json'}
+        with ZipFile(self.origin / 'artifact.zip', 'w') as bundle:
+            bundle.write(manifest, 'inputs.json')
+            for name, content in members.items():
+                bundle.writestr(name, content)
+        record_path = self.origin / 'record.json'
+        source = json.loads(record_path.read_text())
+        source.update(input_manifest_sha256=digest(manifest), artifact_sha256=digest(self.origin / 'artifact.zip'),
+                      optimization={'id': 'b' * 32, 'epoch': 9, 'mode': 'oos'})
+        write_check(record_path, source)
+        profile = self.prepared()
+        self.assertEqual(profile['optimization'], frozen['optimization'])
+        self.assertTrue(any('chưa phải kiểm định ngoài mẫu' in warning for warning in profile['warnings']))
+        self.assertTrue(verify_profile(profile['id'], self.config)[1]['dry_run'])
+
     def test_bootstrap_is_stopped_and_never_copies_exchange_keys(self):
         cfg = json.loads(bootstrap(self.config).read_text())
         self.assertTrue(cfg['dry_run'])

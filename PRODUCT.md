@@ -12,7 +12,7 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 | Hồ sơ tái kiểm tra | Compiled artifacts và lịch sử | ZIP kết quả theo cơ chế engine | Bản sao mã/dữ liệu cho mỗi run, ZIP native, gói SHA-256 và chạy lại/đối chiếu từ gói; chưa đóng băng metadata thị trường từ mạng |
 | Kết quả / so sánh | Metrics, chart/replay, lịch sử | Nhiều panel phân tích và so sánh | Tái sử dụng các panel tương thích API chính thức |
 | Kiểm định | IS/OOS, walk-forward theo gói | Hyperopt/WFA và các phân tích mở rộng | Dùng lại API lookahead/recursive, có job và lịch sử trên UI; đã khảo sát mẫu bằng CLI |
-| Tối ưu | Có nhiều phương pháp | Có launcher hyperopt/WFA | Chưa nối UI, không tối ưu tự động |
+| Tối ưu | Có nhiều phương pháp và IS/OOS/WFA theo gói | Có launcher hyperopt/WFA | Hyperopt native, tập học/ngoài mẫu, bảng lượt thử và lưu ứng viên; chỉ chạy chủ động |
 | Triển khai | Có Demo/Live | Có công cụ quản lý bot | Hồ sơ từ backtest → review cấu hình → bật/pause/tiếp tục/dừng → giám sát; worker nghiên cứu riêng, database theo hồ sơ, chặn đổi khi còn vị thế |
 
 Đã ẩn các mục công cụ phụ thuộc API fork không tồn tại trên backend chính, thay vì đưa người dùng tới trang không chạy được. Nguồn dữ liệu phân biệt webserver nghiên cứu với bot giao dịch, tránh báo offline hoặc cộng vốn sai cho dịch vụ backtest.
@@ -41,6 +41,12 @@ Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquan
 
 ## Nguyên tắc phát triển
 
+Theo yêu cầu bổ sung tối ưu, đã xem lại tài liệu Backtesting và trực tiếp tab Optimize của RoboQuant. Tab này đặt thị trường/ngày/phí, phạm vi tham số, mục tiêu và cách chia dữ liệu cạnh nhau; các phương pháp và giới hạn tùy gói. Tài khoản đang kết nối chưa có phiên tối ưu để đối chiếu kết quả. Việc khảo sát chỉ đọc, không tạo hoặc chạy tác vụ RoboQuant.
+
+FreqPilot đưa bước tối ưu vào cùng chiến lược bằng Hyperopt CLI của engine chính thức; API gốc không có endpoint chạy Hyperopt nên adapter chỉ quản lý tiến trình và hồ sơ. Dùng sampler native của chiến lược (mặc định NSGA-III), seed cố định, tính lại indicator từng epoch, tối đa 500 lượt và mặc định một worker. Bảng có toàn bộ lượt thử với phân trang, số lệnh, điểm/lợi nhuận/drawdown, giữ giá trị không tính được là thiếu. Chọn ứng viên là thao tác riêng, không tự chọn theo lợi nhuận cao nhất. Phiên chia dữ liệu chỉ tìm tham số trên tập học; backtest lại tập học và ngoài mẫu dùng bản sao mã/dữ liệu cùng JSON được xuất từ đúng epoch. Kết quả được giữ trong lịch sử/report native, ghi rõ nguồn và có thể tiếp tục luồng paper hiện có sau khi người dùng review. Không chạy walk-forward, Pareto hay ma trận symbol × timeframe trong bản này.
+
+Nhóm không nạp lại được (`optimize=true`, `load=false`), protection tự thay đổi thiết lập mô phỏng, hoặc ROI/cắt lỗ/trailing đang bị cấu hình cố định đều bị khóa và giải thích lý do. Sửa bộ tham số cố định không được ngầm làm mất các nhóm đặc biệt của một ứng viên đã tối ưu. Nguồn tham khảo: [RoboQuant Backtesting / Optimization](https://roboquant.dev/docs/backtesting), [Freqtrade Hyperopt](https://docs.freqtrade.io/en/stable/hyperopt/); quyết định tích hợp dựa thêm source/image 2026.9 đang cài.
+
 - Giữ nguyên engine và tái sử dụng API chính thức trước khi viết adapter.
 - Mỗi chiến lược giữ ý tưởng, mã, lần chạy và nhận xét trong cùng ngữ cảnh.
 - Tách kết quả kiểm định kỹ thuật khỏi kết luận chiến lược có lợi nhuận.
@@ -55,7 +61,7 @@ Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 1. Diễn giải lookahead/recursive và đối chiếu ngữ cảnh đã có. Còn hướng dẫn chọn mẫu đủ lớn theo từng chiến lược; không dùng ngưỡng số lệnh chung để chứng nhận chất lượng.
 2. Luồng paper một worker, trang quản lý hồ sơ, trạng thái engine trên giám sát Direct và lịch sử thao tác/trạng thái lưu qua các lần mở trang đã có. Nhật ký phân biệt yêu cầu với native observation, lưu theo hồ sơ, có lọc và phân trang; không dựng lại phiên cũ, thời lượng hoặc P&L phiên chưa được đo. Còn lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Gateway chưa cung cấp phần mở rộng trạng thái native này, không suy diễn từ Online. Không bật live.
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run, kiểm tra toàn vẹn và chạy lại/đối chiếu từ gói trên UI. Còn ghim metadata sàn và cơ chế quản lý dung lượng. Gói cũ chỉ tái dùng đầu vào đã lưu, không khẳng định mạng Binance hoặc môi trường ngoài image không đổi.
-4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
+4. Hyperopt và chia tập học/ngoài mẫu đã được nối theo yêu cầu. Còn walk-forward, ma trận nhiều thị trường/khung và chọn thuật toán trên UI. Chưa mô tả tối ưu native hiện tại là có đủ các chế độ của RoboQuant; chỉ chạy khi người dùng chủ động.
 5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.
 6. Đã có khởi tạo cài đặt độc lập, cấu hình ví dụ, kiểm tra Start/Stop và workflow CI ghim phiên bản. Bản sao Git sạch với chuyển dòng Windows đã cài theo lockfile, qua typecheck, 1.692 kiểm tra UI, 38 kiểm tra backend và kiểm tra native tám mẫu; 28 kiểm tra bảo vệ cài đặt chạy bằng dữ liệu riêng. Đăng nhập thử bằng webserver thật hiển thị đủ tám mẫu có mô tả/nhãn, không chép báo cáo cá nhân. Còn xác nhận workflow trên GitHub và cài trọn bộ trên máy khác: chưa tạo/publish repo, chưa chạy dịch vụ Compose mới vì các cổng đang thuộc bộ hiện tại. Xem [hướng dẫn](docs/INSTALL.md) và [bằng chứng cài sạch](benchmarks/portable-install-control.json).
 

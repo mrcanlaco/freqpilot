@@ -189,8 +189,10 @@ onMounted(() => void action(loadList));
       </button>
       <details>
         <summary>Xem giá trị đã lưu</summary>
-        <CodeViewer :code="JSON.stringify(selected.values, null, 2)" language="json" />
+        <CodeViewer :code="JSON.stringify(selected.special_params ? { parameters: selected.values, native_special_parameters: selected.special_params } : selected.values, null, 2)" language="json" />
       </details>
+      <p v-if="selected.optimization" class="notice">Từ lần tối ưu {{selected.optimization.id.slice(0,10)}} · lượt {{selected.optimization.epoch}} · giai đoạn chọn tham số {{selected.optimization.train_timerange}}. Kết quả tối ưu chưa thay cho backtest kiểm tra và chưa đổi paper.</p>
+      <p v-if="selected.special_params && Object.keys(selected.special_params).length" class="notice">Bộ có cả ROI / cắt lỗ / trailing native như phần giá trị đã lưu. Biểu mẫu bộ mới bên dưới lấy cấu hình đặc biệt từ mã gốc; không dùng biểu mẫu này để sao chép bộ tối ưu. Muốn kiểm tra bộ này, giữ nguyên lựa chọn rồi chạy backtest.</p>
     </div>
     <p v-if="message" class="notice" :class="{ bad }" role="status">{{ message }}</p>
     <details v-if="schema" open>
@@ -204,7 +206,7 @@ onMounted(() => void action(loadList));
       </p>
       <button
         v-if="selected"
-        :disabled="locked || stale || schema.revision !== revision"
+        :disabled="locked || stale || schema.revision !== revision || !!(selected?.special_params && Object.keys(selected.special_params).length)"
         @click="loadSelected"
       >
         Nạp bộ đang chọn vào biểu mẫu

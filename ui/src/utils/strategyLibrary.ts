@@ -42,6 +42,8 @@ export type StrategyPreset = {
   values: Record<string, string | number | boolean | null>;
   created_at: string;
   valid?: boolean;
+  optimization?: { id: string; epoch: number; spaces: string[]; loss: string; train_timerange: string; oos_timerange?: string };
+  special_params?: Record<string, unknown>;
 };
 
 /** Only completed archived runs supply metrics; never choose the most profitable result. */

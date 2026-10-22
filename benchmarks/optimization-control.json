@@ -1,0 +1,181 @@
+{
+  "checked_at": "2026-10-22T22:14:35.8499222+07:00",
+  "base_commit": "409564d",
+  "feature": "Explicit native Hyperopt with frozen inputs, manual train/OOS checks and named candidates",
+  "reference": {
+    "roboquant_docs": "https://roboquant.dev/docs/backtesting",
+    "roboquant_tasks_created": 0,
+    "account_optimization_history": 0,
+    "roboquant_ui": "Strategies > Optimize inspected read-only",
+    "freqtrade": "Pinned official 2026.9 source and native CLI; no native API exists to launch Hyperopt"
+  },
+  "scope": {
+    "not_implemented": [
+      "Walk-forward",
+      "UI algorithm selection/grid/TPE/CMA/Pareto modes",
+      "Symbol/timeframe matrix",
+      "Automatic strategy or paper promotion"
+    ],
+    "epochs": "1..500",
+    "workers": "default1; maximum2",
+    "validation": "Single or time-split IS/OOS; selected candidate validation is a separate explicit command",
+    "native_sampler": "Strategy native sampler; default NSGAIIISampler",
+    "parameter_spaces": "Reloadable native Parameter groups, ROI, stoploss, trailing when configuration permits"
+  },
+  "tests": {
+    "full_ui_files": 118,
+    "typecheck": "passed after logical integration",
+    "backend": "passed",
+    "known_numeric_cli_regression": "UI string stake normalized only in CLI recipe; wallet and maximum positions checked against native schema",
+    "latest_build": "passed after final CSS-only overflow fix",
+    "full_ui_tests": 1736,
+    "new_backend_checks": 21,
+    "post_full_focused_ui_tests": 18,
+    "backend_network": "none",
+    "post_full_added_ui_regression": 1,
+    "backend_tests": 79,
+    "request_ownership": "Accepted backtests retain owner callback after component unmount"
+  },
+  "native_proof": {
+    "train_comparison": {
+      "different_metrics": [],
+      "train_trades": 5,
+      "epoch": 3,
+      "train_profit_usdt": 4.26715748
+    },
+    "selection": "Explicit UI click for technical verification, never selected for production",
+    "selected_epoch": 3,
+    "train_timerange": "20260918-20261010",
+    "proof_services_removed": true,
+    "strategy": "FAdxSmaStrategy",
+    "private_artifacts_retained": true,
+    "min_trades": 1,
+    "cancel": {
+      "cancelled_via_ui": true,
+      "completed_epochs": 2,
+      "status": "cancelled",
+      "owned_child_still_exists": false,
+      "requested_epochs": 50,
+      "reloaded_ui_while_running": true
+    },
+    "epochs": 3,
+    "seed": 42,
+    "spaces": [
+      "buy"
+    ],
+    "scope": "Separate private webserver/data/UI; no trading process",
+    "validation_artifacts": [
+      {
+        "id": "22121e0ce9fa4e2e907e828713603f12",
+        "settings": {
+          "timerange": "20261010-20261022",
+          "timeframe": "1h",
+          "timeframe_detail": "1m",
+          "dry_run_wallet": 1000,
+          "max_open_trades": 2,
+          "stake_amount": "100",
+          "enable_protections": false
+        },
+        "valid": true,
+        "mode": "oos",
+        "summary": {
+          "total_trades": 1,
+          "profit_total_abs": -0.388275,
+          "profit_total": -0.000388275,
+          "max_drawdown_account": 0.00038827500000002146,
+          "profit_factor": 0.0,
+          "wins": 0,
+          "losses": 1,
+          "backtest_start": "2026-10-10 00:00:00",
+          "backtest_end": "2026-10-21 18:00:00",
+          "timeframe": "1h"
+        }
+      },
+      {
+        "id": "b77a6101af97421babb51a70b90f7a52",
+        "settings": {
+          "timerange": "20260918-20261010",
+          "timeframe": "1h",
+          "timeframe_detail": "1m",
+          "dry_run_wallet": 1000,
+          "max_open_trades": 2,
+          "stake_amount": "100",
+          "enable_protections": false
+        },
+        "valid": true,
+        "mode": "train",
+        "summary": {
+          "total_trades": 5,
+          "profit_total_abs": 4.26715748,
+          "profit_total": 0.0042671574799999995,
+          "max_drawdown_account": 0.0001613233210973233,
+          "profit_factor": 27.40799798002052,
+          "wins": 4,
+          "losses": 1,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-10 00:00:00",
+          "timeframe": "1h"
+        }
+      }
+    ],
+    "minimum_trade_setting": "Technical smoke only, deliberately below UI default10; not a quality recommendation",
+    "oos_timerange": "20261010-20261022",
+    "adjacent_library_parameter_file_created": false,
+    "named_preset_saved_and_verified": true,
+    "initial_failed_job": "Retained as failed with0epochs when CLI numeric type mismatch was discovered; corrected and regression-tested",
+    "library_source_unchanged": true
+  },
+  "deployed": {
+    "optimizer_available": true,
+    "only_service_restarted": "backtest",
+    "ui_published": true,
+    "paper_state": "running",
+    "paper_open_trades": 0,
+    "paper_services_unchanged": true,
+    "optimization_jobs_on_main": 0,
+    "new_research_image": "sha256:dc01042745d4025072fb601e5b80e379fcdc242b660e34ba08f6365bc8b09e5b",
+    "checked_at": "2026-10-22T22:09:22.6941503+07:00"
+  },
+  "runtime": {
+    "paper_container_id_image_start_times_unchanged": true,
+    "protected_config_env_strategies_unchanged": true,
+    "dry_run_both": true,
+    "official_core_sha256": "85c2b037ae626b47a6506256f008fb9738f028907bdcb890185ccf94d94dfa13",
+    "new_backtests_on_main": 0,
+    "paper_lifecycle_actions_sent": 0,
+    "binance_trading_keys_present": false,
+    "official_core_match": true,
+    "serving_optimizer_source_sha256": "bea43d4e8726a087aece9ec9881041fd6236185699111b3effd9247417684da3",
+    "research_paper_state": "running",
+    "research_paper_open_trades": 0,
+    "official_core_files": 118,
+    "serving_source_matches_repo": true,
+    "checked_at": "2026-10-22T22:13:29.3430712+07:00",
+    "optimization_jobs_on_main": 0
+  },
+  "visual": {
+    "local_screenshots": [
+      "screenshots/optimization-current.png",
+      "screenshots/optimization-native-results.png"
+    ],
+    "optimizer_panel_client_width": 876,
+    "main_page_scroll_width": 1280,
+    "optimizer_panel_scroll_width": 876,
+    "main_page_client_width": 1280,
+    "main_ui_optimizer_visible": true,
+    "main_optimizer_jobs": 0
+  },
+  "limits": [
+    "Three epochs and one split verify integration only; they do not establish an edge or profitability.",
+    "Optimization ranked the training sample. OOS is explicitly separate and may lose money.",
+    "Native loss/epoch metrics keep native conventions; trade count and missing metrics require context.",
+    "Binance market metadata remains external; copied code/data/config do not freeze all network context.",
+    "Remaining RoboQuant capabilities are not claimed as implemented."
+  ],
+  "final_scan": {
+    "diff_check": "passed",
+    "actual_local_credential_scan": "passed",
+    "nonignored_files": 1137,
+    "protected_files": "unchanged"
+  }
+}

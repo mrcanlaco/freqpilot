@@ -9,7 +9,7 @@ import type { StrategyPreset } from '@/utils/strategyLibrary';
 import { useDataSource } from '@/composables/useDataSource';
 import PaperHistory from '@/components/strategyDev/PaperHistory.vue';
 
-type Profile = { id:string; label:string; strategy:string; revision:string; run_id:string; warnings:string[];preset?:StrategyPreset;valid?:boolean;error?:string;
+type Profile = { id:string; label:string; strategy:string; revision:string; run_id:string; warnings:string[];preset?:StrategyPreset;optimization?:{id:string;epoch:number;mode:'train'|'oos'};valid?:boolean;error?:string;
   settings:{pairs:string[];timeframe:string;wallet:number;stake:number|string;max_open_trades:number;fee:number};
   summary:{total_trades?:number;profit_total_abs?:number} };
 type PaperState = {online:boolean;state:string;error?:string;history_error?:string;active_profile?:string|null;open_trades:number|null;profiles:Profile[]};
@@ -84,7 +84,7 @@ onUnmounted(()=>{if(poll)clearInterval(poll);});
         <div class="row"><b>{{profile.label}}</b><span v-if="profile.id===state?.active_profile" class="badge">Hồ sơ đang chọn</span></div>
         <p>{{profile.strategy}} · {{profile.settings.pairs.join(' · ')}} · {{profile.settings.timeframe}} · isolated 1x</p>
         <dl><div><dt>Vốn mô phỏng</dt><dd>{{profile.settings.wallet}} USDT</dd></div><div><dt>Stake đề xuất</dt><dd>{{profile.settings.stake}} USDT</dd></div><div><dt>Lệnh mở tối đa</dt><dd>{{profile.settings.max_open_trades}}</dd></div><div><dt>Phí mỗi chiều</dt><dd>{{(profile.settings.fee*100).toFixed(3)}}%</dd></div></dl>
-        <p v-if="profile.preset">Bộ tham số từ backtest: <b>{{profile.preset.label}}</b> · {{profile.preset.native_sha256.slice(0,10)}}. Không lấy giá trị mới trong thư viện.</p><p>Backtest nguồn: {{profile.summary.total_trades??0}} lệnh · {{profile.summary.profit_total_abs?.toFixed(3)??'—'}} USDT · mã {{profile.revision.slice(0,10)}}.</p>
+        <p v-if="profile.optimization">Nguồn tối ưu {{profile.optimization.id.slice(0,10)}} · lượt {{profile.optimization.epoch}} · backtest {{profile.optimization.mode==='oos'?'ngoài mẫu':'lại tập học'}}. Bộ số lấy từ gói đã kiểm tra, không tự chọn kết quả tối ưu mới.</p><p v-if="profile.preset">Bộ tham số từ backtest: <b>{{profile.preset.label}}</b> · {{profile.preset.native_sha256.slice(0,10)}}. Không lấy giá trị mới trong thư viện.</p><p>Backtest nguồn: {{profile.summary.total_trades??0}} lệnh · {{profile.summary.profit_total_abs?.toFixed(3)??'—'}} USDT · mã {{profile.revision.slice(0,10)}}.</p>
         <p v-if="profile.valid===false" class="notice bad">{{profile.error}} Hãy chuẩn bị một hồ sơ mới.</p><div class="notice"><p v-for="warning in profile.warnings" :key="warning">{{warning}}</p></div>
         <div class="row"><button class="primary" :disabled="working||profile.valid===false||!state?.online||!['running','paused','stopped'].includes(state.state)||(state.active_profile===profile.id&&state.state==='running')||(state.open_trades!==0&&state.active_profile!==profile.id)" @click="start(profile)">{{profile.id===state?.active_profile&&state?.state==='running'?'Đang chạy paper':profile.id===state?.active_profile&&state?.state==='paused'?'Tiếp tục paper':'Bật paper hồ sơ này'}}</button><small>Database riêng cho hồ sơ này; không thay bot paper chính.</small></div>
       </div>

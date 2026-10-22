@@ -213,6 +213,7 @@ class ApiServer(RPCHandler):
         from freqtrade.rpc.api_server.api_webserver import router as api_webserver
         from freqtrade.rpc.api_server.api_ws import router as ws_router
         from freqtrade.rpc.api_server.deps import is_trading_mode, is_webserver_mode
+        from freqtrade.rpc.api_server.api_optimization import guard_native_research
         from freqtrade.rpc.api_server.web_ui import router_ui
 
         app.include_router(api_v1_public, prefix="/api/v1")
@@ -239,7 +240,7 @@ class ApiServer(RPCHandler):
             api_backtest,
             prefix="/api/v1",
             tags=["Backtest"],
-            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)],
+            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode), Depends(guard_native_research)],
         )
         app.include_router(
             api_bg_tasks,
@@ -262,19 +263,19 @@ class ApiServer(RPCHandler):
             api_download_data,
             prefix="/api/v1",
             tags=["Download-data", "Webserver"],
-            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)],
+            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode), Depends(guard_native_research)],
         )
         app.include_router(
             router_lookahead,
             prefix="/api/v1",
             tags=["Lookahead Analysis", "Webserver"],
-            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)],
+            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode), Depends(guard_native_research)],
         )
         app.include_router(
             router_recursive,
             prefix="/api/v1",
             tags=["Recursive Analysis", "Webserver"],
-            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)],
+            dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode), Depends(guard_native_research)],
         )
         app.include_router(ws_router, prefix="/api/v1")
         from freqtrade.rpc.api_server.api_local_strategies import router as local_strategies
@@ -296,6 +297,9 @@ class ApiServer(RPCHandler):
                 dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
         from freqtrade.rpc.api_server.api_presets import router as presets
         app.include_router(presets, prefix="/api/v1/studio",
+                dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
+        from freqtrade.rpc.api_server.api_optimization import router as optimization
+        app.include_router(optimization, prefix="/api/v1/studio",
                 dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
         # UI Router MUST be last!
         app.include_router(router_ui, prefix="")

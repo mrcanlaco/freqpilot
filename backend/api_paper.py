@@ -242,6 +242,10 @@ class {wrapper}(Base):
                   'source_hashes': {p.relative_to(folder).as_posix(): digest(p) for p in stratdir.rglob('*') if p.is_file()},
                   'config_sha256': digest(folder / 'config.json'), 'warnings': warnings}
         if run.get('preset'):record['preset']=run['preset']
+        if frozen.get('optimization'):
+            record['optimization'] = frozen['optimization']
+            if frozen['optimization'].get('mode') == 'train':
+                warnings.append('Báo cáo nguồn chỉ chạy lại tập học của phiên tối ưu, chưa phải kiểm định ngoài mẫu.')
         write_check(folder / 'record.json', record)
         return record
 
