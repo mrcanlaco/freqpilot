@@ -1,0 +1,74 @@
+{
+  "StarterFutures": {
+    "filename": "StarterFutures.py",
+    "strategy": "StarterFutures",
+    "has_bias": "False",
+    "total_signals": "20",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "FReinforcedStrategy": {
+    "filename": "FReinforcedStrategy.py",
+    "strategy": "FReinforcedStrategy",
+    "has_bias": "False",
+    "total_signals": "20",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "TrendFollowingStrategy": {
+    "filename": "TrendFollowingStrategy.py",
+    "strategy": "TrendFollowingStrategy",
+    "has_bias": "False",
+    "total_signals": "20",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "FAdxSmaStrategy": {
+    "filename": "FAdxSmaStrategy.py",
+    "strategy": "FAdxSmaStrategy",
+    "has_bias": "False",
+    "total_signals": "2",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "FSampleStrategy": {
+    "filename": "FSampleStrategy.py",
+    "strategy": "FSampleStrategy",
+    "has_bias": "False",
+    "total_signals": "2",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "FSupertrendStrategy": {
+    "filename": "FSupertrendStrategy.py",
+    "strategy": "FSupertrendStrategy",
+    "has_bias": "False",
+    "total_signals": "2",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "FOttStrategy": {
+    "filename": "FOttStrategy.py",
+    "strategy": "FOttStrategy",
+    "has_bias": "False",
+    "total_signals": "2",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  },
+  "VolatilitySystem": {
+    "filename": "VolatilitySystem.py",
+    "strategy": "VolatilitySystem",
+    "has_bias": "False",
+    "total_signals": "2",
+    "biased_entry_signals": "0",
+    "biased_exit_signals": "0",
+    "biased_indicators": ""
+  }
+}

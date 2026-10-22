@@ -1,0 +1,188 @@
+@import 'tailwindcss';
+@import './stratdev-tokens.css';
+@import './light-mode.css';
+@import './fit-screen.css';
+
+@plugin 'tailwindcss-primeui';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+
+
+
+@layer frequi {
+  /* Customization for freqUI components */
+  :root {
+
+    --p-primary-50: #DBFAFF;
+    --p-primary-100: #B8F4FF;
+    --p-primary-200: #75EAFF;
+    --p-primary-300: #2EE0FF;
+    --p-primary-400: #00C3E6;
+    --p-primary-500: #0089A1;
+    --p-primary-600: #006C80;
+    --p-primary-700: #005261;
+    --p-primary-800: #003842;
+    --p-primary-900: #001A1F;
+    --p-primary-950: #000D0F;
+
+    --p-primary-color: var(--p-primary-600);
+
+    /* ── Dashboard layout control ── */
+    --ft-widget-opacity: 1;
+
+    /* Reduce size of listboxes*/
+    --p-listbox-option-padding: 0.15rem 0.75rem;
+
+    /* Secondary Button */
+    --p-button-secondary-background: var(--p-surface-200);
+    --p-button-secondary-hover-background: var(--p-surface-300);
+
+    /* default profit loss colors, could be overwritten by custom style */
+    --color-profit: #12bb7b;
+    --color-loss: #ef5350;
+
+    --p-tabs-tabpanel-padding: unset;
+
+    --p-togglebutton-content-checked-background: var(--p-primary-500);
+    --p-togglebutton-sm-padding: 0;
+
+
+    --p-selectbutton-border-radius: var(--radius-sm);
+    --p-togglebutton-content-border-radius: 0px;
+  }
+
+  /* ── Warm gray light mode surfaces ── */
+  :root:not(.ft-dark-theme) {
+    --p-surface-0: #f8f6f3;
+    --p-surface-50: #f0ece6;
+    --p-surface-100: #e5e0d8;
+    --p-surface-200: #d8d2c8;
+    --p-surface-300: #c8c0b4;
+    --p-surface-400: #a89e90;
+    --p-surface-500: #7d7568;
+    --p-text-color: #3a3630;
+  }
+
+  .ft-dark-theme {
+      --p-content-background: var(--p-surface-950);
+      --p-menu-background: var(--p-surface-900);
+
+      --p-primary-contrast-color: var(--p-text-200);
+      --p-button-secondary-background: var(--p-surface-700);
+      --p-button-secondary-hover-background: var(--p-surface-600);
+  }
+
+  .p-button-icon-only.p-button-sm {
+    --p-button-sm-icon-only-height: 2.25rem;
+    /* height: var(--p-button-sm-icon-only-width); */
+    padding : 0.1rem 0.4rem 0.1rem 0.4rem;
+    /* padding: unset; */
+  }
+  .p-button-icon-only {
+    /* padding : 0.1rem 0.4rem 0.1rem 0.4rem; */
+    padding: unset;
+    aspect-ratio: 1 / 1;
+  }
+
+  .p-selectbutton {
+    border-color: var(--p-primary-500);
+    border: 1px solid var(--p-primary-500);
+    &>.p-togglebutton {
+      border: none;
+
+    }
+  }
+
+}
+
+
+@layer primevue {
+    /* Base component style overrides */
+    :root {
+
+        --p-datatable-row-background: unset;
+    }
+}
+
+
+
+body.ft-theme-transition,
+body.ft-theme-transition *,
+body.ft-theme-transition *:before,
+body.ft-theme-transition *:after {
+    transition:
+        background 750ms ease-in-out,
+        border-color 750ms ease-in-out,
+        background-color 750ms ease-in-out,
+    ;
+    transition-delay: 0 !important;
+}
+
+
+html {
+    /*  Set the default font size to 14px */
+    font-size: 14px;
+}
+
+.vue-grid-item {
+    /*  Fix white corners in vue-grid-item. */
+    background-color: unset !important;
+}
+
+/* ── Edit-mode resize handle ── */
+.vue-grid-item > .vue-resizable-handle {
+    opacity: 0.35;
+    width: 20px;
+    height: 20px;
+    bottom: 2px;
+    right: 2px;
+    background: none;
+    transition: opacity 200ms;
+}
+.vue-grid-item > .vue-resizable-handle::after {
+    content: '';
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 10px;
+    height: 10px;
+    border-right: 2.5px solid rgba(99, 102, 241, 0.55);
+    border-bottom: 2.5px solid rgba(99, 102, 241, 0.55);
+    border-radius: 0 0 3px 0;
+}
+.vue-grid-item:hover > .vue-resizable-handle {
+    opacity: 1;
+}
+
+/* ── Drop placeholder ── */
+.vue-grid-item.vue-grid-placeholder {
+    background: rgba(99, 102, 241, 0.12) !important;
+    border: 2px dashed rgba(99, 102, 241, 0.5);
+    border-radius: 0.5rem;
+}
+
+/* Hide PrimeVue's native popover arrow — we use Floating UI's arrow instead */
+.p-popover::before,
+.p-popover::after {
+  display: none !important;
+}
+

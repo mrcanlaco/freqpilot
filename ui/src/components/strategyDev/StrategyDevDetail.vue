@@ -1,0 +1,229 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import { RunType } from '@/types';
+import type { JobStartRequest } from '@/types';
+
+const { t } = useI18n();
+const store = useStrategyDevStore();
+
+const emit = defineEmits<{
+  reconstitute: [prefill: Partial<JobStartRequest>];
+}>();
+
+const activeTab = ref('overview');
+const detailLoading = ref(false);
+
+const isHyperopt = computed(() => store.selectedRun?.run_type === RunType.hyperopt);
+const isWfa = computed(() => store.selectedRun?.run_type === RunType.wfa);
+const isBacktest = computed(() => store.selectedRun?.run_type === RunType.backtest);
+const isLive = computed(() => store.selectedRun?.run_type === RunType.live);
+
+// ── Scroll container (.sd-main) ──
+const scrollEl = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  const el = document.querySelector('.sd-main');
+  if (el instanceof HTMLElement) scrollEl.value = el;
+});
+
+function validTabsForType(type: RunType | undefined): string[] {
+  if (type === RunType.live) return ['overview', 'analyse'];
+  const common = ['overview', 'params', 'config', 'source', 'command', 'compare'];
+  if (type === RunType.hyperopt) return [...common, 'analyse'];
+  if (type === RunType.backtest) return [...common, 'analyse', 'graphiques'];
+  if (type === RunType.wfa) return [...common, 'wfa-charts'];
+  return common;
+}
+
+function saveState(filename: string) {
+  const saved = store.getRunViewState(filename);
+  const scrollTop = saved?.scrollTop ? { ...saved.scrollTop } : {};
+  if (scrollEl.value) scrollTop[activeTab.value] = scrollEl.value.scrollTop;
+  store.saveRunViewState(filename, activeTab.value, scrollTop);
+}
+
+function restoreScroll(filename: string, tab: string) {
+  const saved = store.getRunViewState(filename);
+  const pos = saved?.scrollTop[tab];
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      if (scrollEl.value) scrollEl.value.scrollTop = pos ?? 0;
+    });
+  });
+}
+
+// Save/restore scroll on tab switch
+watch(activeTab, (newTab, oldTab) => {
+  if (!store.selectedRun || !scrollEl.value) return;
+  const filename = store.selectedRun.filename;
+  const saved = store.getRunViewState(filename);
+  const scrollTop = saved?.scrollTop ? { ...saved.scrollTop } : {};
+  scrollTop[oldTab] = scrollEl.value.scrollTop;
+  store.saveRunViewState(filename, newTab, scrollTop);
+  restoreScroll(filename, newTab);
+});
+
+// Save/restore on run switch
+watch(
+  () => store.selectedRun,
+  async (run, oldRun) => {
+    if (!run) return;
+
+    if (oldRun) saveState(oldRun.filename);
+
+    const saved = store.getRunViewState(run.filename);
+    const validTabs = validTabsForType(run.run_type);
+    const restoredTab = saved?.tab && validTabs.includes(saved.tab) ? saved.tab : 'overview';
+    activeTab.value = restoredTab;
+
+    if (run.run_type === RunType.live) {
+      detailLoading.value = false;
+    } else {
+      const isCached = store.runCache.has(run.filename);
+      if (!isCached) detailLoading.value = true;
+      try {
+        if (run.run_type === RunType.hyperopt) {
+          await store.fetchHyperoptDetail(run.filename);
+        } else if (run.run_type === RunType.wfa) {
+          await store.fetchWfaDetail(run.filename);
+        } else if (run.run_type === RunType.backtest) {
+          await store.fetchBacktestSnapshot(run.filename, run.strategy);
+        }
+      } finally {
+        detailLoading.value = false;
+      }
+    }
+
+    restoreScroll(run.filename, restoredTab);
+  },
+  { immediate: true },
+);
+</script>
+
+<template>
+  <div v-if="store.selectedRun" class="sd-detail">
+    <RunDetailHeader :run="store.selectedRun" />
+
+    <!-- Loading skeleton while detail fetches -->
+    <div v-if="detailLoading" class="sd-detail-loading">
+      <SkeletonPanel variant="cards" :cols="4" />
+      <SkeletonPanel variant="chart" class="mt-4" />
+    </div>
+
+    <!-- Content with tabs -->
+    <Tabs v-else v-model:value="activeTab" lazy class="mt-2">
+      <TabList>
+        <Tab value="overview" class="sd-tab">
+          <i-mdi-information-outline class="w-4 h-4" />
+          {{ t('strategyDev.tabOverview') }}
+        </Tab>
+        <Tab v-if="isHyperopt || isBacktest || isLive" value="analyse" class="sd-tab">
+          <i-mdi-chart-areaspline class="w-4 h-4" />
+          {{ t('strategyDev.tabAnalyse') }}
+        </Tab>
+        <Tab v-if="isBacktest" value="graphiques" class="sd-tab">
+          <i-mdi-chart-bar class="w-4 h-4" />
+          {{ t('strategyDev.tabGraphiques') }}
+        </Tab>
+        <Tab v-if="isWfa" value="wfa-charts" class="sd-tab">
+          <i-mdi-chart-line class="w-4 h-4" />
+          {{ t('strategyDev.tabCharts') }}
+        </Tab>
+        <Tab v-if="!isLive" value="params" class="sd-tab">
+          <i-mdi-tune class="w-4 h-4" />
+          {{ t('strategyDev.tabParameters') }}
+        </Tab>
+        <Tab v-if="!isLive" value="config" class="sd-tab">
+          <i-mdi-cog class="w-4 h-4" />
+          {{ t('strategyDev.tabConfig') }}
+        </Tab>
+        <Tab v-if="!isLive" value="source" class="sd-tab">
+          <i-mdi-code-braces class="w-4 h-4" />
+          {{ t('strategyDev.tabSourceCode') }}
+        </Tab>
+        <Tab v-if="!isLive" value="command" class="sd-tab">
+          <i-mdi-console class="w-4 h-4" />
+          {{ t('strategyDev.tabCommand') }}
+        </Tab>
+        <Tab v-if="!isLive" value="compare" class="sd-tab">
+          <i-mdi-compare-horizontal class="w-4 h-4" />
+          {{ t('strategyDev.tabCompare') }}
+        </Tab>
+      </TabList>
+
+      <TabPanels>
+        <TabPanel value="overview">
+          <div class="sd-panel-enter">
+            <HyperoptOverviewPanel v-if="isHyperopt" />
+            <WfaOverviewPanel v-else-if="isWfa" />
+            <LiveBotOverviewPanel
+              v-else-if="isLive"
+              @reconstitute="(p) => emit('reconstitute', p)"
+            />
+            <OverviewPanel v-else />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="isHyperopt || isBacktest || isLive" value="analyse">
+          <div class="sd-panel-enter">
+            <HyperoptAnalysePanel v-if="isHyperopt" />
+            <BacktestAnalysePanel v-else-if="isBacktest || isLive" />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="isBacktest" value="graphiques">
+          <div class="sd-panel-enter">
+            <BacktestChartsPanel />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="isWfa" value="wfa-charts">
+          <div class="sd-panel-enter">
+            <WfaChartsPanel />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="!isLive" value="params">
+          <div class="sd-panel-enter">
+            <ParamPanel />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="!isLive" value="config">
+          <div class="sd-panel-enter">
+            <ConfigPanel />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="!isLive" value="source">
+          <div class="sd-panel-enter">
+            <SourcePanel />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="!isLive" value="command">
+          <div class="sd-panel-enter">
+            <CommandPanel @reconstitute="(p) => emit('reconstitute', p)" />
+          </div>
+        </TabPanel>
+        <TabPanel v-if="!isLive" value="compare">
+          <div class="sd-panel-enter">
+            <ComparePanel />
+          </div>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  </div>
+</template>
+
+<style scoped>
+.sd-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
+.sd-detail-loading {
+  padding: 20px 0;
+  animation: sd-fade-in 300ms ease;
+}
+
+.sd-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+</style>

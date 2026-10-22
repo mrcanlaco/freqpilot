@@ -1,0 +1,94 @@
+{
+  "engine": "ultimate",
+  "started_at": "2026-10-22T00:52:16.745685+00:00",
+  "protocol": {
+    "pairs": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT"
+    ],
+    "timerange": "20260918-20261022",
+    "detail": "1m",
+    "fee_each_side": 0.0005,
+    "wallet": 1000,
+    "stake": 100,
+    "max_open_trades": 2,
+    "leverage": 1,
+    "optimization": false,
+    "timeframe": "native per strategy"
+  },
+  "groups": [
+    {
+      "timeframe": "15m",
+      "strategies": [
+        "StarterFutures"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-52-31.zip"
+    },
+    {
+      "timeframe": "5m",
+      "strategies": [
+        "FReinforcedStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-52-42.zip"
+    },
+    {
+      "timeframe": "5m",
+      "strategies": [
+        "TrendFollowingStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-52-58.zip"
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "FAdxSmaStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-53-06.zip"
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "FSampleStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-53-15.zip"
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "FSupertrendStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-53-26.zip"
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "FOttStrategy"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-53-40.zip"
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "VolatilitySystem"
+      ],
+      "returncode": 0,
+      "method": "one strategy per process",
+      "filename": "backtest-result-2026-10-22_00-54-16.zip"
+    }
+  ],
+  "completed_at": "2026-10-22T00:54:18.015112+00:00"
+}

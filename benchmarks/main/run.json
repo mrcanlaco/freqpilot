@@ -1,0 +1,48 @@
+{
+  "engine": "main",
+  "started_at": "2026-10-21T20:38:08.034735+00:00",
+  "protocol": {
+    "pairs": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT"
+    ],
+    "timerange": "20260918-20261022",
+    "detail": "1m",
+    "fee_each_side": 0.0005,
+    "wallet": 1000,
+    "stake": 100,
+    "max_open_trades": 2,
+    "leverage": 1,
+    "optimization": false,
+    "timeframe": "native per strategy"
+  },
+  "groups": [
+    {
+      "timeframe": "15m",
+      "strategies": [
+        "StarterFutures"
+      ],
+      "returncode": 0
+    },
+    {
+      "timeframe": "5m",
+      "strategies": [
+        "FReinforcedStrategy",
+        "TrendFollowingStrategy"
+      ],
+      "returncode": 0
+    },
+    {
+      "timeframe": "1h",
+      "strategies": [
+        "FAdxSmaStrategy",
+        "FSampleStrategy",
+        "FSupertrendStrategy",
+        "FOttStrategy",
+        "VolatilitySystem"
+      ],
+      "returncode": 0
+    }
+  ],
+  "completed_at": "2026-10-21T20:40:14.106671+00:00"
+}

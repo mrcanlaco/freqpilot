@@ -1,0 +1,42 @@
+[
+  {
+    "strategy": "StarterFutures",
+    "timeframe": "15m",
+    "returncode": 0
+  },
+  {
+    "strategy": "FAdxSmaStrategy",
+    "timeframe": "1h",
+    "returncode": 0
+  },
+  {
+    "strategy": "FReinforcedStrategy",
+    "timeframe": "5m",
+    "returncode": 2
+  },
+  {
+    "strategy": "FSampleStrategy",
+    "timeframe": "1h",
+    "returncode": 0
+  },
+  {
+    "strategy": "FSupertrendStrategy",
+    "timeframe": "1h",
+    "returncode": 0
+  },
+  {
+    "strategy": "FOttStrategy",
+    "timeframe": "1h",
+    "returncode": 0
+  },
+  {
+    "strategy": "TrendFollowingStrategy",
+    "timeframe": "5m",
+    "returncode": 0
+  },
+  {
+    "strategy": "VolatilitySystem",
+    "timeframe": "1h",
+    "returncode": 0
+  }
+]

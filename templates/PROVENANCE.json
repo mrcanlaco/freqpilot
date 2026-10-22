@@ -1,0 +1,73 @@
+[
+  {
+    "strategy": "FAdxSmaStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/FAdxSmaStrategy.py",
+    "original_sha256": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+    "installed_sha256": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
+    "changes": []
+  },
+  {
+    "strategy": "FReinforcedStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/FReinforcedStrategy.py",
+    "original_sha256": "acf9e445b50e14419993a2e24215ba650b4550b27bad1ba6e1804da7025a4ba5",
+    "installed_sha256": "8c149ec428ea440c48f02afc808f3380f8319455bcbd219773398a1a28160cdf",
+    "changes": [
+      "Declare space=buy for three existing IntParameters so Freqtrade can classify them; numeric defaults unchanged."
+    ]
+  },
+  {
+    "strategy": "FSampleStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/FSampleStrategy.py",
+    "original_sha256": "faf8a6df56f2b494d886a31a40b63e2ac75c26fd19c6816c68fa7bbec5645bfe",
+    "installed_sha256": "faf8a6df56f2b494d886a31a40b63e2ac75c26fd19c6816c68fa7bbec5645bfe",
+    "changes": []
+  },
+  {
+    "strategy": "FSupertrendStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/FSupertrendStrategy.py",
+    "original_sha256": "6d4760637514311f1664b6a00460f07cf29a762a15b29e89febd73da73316bb8",
+    "installed_sha256": "6d4760637514311f1664b6a00460f07cf29a762a15b29e89febd73da73316bb8",
+    "changes": []
+  },
+  {
+    "strategy": "FOttStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/FOttStrategy.py",
+    "original_sha256": "48f79d6d00c7af9eadbdb972ceb42f39b8d5eb2b203433ded8b90b387135f119",
+    "installed_sha256": "ec3bb14499dbead3334685c5a03f4620eb9aa2d74f8d3a69848d01a178156e69",
+    "changes": [
+      "Use Python standard-library math instead of removed numpy.lib.math; no signal parameter change.",
+      "Use single-step DataFrame.loc assignment for Var under pandas 3 Copy-on-Write; restore original intended update, no parameter tuning.",
+      "Initialize shortstop as float so pandas 3 accepts price-valued assignments; preserve sentinel magnitude."
+    ]
+  },
+  {
+    "strategy": "TrendFollowingStrategy",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/TrendFollowingStrategy.py",
+    "original_sha256": "d165cc1bf236b96b98ecd9404d47aaaacf4231a405caf3055c586624d1ca3747",
+    "installed_sha256": "d165cc1bf236b96b98ecd9404d47aaaacf4231a405caf3055c586624d1ca3747",
+    "changes": []
+  },
+  {
+    "strategy": "VolatilitySystem",
+    "source": "https://github.com/freqtrade/freqtrade-strategies",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/futures/VolatilitySystem.py",
+    "original_sha256": "a3665af76addbb0a732d0d11e6e53b5faf72a9f516023b05dd7b734c2c23e2d8",
+    "installed_sha256": "25379aaf5631a890329a5daafbc769b7ec3b10b0f4caff8eff5371418b188958",
+    "changes": [
+      "Limit leverage to 1x under the existing user instruction; signal logic unchanged."
+    ]
+  }
+]

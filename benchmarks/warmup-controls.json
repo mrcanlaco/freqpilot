@@ -1,0 +1,22 @@
+[
+  {
+    "strategy": "TrendFollowingStrategy",
+    "original_startup": 0,
+    "group_required_startup": 14,
+    "frozen_matches_single_cli": true,
+    "warmup_control_matches_group": true,
+    "group_result": "backtest-result-2026-10-21_20-38-29.zip",
+    "single_result": "backtest-result-2026-10-22_00-48-45.zip",
+    "control_result": "backtest-result-2026-10-22_00-50-09.zip"
+  },
+  {
+    "strategy": "VolatilitySystem",
+    "original_startup": 0,
+    "group_required_startup": 30,
+    "frozen_matches_single_cli": true,
+    "warmup_control_matches_group": true,
+    "group_result": "backtest-result-2026-10-21_20-40-13.zip",
+    "single_result": "backtest-result-2026-10-22_00-51-01.zip",
+    "control_result": "backtest-result-2026-10-22_00-52-04.zip"
+  }
+]

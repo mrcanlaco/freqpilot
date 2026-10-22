@@ -1,0 +1,10 @@
+{
+  "desired_stake": 50,
+  "exchange_minimum": 82,
+  "result": {
+    "official_2026_9": 0.0,
+    "ultimate_2026_6": 82.0
+  },
+  "official_adjustment_cap": 1.3,
+  "ultimate_adjustment_cap": 1.8
+}

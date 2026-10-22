@@ -1,0 +1,177 @@
+<script setup lang="ts">
+import { resolveTargetBot } from '@/utils/targetBot';
+import type { ForceExitPayload, Trade } from '@/types';
+import { ref, computed } from 'vue';
+import { refDebounced } from '@vueuse/core';
+import { useI18n } from 'vue-i18n';
+
+const props = defineProps<{
+  trade: Trade;
+  stakeCurrencyDecimals: number;
+  /** Bot owning the trade. Defaults to the active bot; multi-bot views must pass it. */
+  botId?: string;
+}>();
+
+const model = defineModel<boolean>();
+const { t } = useI18n();
+const botStore = useBotStore();
+const targetBot = computed(() =>
+  resolveTargetBot(botStore.botStores, props.botId, botStore.activeBot),
+);
+const submitting = ref(false);
+
+const form = ref<HTMLFormElement>();
+const amount = ref<number | undefined>(undefined);
+const price = ref<number | undefined>(undefined);
+const ordertype = ref('limit');
+
+const checkFormValidity = () => {
+  const valid = form.value?.checkValidity();
+
+  return valid;
+};
+
+async function handleSubmit() {
+  // Exit when the form isn't valid
+  if (!checkFormValidity() || submitting.value) {
+    return;
+  }
+  submitting.value = true;
+  // call forceentry
+  const payload: ForceExitPayload = { tradeid: String(props.trade.trade_id) };
+
+  if (ordertype.value) {
+    payload.ordertype = ordertype.value;
+  }
+  if (amount.value) {
+    payload.amount = amount.value;
+  }
+  if (price.value && targetBot.value.botFeatures.forceExitWithPrice) {
+    payload.price = price.value;
+  }
+  await nextTick();
+  try {
+    await targetBot.value.forceexit(payload);
+  } finally {
+    submitting.value = false;
+  }
+  model.value = false;
+}
+
+function resetForm() {
+  amount.value = props.trade.amount;
+  ordertype.value =
+    targetBot.value.botState?.order_types?.force_exit ||
+    targetBot.value.botState?.order_types?.exit ||
+    'limit';
+}
+
+function handleExit() {
+  // Trigger submit handler
+  handleSubmit();
+}
+
+const amountDebounced = refDebounced(amount, 250, { maxWait: 500 });
+
+const amountInBase = computed<string>(() => {
+  return amountDebounced.value && props.trade.current_rate
+    ? `~${formatPriceCurrency(amountDebounced.value * props.trade.current_rate, props.trade.quote_currency || '', props.stakeCurrencyDecimals)} (Estimated value) `
+    : '';
+});
+const orderTypeOptions = computed(() => [
+  { value: 'market', text: t('forceEntry.market') },
+  { value: 'limit', text: t('forceEntry.limit') },
+]);
+</script>
+
+<template>
+  <Dialog
+    v-model:visible="model"
+    :header="t('forceExit.title')"
+    modal
+    @show="resetForm"
+    @hide="resetForm"
+  >
+    <form ref="form" class="space-y-4 md:min-w-[32rem]" @submit.prevent="handleSubmit">
+      <div class="mb-4">
+        <p class="mb-2">
+          <span>{{ t('forceExit.exitingTrade', { id: trade.trade_id, pair: trade.pair }) }}</span>
+          <br />
+          <span>{{
+            t('forceExit.currentlyOwning', { amount: trade.amount, currency: trade.base_currency })
+          }}</span>
+        </p>
+      </div>
+
+      <div>
+        <label for="stake-input" class="block font-medium mb-1">
+          {{ t('forceExit.amount', { currency: trade.base_currency }) }}
+          <span class="text-sm italic ml-1">{{ amountInBase }}</span>
+        </label>
+        <div class="space-y-2">
+          <InputNumber
+            id="stake-input"
+            v-model="amount"
+            :min="0"
+            :max="trade.amount"
+            :use-grouping="false"
+            :step="trade.amount_precision ?? 0.000001"
+            :max-fraction-digits="8"
+            class="w-full"
+            show-buttons
+          />
+          <Slider
+            v-model="amount"
+            :min="0"
+            :max="trade.amount"
+            :step="trade.amount_precision ?? 0.000001"
+            class="w-full"
+          />
+        </div>
+      </div>
+      <div v-if="targetBot.botFeatures.forceExitWithPrice">
+        <label for="price-input" class="block font-medium mb-1">
+          {{ t('forceExit.price') }}
+          <span class="text-sm italic ml-1">{{ t('forceExit.limitOnly') }}</span>
+        </label>
+        <div class="space-y-2">
+          <InputNumber
+            id="price-input"
+            v-model="price"
+            :disabled="ordertype !== 'limit'"
+            :min="0"
+            :use-grouping="false"
+            :step="trade.price_precision ?? 0.000001"
+            :max-fraction-digits="8"
+            class="w-full"
+            show-buttons
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-medium mb-1">*{{ t('forceExit.orderType') }}</label>
+        <SelectButton
+          v-model="ordertype"
+          :options="orderTypeOptions"
+          :allow-empty="false"
+          option-label="text"
+          option-value="value"
+          size="small"
+          class="w-full"
+        />
+      </div>
+    </form>
+
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <Button severity="secondary" size="small" @click="model = false">{{
+          t('forceExit.cancel')
+        }}</Button>
+        <Button severity="primary" size="small" @click="handleExit">{{
+          t('forceExit.exitPosition')
+        }}</Button>
+      </div>
+    </template>
+  </Dialog>
+</template>

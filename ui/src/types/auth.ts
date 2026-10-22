@@ -1,0 +1,52 @@
+/**
+ * Payload the user enters, which is required for login.
+ */
+export interface AuthPayload {
+  botName: string;
+  url: string;
+  username: string;
+  password: string;
+}
+
+/** Response from the API */
+export interface AuthResponse {
+  access_token?: string;
+  refresh_token?: string;
+}
+
+/** Stored Authentication */
+export interface AuthStorage {
+  botName: string;
+  botIcon?: string;
+  apiUrl: string;
+  username?: string;
+  refreshToken: string;
+  accessToken: string;
+  autoRefresh: boolean;
+  sortId?: number;
+  /** Epoch ms when this bot was first added to FreqUI. Used for "oldest → newest" sorting. */
+  createdAt?: number;
+}
+
+export interface AuthStorageWithBotId extends AuthStorage {
+  botId: string;
+}
+
+/** Auth Storage container */
+export interface AuthStorageMulti {
+  [key: string]: AuthStorage;
+}
+
+export interface BotDescriptor {
+  botName: string;
+  botIcon?: string;
+  botId: string;
+  botUrl: string;
+  sortId: number;
+  /** Epoch ms when this bot was first added to FreqUI. Used for "oldest → newest" sorting. */
+  createdAt?: number;
+}
+
+export interface BotDescriptors {
+  [key: string]: BotDescriptor;
+}

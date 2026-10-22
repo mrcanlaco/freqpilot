@@ -1,0 +1,794 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+import { useBtcBenchmark } from '@/composables/useBtcBenchmark';
+
+const { t } = useI18n();
+const store = useStrategyDevStore();
+const epochData = ref<Record<string, unknown> | null>(null);
+const epochLoading = ref(false);
+
+const btcEquityInput = computed(
+  () => epochData.value?.equity_curve as { date: string; balance: number }[] | undefined,
+);
+const btcStartBal = computed(() => (epochData.value?.starting_balance as number) ?? 1000);
+const { benchmarkEquity: btcBenchmark } = useBtcBenchmark(btcEquityInput, btcStartBal);
+
+const regimeTimeline = computed(() => {
+  const mr = epochData.value?.market_regime as Record<string, unknown> | undefined;
+  return mr?.timeline as
+    | { date: string; regime: string; volatility: number; trend: number }[]
+    | undefined;
+});
+
+const topEpochs = computed(() => {
+  const a = store.hyperoptAnalysis;
+  if (!a) return [];
+  const top = a.top_epochs as Array<Record<string, unknown>> | undefined;
+  return top?.slice(0, 10) ?? [];
+});
+
+const selectedRank = computed({
+  get: () => store.selectedEpochRank,
+  set: (v) => {
+    store.selectedEpochRank = v;
+  },
+});
+
+async function loadEpoch(rank: number) {
+  selectedRank.value = rank;
+  const filename = store.selectedRun?.filename;
+  if (!filename) return;
+  epochLoading.value = true;
+  try {
+    epochData.value = await store.fetchEpochAdvancedAnalytics(filename, rank);
+  } finally {
+    epochLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  if (topEpochs.value.length > 0) {
+    loadEpoch(selectedRank.value);
+  }
+});
+
+watch(topEpochs, (v) => {
+  if (v.length > 0 && !epochData.value) loadEpoch(selectedRank.value);
+});
+
+const epochInfo = computed(
+  () => epochData.value?.epoch_info as Record<string, unknown> | undefined,
+);
+
+function fmtPct(v: unknown): string {
+  const n = Number(v);
+  if (isNaN(n)) return '—';
+  return `${n >= 0 ? '+' : ''}${(n * 100).toFixed(2)}%`;
+}
+
+function fmtNum(v: unknown, decimals = 2): string {
+  const n = Number(v);
+  if (isNaN(n)) return '—';
+  return n.toFixed(decimals);
+}
+
+const showParams = ref(false);
+const paramsCopied = ref(false);
+
+function copyParams() {
+  const data = epochData.value?.params_details ?? epochData.value?.params_dict;
+  if (!data) return;
+  navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+  paramsCopied.value = true;
+  setTimeout(() => {
+    paramsCopied.value = false;
+  }, 2000);
+}
+</script>
+
+<template>
+  <div class="epoch-panel">
+    <!-- ═══ EPOCH SELECTOR ═══ -->
+    <div v-if="topEpochs.length > 0" class="epoch-selector">
+      <span class="epoch-selector-label">{{ t('strategyDev.epochSelectorLabel') }}</span>
+      <div class="epoch-pills">
+        <button
+          v-for="ep in topEpochs"
+          :key="ep.rank as number"
+          class="epoch-pill"
+          :class="{
+            active: selectedRank === ep.rank,
+            positive: (ep.profit_pct as number) > 0,
+            negative: (ep.profit_pct as number) <= 0,
+          }"
+          @click="loadEpoch(ep.rank as number)"
+        >
+          <span class="ep-rank">#{{ ep.rank }}</span>
+          <span class="ep-profit"
+            >{{ (ep.profit_pct as number) >= 0 ? '+' : ''
+            }}{{ (ep.profit_pct as number).toFixed(1) }}%</span
+          >
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ LOADING ═══ -->
+    <div v-if="epochLoading" class="py-6">
+      <SkeletonPanel variant="cards" :cols="4" />
+      <SkeletonPanel variant="chart" class="mt-4" />
+    </div>
+
+    <!-- ═══ EPOCH CONTENT ═══ -->
+    <template v-else-if="epochData && epochInfo">
+      <!-- Scorecard -->
+      <div class="scorecard">
+        <div class="scorecard-badge">
+          <i-mdi-numeric class="w-3.5 h-3.5" />
+          {{ t('strategyDev.metricEpochNum', { n: epochInfo.current_epoch ?? selectedRank }) }}
+          <span class="scorecard-rank">{{ t('strategyDev.metricRank') }} {{ selectedRank }}</span>
+        </div>
+        <div class="scorecard-metrics">
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.totalProfit') }}</span>
+            <span
+              class="sc-value"
+              :class="Number(epochInfo.total_profit) >= 0 ? 'sc-pos' : 'sc-neg'"
+            >
+              {{ fmtPct(epochInfo.total_profit) }}
+            </span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.totalTrades') }}</span>
+            <span class="sc-value">{{ epochInfo.total_trades }}</span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.btScorecardDD') }}</span>
+            <span class="sc-value sc-neg">{{ fmtPct(epochInfo.max_drawdown) }}</span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.metricSharpe') }}</span>
+            <span class="sc-value">{{ fmtNum(epochInfo.sharpe) }}</span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.metricSortino') }}</span>
+            <span class="sc-value">{{ fmtNum(epochInfo.sortino) }}</span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.btScorecardWinrate') }}</span>
+            <span class="sc-value">
+              {{
+                typeof epochInfo.winrate === 'number' && epochInfo.winrate <= 1
+                  ? (Number(epochInfo.winrate) * 100).toFixed(1)
+                  : fmtNum(epochInfo.winrate, 1)
+              }}%
+            </span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.metricPF') }}</span>
+            <span class="sc-value">{{ fmtNum(epochInfo.profit_factor) }}</span>
+          </div>
+          <div class="sc-metric">
+            <span class="sc-label">{{ t('strategyDev.metricLoss') }}</span>
+            <span class="sc-value">{{ fmtNum(epochInfo.loss, 4) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Params export -->
+      <div
+        v-if="epochData.params_dict || epochData.params_details"
+        class="params-export-panel mt-3"
+      >
+        <button class="params-toggle-btn" @click="showParams = !showParams">
+          <i-mdi-code-json class="w-4 h-4" />
+          {{ t('strategyDev.exportParams') }}
+          <i-mdi-chevron-down v-if="!showParams" class="w-4 h-4" />
+          <i-mdi-chevron-up v-else class="w-4 h-4" />
+        </button>
+        <div v-if="showParams" class="params-json-wrap">
+          <pre class="params-json">{{
+            JSON.stringify(epochData.params_details ?? epochData.params_dict, null, 2)
+          }}</pre>
+          <button class="params-copy-btn" @click="copyParams">
+            {{ paramsCopied ? t('strategyDev.copied') : t('strategyDev.copy') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Charts grid -->
+      <div class="grid grid-cols-1 gap-4 mt-4">
+        <!-- ═══ Equity & Drawdowns ═══ -->
+        <div class="epoch-section-header">
+          <span class="epoch-section-num">1</span>
+          <h3>{{ t('strategyDev.epochSectionEquity') }}</h3>
+        </div>
+
+        <ChartWrapper
+          v-if="epochData.equity_curve"
+          :title="t('strategyDev.aaEquityCurve')"
+          :hint="t('strategyDev.hintEquityCurve')"
+          chart-id="epoch-equity"
+        >
+          <EquityCurveChart
+            :equity="epochData.equity_curve as any[]"
+            :starting-balance="(epochData.starting_balance as number) ?? 1000"
+            :benchmark="btcBenchmark"
+            benchmark-label="BTC"
+            :regimes="regimeTimeline"
+          />
+          <template #fullscreen>
+            <EquityCurveChart
+              :equity="epochData.equity_curve as any[]"
+              :starting-balance="(epochData.starting_balance as number) ?? 1000"
+              :benchmark="btcBenchmark"
+              benchmark-label="BTC"
+              :regimes="regimeTimeline"
+            />
+          </template>
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.drawdown_series"
+            :title="t('strategyDev.aaUnderwaterPlot')"
+            :hint="t('strategyDev.hintUnderwater')"
+            chart-id="epoch-underwater"
+          >
+            <UnderwaterChart
+              :series="epochData.drawdown_series as any[]"
+              :regimes="regimeTimeline"
+            />
+            <template #fullscreen>
+              <UnderwaterChart
+                :series="epochData.drawdown_series as any[]"
+                :regimes="regimeTimeline"
+              />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.cumulative_trades"
+            :title="t('strategyDev.aaCumulativeTrades')"
+            :hint="t('strategyDev.hintCumulativeTrades')"
+            chart-id="epoch-cumulative"
+          >
+            <CumulativeTradesChart
+              :trades="epochData.cumulative_trades as any[]"
+              :regimes="regimeTimeline"
+            />
+            <template #fullscreen>
+              <CumulativeTradesChart
+                :trades="epochData.cumulative_trades as any[]"
+                :regimes="regimeTimeline"
+              />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <!-- ═══ Performance ═══ -->
+        <div class="epoch-section-header">
+          <span class="epoch-section-num">2</span>
+          <h3>{{ t('strategyDev.epochSectionPerformance') }}</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.return_distribution_fit"
+            :title="t('strategyDev.aaReturnDistribution')"
+            :hint="t('strategyDev.hintReturnDistribution')"
+            chart-id="epoch-return-dist"
+          >
+            <ReturnDistributionChart :data="epochData.return_distribution_fit as any" />
+            <template #fullscreen>
+              <ReturnDistributionChart :data="epochData.return_distribution_fit as any" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.mae_mfe"
+            :title="t('strategyDev.aaMaeMfe')"
+            :hint="t('strategyDev.hintMaeMfe')"
+            chart-id="epoch-mae-mfe"
+          >
+            <MaeMfeScatter :points="epochData.mae_mfe as any[]" />
+            <template #fullscreen>
+              <MaeMfeScatter :points="epochData.mae_mfe as any[]" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <ChartWrapper
+          v-if="epochData.drawdown_calendar"
+          :title="t('strategyDev.aaDrawdownCalendar')"
+          :hint="t('strategyDev.hintDrawdownCalendar')"
+          chart-id="epoch-dd-calendar"
+        >
+          <DrawdownCalendarChart :data="epochData.drawdown_calendar as any[]" />
+          <template #fullscreen>
+            <DrawdownCalendarChart :data="epochData.drawdown_calendar as any[]" />
+          </template>
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+
+        <ChartWrapper
+          v-if="epochData.monthly_returns"
+          :title="t('strategyDev.aaMonthlyReturns')"
+          :hint="t('strategyDev.hintMonthlyReturns')"
+          chart-id="epoch-monthly"
+        >
+          <MonthlyReturnsHeatmap :data="epochData.monthly_returns as any[]" />
+          <template #fullscreen>
+            <MonthlyReturnsHeatmap :data="epochData.monthly_returns as any[]" />
+          </template>
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+
+        <!-- ═══ Trades ═══ -->
+        <div class="epoch-section-header">
+          <span class="epoch-section-num">3</span>
+          <h3>{{ t('strategyDev.epochSectionTrades') }}</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.trade_pnl_distribution"
+            :title="t('strategyDev.aaTradePnl')"
+            :hint="t('strategyDev.hintTradePnl')"
+            chart-id="epoch-pnl"
+          >
+            <TradePnlChart :distribution="epochData.trade_pnl_distribution as any" />
+            <template #fullscreen>
+              <TradePnlChart :distribution="epochData.trade_pnl_distribution as any" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.duration_scatter"
+            :title="t('strategyDev.aaDurationScatter')"
+            :hint="t('strategyDev.hintDurationScatter')"
+            chart-id="epoch-duration"
+          >
+            <DurationScatterChart :points="epochData.duration_scatter as any[]" />
+            <template #fullscreen>
+              <DurationScatterChart :points="epochData.duration_scatter as any[]" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.exit_reason_detail"
+            :title="t('strategyDev.aaExitReasons')"
+            :hint="t('strategyDev.hintExitReasons')"
+            chart-id="epoch-exit"
+          >
+            <ExitReasonChart :reasons="epochData.exit_reason_detail as any[]" />
+            <template #fullscreen>
+              <ExitReasonChart :reasons="epochData.exit_reason_detail as any[]" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.weekday_pattern"
+            :title="t('strategyDev.aaWeekdayPattern')"
+            :hint="t('strategyDev.hintWeekdayPattern')"
+            chart-id="epoch-weekday"
+          >
+            <WeekdayPatternChart :pattern="epochData.weekday_pattern as any" />
+            <template #fullscreen>
+              <WeekdayPatternChart :pattern="epochData.weekday_pattern as any" />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <!-- ═══ Risk & Structure ═══ -->
+        <div class="epoch-section-header">
+          <span class="epoch-section-num">4</span>
+          <h3>{{ t('strategyDev.epochSectionRisk') }}</h3>
+        </div>
+
+        <RiskMetricsCard v-if="epochData.risk_metrics" :metrics="epochData.risk_metrics as any" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.long_short_split"
+            :title="t('strategyDev.aaLongShort')"
+            :hint="t('strategyDev.hintLongShort')"
+            chart-id="epoch-ls"
+          >
+            <LongShortCard :split="epochData.long_short_split as any" />
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.trade_expectancy"
+            :title="t('strategyDev.aaExpectancy')"
+            :hint="t('strategyDev.hintExpectancy')"
+            chart-id="epoch-expectancy"
+          >
+            <ExpectancyCard :data="epochData.trade_expectancy as any" />
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <!-- ═══ Consistency ═══ -->
+        <div class="epoch-section-header">
+          <span class="epoch-section-num">5</span>
+          <h3>{{ t('strategyDev.epochSectionConsistency') }}</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ChartWrapper
+            v-if="epochData.rolling_winrate"
+            :title="t('strategyDev.aaRollingWinrate')"
+            :hint="t('strategyDev.hintRollingWinrate')"
+            chart-id="epoch-rwr"
+          >
+            <RollingWinrateChart
+              :data="epochData.rolling_winrate as any[]"
+              :regimes="regimeTimeline"
+            />
+            <template #fullscreen>
+              <RollingWinrateChart
+                :data="epochData.rolling_winrate as any[]"
+                :regimes="regimeTimeline"
+              />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+
+          <ChartWrapper
+            v-if="epochData.rolling_profit_factor"
+            :title="t('strategyDev.aaRollingProfitFactor')"
+            :hint="t('strategyDev.hintRollingProfitFactor')"
+            chart-id="epoch-rpf"
+          >
+            <RollingProfitFactorChart
+              :data="epochData.rolling_profit_factor as any[]"
+              :regimes="regimeTimeline"
+            />
+            <template #fullscreen>
+              <RollingProfitFactorChart
+                :data="epochData.rolling_profit_factor as any[]"
+                :regimes="regimeTimeline"
+              />
+            </template>
+          </ChartWrapper>
+          <ChartEmptyState v-else />
+        </div>
+
+        <ChartWrapper
+          v-if="epochData.exposure_timeline"
+          :title="t('strategyDev.aaExposure')"
+          :hint="t('strategyDev.hintExposure')"
+          chart-id="epoch-exposure"
+        >
+          <ExposureChart
+            :timeline="epochData.exposure_timeline as any[]"
+            :regimes="regimeTimeline"
+          />
+          <template #fullscreen>
+            <ExposureChart
+              :timeline="epochData.exposure_timeline as any[]"
+              :regimes="regimeTimeline"
+            />
+          </template>
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+
+        <ChartWrapper
+          v-if="epochData.streaks"
+          :title="t('strategyDev.aaStreaks')"
+          :hint="t('strategyDev.hintStreaks')"
+          chart-id="epoch-streaks"
+        >
+          <StreaksCard :streaks="epochData.streaks as any" />
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+
+        <ChartWrapper
+          v-if="
+            epochData.capital_utilization && (epochData.capital_utilization as any[]).length > 0
+          "
+          :title="t('strategyDev.btCapitalUtilization')"
+          :hint="t('strategyDev.hintBtCapitalUtilization')"
+          chart-id="epoch-cap-util"
+        >
+          <CapitalUtilizationChart
+            :data="epochData.capital_utilization as any[]"
+            :regimes="regimeTimeline"
+          />
+          <template #fullscreen>
+            <CapitalUtilizationChart
+              :data="epochData.capital_utilization as any[]"
+              :regimes="regimeTimeline"
+            />
+          </template>
+        </ChartWrapper>
+
+        <ChartWrapper
+          v-if="epochData.pair_profit"
+          :title="t('strategyDev.aaPairProfit')"
+          :hint="t('strategyDev.hintPairProfit')"
+          chart-id="epoch-pairs"
+        >
+          <PairProfitBarChart :data="epochData.pair_profit as any[]" :title="''" />
+          <template #fullscreen>
+            <PairProfitBarChart :data="epochData.pair_profit as any[]" :title="''" />
+          </template>
+        </ChartWrapper>
+        <ChartEmptyState v-else />
+      </div>
+    </template>
+
+    <!-- Empty state -->
+    <div v-else-if="!epochLoading" class="epoch-empty">
+      <i-mdi-chart-box-outline class="w-8 h-8 opacity-30" />
+      <p>{{ t('strategyDev.epochSelectPrompt') }}</p>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.epoch-panel {
+  padding: 0.75rem 1rem;
+  background: var(--sd-mantle);
+  border-radius: var(--sd-radius-lg);
+  border: 1px solid var(--sd-border-subtle);
+}
+
+/* ── Epoch selector ── */
+.epoch-selector {
+  margin-bottom: 1rem;
+}
+
+.epoch-selector-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6c7086;
+  margin-bottom: 0.5rem;
+}
+
+.epoch-pills {
+  display: flex;
+  gap: 0.375rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.epoch-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.epoch-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(49, 50, 68, 0.5);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 64px;
+}
+
+.epoch-pill:hover {
+  background: rgba(69, 71, 90, 0.6);
+}
+
+.epoch-pill.active {
+  background: rgba(137, 180, 250, 0.12);
+  border-color: rgba(137, 180, 250, 0.3);
+}
+
+.ep-rank {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6c7086;
+}
+
+.epoch-pill.active .ep-rank {
+  color: #89b4fa;
+}
+
+.ep-profit {
+  font-family: var(--sd-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.epoch-pill.positive .ep-profit {
+  color: #a6e3a1;
+}
+
+.epoch-pill.negative .ep-profit {
+  color: #f38ba8;
+}
+
+/* ── Scorecard ── */
+.scorecard {
+  padding: 0.875rem 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba(137, 180, 250, 0.05);
+  border: 1px solid rgba(137, 180, 250, 0.12);
+}
+
+.scorecard-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #89b4fa;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.625rem;
+}
+
+.scorecard-rank {
+  font-family: var(--sd-font-mono);
+  font-size: 10px;
+  color: #cdd6f4;
+  background: rgba(137, 180, 250, 0.12);
+  padding: 0.0625rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.scorecard-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.sc-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c7086;
+}
+
+.sc-value {
+  font-family: var(--sd-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #cdd6f4;
+}
+
+.sc-pos {
+  color: #a6e3a1;
+}
+.sc-neg {
+  color: #f38ba8;
+}
+
+/* ── Section headers ── */
+.epoch-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(137, 180, 250, 0.08);
+}
+
+.epoch-section-header:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.epoch-section-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(137, 180, 250, 0.1);
+  color: #89b4fa;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.epoch-section-header h3 {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #89b4fa;
+  margin: 0;
+}
+
+/* ── Empty ── */
+.epoch-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem;
+  color: #6c7086;
+  text-align: center;
+}
+
+.params-export-panel {
+  border: 1px solid rgba(69, 71, 90, 0.25);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.params-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(30, 30, 46, 0.5);
+  border: none;
+  color: #a6adc8;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.params-toggle-btn:hover {
+  background: rgba(30, 30, 46, 0.8);
+  color: #cdd6f4;
+}
+
+.params-json-wrap {
+  position: relative;
+  background: rgba(17, 17, 27, 0.5);
+}
+
+.params-json {
+  max-height: 300px;
+  overflow: auto;
+  padding: 0.75rem;
+  margin: 0;
+  font-size: 11px;
+  font-family: var(--sd-font-mono);
+  color: #cdd6f4;
+  white-space: pre;
+}
+
+.params-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(69, 71, 90, 0.5);
+  border: 1px solid rgba(69, 71, 90, 0.4);
+  border-radius: 0.25rem;
+  color: #a6adc8;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.params-copy-btn:hover {
+  background: rgba(69, 71, 90, 0.8);
+  color: #cdd6f4;
+}
+</style>

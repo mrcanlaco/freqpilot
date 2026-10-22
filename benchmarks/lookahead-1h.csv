@@ -1,0 +1,6 @@
+filename,strategy,has_bias,total_signals,biased_entry_signals,biased_exit_signals,biased_indicators
+FAdxSmaStrategy.py,FAdxSmaStrategy,False,2,0,0,
+FSampleStrategy.py,FSampleStrategy,False,2,0,0,
+FSupertrendStrategy.py,FSupertrendStrategy,False,2,0,0,
+FOttStrategy.py,FOttStrategy,False,2,0,0,
+VolatilitySystem.py,VolatilitySystem,False,2,0,0,
