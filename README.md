@@ -2,6 +2,8 @@
 
 Tên làm việc cho workspace nghiên cứu Binance Futures của riêng bạn: ý tưởng → mã → backtest → phân tích → paper. Phiên bản đầu 0.1.0 ưu tiên tái sử dụng FreqUI Ultimate v2.1.0 và API chính thức Freqtrade 2026.9. Đây là tên tạm, chưa xác minh khả năng sử dụng thương hiệu hay tên GitHub công khai.
 
+Đã đối chiếu các yêu cầu bàn giao với source, ZIP kết quả và bộ đang chạy; xem [bảng kiểm bằng chứng](benchmarks/delivery-audit.json) và [trạng thái khi bàn giao](benchmarks/delivery-audit-runtime.json). Kiểm tra mới nhất xác nhận 118 tệp lõi engine của hai dịch vụ nghiên cứu khớp bản chính thức. Những mục “Còn phát triển tiếp” trong PRODUCT là các hướng mở rộng; chưa có tuyên bố tương đương toàn bộ RoboQuant hoặc đã phát hành trên GitHub.
+
 ## Mở bộ cài hiện tại
 
 - FreqPilot: http://localhost:8090/studio

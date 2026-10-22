@@ -1,0 +1,47 @@
+{
+  "engine_core": {
+    "codex-freqtrade-research-paper-1": {
+      "files": 118,
+      "matches_official_reference": true,
+      "sha256": "85c2b037ae626b47a6506256f008fb9738f028907bdcb890185ccf94d94dfa13"
+    },
+    "codex-freqtrade-backtest-1": {
+      "files": 118,
+      "matches_official_reference": true,
+      "sha256": "85c2b037ae626b47a6506256f008fb9738f028907bdcb890185ccf94d94dfa13"
+    }
+  },
+  "native_backtest_running": false,
+  "new_jobs_or_lifecycle_commands": 0,
+  "source_commit": "efc1364f58042ff1f497659ce000ff921f0a1c24",
+  "library": {
+    "engine": "2026.9",
+    "product": "FreqPilot",
+    "strategies": 11,
+    "dry_run": true
+  },
+  "official_reference_image": "sha256:9d67afb8eb5f4e1210f4fb067efcbd5e005bd4f1c27f6f3888b8b9fc7f9b5199",
+  "research_paper": {
+    "state": "running",
+    "open_trades": 0,
+    "online": true,
+    "profiles": 1,
+    "dry_run": true,
+    "trading_keys_present": false,
+    "margin_mode": "isolated"
+  },
+  "main_paper": {
+    "margin_mode": "isolated",
+    "strategy": "StarterFutures",
+    "trading_mode": "futures",
+    "trading_keys_present": false,
+    "exchange": "binance",
+    "dry_run": true
+  },
+  "retained_runs": 10,
+  "actions_during_audit": [
+    "Authenticated read-only GET",
+    "Hash engine Python files in existing containers"
+  ],
+  "checked_at": "2026-10-22T20:03:50.0407631+07:00"
+}
