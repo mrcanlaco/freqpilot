@@ -65,6 +65,8 @@ Lệnh chạy typecheck, toàn bộ unit/component test UI, build vào `ui/dist-
 
 Workflow gốc `.github/workflows/check.yml` chạy cùng quy trình khi repo được đưa lên GitHub. Các action được ghim SHA từ [actions/checkout](https://github.com/actions/checkout), [actions/setup-node](https://github.com/actions/setup-node) và [pnpm/action-setup](https://github.com/pnpm/action-setup). Workflow không publish, deploy, chạy tối ưu hay mở paper. Các workflow kế thừa trong `ui/.github` giữ để tham khảo upstream, không tự hoạt động như workflow gốc của repo này. Chưa xác nhận kết quả trên GitHub khi chưa có repo/run thực tế.
 
+Đã kiểm tra bản sao Git sạch trên Windows với `core.autocrlf=true`: cài theo lockfile, typecheck, 1.692 kiểm tra UI, 38 kiểm tra backend, build và nạp tám mẫu bằng engine native đều qua. Kiểm tra bảo vệ cài đặt cuối cùng có 28 xác nhận. Webserver tạm đã đăng nhập và hiển thị đủ tám mẫu có mô tả/nhãn, sau đó được dừng và xóa container; không bật bot. Chưa chạy toàn bộ Compose của bản cài mới hoặc xác nhận trên máy khác. Chi tiết ở [bằng chứng cài sạch](../benchmarks/portable-install-control.json).
+
 ## Dừng và sao lưu
 
 ```powershell

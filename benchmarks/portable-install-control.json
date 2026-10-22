@@ -1,0 +1,63 @@
+{
+  "checked_at": "2026-10-22T15:07:00.1345955+07:00",
+  "product": "FreqPilot 0.1.0",
+  "engine": "official Freqtrade 2026.9",
+  "source_commit": "30d4db186fc2cc3254849c29a8a018bc7b75a6da",
+  "scope": "Independent initialization, clean Git checkout, local verification and first login; no change to main services",
+  "clean_clone": {
+    "runtime_in_git": false,
+    "frozen_lock_install": "passed",
+    "built_ui_in_git": false,
+    "private_env_in_git": false,
+    "portable_lf_template_hashes": "passed",
+    "dependencies_in_git": false,
+    "autocrlf": "true"
+  },
+  "tests": {
+    "ui": "passed",
+    "native_strategy_resolver": "passed, offline",
+    "production_build": "passed",
+    "backend_tests": 38,
+    "backend": "passed",
+    "native_strategy_resolver_count": 8,
+    "final_install_guard_assertions": 28,
+    "typecheck": "passed",
+    "ui_tests": 1692,
+    "startup_check_unused_broken_strategy": "passed",
+    "ui_files": 112
+  },
+  "first_login": {
+    "strategies": 8,
+    "backtest_status": "not_started",
+    "browser_library_visible": true,
+    "real_webserver": true,
+    "screenshot": "screenshots/clean-install-library.png",
+    "temporary_webserver_removed": true,
+    "descriptions_and_tags": 8,
+    "runmode": "webserver",
+    "dry_run": true,
+    "favorites": 0
+  },
+  "runtime": {
+    "new_data_downloads": [],
+    "main_dry_run": true,
+    "protected_files_unchanged": true,
+    "binance_trading_keys_present": false,
+    "main_services_restarted": [],
+    "trading_actions_invoked": [],
+    "main_strategy": "StarterFutures",
+    "new_backtests": []
+  },
+  "ci": {
+    "actions_pinned": true,
+    "workflow": ".github/workflows/check.yml",
+    "github_run": "not run; repository not published",
+    "local_equivalent": "passed",
+    "other_machines": "not verified"
+  },
+  "limitations": [
+    "Full Compose startup was not exercised because fixed product ports belong to the existing installation; startup mutation guards were tested with mocks.",
+    "The real temporary smoke server ran webserver only, never trade.",
+    "This evidence verifies installation and UI availability, not strategy profitability or order-fill accuracy."
+  ]
+}

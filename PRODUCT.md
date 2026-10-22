@@ -53,7 +53,7 @@ Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run và kiểm tra toàn vẹn trên UI. Còn luồng phát lại tự động từ gói, ghim metadata sàn và cơ chế quản lý dung lượng.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
 5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.
-6. Chuẩn hóa cài đặt độc lập, CI, cấu hình ví dụ và kiểm tra trước khi xuất bản GitHub.
+6. Đã có khởi tạo cài đặt độc lập, cấu hình ví dụ, kiểm tra Start/Stop và workflow CI ghim phiên bản. Bản sao Git sạch với chuyển dòng Windows đã cài theo lockfile, qua typecheck, 1.692 kiểm tra UI, 38 kiểm tra backend và kiểm tra native tám mẫu; 28 kiểm tra bảo vệ cài đặt chạy bằng dữ liệu riêng. Đăng nhập thử bằng webserver thật hiển thị đủ tám mẫu có mô tả/nhãn, không chép báo cáo cá nhân. Còn xác nhận workflow trên GitHub và cài trọn bộ trên máy khác: chưa tạo/publish repo, chưa chạy dịch vụ Compose mới vì các cổng đang thuộc bộ hiện tại. Xem [hướng dẫn](docs/INSTALL.md) và [bằng chứng cài sạch](benchmarks/portable-install-control.json).
 
 Không lấy số lượng tính năng như tick/L2 hoặc AI chat làm tiêu chí để thay engine đang được yêu cầu giữ nguyên.
 
