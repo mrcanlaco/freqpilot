@@ -1,0 +1,3 @@
+# Strategy provenance is a byte hash; preserve template bytes on every checkout.
+# Other source files retain the user's existing line-ending configuration.
+templates/*.py -text

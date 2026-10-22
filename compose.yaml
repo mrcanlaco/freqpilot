@@ -1,4 +1,4 @@
-name: codex-freqtrade
+name: ${FREQPILOT_PROJECT_NAME:-codex-freqtrade}
 x-common: &common
   volumes:
     - ${FREQPILOT_USER_DATA:?Set FREQPILOT_USER_DATA in .env}:/freqtrade/user_data
@@ -11,19 +11,19 @@ services:
     ports:
       - "127.0.0.1:8090:8080"
     command: >-
-      trade --config user_data/config.json --strategy StarterFutures
+      trade --config user_data/config.json --strategy StarterFutures --dry-run
       --db-url sqlite:////freqtrade/user_data/tradesv3.paper.sqlite
       --logfile user_data/logs/paper.log
   backtest:
     <<: *common
-    image: codex-freqpilot:2026.9-v0.1
+    image: ${FREQPILOT_IMAGE:-codex-freqpilot:2026.9-v0.1}
     build: ./backend
     ports:
       - "127.0.0.1:8091:8080"
     command: webserver --config user_data/config.json
   research-paper:
     <<: *common
-    image: codex-freqpilot:2026.9-v0.1
+    image: ${FREQPILOT_IMAGE:-codex-freqpilot:2026.9-v0.1}
     ports:
       - "127.0.0.1:8095:8080"
     entrypoint: /bin/sh

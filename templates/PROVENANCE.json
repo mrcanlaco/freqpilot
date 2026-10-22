@@ -43,7 +43,7 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FOttStrategy.py",
     "original_sha256": "48f79d6d00c7af9eadbdb972ceb42f39b8d5eb2b203433ded8b90b387135f119",
-    "installed_sha256": "ec3bb14499dbead3334685c5a03f4620eb9aa2d74f8d3a69848d01a178156e69",
+    "installed_sha256": "0be3a68dccce50e9ce1e25dbb9fb9a9c0dae03931c3c8af5f66c588b81b9b37d",
     "changes": [
       "Use Python standard-library math instead of removed numpy.lib.math; no signal parameter change.",
       "Use single-step DataFrame.loc assignment for Var under pandas 3 Copy-on-Write; restore original intended update, no parameter tuning.",
@@ -68,6 +68,17 @@
     "installed_sha256": "25379aaf5631a890329a5daafbc769b7ec3b10b0f4caff8eff5371418b188958",
     "changes": [
       "Limit leverage to 1x under the existing user instruction; signal logic unchanged."
+    ]
+  },
+  {
+    "strategy": "StarterFutures",
+    "source": "FreqPilot installation example",
+    "commit": "419c14f",
+    "path": "templates/StarterFutures.py",
+    "original_sha256": "05428d6aa3a54b6ac1abea24af300dcdc042997616355c9e159d0e471becc7db",
+    "installed_sha256": "05428d6aa3a54b6ac1abea24af300dcdc042997616355c9e159d0e471becc7db",
+    "changes": [
+      "Installation example: EMA20/50 with RSI, long/short, fixed 1x. No profitability claim."
     ]
   }
 ]

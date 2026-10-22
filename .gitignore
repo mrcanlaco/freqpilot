@@ -10,6 +10,7 @@ __pycache__/
 !.env.example
 user_data/
 runtime/
+work/
 ACCESS.txt
 *.sqlite*
 *.log
