@@ -184,7 +184,7 @@ function date(value: number | string | undefined) {
           </div>
           <small>Cập nhật {{ date(libraryUpdated(item)) }}</small>
         </div>
-        <div class="evidence">
+        <div class="evidence"><small v-if="latest.get(item.name)?.preset">Bộ tham số: {{latest.get(item.name)?.preset?.label}}</small>
           <template v-if="latest.get(item.name)"
             ><div class="metrics">
               <div>

@@ -291,6 +291,9 @@ class ApiServer(RPCHandler):
         from freqtrade.rpc.api_server.api_paper import router as paper
         app.include_router(paper, prefix="/api/v1/studio",
                 dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
+        from freqtrade.rpc.api_server.api_presets import router as presets
+        app.include_router(presets, prefix="/api/v1/studio",
+                dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
         # UI Router MUST be last!
         app.include_router(router_ui, prefix="")
 

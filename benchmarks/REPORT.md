@@ -10,6 +10,8 @@ Funding/mark của bộ chính nguyên vẹn. Ultimate dùng bản sao funding c
 
 ## Kết quả engine chính thức
 
+Đối chiếu thêm luồng bộ tham số có tên: đã lưu đúng 5 giá trị gốc của FAdxSmaStrategy bằng JSON native, chạy lại khoảng 18/09–22/10. Vẫn 2 lệnh / -3.38536718 USDT; 14 trường của từng lệnh khớp bản trước (gồm giá, lượng, stake, funding, phí và leverage), cùng hash mã chính và 16 tệp dữ liệu. Không thay tham số để tìm lợi nhuận. Tệp .py/.json trong thư viện giữ nguyên; cả lookahead và recursive dùng bản sao có cùng hash JSON. Lookahead xét 2 tín hiệu không thấy bias; recursive hoàn tất nhưng có 3 giá trị null ở warmup 14, không coi là đã đạt kiểm định. Chi tiết và mã hồ sơ ở `presets-control.json`.
+
 | Chiến lược | Khung | Lệnh | Lãi/lỗ USDT | Drawdown | Win rate | Profit factor | So với Ultimate |
 |---|---|---:|---:|---:|---:|---:|---|
 | StarterFutures | 15m | 144 | -22.181 | 3.80% | 20.14% | 0.65 | Khớp từng lệnh |

@@ -92,6 +92,7 @@ class CheckStart(BaseModel):
     timerange: str
     minimum_trade_amount: int=Field(default=10,ge=1,le=500)
     targeted_trade_amount: int=Field(default=20,ge=1,le=200)
+    preset_id: str | None=None
 
 def check_dir(name,config):
     read(target(name,config))
@@ -124,17 +125,25 @@ def start_check(name:str,req:CheckStart,background_tasks:BackgroundTasks,config=
         'timerange':req.timerange,'timeframe':req.timeframe,'timeframe_detail':'1m',
         'dry_run_wallet':config.get('dry_run_wallet',1000),'stake_amount':str(config.get('stake_amount',100)),
         'max_open_trades':config.get('max_open_trades',2),'enable_protections':False}),config)
+    # Native analyses must use the selected code and parameter copy, not a file
+    # subsequently edited in the library while a background job is running.
+    from copy import deepcopy
+    from freqtrade.rpc.api_server.api_presets import snapshot_check_inputs
+    inputs=check_dir(name,config)/'inputs'/uuid4().hex
+    input_record=snapshot_check_inputs(name,req.revision,req.preset_id,inputs,config)
+    runtime=deepcopy(config)
+    runtime.update(user_data_dir=inputs,strategy_path=str(inputs/'strategies'),recursive_strategy_search=False)
     settings={'strategy':name,'timeframe':req.timeframe,'timerange':req.timerange}
     if req.kind=='lookahead':
         settings.update(minimum_trade_amount=req.minimum_trade_amount,targeted_trade_amount=req.targeted_trade_amount)
-        response=api_start_lookahead_analysis(LookaheadAnalysisRequest(**settings),background_tasks,config)
+        response=api_start_lookahead_analysis(LookaheadAnalysisRequest(**settings),background_tasks,runtime)
     else:
         settings['startup_candle']=[100,200,500,1000]
-        response=api_start_recursive_analysis(RecursiveAnalysisRequest(**settings),background_tasks,config)
+        response=api_start_recursive_analysis(RecursiveAnalysisRequest(**settings),background_tasks,runtime)
     job_id=str(response['job_id'])
     record={'id':job_id,'kind':req.kind,'strategy':name,'revision':doc['revision'],
             'settings':settings,'status':'pending','created_at':datetime.now(timezone.utc).isoformat(),
-            'engine':'2026.9','preflight_id':preflight['id'],'result':None,'error':None}
+            'engine':'2026.9','preflight_id':preflight['id'],'result':None,'error':None,**input_record}
     p=check_dir(name,config)
     (p/(job_id+'.py')).write_text(doc['content'],encoding='utf-8')
     write_check(p/(job_id+'.json'),record)
@@ -158,6 +167,12 @@ def get_checks(name:str,config=Depends(get_config)):
                 record['progress_tasks']=json_safe(job.get('progress_tasks',{}))
                 record['result']=json_safe(job.get('result')) if job['status'] in ('success','failed') else None
                 record['error']=job.get('error')
+            if record['status']=='success' and record.get('source_hashes'):
+                source=Path(record['source_snapshot'])
+                if not source.resolve().is_relative_to(check_dir(name,config).resolve()) or any(
+                    not (source/key).is_file() or hashlib.sha256((source/key).read_bytes()).hexdigest()!=expected
+                    for key,expected in record['source_hashes'].items()):
+                    record.update(status='failed',error='Mã/tham số trong bản sao kiểm định đã đổi hoặc bị thiếu. Không xác nhận kết quả cho bản nguồn này.')
             write_check(p,record)
         records.append(record)
     return {'checks':records,'note':'Kết quả là chẩn đoán trên mẫu dữ liệu đã chọn, không chứng nhận lợi nhuận hoặc không có bias ở mọi trường hợp.'}
@@ -205,6 +220,7 @@ class Manifest(BaseModel):
     strategy:str
     revision:str
     settings:dict
+    preset_id:str | None=None
 
 @router.post('/manifests')
 def manifest(req:Manifest,config=Depends(get_config)):

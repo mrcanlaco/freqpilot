@@ -109,9 +109,16 @@ def freeze(req, config):
         out = inputs / 'strategies' / params.name
         shutil.copyfile(params, out)
         inventory[out.relative_to(p).as_posix()] = digest(out)
+        if digest(out) != digest(params):raise HTTPException(409, 'Tệp tham số đang thay đổi. Tải lại trước khi chạy.')
     selected = inputs / 'strategies' / (req.strategy + '.py')
     if digest(selected) != req.revision:
         raise HTTPException(409, 'Mã đã đổi khi chuẩn bị. Tải lại trước khi chạy.')
+    preset = None
+    if req.preset_id:
+        from freqtrade.rpc.api_server.api_presets import apply_preset
+        preset = apply_preset(req.strategy, req.preset_id, inputs, config)
+        parameter = inputs / 'strategies' / (req.strategy+'.json')
+        inventory[parameter.relative_to(p).as_posix()] = digest(parameter)
     public = reproducible_config(config, req.settings, req.strategy)
     (inputs / 'config.json').write_text(json.dumps(public, indent=2, ensure_ascii=False), encoding='utf-8')
     inventory['inputs/config.json'] = digest(inputs / 'config.json')
@@ -119,8 +126,10 @@ def freeze(req, config):
               'settings': req.settings, 'config': public, 'files': inventory,
               'engine': '2026.9', 'created_at': datetime.now(timezone.utc).isoformat(),
               'note': 'Bản sao mã Python local, parameter của chiến lược và toàn bộ feather local. Không đóng băng mạng Binance hoặc thư viện ngoài image.'}
+    if preset:frozen['preset'] = preset
     (p / 'inputs.json').write_text(json.dumps(frozen, indent=2, ensure_ascii=False), encoding='utf-8')
     record = {k: frozen[k] for k in ('id', 'strategy', 'revision', 'settings', 'engine', 'created_at')}
+    if preset:record['preset'] = preset
     record.update(status='prepared', preflight_id=prepared['id'], input_manifest_sha256=digest(p / 'inputs.json'),
                   input_files=len(inventory), input_bytes=sum((p / name).stat().st_size for name in inventory),
                   error=None, filename=None, native_run_id=None, artifact_sha256=None)
@@ -150,6 +159,11 @@ def finish(uid, config):
             embedded = native.read(f'{output.stem}_{record["strategy"]}.py')
             if hashlib.sha256(embedded).hexdigest() != record['revision']:
                 raise ValueError('Mã trong kết quả native khác bản sao đầu vào.')
+            parameter_name = 'inputs/strategies/'+record['strategy']+'.json'
+            if parameter_name in frozen['files']:
+                embedded_params = native.read(f'{output.stem}_{record["strategy"]}.json')
+                if hashlib.sha256(embedded_params).hexdigest() != frozen['files'][parameter_name]:
+                    raise ValueError('Tham số trong kết quả native khác bản sao đầu vào.')
             stats = json.loads(native.read(output.stem + '.json'))['strategy'][record['strategy']]
         meta = output.with_suffix('.meta.json')
         metadata = json.loads(meta.read_text())[record['strategy']]

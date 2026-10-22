@@ -5,9 +5,10 @@ import type { AxiosInstance } from 'axios';
 import { registerPaperLogin } from '@/composables/loginInfo';
 import { useBotStore } from '@/stores/ftbotwrapper';
 import { botKeyFromApiUrl } from '@/datasource/protocol/identity';
+import type { StrategyPreset } from '@/utils/strategyLibrary';
 import { useDataSource } from '@/composables/useDataSource';
 
-type Profile = { id:string; label:string; strategy:string; revision:string; run_id:string; warnings:string[];valid?:boolean;error?:string;
+type Profile = { id:string; label:string; strategy:string; revision:string; run_id:string; warnings:string[];preset?:StrategyPreset;valid?:boolean;error?:string;
   settings:{pairs:string[];timeframe:string;wallet:number;stake:number|string;max_open_trades:number;fee:number};
   summary:{total_trades?:number;profit_total_abs?:number} };
 type PaperState = {online:boolean;state:string;error?:string;active_profile?:string|null;open_trades:number|null;profiles:Profile[]};
@@ -79,7 +80,7 @@ onUnmounted(()=>{if(poll)clearInterval(poll);});
         <div class="row"><b>{{profile.label}}</b><span v-if="profile.id===state?.active_profile" class="badge">Hồ sơ đang chọn</span></div>
         <p>{{profile.settings.pairs.join(' · ')}} · {{profile.settings.timeframe}} · isolated 1x</p>
         <dl><div><dt>Vốn mô phỏng</dt><dd>{{profile.settings.wallet}} USDT</dd></div><div><dt>Stake đề xuất</dt><dd>{{profile.settings.stake}} USDT</dd></div><div><dt>Lệnh mở tối đa</dt><dd>{{profile.settings.max_open_trades}}</dd></div><div><dt>Phí mỗi chiều</dt><dd>{{(profile.settings.fee*100).toFixed(3)}}%</dd></div></dl>
-        <p>Backtest nguồn: {{profile.summary.total_trades??0}} lệnh · {{profile.summary.profit_total_abs?.toFixed(3)??'—'}} USDT · mã {{profile.revision.slice(0,10)}}.</p>
+        <p v-if="profile.preset">Bộ tham số từ backtest: <b>{{profile.preset.label}}</b> · {{profile.preset.native_sha256.slice(0,10)}}. Không lấy giá trị mới trong thư viện.</p><p>Backtest nguồn: {{profile.summary.total_trades??0}} lệnh · {{profile.summary.profit_total_abs?.toFixed(3)??'—'}} USDT · mã {{profile.revision.slice(0,10)}}.</p>
         <p v-if="profile.valid===false" class="notice bad">{{profile.error}} Hãy chuẩn bị một hồ sơ mới.</p><div class="notice"><p v-for="warning in profile.warnings" :key="warning">{{warning}}</p></div>
         <div class="row"><button class="primary" :disabled="working||profile.valid===false||!state?.online||(!!state.open_trades&&state.active_profile!==profile.id)" @click="start(profile)">{{profile.id===state?.active_profile?'Bật / tiếp tục paper':'Bật paper hồ sơ này'}}</button><small>Database riêng cho hồ sơ này; không thay bot paper chính.</small></div>
       </div>

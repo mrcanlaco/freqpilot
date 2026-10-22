@@ -659,7 +659,7 @@ declare global {
   export type { LiveBotPrefillInput } from './utils/reconstitute'
   import('./utils/reconstitute')
   // @ts-ignore
-  export type { ResearchMetadata, LibraryStrategy, LibraryRun } from './utils/strategyLibrary'
+  export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset } from './utils/strategyLibrary'
   import('./utils/strategyLibrary')
   // @ts-ignore
   export type { ResolvedTheme } from './utils/theme'

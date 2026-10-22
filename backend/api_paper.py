@@ -240,6 +240,7 @@ class {wrapper}(Base):
                                'max_open_trades': cfg['max_open_trades'], 'fee': cfg.get('fee')},
                   'source_hashes': {p.relative_to(folder).as_posix(): digest(p) for p in stratdir.rglob('*') if p.is_file()},
                   'config_sha256': digest(folder / 'config.json'), 'warnings': warnings}
+        if run.get('preset'):record['preset']=run['preset']
         write_check(folder / 'record.json', record)
         return record
 

@@ -44,6 +44,8 @@ class FrozenRunChecks(unittest.TestCase):
         output = p / 'output/freqpilot-test.zip'
         with ZipFile(output, 'w') as archive:
             archive.writestr('freqpilot-test_FrozenSample.py', source or self.doc['content'])
+            parameter=p/'inputs/strategies/FrozenSample.json'
+            if parameter.exists():archive.write(parameter,'freqpilot-test_FrozenSample.json')
             archive.writestr('freqpilot-test.json', json.dumps({'strategy': {'FrozenSample': {
                 'total_trades': 2, 'profit_total_abs': -1.25, 'profit_total': -0.00125}}}))
         output.with_suffix('.meta.json').write_text(json.dumps({'FrozenSample': {'run_id': 'native-id'}}))

@@ -23,7 +23,9 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 
 FreqPilot đã áp dụng thư viện thẻ/danh sách, tìm mô tả/nhãn, yêu thích lưu trên máy, lọc khung/hồ sơ, cập nhật gần nhất, chỉ số từ lần backtest có gói gần nhất, cảnh báo khác mã/mẫu nhỏ và chọn nhiều chiến lược để so sánh. Dùng lại Monaco, DiffViewer, bảng so sánh, API metadata/phiên bản và ZIP kết quả hiện có. Không chọn kết quả lợi nhuận tốt nhất làm đại diện, không gọi là chứng nhận chất lượng; báo cáo không có gói chưa được dùng để gán KPI cho mã hiện tại.
 
-Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, cấu hình tham số có tên, chatbot riêng hoặc bước compile như `.rq`. Freqtrade dùng Python và kiểm tra cú pháp khi lưu; không giả lập compiler/sandbox của RoboQuant. Các phần này cần khảo sát khả năng native trước khi bổ sung.
+Đã bổ sung bộ tham số có tên bằng API strategy/Parameter và HyperoptTools.export_params gốc, không chạy hyperopt. Hỗ trợ số nguyên, số thực, thập phân, boolean và lựa chọn; kiểm tra đúng tên/kiểu/giới hạn, không đổi trường load=false. JSON bất biến được chép riêng vào backtest và kiểm định; ZIP native phải chứa đúng byte JSON của đầu vào. Paper kế thừa JSON từ gói backtest và đổi strategy_name cho lớp giới hạn 1x theo cơ chế đã có. Mã Python và JSON trong thư viện không bị ghi đè. Bộ gắn với revision mã và schema; mã đổi thì cần bộ mới. Các hằng số không khai báo Parameter vẫn sửa qua editor, chưa có bộ điều khiển ROI/stoploss riêng hoặc import `.set` của RoboQuant.
+
+Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, chatbot riêng hoặc bước compile như `.rq`. Freqtrade dùng Python và kiểm tra cú pháp khi lưu; không giả lập compiler/sandbox của RoboQuant. Các phần này cần khảo sát khả năng native trước khi bổ sung.
 
 Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquant.dev/docs/python-strategies .
 

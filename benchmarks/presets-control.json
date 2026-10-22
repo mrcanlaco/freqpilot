@@ -1,0 +1,84 @@
+{
+  "strategy": "FAdxSmaStrategy",
+  "baseline_run": "47309a791f9847b79df88742b11ae1e0",
+  "preset_run": "866002faf35049e7ac1d7edeb02ab35d",
+  "preset_id": "b34bb29f937f42068b66428f86ef65d0",
+  "preset_label": "Gốc · đối chiếu 18/09–22/10",
+  "preset_values": {
+    "adx_period": 14,
+    "pos_entry_adx": 30,
+    "sma_long_period": 48,
+    "sma_short_period": 12,
+    "pos_exit_adx": 30
+  },
+  "parameter_sha256": "0dc12550062a75b4734885a4151ebd8515610af072b89ae335aa7b1d68937ffb",
+  "trades": 2,
+  "profit_usdt": -3.3853671800000003,
+  "fields_compared": [
+    "pair",
+    "open_date",
+    "close_date",
+    "open_rate",
+    "close_rate",
+    "amount",
+    "stake_amount",
+    "funding_fees",
+    "profit_abs",
+    "exit_reason",
+    "leverage",
+    "fee_open",
+    "fee_close",
+    "is_short"
+  ],
+  "all_trade_fields_match": true,
+  "same_main_source": true,
+  "same_data_files": 16,
+  "original_library_files_unchanged": true,
+  "no_optimization": true,
+  "caveat": "Round-trip control of preset storage/loading; two trades do not establish strategy quality.",
+  "lookahead": {
+    "id": "211dbc0b-958c-45ec-a313-00dd1a0fd911",
+    "status": "success",
+    "result": {
+      "strategy": "FAdxSmaStrategy",
+      "has_bias": false,
+      "total_signals": 2,
+      "biased_entry_signals": 0,
+      "biased_exit_signals": 0,
+      "biased_indicators": []
+    }
+  },
+  "recursive": {
+    "id": "e0c29baa-7d09-41b4-8f93-c2a996beb10e",
+    "status": "success",
+    "result": {
+      "strategy": "FAdxSmaStrategy",
+      "startup_candles": [
+        14,
+        100,
+        200,
+        500,
+        1000
+      ],
+      "strategy_scc": 14,
+      "results": {
+        "adx_14": {
+          "14": null,
+          "100": -0.000900395413,
+          "200": 1.859427e-06,
+          "500": -0.0
+        },
+        "sma_short_12": {
+          "14": null
+        },
+        "sma_long_48": {
+          "14": null,
+          "100": -0.0,
+          "200": -0.0,
+          "1000": -0.0
+        }
+      }
+    }
+  },
+  "analysis_uses_same_parameter_hash": true
+}

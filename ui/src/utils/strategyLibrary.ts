@@ -22,12 +22,25 @@ export type LibraryRun = {
   status: string;
   created_at: string;
   settings: Record<string, unknown>;
+  preset?: StrategyPreset;
   summary?: {
     total_trades?: number;
     profit_total_abs?: number;
     profit_total?: number;
     max_drawdown_account?: number;
   };
+};
+export type StrategyPreset = {
+  id: string;
+  label: string;
+  strategy: string;
+  revision: string;
+  schema_revision: string;
+  parameter_revision: string;
+  native_sha256: string;
+  values: Record<string, string | number | boolean | null>;
+  created_at: string;
+  valid?: boolean;
 };
 
 /** Only completed archived runs supply metrics; never choose the most profitable result. */
