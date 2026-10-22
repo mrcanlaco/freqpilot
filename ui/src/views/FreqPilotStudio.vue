@@ -57,6 +57,7 @@ function notify(s:string,error=false){message.value=s;failure.value=error;}
 function errorMessage(e:unknown){const err=e as {response?:{data?:{detail?:unknown}},message?:string};return String(err.response?.data?.detail??err.message??e);}
 async function guard(fn:()=>Promise<void>){working.value=true;try{await fn();}catch(e){notify(errorMessage(e),true);}finally{working.value=false;}}
 async function loadRuns(){if(api.value)runs.value=(await api.value.get('/studio/runs')).data.runs;}
+function latestResearchEntry(name:string){const frozen=runs.value.filter(r=>r.strategy===name&&r.status==='success').sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at))[0];return active.value?.backtestHistoryList.find(x=>x.strategy===name&&x.filename===frozen?.filename)??active.value?.backtestHistoryList.find(x=>x.strategy===name);}
 async function refresh(){if(!api.value)return;const response=await api.value.get('/studio/library');items.value=response.data.strategies;await active.value?.getBacktestHistory();await loadRuns();}
 async function select(name:string){if(dirty.value&&!window.confirm('Bỏ thay đổi mã chưa lưu?'))return;await guard(async()=>{
   const response=await api.value!.get('/local-strategies/'+name);selected.value=name;code.value=original.value=response.data.content;revision.value=response.data.revision;
@@ -64,7 +65,7 @@ async function select(name:string){if(dirty.value&&!window.confirm('Bỏ thay đ
   versions.value=(await api.value!.get('/studio/versions/'+name)).data.versions;
   checks.value=(await api.value!.get('/studio/checks/'+name)).data.checks;
   versionId.value='';manifestId.value='';sourcePreview.value='';artifactValid.value=null;interval.value=selectedItem.value?.timeframe;
-  const latest=results.value[0];if(latest)await active.value?.getBacktestHistoryResult(latest);
+  const latest=latestResearchEntry(name);if(latest)await active.value?.getBacktestHistoryResult(latest);
   notify('Đang nghiên cứu '+name+'. Lưu mã không đổi bot paper đang chạy.');
 });}
 async function save(){if(!selected.value||selectedItem.value?.protected)return;await guard(async()=>{
@@ -99,7 +100,7 @@ async function compareLatest(){await guard(async()=>{
   await active.value?.getBacktestHistory();
   await loadRuns();
   const names=['StarterFutures','FAdxSmaStrategy','FReinforcedStrategy','FSampleStrategy','FSupertrendStrategy','FOttStrategy','TrendFollowingStrategy','VolatilitySystem'];
-  const latest=names.map(name=>{const frozen=runs.value.filter(r=>r.strategy===name&&r.status==='success').sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at))[0];return active.value?.backtestHistoryList.find(x=>x.strategy===name&&x.filename===frozen?.filename)??active.value?.backtestHistoryList.find(x=>x.strategy===name);}).filter((x):x is BacktestHistoryEntry=>!!x);
+  const latest=names.map(latestResearchEntry).filter((x):x is BacktestHistoryEntry=>!!x);
   comparisonIds.value=latest.map(x=>x.run_id);
   for(const entry of latest)await active.value?.getBacktestHistoryResult(entry);
   tab.value='compare';notify('Đã mở '+latest.length+' chiến lược để so sánh. Kiểm tra khoảng ngày và cấu hình của từng lần chạy.');
