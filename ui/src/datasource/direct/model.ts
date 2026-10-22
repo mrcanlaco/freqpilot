@@ -16,6 +16,7 @@ import type {
   TradeRow,
 } from '@/gateway/types.gen';
 import type { BalanceInterface, BotState, FleetviewBot, ProfitStats, Trade } from '@/types';
+import type { ExecutionRow, ExecutionSnapshot } from '../execution';
 import type { FleetBotDigest } from '@/types/fleetSnapshot';
 
 import { computeDrawdown } from '../calc/drawdown';
@@ -62,6 +63,8 @@ export interface BotRuntime {
   /** Last time any request got a usable answer. */
   lastContactMs: number | null;
   config: Fetched<BotState> | null;
+  executionGeneration: number;
+  executionInvalidated: boolean;
   profit: Fetched<ProfitStats> | null;
   balance: Fetched<BalanceInterface> | null;
   status: Fetched<Trade[]> | null;
@@ -91,6 +94,8 @@ export function newRuntime(
     reachSinceMs: null,
     lastContactMs: null,
     config: null,
+    executionGeneration: 0,
+    executionInvalidated: false,
     profit: null,
     balance: null,
     status: null,
@@ -419,12 +424,29 @@ export function buildBotRow(rt: BotRuntime, ctx: RowContext): BotRow {
     freshness.capital = computeFreshness('rest', Math.min(...capAges), nowMs, ctx.slowCadenceMs);
   }
 
-  return {
+  const nativeState = cfg?.state as string | undefined;
+  const execution: ExecutionSnapshot | undefined = rt.config
+    ? {
+        state: ['running', 'paused', 'stopped', 'reload_config'].includes(nativeState ?? '')
+          ? (nativeState as ExecutionSnapshot['state'])
+          : 'unknown',
+        as_of_ms: rt.config.atMs,
+        expires_ms: rt.executionInvalidated ? 0 : rt.config.atMs + 3 * ctx.slowCadenceMs,
+        managed_paper:
+          cfg?.dry_run === true &&
+          rt.key === 'local:8095' &&
+          rt.port === 8095 &&
+          cfg.strategy?.startsWith('FPPaper') === true,
+      }
+    : undefined;
+  const row: ExecutionRow = {
     bot_key: rt.key,
     identity,
     state,
+    execution,
     metrics,
     alerts: ctx.alerts,
     freshness,
   };
+  return row;
 }

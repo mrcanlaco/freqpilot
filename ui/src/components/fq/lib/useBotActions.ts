@@ -16,6 +16,8 @@ import {
   type DisabledReason,
 } from './actions';
 import { botState } from './bots';
+import { executionBlock } from '@/datasource/execution';
+import { useNowMs } from '@/components/ds/lib/useNowMs';
 
 /**
  * What every action surface needs (row, header, drawer, palette): the list of actions of a bot
@@ -32,6 +34,7 @@ export function useBotActions(
   const fleet = useFqFleetStore();
   const conn = useFqConnectionStore();
   const actions = useBotAction(botKey);
+  const clock = useNowMs();
 
   const bot = computed(() => fleet.bots[toValue(botKey)] ?? null);
   const state = computed(() =>
@@ -52,6 +55,16 @@ export function useBotActions(
   function actionOf(id: ActionId, pair?: string) {
     return buildAction(id, { position: toValue(position), pair });
   }
+  function reasonFor(id: ActionId): DisabledReason | null {
+    const action = actionOf(id);
+    return (
+      reason.value ?? (bot.value && action ? executionBlock(bot.value, action, clock.value) : null)
+    );
+  }
+  function reasonTextFor(id: ActionId): string | undefined {
+    const why = reasonFor(id);
+    return why ? t(`fq.act.disabled.${why}`) : undefined;
+  }
 
   /** In-flight lock key of an action id, or undefined for navigation. */
   function lockKey(id: ActionId): string | undefined {
@@ -67,7 +80,7 @@ export function useBotActions(
   /** Whether the id is available: a mutation needs a bot that answers and a valid target. */
   function disabled(id: ActionId): boolean {
     if (!ACTIONS[id].mutation) return false;
-    if (reason.value) return true;
+    if (reasonFor(id)) return true;
     return actionOf(id) === null;
   }
 
@@ -95,7 +108,7 @@ export function useBotActions(
       danger: def.danger,
       disabled: off || busy(id),
       disabledReason: off
-        ? (reasonText.value ?? t('fq.act.disabled.target'))
+        ? (reasonTextFor(id) ?? t('fq.act.disabled.target'))
         : t('fq.result.inProgressTitle'),
     };
   }
@@ -108,6 +121,7 @@ export function useBotActions(
     state,
     reason,
     reasonText,
+    reasonTextFor,
     lockKey,
     busy,
     disabled,

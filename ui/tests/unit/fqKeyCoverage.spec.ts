@@ -102,6 +102,10 @@ describe('message keys used by the composites', () => {
       'cache',
       'orphan',
       'unknownBot',
+      'managedPaper',
+      'executionUnknown',
+      'executionState',
+      'openPositions',
       'target',
     ]) {
       expect(rootedEn.has(`fq.act.disabled.${reason}`), reason).toBe(true);

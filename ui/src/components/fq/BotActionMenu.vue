@@ -20,6 +20,7 @@ import {
   type ActionId,
 } from './lib/actions';
 import { useBotActions } from './lib/useBotActions';
+import { isManagedPaper } from '@/datasource/execution';
 
 /**
  * Menu of the actions of a bot (02 section 5.2). The destructive items are isolated at the end by
@@ -60,7 +61,9 @@ const ids = computed<ActionId[]>(() => {
     case 'drawer':
       return drawerActionIds(props.position?.orphan === true);
     case 'header':
-      return [...HEADER_MORE, ...HEADER_SENSITIVE];
+      return isManagedPaper(acts.bot.value)
+        ? ['paperWorkspace', 'config', 'replay', 'exitAll']
+        : [...HEADER_MORE, ...HEADER_SENSITIVE];
     case 'palette':
       return (Object.keys(ACTIONS) as ActionId[]).filter((id) =>
         props.position

@@ -14,6 +14,8 @@ import {
   type ActionId,
 } from './lib/actions';
 import { useBotActions } from './lib/useBotActions';
+import { executionState, isManagedPaper } from '@/datasource/execution';
+import { useNowMs } from '@/components/ds/lib/useNowMs';
 
 /**
  * The actions of a bot on one surface (02 sections 3.1, 3.2, 8 and 11.4). The surfaces differ
@@ -58,6 +60,12 @@ const acts = useBotActions(
   () => props.position,
 );
 const phone = useMediaQuery('(max-width: 599px)');
+const clock = useNowMs();
+const headerVisible = computed<readonly ActionId[]>(() => {
+  if (isManagedPaper(acts.bot.value)) return ['paperWorkspace'];
+  const state = executionState(acts.bot.value, clock.value);
+  return state === 'paused' || state === 'stopped' ? ['resume'] : HEADER_VISIBLE;
+});
 
 const menuOpen = ref(false);
 const menuAnchor = ref<HTMLElement | null>(null);
@@ -100,12 +108,12 @@ const paletteIds = computed<ActionId[]>(() =>
     :aria-label="acts.t('fq.act.menuLabel')"
   >
     <Btn
-      v-for="id in HEADER_VISIBLE"
+      v-for="id in headerVisible"
       :key="id"
       size="sm"
       :icon="ACTIONS[id].icon"
       :disabled="acts.disabled(id)"
-      :disabled-reason="acts.reasonText.value"
+      :disabled-reason="acts.reasonTextFor(id)"
       :lock-key="acts.lockKey(id)"
       :data-action="id"
       @click="fire(id)"
@@ -138,13 +146,13 @@ const paletteIds = computed<ActionId[]>(() =>
   <div v-else-if="context === 'header'" class="phone">
     <div class="tiles" role="group" :aria-label="acts.t('fq.act.menuLabel')">
       <button
-        v-for="id in HEADER_VISIBLE"
+        v-for="id in headerVisible"
         :key="id"
         type="button"
         class="tile"
         :aria-disabled="acts.disabled(id) || undefined"
         :aria-busy="acts.busy(id) || undefined"
-        :title="acts.disabled(id) ? acts.reasonText.value : undefined"
+        :title="acts.disabled(id) ? acts.reasonTextFor(id) : undefined"
         :data-action="id"
         @click="acts.disabled(id) ? undefined : fire(id)"
       >
@@ -164,7 +172,7 @@ const paletteIds = computed<ActionId[]>(() =>
           size="lg"
           :icon="ACTIONS[HEADER_DANGER].icon"
           :disabled="acts.disabled(HEADER_DANGER)"
-          :disabled-reason="acts.reasonText.value"
+          :disabled-reason="acts.reasonTextFor(HEADER_DANGER)"
           :lock-key="acts.lockKey(HEADER_DANGER)"
           :data-action="HEADER_DANGER"
           @click="fire(HEADER_DANGER)"
@@ -176,7 +184,7 @@ const paletteIds = computed<ActionId[]>(() =>
           size="lg"
           :icon="ACTIONS.stop.icon"
           :disabled="acts.disabled('stop')"
-          :disabled-reason="acts.reasonText.value"
+          :disabled-reason="acts.reasonTextFor('stop')"
           :lock-key="acts.lockKey('stop')"
           data-action="stop"
           @click="fire('stop')"
@@ -205,7 +213,7 @@ const paletteIds = computed<ActionId[]>(() =>
           size="lg"
           :icon="ACTIONS[HEADER_DANGER].icon"
           :disabled="acts.disabled(HEADER_DANGER)"
-          :disabled-reason="acts.reasonText.value"
+          :disabled-reason="acts.reasonTextFor(HEADER_DANGER)"
           :lock-key="acts.lockKey(HEADER_DANGER)"
           :data-action="HEADER_DANGER"
           @click="fire(HEADER_DANGER)"
@@ -217,7 +225,7 @@ const paletteIds = computed<ActionId[]>(() =>
           size="lg"
           :icon="ACTIONS.stop.icon"
           :disabled="acts.disabled('stop')"
-          :disabled-reason="acts.reasonText.value"
+          :disabled-reason="acts.reasonTextFor('stop')"
           :lock-key="acts.lockKey('stop')"
           data-action="stop"
           @click="fire('stop')"
@@ -246,7 +254,7 @@ const paletteIds = computed<ActionId[]>(() =>
         size="xs"
         icon="log-out"
         :disabled="acts.disabled(exitId)"
-        :disabled-reason="acts.reasonText.value"
+        :disabled-reason="acts.reasonTextFor(exitId)"
         :lock-key="acts.lockKey(exitId)"
         :data-action="exitId"
         @click.stop="fire(exitId)"
@@ -282,7 +290,7 @@ const paletteIds = computed<ActionId[]>(() =>
         icon="log-out"
         class="grow"
         :disabled="acts.disabled('exit')"
-        :disabled-reason="acts.reasonText.value"
+        :disabled-reason="acts.reasonTextFor('exit')"
         :lock-key="acts.lockKey('exit')"
         data-action="exit"
         @click="fire('exit')"
@@ -295,7 +303,7 @@ const paletteIds = computed<ActionId[]>(() =>
         icon="plus"
         class="grow"
         :disabled="acts.disabled('add')"
-        :disabled-reason="acts.reasonText.value"
+        :disabled-reason="acts.reasonTextFor('add')"
         :lock-key="acts.lockKey('add')"
         data-action="add"
         @click="fire('add')"
@@ -325,7 +333,7 @@ const paletteIds = computed<ActionId[]>(() =>
         class="li"
         :aria-disabled="acts.disabled(id) || undefined"
         :aria-busy="acts.busy(id) || undefined"
-        :title="acts.disabled(id) ? acts.reasonText.value : undefined"
+        :title="acts.disabled(id) ? acts.reasonTextFor(id) : undefined"
         :data-action="id"
         @click="acts.disabled(id) ? undefined : fire(id)"
       >

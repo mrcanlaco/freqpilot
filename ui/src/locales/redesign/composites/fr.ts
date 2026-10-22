@@ -152,6 +152,7 @@ export default {
     forceEntry: 'Entrée forcée…',
     pause: 'Pause des entrées',
     resume: 'Reprendre les entrées',
+    paperWorkspace: 'Espace paper de recherche',
     reload: 'Recharger',
     stop: 'Arrêter le bot…',
     cancelOrder: 'Annuler l’ordre',
@@ -166,6 +167,12 @@ export default {
     more: 'Plus d’actions',
     sensitive: 'Actions sensibles du bot',
     disabled: {
+      managedPaper:
+        'Gérez ce worker dans l’espace paper de recherche pour vérifier son profil avant de le lancer.',
+      executionUnknown: 'Attendez un état du moteur actualisé avant cette action.',
+      executionState: 'Cette action ne correspond pas à l’état actuel du moteur.',
+      openPositions:
+        'Des positions restent ouvertes. Suspendez les entrées pour continuer à gérer les sorties.',
       offline: 'Le bot ne répond pas : rien ne peut lui être envoyé.',
       authExpired: 'Session expirée : reconnectez-vous d’abord.',
       starting: 'Le bot démarre : actions désactivées.',
@@ -302,7 +309,7 @@ export default {
     },
     emptyHint: {
       open: 'Les bots attendent un signal.',
-      bot: 'Le bot attend un signal.',
+      bot: 'Consultez l’état du moteur dans l’en-tête du bot.',
       closed: 'Les trades fermés de ce bot apparaissent ici.',
       journal: 'Élargissez la période ou retirez un filtre.',
     },

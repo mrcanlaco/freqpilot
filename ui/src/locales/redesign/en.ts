@@ -13,11 +13,28 @@ export default {
   ...charts,
   ...tools,
   ...pages,
+  execution: {
+    running: 'Running',
+    paused: 'Entries paused',
+    stopped: 'Stopped',
+    reload_config: 'Reloading configuration',
+    unknown: 'Execution state unknown',
+    stale: 'Execution state out of date',
+    body: {
+      paused: 'The engine manages exits, but opens no new trades and makes no position increases.',
+      stopped:
+        'The API is connected. The trading engine is stopped and is not waiting for an entry signal.',
+      reload_config: 'Wait for a fresh state after the configuration reload.',
+      unknown: 'API connectivity does not prove that the trading engine is running.',
+      stale: 'The last execution state is old. Wait for a fresh configuration response.',
+    },
+  },
   currency: {
     unavailable: 'A common stake currency is unavailable',
     hint: 'Select bots using one known currency. Monetary amounts are not converted or combined across currencies.',
   },
   nav: {
+    paper: 'Paper',
     fleet: 'Fleet',
     bot: 'Bot',
     charts: 'Charts',

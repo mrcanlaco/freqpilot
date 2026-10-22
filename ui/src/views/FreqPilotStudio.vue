@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import type { AxiosInstance } from 'axios';
 import type { BacktestHistoryEntry } from '@/types';
 import CodeEditor from '@/components/strategyDev/CodeEditor.vue';
@@ -27,7 +27,9 @@ type Item = LibraryStrategy;
 type DataRow = { pair: string; timeframe: string; type: string; rows: number; start: string; end: string; duplicates: number; sorted: boolean };
 type Version = { id: string; saved_at: number };
 type FrozenRun = LibraryRun & { filename?:string; native_run_id?:string; artifact_sha256?:string; input_files:number; input_bytes:number; error?:string };
-const router=useRouter(); const bots=useBotStore();
+const router=useRouter(); const route=useRoute(); const bots=useBotStore();
+const paperView=computed(()=>route.name==='research-paper'||route.query.paper==='active');
+function openLibrary(){libraryOpen.value=true;void router.push('/studio');}
 const items=ref<Item[]>([]), query=ref(''), selected=ref(''), tab=ref('idea');
 const preset=ref<StrategyPreset>(),parameterBusy=ref(false);
 const libraryOpen=ref(true), tagsText=ref(''), favorite=ref(false), versionPreview=ref('');
@@ -135,10 +137,11 @@ onMounted(initialize);onUnmounted(()=>{if(poll)clearInterval(poll);});
 
 <template>
   <div class="pilot">
-    <div class="pilot-heading" :class="{'library-mode':libraryOpen}"><div><span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span><h1>Từ ý tưởng đến chiến lược có bằng chứng</h1><p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p></div><div class="row"><button v-if="api&&!libraryOpen" @click="libraryOpen=true">← Thư viện chiến lược</button><button v-if="api" :disabled="working||running" @click="compareLatest()">So sánh kết quả thư viện</button><div class="safe">● Chỉ backtest & paper</div></div></div>
+    <div class="pilot-heading" :class="{'library-mode':libraryOpen}"><div><span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span><h1>Từ ý tưởng đến chiến lược có bằng chứng</h1><p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p></div><div class="row"><button v-if="api&&(!libraryOpen||paperView)" @click="openLibrary">← Thư viện chiến lược</button><button v-if="api&&!paperView" @click="router.push('/paper')">Paper nghiên cứu</button><button v-if="api&&!paperView" :disabled="working||running" @click="compareLatest()">So sánh kết quả thư viện</button><div class="safe">● Chỉ backtest & paper</div></div></div>
     <div v-if="message&&(!libraryOpen||failure)" class="feedback" :class="{bad:failure}" role="status">{{message}}</div>
     <div v-if="loading" class="empty">Đang kết nối dữ liệu và chiến lược…</div>
     <div v-else-if="!api" class="empty"><h2>Kết nối bộ cài hiện tại</h2><p>Thêm Backtest tại http://localhost:8091 bằng tài khoản local sẵn có.</p><button @click="router.push('/settings')">Mở cài đặt kết nối</button></div>
+    <PaperWorkspace v-else-if="paperView" :api="api" strategy="" revision="" @open-results="openLibrary" />
     <StrategyLibrary v-else-if="libraryOpen" :items="items" :runs="runs" :busy="working" @open="openStrategy" @favorite="toggleFavorite" @create="createDialog()" @compare="compareLatest" @refresh="guard(refresh)" />
     <div v-else class="workspace">
       <aside><div class="row"><h2>Chiến lược <small>{{items.length}}</small></h2><button aria-label="Tải lại thư viện" @click="guard(refresh)">↻</button></div><button class="primary wide" @click="createDialog()">＋ Tạo chiến lược</button><input v-model="query" aria-label="Tìm chiến lược" placeholder="Tên, mô tả hoặc nhãn…"><div class="library"><button v-for="item in filtered" :key="item.name" class="strategy" :class="{chosen:selected===item.name}" @click="openStrategy(item.name)"><b>{{item.research?.is_favorite?'★ ':''}}{{item.name}}</b><span>{{item.timeframe??'Kiểm tra mã'}} · {{item.can_short==null?'Chưa rõ chiều':item.can_short?'Hỗ trợ short':'Không khai báo short'}} <span v-if="item.protected">· Paper 🔒</span></span><small>{{item.research?.idea?.slice(0,65)||'Chưa có mô tả nghiên cứu'}}</small></button></div><a href="http://localhost:8092/tools/strategy-dev" target="_blank" rel="noopener">Mở Ultimate để so sánh ↗</a><small class="lineage">Kế thừa FreqUI Ultimate + API chính thức của Freqtrade.</small></aside>

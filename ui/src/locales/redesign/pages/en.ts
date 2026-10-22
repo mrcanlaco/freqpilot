@@ -42,7 +42,7 @@ export default {
       perfPairs: 'Result by pair',
       perfPartial: 'Partial history: only what this tab has loaded.',
       drawer: 'Position',
-      noPosition: 'No open position. The bot is waiting for a signal.',
+      noPosition: 'No open position. Execution status is shown in the header.',
       tradeClosed: 'This trade is closed.',
       closedTrade: 'closed trade',
       closedDetails: 'Trade details',

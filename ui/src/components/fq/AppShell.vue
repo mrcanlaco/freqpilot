@@ -33,7 +33,15 @@ import CommandPalette, { type PalettePage } from './CommandPalette.vue';
 import { isKnownReason, sortReasons } from './lib/risk';
 import { formatClockSeconds } from './lib/time';
 
-export type ShellPage = 'studio' | 'fleet' | 'bot' | 'charts' | 'journal' | 'tools' | 'settings';
+export type ShellPage =
+  | 'studio'
+  | 'paper'
+  | 'fleet'
+  | 'bot'
+  | 'charts'
+  | 'journal'
+  | 'tools'
+  | 'settings';
 
 /**
  * The shell shared by every page (02 sections 2.3 to 2.5): the top bar (logo, the four pages,
@@ -85,16 +93,18 @@ const PAGES: Array<{
   icon: 'layout-grid' | 'bot' | 'chart-candlestick' | 'book-open-text';
 }> = [
   { id: 'fleet', icon: 'layout-grid' },
-  { id: 'bot', icon: 'bot' },
+  { id: 'paper', icon: 'bot' },
   { id: 'charts', icon: 'chart-candlestick' },
   { id: 'journal', icon: 'book-open-text' },
 ];
+const NAV_LABELS: Partial<Record<ShellPage, string>> = {
+  fleet: 'Tổng quan',
+  paper: 'Paper',
+  charts: 'Biểu đồ',
+  journal: 'Nhật ký',
+};
 const TOOLS_PRIMARY = ['diagnostic', 'logs'] as const;
-const TOOLS_LAB = [
-  'backtest',
-  'downloadData',
-  'pairlistConfig',
-] as const;
+const TOOLS_LAB = ['backtest', 'downloadData', 'pairlistConfig'] as const;
 
 const toolsOpen = ref(false);
 const toolsAnchor = ref<HTMLElement | null>(null);
@@ -133,7 +143,7 @@ type Banners = Array<{
 const banners = computed<Banners>(() => {
   const out: Banners = [];
   // Research endpoints have their own request/error state; /status is trading-only.
-  if (props.page === 'studio') return out;
+  if (props.page === 'studio' || props.page === 'paper') return out;
   if (conn.fromCache) {
     out.push({ kind: 'cache', text: t('fq.freshness.dataFrom', { n: cacheAgeMin.value }) });
   }
@@ -283,24 +293,31 @@ function openPalette() {
 <template>
   <div class="shell fq-app" :class="{ contained }" :data-page="page">
     <header class="top">
-      <button type="button" class="logo" aria-label="FreqPilot, mở nghiên cứu" @click="go('studio')">
+      <button
+        type="button"
+        class="logo"
+        aria-label="FreqPilot, mở nghiên cứu"
+        @click="go('studio')"
+      >
         <DsIcon name="activity" :size="20" />
         <b>FreqPilot</b>
       </button>
       <nav class="nav" :aria-label="t('fq.shell.navigation')">
-        <button type="button" class="nl" :class="{on:page==='studio'}" @click="go('studio')">Nghiên cứu</button>
+        <button type="button" class="nl" :class="{ on: page === 'studio' }" @click="go('studio')">
+          Nghiên cứu
+        </button>
         <button
           v-for="p in PAGES"
           :key="p.id"
           type="button"
           class="nl"
-          :class="{ on: page === p.id }"
-          :aria-current="page === p.id ? 'page' : undefined"
+          :class="{ on: page === p.id || (p.id === 'paper' && page === 'bot') }"
+          :aria-current="page === p.id || (p.id === 'paper' && page === 'bot') ? 'page' : undefined"
           :data-nav="p.id"
           @click="go(p.id)"
         >
           <DsIcon :name="p.icon" />
-          {{ ({fleet:'Tổng quan',bot:'Paper',charts:'Biểu đồ',journal:'Nhật ký'} as Record<string,string>)[p.id] ?? t(`fq.nav.${p.id}`) }}
+          {{ NAV_LABELS[p.id] ?? t(`fq.nav.${p.id}`) }}
         </button>
         <button
           type="button"
@@ -337,8 +354,9 @@ function openPalette() {
           :label="t('fq.palette.label')"
           @click="openPalette"
         />
-        <span v-if="page==='studio'" class="si">Research · local</span>
-        <ConnectionPill v-else
+        <span v-if="page === 'studio'" class="si">Research · local</span>
+        <ConnectionPill
+          v-else
           :kind="connKind"
           :state="conn.status.state"
           :latency-ms="conn.status.latencyMs ?? undefined"
@@ -413,7 +431,7 @@ function openPalette() {
     <div class="tabbar">
       <TabBar
         :items="tabItems"
-        :model-value="page"
+        :model-value="page === 'bot' ? 'paper' : page"
         :label="t('fq.shell.navigation')"
         @select="onTab"
       />

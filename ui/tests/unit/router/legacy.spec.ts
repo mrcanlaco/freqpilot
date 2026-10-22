@@ -118,6 +118,11 @@ describe('the table of old paths', () => {
       expect(resolved.name, path).not.toBe('404');
     }
   });
+  it('opens the research paper workspace directly without a bot selection', async () => {
+    await router.push('/paper');
+    expect(router.currentRoute.value.name).toBe('research-paper');
+    expect(router.currentRoute.value.meta.page).toBe('paper');
+  });
 
   it('redirects every old path that moved to its new home', async () => {
     for (const [from, to] of Object.entries(LEGACY_REDIRECTS)) {

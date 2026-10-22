@@ -8,6 +8,7 @@ import type { BotState, DsIconRef } from '@/components/ds/types';
 import type { BotAction } from '@/datasource/types';
 import type { BotRow, Position } from '@/gateway/types.gen';
 import type { ConnectionState } from '@/datasource/types';
+import type { ExecutionBlock } from '@/datasource/execution';
 
 export type ActionId =
   | 'exit'
@@ -16,6 +17,7 @@ export type ActionId =
   | 'forceEntry'
   | 'pause'
   | 'resume'
+  | 'paperWorkspace'
   | 'reload'
   | 'stop'
   | 'cancelOrder'
@@ -48,6 +50,12 @@ export const ACTIONS: Readonly<Record<ActionId, ActionDef>> = {
   forceEntry: { id: 'forceEntry', label: 'forceEntry', icon: 'log-in', mutation: true },
   pause: { id: 'pause', label: 'pause', icon: 'pause', mutation: true, shortcut: 'P' },
   resume: { id: 'resume', label: 'resume', icon: 'play', mutation: true },
+  paperWorkspace: {
+    id: 'paperWorkspace',
+    label: 'paperWorkspace',
+    icon: 'layers',
+    mutation: false,
+  },
   reload: { id: 'reload', label: 'reload', icon: 'refresh-cw', mutation: true },
   stop: { id: 'stop', label: 'stop', icon: 'square', mutation: true, danger: true },
   cancelOrder: { id: 'cancelOrder', label: 'cancelOrder', icon: 'x', mutation: true },
@@ -95,6 +103,7 @@ export const HEADER_DANGER: ActionId = 'exitAll';
 export const HEADER_SENSITIVE: readonly ActionId[] = ['exitAll', 'stop'];
 
 export type DisabledReason =
+  | ExecutionBlock
   | 'offline'
   | 'authExpired'
   | 'starting'

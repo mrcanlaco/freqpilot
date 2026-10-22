@@ -8,7 +8,16 @@ import type { Collections } from '@/datasource/protocol/apply';
 import { applyStateUpdate } from '@/datasource/stores/apply';
 import type { StateUpdate, UnavailableUpdate } from '@/datasource/types';
 
-import { createFakeHttp, makeJwt, ok, status, tick, type FakeHandler } from './helpers';
+import {
+  createFakeHttp,
+  makeJwt,
+  ok,
+  status,
+  tick,
+  ManualTimers,
+  type FakeHandler,
+} from './helpers';
+import { executionState } from '@/datasource/execution';
 
 const NOW = 1_800_000_000_000;
 const TOKEN = makeJwt(NOW + 3_600_000);
@@ -85,6 +94,7 @@ interface World {
   noConfig?: Set<string>;
   currencies?: Record<string, string>;
   dryModes?: Record<string, boolean>;
+  executionStates?: Record<string, string>;
 }
 
 function bot(host: string, world: World): FakeHandler {
@@ -99,7 +109,17 @@ function bot(host: string, world: World): FakeHandler {
         ? world.forceSell(host)
         : ok({ result: 'Created exit order for trade 1.' });
     }
-    if (req.method !== 'GET') return ok({ status: 'ok' });
+    if (req.method !== 'GET') {
+      if (world.executionStates) {
+        const next: Record<string, string> = {
+          '/start': 'running',
+          '/stopbuy': 'paused',
+          '/stop': 'stopped',
+        };
+        if (next[path]) world.executionStates[host] = next[path]!;
+      }
+      return ok({ status: 'ok' });
+    }
     switch (path) {
       case '/show_config':
         if (world.noConfig?.has(host)) return status(404);
@@ -112,7 +132,7 @@ function bot(host: string, world: World): FakeHandler {
           strategy: 'TestStrat',
           timeframe: '30m',
           max_open_trades: 3,
-          state: 'running',
+          state: world.executionStates?.[host] ?? 'running',
         });
       // freqtrade serves ONE trade at /trade/{id}; /trades/{id} is a 404 (B190)
       case '/trade/1':
@@ -202,7 +222,7 @@ function router(world: World): FakeHandler {
   };
 }
 
-async function started(world: World = makeWorld(), clock = { t: NOW }) {
+async function started(world: World = makeWorld(), clock = { t: NOW }, timers?: ManualTimers) {
   const fake = createFakeHttp(router(world));
   const auth = createMemoryAuthStore(entries());
   const src = new DirectSource({
@@ -211,8 +231,8 @@ async function started(world: World = makeWorld(), clock = { t: NOW }) {
     now: () => clock.t,
     localHosts: LOCAL,
     maxConcurrent: 100,
-    setTimeout: () => 0,
-    clearTimeout: () => undefined,
+    setTimeout: timers?.setTimeout ?? (() => 0),
+    clearTimeout: timers?.clearTimeout ?? (() => undefined),
   });
   const fleet: Array<StateUpdate | UnavailableUpdate> = [];
   src.subscribe('fleet', undefined, (u) => fleet.push(u));
@@ -791,6 +811,85 @@ describe('DirectSource actions (real money rules, against fakes only)', () => {
     });
     await src.act('local:9056', { kind: 'stopbuy' }, 'k-ev');
     expect(items.some((e) => e.kind === 'action' && e.bot_key === 'local:9056')).toBe(true);
+    src.stop();
+  });
+});
+
+describe('Native execution controls', () => {
+  it('refreshes native configuration before acting and confirms a requested start by polling', async () => {
+    const world = makeWorld();
+    world.executionStates = { 'dry-bot.test:9056': 'stopped' };
+    const clock = { t: NOW };
+    const timers = new ManualTimers();
+    const { src, fake, fleet } = await started(world, clock, timers);
+    expect(executionState(botsOf(fleet)['local:9056'], clock.t)).toBe('stopped');
+    expect((await src.act('local:9056', { kind: 'stopbuy' }, 'native-pause-stopped')).status).toBe(
+      'rejected',
+    );
+    expect(fake.writes()).toHaveLength(0);
+    expect((await src.act('local:9056', { kind: 'start' }, 'native-start')).status).toBe(
+      'accepted',
+    );
+    src.flush();
+    expect(executionState(botsOf(fleet)['local:9056'], clock.t)).toBe('stale');
+    clock.t += 1000;
+    timers.advance(1000);
+    await src.settle();
+    src.flush();
+    expect(executionState(botsOf(fleet)['local:9056'], clock.t)).toBe('running');
+    expect(fake.writes().map((r) => new URL(r.url).pathname)).toEqual(['/api/v1/start']);
+    src.stop();
+  });
+  it('checks open positions before stopping and refuses a failed execution read', async () => {
+    const world = makeWorld();
+    world.openTrades['dry-bot.test:9056'] = [trade()];
+    const { src, fake } = await started(world);
+    const stopped = await src.act('local:9056', { kind: 'stop' }, 'stop-open');
+    expect(stopped.status).toBe('rejected');
+    expect(stopped.botResponse).toBe('openPositions');
+    world.noConfig = new Set(['dry-bot.test:9056']);
+    expect((await src.act('local:9056', { kind: 'stopbuy' }, 'missing-execution')).status).toBe(
+      'rejected',
+    );
+    expect(fake.writes()).toHaveLength(0);
+    src.stop();
+  });
+  it('never bypasses managed paper profile controls through generic native lifecycle buttons', async () => {
+    const fallback = router(makeWorld());
+    const fake = createFakeHttp((req, n) => {
+      if (req.url.endsWith('/show_config'))
+        return ok({
+          dry_run: true,
+          state: 'stopped',
+          strategy: 'FPPaper_123',
+          trading_mode: 'futures',
+          stake_currency: 'USDT',
+          max_open_trades: 2,
+        });
+      return fallback(
+        { ...req, url: req.url.replace('dry-bot.test:8095', 'dry-bot.test:9056') },
+        n,
+      );
+    });
+    const src = new DirectSource({
+      auth: createMemoryAuthStore([
+        { ...entries()[1]!, id: 'freqpilot.research-paper', apiUrl: 'http://dry-bot.test:8095' },
+      ]),
+      http: fake.http,
+      now: () => NOW,
+      localHosts: LOCAL,
+      maxConcurrent: 100,
+      setTimeout: () => 0,
+      clearTimeout: () => undefined,
+    });
+    await src.start();
+    await src.settle();
+    for (const kind of ['start', 'stopbuy', 'stop', 'reload_config'] as const) {
+      const result = await src.act('local:8095', { kind }, 'managed-' + kind);
+      expect(result.status).toBe('rejected');
+      expect(result.botResponse).toBe('managedPaper');
+    }
+    expect(fake.writes()).toHaveLength(0);
     src.stop();
   });
 });

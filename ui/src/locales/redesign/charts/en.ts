@@ -442,6 +442,8 @@ export default {
     emptyHint:
       'No candle received for this pair. A bot only serves its own strategy timeframe: try that one.',
     emptyError: 'The bot did not answer.',
+    emptyStopped:
+      'The trading engine is stopped and has supplied no analysed candles for this pair. Start paper from its profile when you want new strategy data. Opening this monitor does not start trading.',
     emptyTf: 'No candles in {tf}',
     onlyTf: 'This bot only serves {tf}.',
     needGatewayTf: 'Other timeframes need the gateway.',

@@ -13,11 +13,29 @@ export default {
   ...charts,
   ...tools,
   ...pages,
+  execution: {
+    running: 'En marche',
+    paused: 'Entrées suspendues',
+    stopped: 'Arrêté',
+    reload_config: 'Rechargement de la configuration',
+    unknown: 'État du moteur inconnu',
+    stale: 'État du moteur ancien',
+    body: {
+      paused: 'Le moteur gère les sorties, sans nouvelles entrées ni augmentation de position.',
+      stopped:
+        'L’API est connectée. Le moteur de trading est arrêté et n’attend pas de signal d’entrée.',
+      reload_config: 'Attendez un état actualisé après le rechargement de la configuration.',
+      unknown: 'La connexion à l’API ne prouve pas que le moteur fonctionne.',
+      stale:
+        'Le dernier état du moteur est ancien. Attendez une réponse de configuration actualisée.',
+    },
+  },
   currency: {
     unavailable: 'Devise de mise commune indisponible',
     hint: 'Choisissez des bots utilisant une même devise connue. Les montants ne sont ni convertis ni additionnés entre devises.',
   },
   nav: {
+    paper: 'Paper',
     fleet: 'Flotte',
     bot: 'Bot',
     charts: 'Graphiques',

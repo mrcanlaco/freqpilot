@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useStakeCurrency } from '@/composables/useStakeCurrency';
+import { executionState, executionSnapshot } from '@/datasource/execution';
+import { useNowMs } from '@/components/ds/lib/useNowMs';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -62,7 +64,10 @@ const conn = useFqConnectionStore();
 const { vs } = useValueSlot();
 const prefs = useFqPrefsStore();
 
-const now = computed(() => props.nowMs ?? Date.now());
+const clock = useNowMs();
+const now = computed(() => props.nowMs ?? clock.value);
+const execution = computed(() => executionState(props.bot, now.value));
+const nativeExecution = computed(() => executionSnapshot(props.bot));
 const skew = computed(() => conn.status.clockSkewMs);
 const state = computed(() => botState(props.bot, now.value, skew.value));
 const m = computed(() => props.bot.metrics);
@@ -179,6 +184,14 @@ const stateSince = computed(
       <StatusDot :state="state" />
       <h1 class="name" :title="bot.identity.name">{{ bot.identity.name }}</h1>
       <ModeMark :mode="bot.identity.mode" full />
+      <span
+        v-if="nativeExecution"
+        class="execution"
+        :data-execution="execution"
+        data-testid="execution-state"
+      >
+        {{ t(`fq.execution.${execution}`) }}
+      </span>
       <IconBtn icon="chevron-down" :label="t('fq.header.pick')" @click="emit('selectBot')" />
       <div class="meta" data-testid="bot-meta">
         <span v-if="bot.identity.strategy" :title="bot.identity.strategy">{{
@@ -271,6 +284,13 @@ const stateSince = computed(
     </KpiStrip>
 
     <Banner
+      v-if="nativeExecution && state === 'online' && execution !== 'running'"
+      kind="stopped"
+      data-testid="execution-banner"
+    >
+      <b>{{ t(`fq.execution.${execution}`) }}.</b> {{ t(`fq.execution.body.${execution}`) }}
+    </Banner>
+    <Banner
       v-if="state === 'auth_expired'"
       kind="auth"
       :action="t('fq.status.reconnect')"
@@ -297,6 +317,19 @@ const stateSince = computed(
 </template>
 
 <style scoped>
+.execution {
+  padding: 4px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-1);
+  font-size: var(--t-xs);
+  color: var(--fg-2);
+}
+.execution[data-execution='running'] {
+  color: var(--profit);
+}
+.execution[data-execution='paused'] {
+  color: var(--warn);
+}
 .bh {
   display: grid;
   background: var(--bg-1);

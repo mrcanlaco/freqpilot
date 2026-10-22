@@ -77,6 +77,9 @@ function go(target: string) {
     return;
   }
   switch (target) {
+    case 'paper':
+      void router.push({ name: 'research-paper' });
+      break;
     case 'studio':
       void router.push({ name: 'studio' });
       break;

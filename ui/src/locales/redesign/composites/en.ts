@@ -151,6 +151,7 @@ export default {
     forceEntry: 'Forced entry…',
     pause: 'Pause entries',
     resume: 'Resume entries',
+    paperWorkspace: 'Research paper workspace',
     reload: 'Reload',
     stop: 'Stop the bot…',
     cancelOrder: 'Cancel the order',
@@ -165,6 +166,11 @@ export default {
     more: 'More actions',
     sensitive: 'Sensitive actions of the bot',
     disabled: {
+      managedPaper:
+        'Manage this worker from the research paper workspace so its profile is verified first.',
+      executionUnknown: 'Wait for a fresh execution state before sending this action.',
+      executionState: 'This action does not apply to the current execution state.',
+      openPositions: 'Open positions remain. Pause entries to keep managing exits.',
       offline: 'The bot does not answer: nothing can be sent to it.',
       authExpired: 'Session expired: reconnect first.',
       starting: 'The bot is starting: actions are disabled.',
@@ -300,7 +306,7 @@ export default {
     },
     emptyHint: {
       open: 'The bots are waiting for a signal.',
-      bot: 'The bot is waiting for a signal.',
+      bot: 'Check the execution state in the bot header.',
       closed: 'Closed trades of this bot appear here.',
       journal: 'Widen the period or clear a filter.',
     },

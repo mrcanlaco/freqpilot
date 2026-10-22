@@ -54,8 +54,19 @@ function botTarget(botKey: string | null, query: Record<string, string> = {}): R
 }
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/paper',
+    name: 'research-paper',
+    component: () => import('@/views/FreqPilotStudio.vue'),
+    meta: { page: 'paper', legacy: true },
+  },
   { path: '/strategy-editor.html', redirect: '/studio' },
-  { path: '/studio', name: 'studio', component: () => import('@/views/FreqPilotStudio.vue'), meta: { page: 'studio', legacy: true } },
+  {
+    path: '/studio',
+    name: 'studio',
+    component: () => import('@/views/FreqPilotStudio.vue'),
+    meta: { page: 'studio', legacy: true },
+  },
   {
     path: '/',
     redirect: (to) => ({ path: '/studio', query: carryQuery(to.query) }),

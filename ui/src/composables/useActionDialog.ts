@@ -8,6 +8,7 @@ import { useFqPositionsStore } from '@/datasource/stores/positions';
 import type { BotAction } from '@/datasource/types';
 import type { BotKey, Position } from '@/gateway/types.gen';
 import i18n from '@/locales';
+import { executionBlock } from '@/datasource/execution';
 
 import { positionTradeIdOf, useBotAction } from './useBotAction';
 import { useToaster } from './useToaster';
@@ -75,11 +76,12 @@ export function requestAction(
       ? (context.position ?? useFqPositionsStore().get(botKey, tradeId) ?? null)
       : (context.position ?? null);
 
-  const disabled = disabledReasonFor(
-    state,
-    { connection: conn.status.state, fromCache: conn.fromCache },
-    { orphan: position?.orphan === true },
-  );
+  const disabled =
+    disabledReasonFor(
+      state,
+      { connection: conn.status.state, fromCache: conn.fromCache },
+      { orphan: position?.orphan === true },
+    ) ?? executionBlock(bot, action, Date.now());
   if (disabled) {
     return { ok: false, reason: disabled === 'orphan' ? 'orphan' : 'not_actionable', disabled };
   }

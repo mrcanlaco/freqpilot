@@ -15,6 +15,7 @@
  */
 import { ref, type Ref } from 'vue';
 import { requireCommonCurrency, currencyFromPair } from '@/utils/stakeCurrency';
+import { executionBlock, isLifecycleAction } from '../execution';
 
 import type {
   Alert,
@@ -662,8 +663,12 @@ export class DirectSource implements DataSource {
     // The positions of a bot whose mode is unknown are not published (they would land in the Live
     // table): its config is read at the same time, not behind the slow cycle of the whole fleet
     const needConfig = !modeKnown(rt);
+    const generation = rt.executionGeneration;
     const cfg = needConfig ? await this.fetchJson<BotState>(rt, '/show_config') : null;
-    if (cfg?.ok) rt.config = { data: cfg.data, atMs: this.now() };
+    if (cfg?.ok) {
+      rt.config = { data: cfg.data, atMs: this.now() };
+      if (generation === rt.executionGeneration) rt.executionInvalidated = false;
+    }
     // A webserver is a research service, not a stopped trading bot. Its /status
     // endpoint is deliberately unavailable and must not trigger offline alerts.
     if (rt.config?.data.runmode === 'webserver') {
@@ -674,13 +679,16 @@ export class DirectSource implements DataSource {
     if (r.ok && Array.isArray(r.data)) {
       rt.status = { data: r.data, atMs: this.now() };
     }
-    if (cfg?.ok) rt.config = { data: cfg.data, atMs: this.now() };
     this.scheduleEmit();
   }
 
   private async pollSlow(rt: BotRuntime): Promise<void> {
+    const generation = rt.executionGeneration;
     const cfg = await this.fetchJson<BotState>(rt, '/show_config');
-    if (cfg.ok) rt.config = { data: cfg.data, atMs: this.now() };
+    if (cfg.ok) {
+      rt.config = { data: cfg.data, atMs: this.now() };
+      if (generation === rt.executionGeneration) rt.executionInvalidated = false;
+    }
     if (rt.config?.data.runmode === 'webserver') {
       this.scheduleEmit();
       return;
@@ -1737,6 +1745,41 @@ export class DirectSource implements DataSource {
       ...extra,
     });
 
+    if (isLifecycleAction(action) || action.kind === 'forceentry') {
+      // Re-read native execution before lifecycle/entry intents. A successful /status is only
+      // evidence of positions, never evidence that the trader is RUNNING.
+      const fresh = await this.fetchJson<BotState>(rt, '/show_config');
+      if (!fresh.ok)
+        return base('rejected', {
+          error: 'bot_unreachable',
+          botResponse: 'Execution state could not be verified.',
+        });
+      rt.config = { data: fresh.data, atMs: this.now() };
+      rt.executionInvalidated = false;
+      if (action.kind === 'stop') {
+        const positions = await this.fetchJson<Trade[]>(
+          rt,
+          '/status',
+          undefined,
+          STATUS_TIMEOUT_MS,
+        );
+        if (!positions.ok || !Array.isArray(positions.data))
+          return base('rejected', {
+            error: 'bot_unreachable',
+            botResponse: 'Open positions could not be verified.',
+          });
+        rt.status = { data: positions.data, atMs: this.now() };
+      }
+    }
+    const executionReason = executionBlock(
+      buildBotRow(rt, this.rowContext(rt, this.now(), undefined)),
+      action,
+      this.now(),
+    );
+    this.scheduleEmit();
+    if (executionReason)
+      return base('rejected', { error: 'bad_request', botResponse: executionReason });
+
     if (action.kind === 'forceexit' && action.tradeId !== 'all') {
       // An exit without the state the user saw is never sent.
       if (!action.expected)
@@ -1794,9 +1837,16 @@ export class DirectSource implements DataSource {
   }
 
   private refetchStatusSoon(rt: BotRuntime): void {
+    rt.executionGeneration++;
+    rt.executionInvalidated = true;
+    this.due(rt, 'slow');
+    this.scheduleEmit();
     for (const ms of STALE_REFETCH_AFTER_ACTION_MS) {
       this.setT(() => {
-        if (this.running) this.due(rt, 'status');
+        if (this.running) {
+          this.due(rt, 'status');
+          this.due(rt, 'slow');
+        }
       }, ms);
     }
   }

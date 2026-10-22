@@ -51,6 +51,9 @@ export function useActionNav() {
       return;
     }
     switch (id) {
+      case 'paperWorkspace':
+        void router.push({ path: '/paper' });
+        break;
       case 'openTrade':
         // The pair (and the timeframe) travel with the trade: the Bot page can draw the chart
         // before the trade itself has come in, which it may have to fetch (a closed one)

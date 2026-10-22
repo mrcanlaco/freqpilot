@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CandleChart, ClosedTradeSheet, TradeChart, TradeDrawer } from '../../../src/components/fq';
 import { FIXTURE_NOW } from '../../../src/components/fq/fixtures';
+import { useFqFleetStore } from '../../../src/datasource/stores/fleet';
+import type { ExecutionRow } from '../../../src/datasource/execution';
 import {
   makeCandles,
   makeClosedTrades,
@@ -99,6 +101,24 @@ const props = (extra: Record<string, unknown> = {}) => ({
 const calls = (path: string) => sb.proxyCalls.filter((c) => c.path.startsWith(path));
 
 describe('a timeframe the bot does not serve', () => {
+  it('explains an empty analysed candle cache when the native trader is stopped', async () => {
+    sb = sourceB(world.fixture, { candles: { ...makeCandles(0), data: [] } });
+    const row = useFqFleetStore().bots[bot] as ExecutionRow;
+    row.state.status = 'online';
+    row.execution = {
+      state: 'stopped',
+      as_of_ms: FIXTURE_NOW,
+      expires_ms: FIXTURE_NOW + 60000,
+      managed_paper: true,
+    };
+    const w = mountFq(CandleChart, { props: props(), attachTo: document.body });
+    await flushPromises();
+    const text = w.get('[data-testid=candle-empty]').text();
+    expect(text).toContain('trading engine is stopped');
+    expect(text).toContain('does not start trading');
+    expect(text).not.toContain('try that one');
+    expect(sb.proxyCalls.every((c) => !c.path.startsWith('/start'))).toBe(true);
+  });
   it('reads the local history when the bot answers with no candle, and says so', async () => {
     sb = sourceB(world.fixture, { candles: { ...makeCandles(0), data: [] } });
     const h = history(3000);

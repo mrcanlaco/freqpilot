@@ -9,6 +9,7 @@ use([DatasetComponent]);
 
 <script setup lang="ts">
 import { useStakeCurrency } from '@/composables/useStakeCurrency';
+import { executionState } from '@/datasource/execution';
 import type { ECharts } from 'echarts/core';
 import { useElementSize, useMediaQuery } from '@vueuse/core';
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue';
@@ -578,6 +579,7 @@ const lastTs = computed(() => {
     : null;
 });
 const clock = useNowMs();
+const stopped = computed(() => executionState(fleet.bots[props.botKey], clock.value) === 'stopped');
 const staleText = computed(() => {
   const age = staleAgeMs(lastTs.value, clock.value, tfMs(props.tf));
   if (age === null) return '';
@@ -1366,7 +1368,9 @@ const hasOverlay = (k: keyof OverlayToggles) => {
               ? localApi
                 ? t('fq.candle.emptyLocal')
                 : `${t('fq.candle.onlyTf', { tf: ownTf })} ${t('fq.candle.needGatewayTf')}`
-              : t('fq.candle.emptyHint')
+              : stopped
+                ? t('fq.candle.emptyStopped')
+                : t('fq.candle.emptyHint')
         "
         data-testid="candle-empty"
       />

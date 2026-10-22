@@ -43,7 +43,7 @@ export default {
       perfPairs: 'Résultat par paire',
       perfPartial: 'Historique partiel : seulement ce que cet onglet a chargé.',
       drawer: 'Position',
-      noPosition: 'Aucune position ouverte. Le bot attend un signal.',
+      noPosition: 'Aucune position ouverte. L’état du moteur figure dans l’en-tête.',
       tradeClosed: 'Ce trade est clos.',
       closedTrade: 'trade fermé',
       closedDetails: 'Détails du trade',

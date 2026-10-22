@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-10-22T11:37:52.3874388+07:00",
+  "product": "FreqPilot 0.1.0",
+  "engine": "official Freqtrade 2026.9",
+  "scope": "Direct UI execution states and verified research paper workspace; no native engine/backend changes",
+  "runtime": {
+    "research_open_trades": 0,
+    "prepared_profiles": 1,
+    "research_active_profile": "6a5d0f0135bc475c87184c8b8017c4d1",
+    "main_strategy": "StarterFutures",
+    "research_state": "stopped",
+    "binance_trading_keys_present": false,
+    "main_dry_run": true,
+    "research_online": true
+  },
+  "tests": {
+    "production_build": "passed",
+    "post_full_layout_tests": 6,
+    "full_ui_files": 112,
+    "full_ui_tests": 1692,
+    "full_ui_passed": true,
+    "typecheck": "passed",
+    "backend": "unchanged; previous 38 tests retained"
+  },
+  "ui_observations": [
+    "primary Paper navigation opens /paper without selecting a trading bot",
+    "existing profile, stopped worker, zero positions, wallet/stake/fee and frozen source report displayed",
+    "pause/stop disabled for stopped flat worker; start remains an explicit user action",
+    "Open paper monitor registers existing connection and opens BTC 15m without starting worker",
+    "monitor distinguishes Online connectivity from Stopped execution",
+    "managed monitor links back to paper profile controls; generic start/reload/stop absent from menu",
+    "empty analysed candle cache explains stopped engine rather than recommending a different timeframe",
+    "profile control and open-position transition tests use fake HTTP, never real .test requests"
+  ],
+  "trading_actions_invoked_during_ui_review": [],
+  "service_restarts_during_this_change": [],
+  "limitations": [
+    "execution metadata is a UI-owned Direct extension, not evidence supplied by Gateway",
+    "only one research worker is configured",
+    "no new paper start/pause/stop cycle was performed during this UI-only change"
+  ],
+  "screenshots": [
+    "screenshots/paper-profiles-current.png",
+    "screenshots/paper-stopped-current.png"
+  ]
+}

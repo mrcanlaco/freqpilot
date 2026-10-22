@@ -29,6 +29,8 @@ Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, cha
 
 Đã tách trạng thái thực thi khỏi nhận định kiểm định: lookahead ghi rõ số tín hiệu thực sự xét và giới hạn mẫu; recursive phân biệt ô không tính được, ô engine không báo cáo và chênh lệch bằng 0. Bảng đổi tỷ lệ native sang phần trăm, không tự đặt ngưỡng đạt. Mỗi kết quả đối chiếu mã chính, JSON tham số, khung và ngày với biểu mẫu hiện tại; đổi cấu hình vẫn giữ kết quả cũ và chỉ rõ khác biệt. Đối chiếu này không khẳng định dữ liệu/helper/môi trường bên ngoài cũng khớp.
 
+Đã có trang Paper nghiên cứu riêng, truy cập từ thanh điều hướng và từ màn hình giám sát, dùng lại PaperWorkspace/API hồ sơ. Có thể xem các hồ sơ từ nhiều chiến lược mà không đọc/sửa mã hiện tại. So với các nút bot chung của Ultimate, worker nghiên cứu đi qua bước xác minh hồ sơ và quy tắc đổi database đã có. Direct giữ thông tin kết nối và trạng thái engine native riêng, hiển thị trạng thái cũ khi hết hạn/mất kết nối hoặc chưa đọc lại sau thao tác; không suy RUNNING từ Online hay từ danh sách vị thế. Không thay engine hoặc hợp đồng wire Gateway.
+
 Các màn hình tiền tệ kế thừa đã dùng stake_currency của bot hoặc đồng thanh toán của cặp lịch sử, thay cho nhãn USDC cố định. Nguồn Direct từ chối cộng các đơn vị khác nhau hoặc chưa rõ; các panel thống kê có dữ liệu truyền trực tiếp cũng không hiển thị tổng tiền thiếu đơn vị chung. Vốn bot quản lý có giải thích phần phân bổ và dự phòng, tách với lợi nhuận. Lệnh thoát một phần bằng tay trên Binance chưa được mở khi chưa nạp bộ lọc giới hạn sàn; mức tối thiểu 10 của Hyperliquid không được áp đặt cho Binance. Việc thoát tự động của engine/chiến lược không bị đổi.
 
 Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquant.dev/docs/python-strategies .
@@ -47,7 +49,7 @@ Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquan
 Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 
 1. Diễn giải lookahead/recursive và đối chiếu ngữ cảnh đã có. Còn hướng dẫn chọn mẫu đủ lớn theo từng chiến lược; không dùng ngưỡng số lệnh chung để chứng nhận chất lượng.
-2. Luồng paper một worker đã có trên UI bằng Compose/API native. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Màn hình giám sát Bot kế thừa hiện dùng Online cho kết nối API, chưa phân biệt đầy đủ trạng thái thực thi STOPPED/PAUSED; xem trạng thái worker tại tab 06 · Paper. Cần chuẩn hóa phần này trước khi coi trang giám sát là màn hình điều khiển đầy đủ. Không bật live.
+2. Luồng paper một worker, trang quản lý hồ sơ và trạng thái engine trên giám sát Direct đã có. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Gateway chưa cung cấp phần mở rộng trạng thái native này, không suy diễn từ Online. Không bật live.
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run và kiểm tra toàn vẹn trên UI. Còn luồng phát lại tự động từ gói, ghim metadata sàn và cơ chế quản lý dung lượng.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
 5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.

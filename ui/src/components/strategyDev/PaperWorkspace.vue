@@ -19,11 +19,11 @@ const dataSource=useDataSource();
 const state=ref<PaperState>(), working=ref(false),message=ref(''),bad=ref(false),label=ref('');
 let poll:ReturnType<typeof setInterval>|undefined;
 let refreshFailed=false;
-const profiles=computed(()=>state.value?.profiles.filter(p=>p.strategy===props.strategy)??[]);
+const profiles=computed(()=>state.value?.profiles.filter(p=>!props.strategy||p.strategy===props.strategy)??[]);
 const active=computed(()=>state.value?.profiles.find(p=>p.id===state.value?.active_profile));
-const statusNames:Record<string,string>={running:'Đang chạy paper',paused:'Tạm ngừng vào lệnh · vẫn quản lý thoát lệnh',stopped:'Đã dừng',unavailable:'Chưa kết nối'};
+const statusNames:Record<string,string>={running:'Đang chạy paper',paused:'Tạm ngừng vào lệnh · vẫn quản lý thoát lệnh',stopped:'Đã dừng',reload_config:'Đang nạp cấu hình · chờ xác nhận',unavailable:'Chưa kết nối'};
 function errorText(e:unknown){const err=e as {response?:{data?:{detail?:unknown}};message?:string};return String(err.response?.data?.detail??err.message??e);}
-async function refresh(){try{state.value=(await props.api.get('/studio/paper')).data;if(refreshFailed){message.value='';bad.value=false;refreshFailed=false;}}catch(e){refreshFailed=true;message.value=errorText(e);bad.value=true;}}
+async function refresh(){try{state.value=(await props.api.get('/studio/paper')).data;if(refreshFailed){message.value='';bad.value=false;refreshFailed=false;}}catch(e){refreshFailed=true;if(state.value)state.value={...state.value,online:false,state:'unavailable'};message.value=errorText(e);bad.value=true;}}
 async function action(fn:()=>Promise<void>){working.value=true;bad.value=false;try{await fn();await refresh();}catch(e){message.value=errorText(e);bad.value=true;}finally{working.value=false;}}
 async function prepare(){if(!props.run)return;await action(async()=>{await props.api.post('/studio/paper/profiles',{run_id:props.run!.id,label:label.value});message.value='Đã chuẩn bị mã và database paper riêng. Bot chưa được bật.';});}
 async function start(profile:Profile){await action(async()=>{message.value='Đang nạp worker paper; bước này có thể mất khoảng một phút…';await props.api.post('/studio/paper/profiles/'+profile.id+'/start',{}, {timeout:150000});message.value='Đã bật paper cho '+profile.label+'.';});}
@@ -56,15 +56,15 @@ onUnmounted(()=>{if(poll)clearInterval(poll);});
     <p>Worker nghiên cứu dùng engine chính thức 2026.9 và tiền mô phỏng. Bot StarterFutures hiện có dùng dịch vụ riêng trên cổng 8090.</p>
     <div v-if="message" class="notice" :class="{bad}" role="status">{{message}}</div>
     <article class="box worker">
-      <div class="row"><b>{{statusNames[state?.state??'unavailable']??state?.state}}</b><span v-if="state?.online" class="badge">Kết nối 8095</span></div>
+      <div class="row"><b>{{!state&&!bad?'Đang đọc trạng thái worker…':statusNames[state?.state??'unavailable']??state?.state}}</b><span v-if="state?.online" class="badge">Kết nối 8095</span></div>
       <p v-if="active">Hồ sơ đang chọn: <strong>{{active.label}}</strong> · {{active.strategy}} · mã {{active.revision.slice(0,10)}}.</p>
       <p v-else-if="state?.online">Worker đã sẵn sàng, chưa chọn hồ sơ nghiên cứu.</p>
       <p v-if="state?.error" class="notice bad">{{state.error}}</p>
       <p v-if="state?.online">Vị thế mô phỏng đang mở: <b>{{state.open_trades}}</b>.</p>
-      <div class="row"><button :disabled="working||!state?.online||!active" @click="control('pause')">Tạm ngừng vào lệnh</button><button :disabled="working||!state?.online||!!state.open_trades" @click="control('stop')">Dừng khi đã hết vị thế</button><button class="primary" :disabled="working||!state?.online||!active" @click="monitor">Mở giám sát paper</button></div>
+      <div class="row"><button :disabled="working||!state?.online||!active||!(state.state==='running'||(state.state==='stopped'&&Number(state.open_trades)>0))" @click="control('pause')">{{state?.state==='stopped'&&Number(state.open_trades)>0?'Tiếp tục quản lý thoát lệnh':'Tạm ngừng vào lệnh'}}</button><button :disabled="working||!state?.online||!['running','paused'].includes(state.state)||state.open_trades!==0" @click="control('stop')">Dừng khi đã hết vị thế</button><button class="primary" :disabled="working||!state?.online||!active" @click="monitor">Mở giám sát paper</button></div>
       <small>Đổi hồ sơ cần hết vị thế mở. Tạm ngừng vẫn cho engine quản lý thoát lệnh; bật lại cùng hồ sơ sẽ dùng tiếp database cũ. Sau khi dịch vụ khởi động lại, worker không tự vào lệnh mới. Nếu còn vị thế, worker tiếp tục quản lý thoát lệnh ở chế độ tạm ngừng; nếu không còn vị thế thì dừng.</small><p class="notice">Chế độ tạm ngừng chặn vào lệnh mới và tăng vị thế. Giảm vị thế hoặc chốt lời từng phần vẫn được xử lý theo chiến lược, cùng stoploss, ROI và tín hiệu thoát.</p>
     </article>
-    <article class="box">
+    <article v-if="strategy" class="box">
       <h3>1 · Chuẩn bị từ bản đã backtest</h3>
       <template v-if="run?.strategy===strategy&&run.status==='success'">
         <p>Hồ sơ {{run.id.slice(0,10)}} · {{strategy}} · mã {{run.revision.slice(0,10)}}. Sao chép mã từ gói lưu, giữ nguyên quy tắc tín hiệu, dùng lớp paper giới hạn leverage 1x.</p>
@@ -74,15 +74,15 @@ onUnmounted(()=>{if(poll)clearInterval(poll);});
       </template>
       <template v-else><p>Chọn một kết quả có gói mã và dữ liệu đã lưu trước khi chuẩn bị paper.</p><button @click="$emit('openResults')">Mở kết quả backtest</button></template>
     </article>
-    <article class="box"><h3>2 · Xem cấu hình rồi bật paper</h3>
-      <p v-if="!profiles.length">Chưa có hồ sơ paper cho {{strategy}}.</p>
+    <article class="box"><div class="row"><h3>{{strategy?'2 · Xem cấu hình rồi bật paper':'Hồ sơ paper đã chuẩn bị'}}</h3><button v-if="!strategy" @click="$emit('openResults')">＋ Chuẩn bị từ kết quả backtest</button></div>
+      <p v-if="!state">{{bad?'Chưa tải được hồ sơ paper. Hãy tải lại trạng thái.':'Đang tải hồ sơ paper…'}}</p><p v-else-if="!profiles.length">{{strategy?'Chưa có hồ sơ paper cho '+strategy+'.':'Chưa có hồ sơ paper. Mở một chiến lược và chọn kết quả backtest đã lưu để chuẩn bị.'}}</p>
       <div v-for="profile in profiles" :key="profile.id" class="profile">
         <div class="row"><b>{{profile.label}}</b><span v-if="profile.id===state?.active_profile" class="badge">Hồ sơ đang chọn</span></div>
-        <p>{{profile.settings.pairs.join(' · ')}} · {{profile.settings.timeframe}} · isolated 1x</p>
+        <p>{{profile.strategy}} · {{profile.settings.pairs.join(' · ')}} · {{profile.settings.timeframe}} · isolated 1x</p>
         <dl><div><dt>Vốn mô phỏng</dt><dd>{{profile.settings.wallet}} USDT</dd></div><div><dt>Stake đề xuất</dt><dd>{{profile.settings.stake}} USDT</dd></div><div><dt>Lệnh mở tối đa</dt><dd>{{profile.settings.max_open_trades}}</dd></div><div><dt>Phí mỗi chiều</dt><dd>{{(profile.settings.fee*100).toFixed(3)}}%</dd></div></dl>
         <p v-if="profile.preset">Bộ tham số từ backtest: <b>{{profile.preset.label}}</b> · {{profile.preset.native_sha256.slice(0,10)}}. Không lấy giá trị mới trong thư viện.</p><p>Backtest nguồn: {{profile.summary.total_trades??0}} lệnh · {{profile.summary.profit_total_abs?.toFixed(3)??'—'}} USDT · mã {{profile.revision.slice(0,10)}}.</p>
         <p v-if="profile.valid===false" class="notice bad">{{profile.error}} Hãy chuẩn bị một hồ sơ mới.</p><div class="notice"><p v-for="warning in profile.warnings" :key="warning">{{warning}}</p></div>
-        <div class="row"><button class="primary" :disabled="working||profile.valid===false||!state?.online||(!!state.open_trades&&state.active_profile!==profile.id)" @click="start(profile)">{{profile.id===state?.active_profile?'Bật / tiếp tục paper':'Bật paper hồ sơ này'}}</button><small>Database riêng cho hồ sơ này; không thay bot paper chính.</small></div>
+        <div class="row"><button class="primary" :disabled="working||profile.valid===false||!state?.online||!['running','paused','stopped'].includes(state.state)||(state.active_profile===profile.id&&state.state==='running')||(state.open_trades!==0&&state.active_profile!==profile.id)" @click="start(profile)">{{profile.id===state?.active_profile&&state?.state==='running'?'Đang chạy paper':profile.id===state?.active_profile&&state?.state==='paused'?'Tiếp tục paper':'Bật paper hồ sơ này'}}</button><small>Database riêng cho hồ sơ này; không thay bot paper chính.</small></div>
       </div>
     </article>
   </div>

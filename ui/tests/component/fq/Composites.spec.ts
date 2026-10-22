@@ -5,6 +5,8 @@ import { nextTick } from 'vue';
 import AppShell from '../../../src/components/fq/AppShell.vue';
 import BotActionBar from '../../../src/components/fq/BotActionBar.vue';
 import BotHeader from '../../../src/components/fq/BotHeader.vue';
+import type { ExecutionRow } from '../../../src/datasource/execution';
+import { useFqFleetStore } from '../../../src/datasource/stores/fleet';
 import FleetScope from '../../../src/components/fq/FleetScope.vue';
 import ScopePanel from '../../../src/components/fq/ScopePanel.vue';
 import TradeDrawer from '../../../src/components/fq/TradeDrawer.vue';
@@ -43,6 +45,45 @@ describe('BotHeader', () => {
       props: { bot, nowMs: FIXTURE_NOW, canPrev: true, canNext: false },
       attachTo: document.body,
     });
+
+  it('distinguishes a connected stopped native trader and links managed paper to its workspace', async () => {
+    const bot = bots(
+      (b) => b.identity.mode === 'dry' && b.state.status === 'online' && !b.freshness.state?.stale,
+    ) as ExecutionRow;
+    bot.execution = {
+      state: 'stopped',
+      as_of_ms: FIXTURE_NOW,
+      expires_ms: FIXTURE_NOW + 60000,
+      managed_paper: true,
+    };
+    useFqFleetStore().bots[bot.bot_key] = { ...bot };
+    const w = header(bot);
+    expect(w.get('[data-testid=execution-state]').text()).toBe('Stopped');
+    expect(w.get('[data-testid=execution-banner]').text()).toContain('API is connected');
+    expect(w.find('[data-action=pause]').exists()).toBe(false);
+    await w.get('[data-action=paperWorkspace]').trigger('click');
+    expect(w.emitted('navigate')?.[0]).toEqual(['paperWorkspace']);
+    expect(useActionDialog().current.value).toBeNull();
+  });
+
+  it('offers resume for a native paused trader and does not render a stale running state as current', async () => {
+    const bot = bots(
+      (b) => b.identity.mode === 'dry' && b.state.status === 'online' && !b.freshness.state?.stale,
+    ) as ExecutionRow;
+    bot.execution = {
+      state: 'paused',
+      as_of_ms: FIXTURE_NOW,
+      expires_ms: FIXTURE_NOW + 60000,
+      managed_paper: false,
+    };
+    useFqFleetStore().bots[bot.bot_key] = { ...bot };
+    const w = header(bot);
+    expect(w.get('[data-testid=execution-banner]').text()).toContain('manages exits');
+    expect(w.find('[data-action=resume]').exists()).toBe(true);
+    bot.execution = { ...bot.execution, state: 'running', expires_ms: FIXTURE_NOW - 1 };
+    await w.setProps({ bot: { ...bot } });
+    expect(w.get('[data-testid=execution-state]').text()).toBe('Execution state out of date');
+  });
 
   it('an online bot: name, mode, no banner, actions available', () => {
     const bot = bots(
@@ -338,6 +379,11 @@ describe('ScopePanel and FleetScope', () => {
 });
 
 describe('AppShell', () => {
+  it('opens the paper workspace from the primary navigation and keeps the monitor in that section', async () => {
+    const w=mountFq(AppShell,{props:{page:'bot',source:world.fake.source,inline:true,contained:true}});
+    const paper=w.get('[data-nav=paper]');expect(paper.attributes('aria-current')).toBe('page');
+    await paper.trigger('click');expect(w.emitted('navigate')?.[0]).toEqual(['paper']);
+  });
   it('mounts the single confirmation host and the palette; Ctrl K opens the palette', async () => {
     const w = mountFq(AppShell, {
       props: { page: 'fleet', source: world.fake.source, inline: true, contained: true },

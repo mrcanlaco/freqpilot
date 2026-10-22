@@ -445,6 +445,8 @@ export default {
     emptyHint:
       "Aucune bougie reçue pour cette paire. Un bot ne sert que l'unité de temps de sa stratégie : essayez-la.",
     emptyError: "Le bot n'a pas répondu.",
+    emptyStopped:
+      'Le moteur est arrêté et ne fournit pas de bougies analysées pour cette paire. Lancez le paper depuis son profil pour obtenir de nouvelles données. Ouvrir ce suivi ne lance pas le trading.',
     emptyTf: 'Pas de bougies en {tf}',
     onlyTf: 'Ce bot ne sert que {tf}.',
     needGatewayTf: 'Les autres unités de temps demandent la gateway.',
