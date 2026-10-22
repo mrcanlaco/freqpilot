@@ -238,6 +238,7 @@ declare global {
   const refManualReset: typeof import('@vueuse/core').refManualReset
   const refThrottled: typeof import('@vueuse/core').refThrottled
   const refWithControl: typeof import('@vueuse/core').refWithControl
+  const registerPaperLogin: typeof import('./composables/loginInfo').registerPaperLogin
   const registerSlowRefreshRunner: typeof import('./stores/slowRefreshScheduler').registerSlowRefreshRunner
   const rememberBotName: typeof import('./stores/botNameRegistry').rememberBotName
   const reportedBotName: typeof import('./stores/botNameRegistry').reportedBotName
@@ -894,6 +895,7 @@ declare module 'vue' {
     readonly refManualReset: UnwrapRef<typeof import('@vueuse/core')['refManualReset']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly registerPaperLogin: UnwrapRef<typeof import('./composables/loginInfo')['registerPaperLogin']>
     readonly registerSlowRefreshRunner: UnwrapRef<typeof import('./stores/slowRefreshScheduler')['registerSlowRefreshRunner']>
     readonly rememberBotName: UnwrapRef<typeof import('./stores/botNameRegistry')['rememberBotName']>
     readonly reportedBotName: UnwrapRef<typeof import('./stores/botNameRegistry')['reportedBotName']>

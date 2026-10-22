@@ -8,6 +8,7 @@ Tên làm việc cho workspace nghiên cứu Binance Futures của riêng bạn:
 - Backtest workspace: http://localhost:8091/studio
 - Ultimate độc lập để tham khảo: http://localhost:8092/tools/strategy-dev
 - Paper Ultimate độc lập: http://localhost:8093
+- Worker paper nghiên cứu riêng: http://localhost:8095 (giám sát từ workspace chính)
 
 Các chiến lược, dữ liệu, cấu hình và database của bộ chính vẫn ở thư mục `../freqtrade/user_data`. Repo này không chứa tài khoản Binance hoặc thông tin đăng nhập. Dùng tài khoản local hiện tại để đăng nhập trên UI nếu được hỏi. Trạng thái vận hành: **chỉ backtest và paper**, không có khóa giao dịch Binance, giữ isolated và 1x cho bộ mẫu so sánh.
 
@@ -22,7 +23,7 @@ Các chiến lược, dữ liệu, cấu hình và database của bộ chính v�
 - Mỗi lần chạy mới sao chép mã Python local, parameter của chiến lược và dữ liệu feather (nến/mark/funding) vào thư mục riêng; engine chính thức chạy trực tiếp từ bản sao. Lưu ZIP gốc và gói đầu vào/kết quả có SHA-256 để kiểm tra toàn vẹn, xem mã đã chạy và tải về. Báo cáo cũ được ghi rõ là chưa có gói đầy đủ. Gói không đóng băng metadata thị trường lấy qua mạng hoặc môi trường bên ngoài image engine.
 - Lịch sử, KPI, đường vốn theo lệnh đóng, bảng chỉ số/giao dịch, biểu đồ lệnh và so sánh nhiều chiến lược. Tái sử dụng chart/report từ Ultimate và FreqUI.
 - Soạn yêu cầu cho Codex từ ý tưởng/ghi chú. Chưa có chatbot AI tích hợp riêng.
-- Theo dõi bot paper hiện tại. Chưa có nút tự triển khai paper cho chiến lược mới; cần cấu hình riêng cùng Codex.
+- Paper trên UI: chuẩn bị hồ sơ từ đúng gói backtest, giữ mã và tham số, tạo database riêng, xem cấu hình trước khi bật. Worker nghiên cứu 8095 dùng CLI --dry-run và lớp chiến lược giới hạn 1x; tái sử dụng API start/pause/reload_config của Freqtrade. Bot paper chính 8090 độc lập.
 
 ## Cách dùng
 
@@ -31,13 +32,17 @@ Các chiến lược, dữ liệu, cấu hình và database của bộ chính v�
 3. Mở tab Mã, sửa rồi lưu. StarterFutures đang chạy paper được bảo vệ; sửa trên bản sao.
 4. Chạy backtest. Phí của bộ hiện tại là 0.05% mỗi chiều, dữ liệu chi tiết 1m. Đây là mô phỏng nến, không phải tick/L2.
 5. Đọc kết quả, biểu đồ và cảnh báo mẫu nhỏ. **So sánh kết quả thư viện** ưu tiên các kết quả có gói lưu mới nhất của 8 chiến lược thử, dùng bảng so sánh có sẵn.
-6. Kiểm tra lookahead/recursive và quan sát paper trước khi đánh giá khả năng sử dụng. Lưu mã/backtest không tự đổi chiến lược paper đang chạy.
+6. Kiểm tra lookahead/recursive trước khi đánh giá khả năng sử dụng. Lưu mã/backtest không tự đổi chiến lược paper đang chạy.
+7. Mở **06 · Paper**, chọn **Chuẩn bị hồ sơ paper**, đọc lại mã nguồn, vốn/stake, phí và cảnh báo mẫu nhỏ. Bước chuẩn bị chưa bật bot.
+8. Chọn **Bật paper hồ sơ này**. Worker 8095 nạp cấu hình từ hồ sơ và dùng database riêng; mỗi lần đổi hồ sơ cần không còn vị thế đang mở. Lớp thực thi kế thừa tín hiệu gốc, giới hạn leverage 1x và đổi tên metadata của tệp tham số để Freqtrade nạp đúng bộ số cũ.
+9. **Tạm ngừng vào lệnh** tiếp tục quản lý thoát lệnh và dừng tăng vị thế theo PAUSED của 2026.9. Các điều chỉnh giảm vị thế / chốt lời từng phần vẫn hoạt động; đã kiểm tra trực tiếp phương thức gốc với State.PAUSED. **Bật / tiếp tục** dùng lại database cũ. **Dừng khi đã hết vị thế** từ chối nếu còn vị thế; không ép đóng lệnh. Khi dịch vụ khởi động lại, worker không tự vào lệnh mới; còn vị thế thì khôi phục PAUSED để quản lý thoát lệnh, không còn thì STOPPED.
+10. **Mở giám sát paper** đăng ký kết nối token trong UI hiện tại, dùng lại màn hình Bot/Chart/History/Logs, không cần nhập lại mật khẩu. Luồng local này dùng nguồn Direct; Gateway chưa được nối với worker. Một worker nghiên cứu dùng một hồ sơ tại một thời điểm, có thể giữ nhiều hồ sơ đã chuẩn bị.
 
 ## Phát triển lại
 
 Yêu cầu Node.js 24, pnpm 10.33.2 và Docker Desktop. Cài UI theo lockfile, build UI trong thư mục `ui/`; backend dùng Dockerfile ở `backend/` trên image chính thức đã ghim. `Start.ps1` dùng `.env` để trỏ tới dữ liệu ngoài repo. `.env.example` không có bí mật. Tài khoản, dữ liệu, ZIP kết quả và database không được đưa vào Git.
 
-Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit/datasource/directSource.spec.ts`, `pnpm --dir ui build`; backend chạy unittest `test_*.py` trong image. Các kiểm tra hiện tại gồm 37 kiểm tra data source, 3 kiểm tra diễn giải profit factor và 13 kiểm tra backend. Build, typecheck, thao tác UI tạo/sửa/lưu nghiên cứu, backtest từ snapshot, kiểm tra hash, mở mã gốc, tải gói và kiểm định lookahead/recursive đã được kiểm tra.
+Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit/datasource/directSource.spec.ts`, `pnpm --dir ui build`; backend chạy unittest `test_*.py` trong image. Các kiểm tra hiện tại gồm 39 kiểm tra data source, 3 kiểm tra diễn giải profit factor và 25 kiểm tra backend. Build, typecheck, thao tác UI tạo/sửa/lưu nghiên cứu, backtest từ snapshot, kiểm tra hash, mở mã gốc, tải gói và kiểm định lookahead/recursive đã được kiểm tra. Paper đã kiểm tra chuẩn bị, bật, tạm ngừng, tiếp tục, giám sát và dừng khi không còn vị thế bằng engine thực; tệp tham số được kiểm tra bằng StrategyResolver gốc. Lỗi chuyển stake dạng chuỗi đã có kiểm tra hồi quy và schema native chặn trước khi nạp worker.
 
 `tools/run_benchmark.py` ghi rõ protocol, dùng timeframe gốc và mặc định chạy riêng từng chiến lược, tránh dùng chung warmup; `tools/compare_benchmark.py` đọc ZIP kết quả thực và đối chiếu từng lệnh. Không tối ưu tham số tự động.
 
@@ -46,4 +51,3 @@ Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit
 Xem `PRODUCT.md` cho định hướng so với RoboQuant/Ultimate, `benchmarks/REPORT.md` cho kết quả 8 chiến lược và các giới hạn kiểm định. Bản Ultimate độc lập là công cụ so sánh, không phải engine vận hành chính. Chưa tạo repo GitHub hay xuất bản công khai.
 
 FreqPilot là tác phẩm phái sinh GPL-3.0 của FreqUI Ultimate / FreqUI. Giữ LICENSE và các ghi nhận nguồn ở `SOURCES.md`; mã engine Freqtrade không bị thay bằng fork Ultimate.
-

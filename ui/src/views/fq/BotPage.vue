@@ -433,7 +433,7 @@ useShortcuts([
 ]);
 
 const header = ref<HTMLElement | null>(null);
-const unknownBot = computed(() => fleet.loaded && !bot.value);
+const unknownBot = computed(() => fleet.loaded && !conn.fromCache && conn.status.state === 'live' && !bot.value);
 function editConfig() {
   const b = bot.value;
   if (!b) return;

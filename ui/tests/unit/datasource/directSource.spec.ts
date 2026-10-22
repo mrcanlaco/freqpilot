@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { createMemoryAuthStore } from '@/datasource/direct/auth';
 import { DirectSource } from '@/datasource/direct/DirectSource';
+import { nameOf, newRuntime } from '@/datasource/direct/model';
 import type { Collections } from '@/datasource/protocol/apply';
 import { applyStateUpdate } from '@/datasource/stores/apply';
 import type { StateUpdate, UnavailableUpdate } from '@/datasource/types';
@@ -230,6 +231,22 @@ const botsOf = (fleet: Array<StateUpdate | UnavailableUpdate>): Record<string, a
 };
 
 describe('DirectSource polling', () => {
+  it('publishes a newly registered local bot before the next scheduler tick', async () => {
+    const {src,auth,fleet}=await started();
+    auth.data.push({id:'freqpilot.research-paper',botName:'research paper',apiUrl:'http://localhost:8095',accessToken:TOKEN,refreshToken:'refresh-paper'});
+    await src.registry.list();
+    const row=botsOf(fleet)['local:8095'];
+    expect(row.identity.name).toBe('research paper');
+    expect(row.state.status).toBe('starting');
+    src.stop();
+  });
+  it('hides only the local paper reload generation from display names', () => {
+    const rt=newRuntime('paper','local:8095','research',null,8095,0);
+    rt.config={data:{strategy:'FPPaper_123',bot_name:'FreqPilot paper · sample #1234abcd'} as any,atMs:NOW};
+    expect(nameOf(rt)).toBe('FreqPilot paper · sample');
+    rt.config.data.strategy='OtherStrategy';
+    expect(nameOf(rt)).toBe('FreqPilot paper · sample #1234abcd');
+  });
   it('keeps a webserver out of trading balances and does not poll its trading-only status', async () => {
     const fallback = router(makeWorld());
     const fake = createFakeHttp((req, n) => {

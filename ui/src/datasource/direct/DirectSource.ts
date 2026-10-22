@@ -396,6 +396,8 @@ export class DirectSource implements DataSource {
   readonly registry: RegistryApi = {
     list: async () => {
       this.syncRegistry();
+      // Publish newly registered local bots before navigation can render "not found".
+      this.flush();
       return [...this.rts.values()]
         .sort((a, b) => a.sortId - b.sortId)
         .map((rt) => ({ botKey: rt.key, uiId: rt.id, name: nameOf(rt), icon: rt.icon }));

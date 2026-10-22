@@ -24,6 +24,12 @@ export function readLoginInfos(): Readonly<AuthStorageMulti> {
   return allLoginInfos.value;
 }
 
+/** Register tokens returned by the authenticated local paper adapter; never store a password. */
+export function registerPaperLogin(botId: string, info: AuthStorage): void {
+  const previous = allLoginInfos.value[botId];
+  allLoginInfos.value[botId] = { ...previous, ...info, createdAt: previous?.createdAt ?? Date.now() };
+}
+
 /**
  * Write renewed tokens of one bot back to the shared storage, nothing else, so the legacy pages and
  * the data layer keep working from the same tokens. A bot removed meanwhile is not recreated.

@@ -21,3 +21,12 @@ services:
     ports:
       - "127.0.0.1:8091:8080"
     command: webserver --config user_data/config.json
+  research-paper:
+    <<: *common
+    image: codex-freqpilot:2026.9-v0.1
+    ports:
+      - "127.0.0.1:8095:8080"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - python -m freqtrade.rpc.api_server.api_paper && exec freqtrade trade --config /freqtrade/user_data/freqpilot/paper/active/config.json --dry-run

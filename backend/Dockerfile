@@ -5,3 +5,4 @@ LABEL local.extension="strategy-editor" local.engine="official-2026.9"
 
 COPY --chown=ftuser:ftuser api_studio.py /freqtrade/freqtrade/rpc/api_server/api_studio.py
 COPY --chown=ftuser:ftuser api_runs.py /freqtrade/freqtrade/rpc/api_server/api_runs.py
+COPY --chown=ftuser:ftuser api_paper.py /freqtrade/freqtrade/rpc/api_server/api_paper.py

@@ -13,7 +13,7 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 | Kết quả / so sánh | Metrics, chart/replay, lịch sử | Nhiều panel phân tích và so sánh | Tái sử dụng các panel tương thích API chính thức |
 | Kiểm định | IS/OOS, walk-forward theo gói | Hyperopt/WFA và các phân tích mở rộng | Dùng lại API lookahead/recursive, có job và lịch sử trên UI; đã khảo sát mẫu bằng CLI |
 | Tối ưu | Có nhiều phương pháp | Có launcher hyperopt/WFA | Chưa nối UI, không tối ưu tự động |
-| Triển khai | Có Demo/Live | Có công cụ quản lý bot | Giám sát paper hiện có; thay chiến lược vẫn qua cấu hình cùng Codex |
+| Triển khai | Có Demo/Live | Có công cụ quản lý bot | Hồ sơ từ backtest → review cấu hình → bật/pause/tiếp tục/dừng → giám sát; worker nghiên cứu riêng, database theo hồ sơ, chặn đổi khi còn vị thế |
 
 Đã ẩn các mục công cụ phụ thuộc API fork không tồn tại trên backend chính, thay vì đưa người dùng tới trang không chạy được. Nguồn dữ liệu phân biệt webserver nghiên cứu với bot giao dịch, tránh báo offline hoặc cộng vốn sai cho dịch vụ backtest.
 
@@ -31,10 +31,10 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 
 1. Hoàn thiện diễn giải kết quả kiểm định và chuẩn hóa tiêu chí chọn mẫu; API/job/lịch sử lookahead/recursive đã được nối trên UI.
-2. Luồng chuẩn bị cấu hình paper riêng có kiểm tra bằng chứng, sau đó chủ động bật/tắt và theo dõi từng chiến lược, tái sử dụng Compose/API.
+2. Luồng paper một worker đã có trên UI bằng Compose/API native. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Không bật live.
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run và kiểm tra toàn vẹn trên UI. Còn luồng phát lại tự động từ gói, ghim metadata sàn và cơ chế quản lý dung lượng.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
-5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa.
+5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Màn hình Bot đã xử lý đăng ký bot mới và trạng thái đang kết nối; còn các nhãn tiền USDC từ Ultimate cần chuyển sang stake_currency của bot, cùng việc diễn giải vốn khả dụng so với vốn ban đầu.
 6. Chuẩn hóa cài đặt độc lập, CI, cấu hình ví dụ và kiểm tra trước khi xuất bản GitHub.
 
 Không lấy số lượng tính năng như tick/L2 hoặc AI chat làm tiêu chí để thay engine đang được yêu cầu giữ nguyên.
