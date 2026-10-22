@@ -5,8 +5,10 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FAdxSmaStrategy.py",
     "original_sha256": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
-    "installed_sha256": "450ed20d7fee0b7316fa4856c549aad4664299f40f5f6de6ca5be791f7ac7cad",
-    "changes": []
+    "installed_sha256": "43ae02ecca4553b8a609d4533cb4d5b6517292d35b41fc4c77f54f8e959ced89",
+    "changes": [],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "FReinforcedStrategy",
@@ -14,10 +16,12 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FReinforcedStrategy.py",
     "original_sha256": "acf9e445b50e14419993a2e24215ba650b4550b27bad1ba6e1804da7025a4ba5",
-    "installed_sha256": "8c149ec428ea440c48f02afc808f3380f8319455bcbd219773398a1a28160cdf",
+    "installed_sha256": "915eb861e6b1e6244ba669a25f0806d4b36378b95615df1f05c392bf64a98c17",
     "changes": [
       "Declare space=buy for three existing IntParameters so Freqtrade can classify them; numeric defaults unchanged."
-    ]
+    ],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "FSampleStrategy",
@@ -25,8 +29,10 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FSampleStrategy.py",
     "original_sha256": "faf8a6df56f2b494d886a31a40b63e2ac75c26fd19c6816c68fa7bbec5645bfe",
-    "installed_sha256": "faf8a6df56f2b494d886a31a40b63e2ac75c26fd19c6816c68fa7bbec5645bfe",
-    "changes": []
+    "installed_sha256": "3fcbe2ed16dd097fd6e4548172acbde871bdfe64c5a7341f337f19caf3daa225",
+    "changes": [],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "FSupertrendStrategy",
@@ -34,8 +40,10 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FSupertrendStrategy.py",
     "original_sha256": "6d4760637514311f1664b6a00460f07cf29a762a15b29e89febd73da73316bb8",
-    "installed_sha256": "6d4760637514311f1664b6a00460f07cf29a762a15b29e89febd73da73316bb8",
-    "changes": []
+    "installed_sha256": "93f31258c4b6c05cf2380fc81f235f37355d97a3e4d2ebdf075e948e07978e19",
+    "changes": [],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "FOttStrategy",
@@ -43,12 +51,14 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/FOttStrategy.py",
     "original_sha256": "48f79d6d00c7af9eadbdb972ceb42f39b8d5eb2b203433ded8b90b387135f119",
-    "installed_sha256": "0be3a68dccce50e9ce1e25dbb9fb9a9c0dae03931c3c8af5f66c588b81b9b37d",
+    "installed_sha256": "ec3bb14499dbead3334685c5a03f4620eb9aa2d74f8d3a69848d01a178156e69",
     "changes": [
       "Use Python standard-library math instead of removed numpy.lib.math; no signal parameter change.",
       "Use single-step DataFrame.loc assignment for Var under pandas 3 Copy-on-Write; restore original intended update, no parameter tuning.",
       "Initialize shortstop as float so pandas 3 accepts price-valued assignments; preserve sentinel magnitude."
-    ]
+    ],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "TrendFollowingStrategy",
@@ -56,8 +66,10 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/TrendFollowingStrategy.py",
     "original_sha256": "d165cc1bf236b96b98ecd9404d47aaaacf4231a405caf3055c586624d1ca3747",
-    "installed_sha256": "d165cc1bf236b96b98ecd9404d47aaaacf4231a405caf3055c586624d1ca3747",
-    "changes": []
+    "installed_sha256": "6b8f3e272acfd4923539120364b9ddceccc17a385117d12a249dc1460ea53c4f",
+    "changes": [],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "VolatilitySystem",
@@ -65,10 +77,12 @@
     "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
     "path": "user_data/strategies/futures/VolatilitySystem.py",
     "original_sha256": "a3665af76addbb0a732d0d11e6e53b5faf72a9f516023b05dd7b734c2c23e2d8",
-    "installed_sha256": "25379aaf5631a890329a5daafbc769b7ec3b10b0f4caff8eff5371418b188958",
+    "installed_sha256": "c53163f6338f12cf4f1428eed63e414aff4a2a226cdb1ed34255e3059daafab4",
     "changes": [
       "Limit leverage to 1x under the existing user instruction; signal logic unchanged."
-    ]
+    ],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   },
   {
     "strategy": "StarterFutures",
@@ -76,9 +90,11 @@
     "commit": "419c14f",
     "path": "templates/StarterFutures.py",
     "original_sha256": "05428d6aa3a54b6ac1abea24af300dcdc042997616355c9e159d0e471becc7db",
-    "installed_sha256": "05428d6aa3a54b6ac1abea24af300dcdc042997616355c9e159d0e471becc7db",
+    "installed_sha256": "9e5a389d11dead5d8339c45d514f02433fc1979bdc6263e582ee7bfd9e1269ef",
     "changes": [
       "Installation example: EMA20/50 with RSI, long/short, fixed 1x. No profitability claim."
-    ]
+    ],
+    "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
   }
 ]
