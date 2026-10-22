@@ -165,8 +165,11 @@ declare global {
   const isShallow: typeof import('vue').isShallow
   const isTransportFailure: typeof import('./composables/api').isTransportFailure
   const isTypingTarget: typeof import('./composables/useShortcuts').isTypingTarget
+  const latestLibraryRuns: typeof import('./utils/strategyLibrary').latestLibraryRuns
   const legacyPollingAllowed: typeof import('./stores/legacyPollingGate').legacyPollingAllowed
   const legacyThemeToResolved: typeof import('./utils/theme').legacyThemeToResolved
+  const libraryMatches: typeof import('./utils/strategyLibrary').libraryMatches
+  const libraryUpdated: typeof import('./utils/strategyLibrary').libraryUpdated
   const lockKeyOf: typeof import('./composables/useBotAction').lockKeyOf
   const locksDemand: typeof import('./stores/perBotFetchPolicy').locksDemand
   const locksWanted: typeof import('./stores/perBotFetchPolicy').locksWanted
@@ -656,6 +659,9 @@ declare global {
   export type { LiveBotPrefillInput } from './utils/reconstitute'
   import('./utils/reconstitute')
   // @ts-ignore
+  export type { ResearchMetadata, LibraryStrategy, LibraryRun } from './utils/strategyLibrary'
+  import('./utils/strategyLibrary')
+  // @ts-ignore
   export type { ResolvedTheme } from './utils/theme'
   import('./utils/theme')
 }
@@ -824,8 +830,11 @@ declare module 'vue' {
     readonly isShallow: UnwrapRef<typeof import('vue')['isShallow']>
     readonly isTransportFailure: UnwrapRef<typeof import('./composables/api')['isTransportFailure']>
     readonly isTypingTarget: UnwrapRef<typeof import('./composables/useShortcuts')['isTypingTarget']>
+    readonly latestLibraryRuns: UnwrapRef<typeof import('./utils/strategyLibrary')['latestLibraryRuns']>
     readonly legacyPollingAllowed: UnwrapRef<typeof import('./stores/legacyPollingGate')['legacyPollingAllowed']>
     readonly legacyThemeToResolved: UnwrapRef<typeof import('./utils/theme')['legacyThemeToResolved']>
+    readonly libraryMatches: UnwrapRef<typeof import('./utils/strategyLibrary')['libraryMatches']>
+    readonly libraryUpdated: UnwrapRef<typeof import('./utils/strategyLibrary')['libraryUpdated']>
     readonly lockKeyOf: UnwrapRef<typeof import('./composables/useBotAction')['lockKeyOf']>
     readonly locksDemand: UnwrapRef<typeof import('./stores/perBotFetchPolicy')['locksDemand']>
     readonly locksWanted: UnwrapRef<typeof import('./stores/perBotFetchPolicy')['locksWanted']>

@@ -17,6 +17,16 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 
 Đã ẩn các mục công cụ phụ thuộc API fork không tồn tại trên backend chính, thay vì đưa người dùng tới trang không chạy được. Nguồn dữ liệu phân biệt webserver nghiên cứu với bot giao dịch, tránh báo offline hoặc cộng vốn sai cho dịch vụ backtest.
 
+## Tham khảo Strategies của RoboQuant · 22/10/2026
+
+Đã xem trực tiếp trang Strategies và Code của tài khoản đang kết nối, cùng docs `python-strategies` và metadata qua connector; chỉ đọc, không tạo/sửa/compile/chạy tác vụ RoboQuant. Thư viện thực có tìm kiếm, danh sách/thẻ, yêu thích, sắp xếp, section và chỉ số gần nhất. Trang chi tiết đặt Code/Backtest/Optimize/Deployments/Settings quanh cùng chiến lược, có cây tệp và lịch sử phiên bản. Tài liệu còn mô tả cấu hình tham số dùng lại giữa các màn hình.
+
+FreqPilot đã áp dụng thư viện thẻ/danh sách, tìm mô tả/nhãn, yêu thích lưu trên máy, lọc khung/hồ sơ, cập nhật gần nhất, chỉ số từ lần backtest có gói gần nhất, cảnh báo khác mã/mẫu nhỏ và chọn nhiều chiến lược để so sánh. Dùng lại Monaco, DiffViewer, bảng so sánh, API metadata/phiên bản và ZIP kết quả hiện có. Không chọn kết quả lợi nhuận tốt nhất làm đại diện, không gọi là chứng nhận chất lượng; báo cáo không có gói chưa được dùng để gán KPI cho mã hiện tại.
+
+Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, cấu hình tham số có tên, chatbot riêng hoặc bước compile như `.rq`. Freqtrade dùng Python và kiểm tra cú pháp khi lưu; không giả lập compiler/sandbox của RoboQuant. Các phần này cần khảo sát khả năng native trước khi bổ sung.
+
+Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquant.dev/docs/python-strategies .
+
 ## Nguyên tắc phát triển
 
 - Giữ nguyên engine và tái sử dụng API chính thức trước khi viết adapter.

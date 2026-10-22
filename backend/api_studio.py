@@ -9,7 +9,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from typing import Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from freqtrade.rpc.api_server.deps import get_config
 from freqtrade.rpc.api_server.api_local_strategies import root, target, read, lock
 
@@ -27,12 +27,26 @@ def meta_path(name,config):
 
 def metadata(name,config):
     p=meta_path(name,config)
-    return json.loads(p.read_text()) if p.exists() else {'name':name,'idea':'','notes':'','tags':[]}
+    defaults={'name':name,'idea':'','notes':'','tags':[],'is_favorite':False}
+    return {**defaults,**json.loads(p.read_text())} if p.exists() else defaults
 
 class Research(BaseModel):
     idea: str=Field(default='',max_length=20000)
     notes: str=Field(default='',max_length=40000)
     tags: list[str]=Field(default_factory=list,max_length=12)
+    is_favorite: bool=False
+
+    @field_validator('tags')
+    @classmethod
+    def clean_tags(cls,values):
+        tags=[]
+        for value in values:
+            tag=value.strip()
+            if not tag:continue
+            if len(tag)>32 or any(ord(c)<32 for c in tag):
+                raise ValueError('Mỗi nhãn tối đa 32 ký tự và không chứa ký tự điều khiển.')
+            if tag.casefold() not in {t.casefold() for t in tags}:tags.append(tag)
+        return tags
 
 @router.get('/library')
 def library(config=Depends(get_config)):
@@ -63,8 +77,10 @@ def get_research(name:str,config=Depends(get_config)):
 @router.put('/research/{name}')
 def save_research(name:str,req:Research,config=Depends(get_config)):
     p=meta_path(name,config)
-    result={'name':name,**req.model_dump(),'updated_at':datetime.now(timezone.utc).isoformat()}
     with lock:
+        # Small library actions must not discard notes/tags saved in the editor.
+        result={**metadata(name,config),**req.model_dump(exclude_unset=True),'name':name,
+                'updated_at':datetime.now(timezone.utc).isoformat()}
         tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(result,ensure_ascii=False),encoding='utf-8');os.replace(tmp,p)
     return result
 

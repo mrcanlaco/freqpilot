@@ -22,6 +22,25 @@ class StudioChecks(unittest.TestCase):
         old=versions('ResearchSample',self.config)['versions'][0]['id']
         self.assertEqual(version('ResearchSample',old,self.config)['content'],self.doc['content'])
         with self.assertRaises(HTTPException):version('ResearchSample','../config.json',self.config)
+
+    def test_library_favorite_action_preserves_research_and_normalized_tags(self):
+        save_research('ResearchSample',Research(idea='Giữ ý tưởng',notes='Không mất ghi chú',tags=[' short ','Short','fibonacci']),self.config)
+        result=save_research('ResearchSample',Research(is_favorite=True),self.config)
+        self.assertEqual(result['idea'],'Giữ ý tưởng')
+        self.assertEqual(result['notes'],'Không mất ghi chú')
+        self.assertEqual(result['tags'],['short','fibonacci'])
+        self.assertTrue(library(self.config)['strategies'][0]['research']['is_favorite'])
+        # Older clients omit favorites: saving notes must retain the stored flag.
+        save_research('ResearchSample',Research(notes='Ghi chú mới'),self.config)
+        self.assertTrue(get_research('ResearchSample',self.config)['is_favorite'])
+        save_research('ResearchSample',Research(tags=[],is_favorite=False),self.config)
+        self.assertEqual(get_research('ResearchSample',self.config)['tags'],[])
+        self.assertFalse(get_research('ResearchSample',self.config)['is_favorite'])
+
+    def test_library_rejects_unbounded_or_control_character_tags(self):
+        from pydantic import ValidationError
+        for tags in (['a'*33],['one\ntwo'],['x']*13):
+            with self.assertRaises(ValidationError):Research(tags=tags)
     def test_manifest_rejects_stale_revision_missing_funding_and_live_knobs(self):
         settings={'timerange':'20260918-','timeframe':'15m','timeframe_detail':'1m','dry_run_wallet':1000,'stake_amount':'100','max_open_trades':2,'enable_protections':False}
         with self.assertRaises(HTTPException):manifest(Manifest(strategy='ResearchSample',revision='old',settings=settings),self.config)

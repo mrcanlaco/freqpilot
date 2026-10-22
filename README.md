@@ -15,8 +15,10 @@ Các chiến lược, dữ liệu, cấu hình và database của bộ chính v�
 ## Đã có
 
 - Thư viện chiến lược cùng mô tả, ý tưởng và ghi chú lưu trên máy.
+- Thư viện dạng thẻ/danh sách tham khảo Strategies của RoboQuant: tìm tên/mô tả/nhãn, yêu thích, lọc khung và hồ sơ, sắp xếp theo cập nhật hoặc lần chạy. Chỉ số từ gói backtest hoàn tất gần nhất, ghi rõ mã khớp/đã đổi và mẫu ít lệnh. Chọn các chiến lược để so sánh bằng bảng native có sẵn; không cố định vào tám mẫu benchmark.
 - Tạo mới hoặc sao chép mẫu có sẵn; editor Monaco tái sử dụng từ Ultimate.
 - Lưu mã có kiểm tra cú pháp, chống ghi đè phiên bản cũ, bản sao dự phòng và xem/khôi phục mã cũ.
+- So sánh bản sao cũ với mã trong editor bằng DiffViewer có sẵn của Ultimate, không thay hoặc lưu mã khi chỉ xem khác biệt.
 - Backtest ngay trong workspace bằng API/engine chính thức: ngày, khung tín hiệu, chi tiết 1m, vốn, số tiền mỗi lệnh và số lệnh tối đa.
 - Kiểm định lookahead/recursive bằng API gốc, tiến trình và lịch sử kết quả gắn với hash mã; kết quả hoàn tất được lưu ngay cả khi đóng trình duyệt.
 - Kiểm tra dữ liệu local và chặn hồ sơ chạy nếu thiếu nến/mark/funding hoặc ngày bắt đầu nằm trước phạm vi dữ liệu.
@@ -27,8 +29,8 @@ Các chiến lược, dữ liệu, cấu hình và database của bộ chính v�
 
 ## Cách dùng
 
-1. Chọn chiến lược hoặc **Tạo chiến lược**. Có 7 mẫu futures từ repo freqtrade-strategies chính thức bên cạnh các chiến lược hiện có; nguồn và các sửa đổi tương thích nằm ở `templates/PROVENANCE.json`.
-2. Viết ý tưởng, lưu nghiên cứu; sao chép yêu cầu sang Codex nếu cần phát triển quy tắc.
+1. Mở thư viện, tìm/lọc và chọn chiến lược hoặc **Tạo chiến lược**. Có thể đổi dạng thẻ/danh sách, chọn nhiều chiến lược để so sánh. Có 7 mẫu futures từ repo freqtrade-strategies chính thức bên cạnh các chiến lược hiện có; nguồn và các sửa đổi tương thích nằm ở `templates/PROVENANCE.json`.
+2. Viết ý tưởng, gắn nhãn phân cách bằng dấu phẩy, đánh dấu yêu thích và lưu nghiên cứu; sao chép yêu cầu sang Codex nếu cần phát triển quy tắc. Đánh dấu sao tại thư viện không xóa ý tưởng/ghi chú/nhãn đã lưu.
 3. Mở tab Mã, sửa rồi lưu. StarterFutures đang chạy paper được bảo vệ; sửa trên bản sao.
 4. Chạy backtest. Phí của bộ hiện tại là 0.05% mỗi chiều, dữ liệu chi tiết 1m. Đây là mô phỏng nến, không phải tick/L2.
 5. Đọc kết quả, biểu đồ và cảnh báo mẫu nhỏ. **So sánh kết quả thư viện** ưu tiên các kết quả có gói lưu mới nhất của 8 chiến lược thử, dùng bảng so sánh có sẵn.
@@ -42,7 +44,7 @@ Các chiến lược, dữ liệu, cấu hình và database của bộ chính v�
 
 Yêu cầu Node.js 24, pnpm 10.33.2 và Docker Desktop. Cài UI theo lockfile, build UI trong thư mục `ui/`; backend dùng Dockerfile ở `backend/` trên image chính thức đã ghim. `Start.ps1` dùng `.env` để trỏ tới dữ liệu ngoài repo. `.env.example` không có bí mật. Tài khoản, dữ liệu, ZIP kết quả và database không được đưa vào Git.
 
-Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit/datasource/directSource.spec.ts`, `pnpm --dir ui build`; backend chạy unittest `test_*.py` trong image. Các kiểm tra hiện tại gồm 39 kiểm tra data source, 3 kiểm tra diễn giải profit factor và 25 kiểm tra backend. Build, typecheck, thao tác UI tạo/sửa/lưu nghiên cứu, backtest từ snapshot, kiểm tra hash, mở mã gốc, tải gói và kiểm định lookahead/recursive đã được kiểm tra. Paper đã kiểm tra chuẩn bị, bật, tạm ngừng, tiếp tục, giám sát và dừng khi không còn vị thế bằng engine thực; tệp tham số được kiểm tra bằng StrategyResolver gốc. Lỗi chuyển stake dạng chuỗi đã có kiểm tra hồi quy và schema native chặn trước khi nạp worker.
+Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit/datasource/directSource.spec.ts`, `pnpm --dir ui build`; backend chạy unittest `test_*.py` trong image. Các kiểm tra hiện tại gồm 39 kiểm tra data source, 3 kiểm tra diễn giải profit factor, 4 kiểm tra thư viện và 27 kiểm tra backend. Build, typecheck, thao tác UI tạo/sửa/lưu nghiên cứu, backtest từ snapshot, kiểm tra hash, mở mã gốc, tải gói và kiểm định lookahead/recursive đã được kiểm tra. Thư viện đã thử lưu/tải lại yêu thích và nhãn, lọc tìm kiếm, chế độ danh sách, so sánh hai chiến lược và xem khác biệt phiên bản không thay mã. Paper đã kiểm tra chuẩn bị, bật, tạm ngừng, tiếp tục, giám sát và dừng khi không còn vị thế bằng engine thực; tệp tham số được kiểm tra bằng StrategyResolver gốc. Lỗi chuyển stake dạng chuỗi đã có kiểm tra hồi quy và schema native chặn trước khi nạp worker.
 
 `tools/run_benchmark.py` ghi rõ protocol, dùng timeframe gốc và mặc định chạy riêng từng chiến lược, tránh dùng chung warmup; `tools/compare_benchmark.py` đọc ZIP kết quả thực và đối chiếu từng lệnh. Không tối ưu tham số tự động.
 
