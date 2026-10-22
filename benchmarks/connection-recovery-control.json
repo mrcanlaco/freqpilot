@@ -1,0 +1,60 @@
+{
+  "checked_at": "2026-10-22T20:01:16.323971+07:00",
+  "base_commit": "1f46920",
+  "scope": "Initial research connection recovery; UI only",
+  "tests": {
+    "ui_tests": 1722,
+    "production_build": "passed",
+    "ui_files": 117,
+    "typecheck": "passed",
+    "backend_changed": false,
+    "previous_backend_checks": 58,
+    "new_tests": 16
+  },
+  "discovery": {
+    "engine": "2026.9",
+    "main_strategies": 11,
+    "ultimate_library_http": 404,
+    "product": "FreqPilot",
+    "dry_run": true
+  },
+  "native_fault_proof": {
+    "research_jobs_started": 0,
+    "restore": "Recreated isolated webserver with identical image and scratch data at original address after Docker reassigned its ephemeral port",
+    "scope": "Private scratch webserver and separate static UI origin",
+    "bounded_failure_notice_visible": true,
+    "manual_retry_restored_library": true,
+    "static_ui_stopped": true,
+    "initial_outage": "Stopped only isolated webserver",
+    "templates": 8,
+    "sandbox_removed": true,
+    "reregister_after_restore": false,
+    "trading_process_started": false,
+    "reload_after_restore": false
+  },
+  "production": {
+    "outage_preflight": "Refused because research paper was running; production stop was never issued",
+    "paper_state_at_finish": "running",
+    "service_id_image_start_times_unchanged": true,
+    "strategy_or_config_modified": false,
+    "paper_lifecycle_commands_sent": 0,
+    "paper_open_trades_at_finish": 0
+  },
+  "screenshots": [
+    "screenshots/connection-retry.png",
+    "screenshots/connection-restored.png"
+  ],
+  "limits": [
+    "Recovery applies to initial read-only bootstrap only. Commands are never retried automatically.",
+    "Compatibility response is a capability check, not cryptographic engine attestation.",
+    "Existing preferred compatible connection wins; otherwise first compatible candidate.",
+    "An unrelated configured bot can delay discovery until its request timeout."
+  ],
+  "final_checks": {
+    "staged_diff_check": "passed",
+    "protected_configs_env_strategies": "unchanged; published UI index excluded",
+    "nonignored_files_scanned": 1130,
+    "source_review": "No blocking findings",
+    "actual_local_credential_scan": "passed"
+  }
+}

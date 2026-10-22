@@ -39,6 +39,7 @@ declare global {
   const ROUND_CLOSER: typeof import('./utils/roundTimeframe').ROUND_CLOSER
   const ROUND_DOWN: typeof import('./utils/roundTimeframe').ROUND_DOWN
   const ROUND_UP: typeof import('./utils/roundTimeframe').ROUND_UP
+  const ResearchConnectionError: typeof import('./utils/researchConnection').ResearchConnectionError
   const SUBPLOTS_KEY: typeof import('./composables/useChartDisplay').SUBPLOTS_KEY
   const THEME_MODES: typeof import('./utils/theme').THEME_MODES
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
@@ -108,6 +109,7 @@ declare global {
   const defineComponent: typeof import('vue').defineComponent
   const defineStore: typeof import('pinia').defineStore
   const diffConfig: typeof import('./utils/configEditorObject').diffConfig
+  const discoverResearchConnection: typeof import('./utils/researchConnection').discoverResearchConnection
   const eagerComputed: typeof import('@vueuse/core').eagerComputed
   const easeOutCubic: typeof import('./utils/motion').easeOutCubic
   const echartsGridDefault: typeof import('./utils/charts/chartZoom').echartsGridDefault
@@ -253,6 +255,7 @@ declare global {
   const reportedBotName: typeof import('./stores/botNameRegistry').reportedBotName
   const requestAction: typeof import('./composables/useActionDialog').requestAction
   const requireCommonCurrency: typeof import('./utils/stakeCurrency').requireCommonCurrency
+  const researchFailureMessage: typeof import('./utils/researchConnection').researchFailureMessage
   const resetActionDialog: typeof import('./composables/useActionDialog').resetActionDialog
   const resetBotActionState: typeof import('./composables/useBotAction').resetBotActionState
   const resolveColumns: typeof import('./composables/useColumns').resolveColumns
@@ -283,6 +286,7 @@ declare global {
   const syncRef: typeof import('@vueuse/core').syncRef
   const syncRefs: typeof import('@vueuse/core').syncRefs
   const templateRef: typeof import('@vueuse/core').templateRef
+  const temporaryResearchFailure: typeof import('./utils/researchConnection').temporaryResearchFailure
   const throttledRef: typeof import('@vueuse/core').throttledRef
   const throttledWatch: typeof import('@vueuse/core').throttledWatch
   const timeformat: typeof import('./utils/formatters/timeformat').default
@@ -466,6 +470,7 @@ declare global {
   const useRefHistory: typeof import('@vueuse/core').useRefHistory
   const useRegimeOverlay: typeof import('./composables/useRegimeOverlay').useRegimeOverlay
   const useReplayStore: typeof import('./stores/replayStore').useReplayStore
+  const useResearchBootstrap: typeof import('./composables/useResearchBootstrap').useResearchBootstrap
   const useResizeObserver: typeof import('@vueuse/core').useResizeObserver
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
@@ -670,6 +675,9 @@ declare global {
   export type { ResearchCheck, CheckContext, CheckAssessment } from './utils/researchChecks'
   import('./utils/researchChecks')
   // @ts-ignore
+  export type { ResearchConnectionError } from './utils/researchConnection'
+  import('./utils/researchConnection')
+  // @ts-ignore
   export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset } from './utils/strategyLibrary'
   import('./utils/strategyLibrary')
   // @ts-ignore
@@ -715,6 +723,7 @@ declare module 'vue' {
     readonly ROUND_CLOSER: UnwrapRef<typeof import('./utils/roundTimeframe')['ROUND_CLOSER']>
     readonly ROUND_DOWN: UnwrapRef<typeof import('./utils/roundTimeframe')['ROUND_DOWN']>
     readonly ROUND_UP: UnwrapRef<typeof import('./utils/roundTimeframe')['ROUND_UP']>
+    readonly ResearchConnectionError: UnwrapRef<typeof import('./utils/researchConnection')['ResearchConnectionError']>
     readonly SUBPLOTS_KEY: UnwrapRef<typeof import('./composables/useChartDisplay')['SUBPLOTS_KEY']>
     readonly THEME_MODES: UnwrapRef<typeof import('./utils/theme')['THEME_MODES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
@@ -784,6 +793,7 @@ declare module 'vue' {
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly diffConfig: UnwrapRef<typeof import('./utils/configEditorObject')['diffConfig']>
+    readonly discoverResearchConnection: UnwrapRef<typeof import('./utils/researchConnection')['discoverResearchConnection']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly easeOutCubic: UnwrapRef<typeof import('./utils/motion')['easeOutCubic']>
     readonly echartsGridDefault: UnwrapRef<typeof import('./utils/charts/chartZoom')['echartsGridDefault']>
@@ -927,6 +937,7 @@ declare module 'vue' {
     readonly reportedBotName: UnwrapRef<typeof import('./stores/botNameRegistry')['reportedBotName']>
     readonly requestAction: UnwrapRef<typeof import('./composables/useActionDialog')['requestAction']>
     readonly requireCommonCurrency: UnwrapRef<typeof import('./utils/stakeCurrency')['requireCommonCurrency']>
+    readonly researchFailureMessage: UnwrapRef<typeof import('./utils/researchConnection')['researchFailureMessage']>
     readonly resetActionDialog: UnwrapRef<typeof import('./composables/useActionDialog')['resetActionDialog']>
     readonly resetBotActionState: UnwrapRef<typeof import('./composables/useBotAction')['resetBotActionState']>
     readonly resolveColumns: UnwrapRef<typeof import('./composables/useColumns')['resolveColumns']>
@@ -956,6 +967,7 @@ declare module 'vue' {
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
+    readonly temporaryResearchFailure: UnwrapRef<typeof import('./utils/researchConnection')['temporaryResearchFailure']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
     readonly timeformat: UnwrapRef<typeof import('./utils/formatters/timeformat')['default']>
@@ -1139,6 +1151,7 @@ declare module 'vue' {
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useRegimeOverlay: UnwrapRef<typeof import('./composables/useRegimeOverlay')['useRegimeOverlay']>
     readonly useReplayStore: UnwrapRef<typeof import('./stores/replayStore')['useReplayStore']>
+    readonly useResearchBootstrap: UnwrapRef<typeof import('./composables/useResearchBootstrap')['useResearchBootstrap']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>

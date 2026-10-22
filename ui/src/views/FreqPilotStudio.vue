@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, shallowRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import type { AxiosInstance } from 'axios';
 import type { BacktestHistoryEntry } from '@/types';
@@ -8,6 +8,9 @@ import PaperWorkspace from '@/components/strategyDev/PaperWorkspace.vue';
 import ParameterPresets from '@/components/strategyDev/ParameterPresets.vue';
 import ResearchCheckReport from '@/components/strategyDev/ResearchCheckReport.vue';
 import ReplayBacktest from '@/components/strategyDev/ReplayBacktest.vue';
+import ResearchConnectionNotice from '@/components/strategyDev/ResearchConnectionNotice.vue';
+import { discoverResearchConnection } from '@/utils/researchConnection';
+import { useResearchBootstrap } from '@/composables/useResearchBootstrap';
 import type { ResearchCheck } from '@/utils/researchChecks';
 import StrategyLibrary from '@/components/strategyDev/StrategyLibrary.vue';
 import DiffViewer from '@/components/strategyDev/DiffViewer.vue';
@@ -36,7 +39,7 @@ const preset=ref<StrategyPreset>(),parameterBusy=ref(false);
 const libraryOpen=ref(true), tagsText=ref(''), favorite=ref(false), versionPreview=ref('');
 const tabs=[['idea','01 · Ý tưởng'],['code','02 · Mã chiến lược'],['run','03 · Backtest'],['results','04 · Kết quả'],['checks','05 · Kiểm định'],['paper','06 · Paper']];
 const code=ref(''), original=ref(''), revision=ref(''), idea=ref(''), notes=ref('');
-const message=ref(''), failure=ref(false), loading=ref(true), working=ref(false), api=ref<AxiosInstance>();
+const message=ref(''), failure=ref(false), working=ref(false), api=ref<AxiosInstance>();
 type CheckRun=ResearchCheck;
 const checks=ref<CheckRun[]>([]), minSignals=ref(10), targetSignals=ref(20);
 const checking=computed(()=>checks.value.some(c=>['pending','running'].includes(c.status)));
@@ -56,7 +59,7 @@ const selectedItem=computed(()=>items.value.find(x=>x.name===selected.value));
 const filtered=computed(()=>items.value.filter(x=>libraryMatches(x,query.value)));
 const dirty=computed(()=>code.value!==original.value);
 const researchDirty=computed(()=>!!selected.value&&(idea.value!==(selectedItem.value?.research?.idea??'')||notes.value!==(selectedItem.value?.research?.notes??'')||tagsText.value!==(selectedItem.value?.research?.tags??[]).join(', ')||favorite.value!==!!selectedItem.value?.research?.is_favorite));
-const active=computed(()=>bots.hasBots?bots.activeBot:undefined);
+const active=shallowRef<typeof bots.activeBot>();
 let researchBot: typeof bots.activeBot | undefined;
 const results=computed(()=>active.value?.backtestHistoryList.filter(x=>x.strategy===selected.value)??[]);
 const result=computed(()=>active.value?.selectedBacktestResult?.strategy_name===selected.value?active.value.selectedBacktestResult:undefined);
@@ -127,28 +130,33 @@ async function compareLatest(names?:string[]){await guard(async()=>{
 function pct(n:number|undefined){return n==null?'—':(n*100).toFixed(2)+'%';}
 function fmtDate(value:string){return value?.slice(0,16).replace('T',' ')+' UTC';}
 async function pollBacktest(){if(!active.value)return;try{const was=active.value.backtestRunning;await active.value.pollBacktest();if(was&&!active.value.backtestRunning){await refresh();tab.value='results';notify('Backtest đã kết thúc. Xem số lệnh, phí và rủi ro trước khi đánh giá.');}}catch{/* Native API can be idle or still initializing. */}}
-async function initialize(){try{
-  await Promise.all(bots.allBotStores.map(b=>b.getState().catch(()=>null)));
-  const server=bots.allBotStores.find(b=>b.isWebserverMode);if(!server)throw Error('Cần kết nối dịch vụ Backtest 8091 trong Settings → Bots.');
-  researchBot=server;
+async function initialize({isCurrent}:{isCurrent:()=>boolean}){
+  if(poll){clearInterval(poll);poll=undefined;}
+  const server=await discoverResearchConnection(bots.allBotStores,b=>useApi(useLoginInfo(b.botId),b.botId).api,bots.hasBots?bots.activeBot?.botId:undefined,isCurrent);
+  if(!isCurrent())return;
+  researchBot=server;active.value=server;
   bots.selectBot(server.botId);api.value=useApi(useLoginInfo(server.botId),server.botId).api;
-  data.value=(await api.value.get('/studio/data')).data;wallet.value=data.value?.wallet??1000;stake.value=Number(data.value?.stake??100);maxTrades.value=data.value?.max_open_trades??2;
-  await refresh();await pollBacktest();if(items.value[0])await select(items.value.find(x=>x.name==='StarterFuturesResearch')?.name??items.value[0].name);
+  const response=await api.value.get('/studio/data');if(!isCurrent())return;
+  data.value=response.data;wallet.value=data.value?.wallet??1000;stake.value=Number(data.value?.stake??100);maxTrades.value=data.value?.max_open_trades??2;
+  await refresh();if(!isCurrent())return;await pollBacktest();if(!isCurrent())return;
+  if(items.value[0])await select(items.value.find(x=>x.name==='StarterFuturesResearch')?.name??items.value[0].name);
+  if(!isCurrent())return;
   poll=setInterval(()=>{if(running.value)void pollBacktest();if(checking.value)void loadChecks().catch(e=>notify(errorMessage(e),true));if(pendingArtifact.value)void loadRuns().then(async()=>{if(!pendingArtifact.value)await active.value?.getBacktestHistory();}).catch(e=>notify(errorMessage(e),true));},1500);
-}catch(e){notify(errorMessage(e),true);}finally{loading.value=false;}}
-onMounted(initialize);onUnmounted(()=>{if(poll)clearInterval(poll);});
+}
+const connection=useResearchBootstrap(initialize);
+const ready=computed(()=>connection.phase.value==='ready');
+onMounted(()=>void connection.start());onUnmounted(()=>{if(poll)clearInterval(poll);});
 </script>
 
 <template>
   <div class="pilot">
-    <div class="pilot-heading" :class="{'library-mode':libraryOpen}"><div><span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span><h1>Từ ý tưởng đến chiến lược có bằng chứng</h1><p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p></div><div class="row"><button v-if="api&&(!libraryOpen||paperView)" @click="openLibrary">← Thư viện chiến lược</button><button v-if="api&&!paperView" @click="router.push('/paper')">Paper nghiên cứu</button><button v-if="api&&!paperView" :disabled="working||running" @click="compareLatest()">So sánh kết quả thư viện</button><div class="safe">● Chỉ backtest & paper</div></div></div>
+    <div class="pilot-heading" :class="{'library-mode':libraryOpen}"><div><span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span><h1>Từ ý tưởng đến chiến lược có bằng chứng</h1><p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p></div><div class="row"><button v-if="ready&&api&&(!libraryOpen||paperView)" @click="openLibrary">← Thư viện chiến lược</button><button v-if="ready&&api&&!paperView" @click="router.push('/paper')">Paper nghiên cứu</button><button v-if="ready&&api&&!paperView" :disabled="working||running" @click="compareLatest()">So sánh kết quả thư viện</button><div class="safe">● Chỉ backtest & paper</div></div></div>
     <div v-if="message&&(!libraryOpen||failure)" class="feedback" :class="{bad:failure}" role="status">{{message}}</div>
     <div v-if="running&&!libraryOpen&&tab==='results'" class="progress" role="status"><progress :value="active?.backtestProgress??0" max="1"/><span>{{active?.backtestStep}} · {{Math.round((active?.backtestProgress??0)*100)}}%</span></div>
-    <div v-if="loading" class="empty">Đang kết nối dữ liệu và chiến lược…</div>
-    <div v-else-if="!api" class="empty"><h2>Kết nối bộ cài hiện tại</h2><p>Thêm Backtest tại http://localhost:8091 bằng tài khoản local sẵn có.</p><button @click="router.push('/settings')">Mở cài đặt kết nối</button></div>
-    <PaperWorkspace v-else-if="paperView" :api="api" strategy="" revision="" @open-results="openLibrary" />
-    <StrategyLibrary v-else-if="libraryOpen" :items="items" :runs="runs" :busy="working" @open="openStrategy" @favorite="toggleFavorite" @create="createDialog()" @compare="compareLatest" @refresh="guard(refresh)" />
-    <div v-else class="workspace">
+    <ResearchConnectionNotice v-if="!ready" :phase="connection.phase.value" :attempt="connection.attempt.value" :max-attempts="connection.maxAttempts" :error="connection.error.value" :has-bots="bots.hasBots" @retry="connection.start" @settings="router.push('/settings')" />
+    <PaperWorkspace v-else-if="paperView&&api" :api="api" strategy="" revision="" @open-results="openLibrary" />
+    <StrategyLibrary v-else-if="libraryOpen&&api" :items="items" :runs="runs" :busy="working" @open="openStrategy" @favorite="toggleFavorite" @create="createDialog()" @compare="compareLatest" @refresh="guard(refresh)" />
+    <div v-else-if="api" class="workspace">
       <aside><div class="row"><h2>Chiến lược <small>{{items.length}}</small></h2><button aria-label="Tải lại thư viện" @click="guard(refresh)">↻</button></div><button class="primary wide" @click="createDialog()">＋ Tạo chiến lược</button><input v-model="query" aria-label="Tìm chiến lược" placeholder="Tên, mô tả hoặc nhãn…"><div class="library"><button v-for="item in filtered" :key="item.name" class="strategy" :class="{chosen:selected===item.name}" @click="openStrategy(item.name)"><b>{{item.research?.is_favorite?'★ ':''}}{{item.name}}</b><span>{{item.timeframe??'Kiểm tra mã'}} · {{item.can_short==null?'Chưa rõ chiều':item.can_short?'Hỗ trợ short':'Không khai báo short'}} <span v-if="item.protected">· Paper 🔒</span></span><small>{{item.research?.idea?.slice(0,65)||'Chưa có mô tả nghiên cứu'}}</small></button></div><a href="http://localhost:8092/tools/strategy-dev" target="_blank" rel="noopener">Mở Ultimate để so sánh ↗</a><small class="lineage">Kế thừa FreqUI Ultimate + API chính thức của Freqtrade.</small></aside>
       <section v-if="selected"><div class="strategy-head"><div><span class="eyebrow">CHIẾN LƯỢC ĐANG NGHIÊN CỨU</span><h2>{{selected}}</h2><small>Mã {{revision.slice(0,10)}} · {{selectedItem?.timeframe}} · Binance USDT-M</small></div><button @click="createDialog(true)">Sao chép để thử</button></div>
         <nav class="steps" aria-label="Quy trình phát triển"><button v-for="[id,label] in tabs" :key="id" :class="{active:tab===id}" @click="tab=id!">{{label}}</button></nav>

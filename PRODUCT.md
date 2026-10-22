@@ -17,6 +17,8 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 
 Đã ẩn các mục công cụ phụ thuộc API fork không tồn tại trên backend chính, thay vì đưa người dùng tới trang không chạy được. Nguồn dữ liệu phân biệt webserver nghiên cứu với bot giao dịch, tránh báo offline hoặc cộng vốn sai cho dịch vụ backtest.
 
+Khi mở workspace, UI kiểm tra các kết nối đã có và chỉ chọn dịch vụ trả về thư viện FreqPilot, engine 2026.9, `dry_run=true`; Ultimate trả 404 cho API này được bỏ qua. Lỗi đọc ban đầu tạm thời được thử tối đa ba lần, sau đó có **Thử kết nối lại**; lỗi xác thực/quyền được hướng dẫn xử lý riêng. Luồng này chỉ áp dụng khi khởi tạo, không tự gửi lại tác vụ hoặc nạp lại editor sau khi đã sẵn sàng. Khi rời trang, lịch thử lại bị hủy và phản hồi muộn không cập nhật workspace.
+
 ## Tham khảo Strategies của RoboQuant · 22/10/2026
 
 Đã xem trực tiếp trang Strategies và Code của tài khoản đang kết nối, cùng docs `python-strategies` và metadata qua connector; chỉ đọc, không tạo/sửa/compile/chạy tác vụ RoboQuant. Thư viện thực có tìm kiếm, danh sách/thẻ, yêu thích, sắp xếp, section và chỉ số gần nhất. Trang chi tiết đặt Code/Backtest/Optimize/Deployments/Settings quanh cùng chiến lược, có cây tệp và lịch sử phiên bản. Tài liệu còn mô tả cấu hình tham số dùng lại giữa các màn hình.

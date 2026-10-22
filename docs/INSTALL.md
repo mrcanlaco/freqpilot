@@ -49,6 +49,8 @@ Nếu tên dự án đã thuộc thư mục dữ liệu khác hoặc cổng do �
 
 Phiên đăng nhập lưu trong trình duyệt. Không đưa ACCESS.txt, config.json, `.env`, database hoặc gói mã/dữ liệu riêng lên GitHub.
 
+Nếu dịch vụ đang khởi động lại, workspace thử đọc ban đầu tối đa ba lần rồi hiện **Thử kết nối lại**; dùng nút này sau khi API sẵn sàng, không cần thêm lại kết nối đã có. Lỗi đăng nhập/quyền cần xử lý trong cài đặt và không được tự thử lại. Workspace chỉ chọn dịch vụ báo FreqPilot, engine 2026.9 và `dry_run=true`; kết nối Ultimate không có API workspace sẽ được bỏ qua. Các lần thử này chỉ đọc, không gửi lại lệnh backtest/paper hoặc xóa mã đang sửa sau khi workspace đã mở thành công.
+
 ## Backtest rồi paper
 
 Ở bản cài mới, dữ liệu đang trống. Dùng công cụ tải dữ liệu native của Freqtrade trong UI, chọn Binance Futures, BTC/ETH, khung của chiến lược và chi tiết 1m. Cần tải cả nến, mark price và funding; preflight trong workspace sẽ chỉ rõ phần thiếu. Không dùng funding bằng 0 để lấp dữ liệu chưa tải.
