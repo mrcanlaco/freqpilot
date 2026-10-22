@@ -8,7 +8,13 @@
     "installed_sha256": "43ae02ecca4553b8a609d4533cb4d5b6517292d35b41fc4c77f54f8e959ced89",
     "changes": [],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Giao cắt SMA có lọc ADX, khung 1h, long/short.",
+    "tags": [
+      "Mẫu",
+      "SMA",
+      "ADX"
+    ]
   },
   {
     "strategy": "FReinforcedStrategy",
@@ -21,7 +27,13 @@
       "Declare space=buy for three existing IntParameters so Freqtrade can classify them; numeric defaults unchanged."
     ],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Giao cắt EMA và ADX trên 5m, có lọc từ dữ liệu resample.",
+    "tags": [
+      "Mẫu",
+      "EMA",
+      "ADX"
+    ]
   },
   {
     "strategy": "FSampleStrategy",
@@ -32,7 +44,12 @@
     "installed_sha256": "3fcbe2ed16dd097fd6e4548172acbde871bdfe64c5a7341f337f19caf3daa225",
     "changes": [],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Mẫu futures 1h dùng RSI và Stochastic, có tín hiệu long/short.",
+    "tags": [
+      "Mẫu",
+      "RSI"
+    ]
   },
   {
     "strategy": "FSupertrendStrategy",
@@ -43,7 +60,12 @@
     "installed_sha256": "93f31258c4b6c05cf2380fc81f235f37355d97a3e4d2ebdf075e948e07978e19",
     "changes": [],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Ba chỉ báo Supertrend trên 1h; giữ hành vi long-only của mã gốc.",
+    "tags": [
+      "Mẫu",
+      "Supertrend"
+    ]
   },
   {
     "strategy": "FOttStrategy",
@@ -58,7 +80,13 @@
       "Initialize shortstop as float so pandas 3 accepts price-valued assignments; preserve sentinel magnitude."
     ],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Optimized Trend Tracker và ADX trên 1h; long-only theo mã gốc.",
+    "tags": [
+      "Mẫu",
+      "OTT",
+      "ADX"
+    ]
   },
   {
     "strategy": "TrendFollowingStrategy",
@@ -69,7 +97,13 @@
     "installed_sha256": "6b8f3e272acfd4923539120364b9ddceccc17a385117d12a249dc1460ea53c4f",
     "changes": [],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Giá cắt EMA20 với xác nhận OBV trên 5m; long-only theo mã gốc.",
+    "tags": [
+      "Mẫu",
+      "EMA",
+      "OBV"
+    ]
   },
   {
     "strategy": "VolatilitySystem",
@@ -82,12 +116,17 @@
       "Limit leverage to 1x under the existing user instruction; signal logic unchanged."
     ],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Hệ thống biến động và ATR trên 1h, có điều chỉnh vị thế; giới hạn 1x.",
+    "tags": [
+      "Mẫu",
+      "ATR"
+    ]
   },
   {
     "strategy": "StarterFutures",
     "source": "FreqPilot installation example",
-    "commit": "419c14f",
+    "commit": "aca1cce",
     "path": "templates/StarterFutures.py",
     "original_sha256": "05428d6aa3a54b6ac1abea24af300dcdc042997616355c9e159d0e471becc7db",
     "installed_sha256": "9e5a389d11dead5d8339c45d514f02433fc1979bdc6263e582ee7bfd9e1269ef",
@@ -95,6 +134,12 @@
       "Installation example: EMA20/50 with RSI, long/short, fixed 1x. No profitability claim."
     ],
     "original_hash_format": "SHA-256 of original Windows checkout/installation bytes (CRLF)",
-    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)"
+    "installed_hash_format": "SHA-256 of portable repository seed bytes (LF)",
+    "description": "Ví dụ cài đặt EMA20/50 và RSI trên 15m, long/short 1x. Chưa xác nhận có lợi nhuận.",
+    "tags": [
+      "Mẫu",
+      "EMA",
+      "RSI"
+    ]
   }
 ]

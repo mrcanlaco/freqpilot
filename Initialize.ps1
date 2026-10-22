@@ -14,6 +14,7 @@ if ($taskEnvPath -eq $taskDataPath -or $taskEnvPath.StartsWith($taskDataPath + [
 $taskTemplateRoot = Join-Path $PSScriptRoot 'templates'
 $taskProvenance = Get-Content -LiteralPath (Join-Path $taskTemplateRoot 'PROVENANCE.json') -Raw | ConvertFrom-Json
 foreach ($taskTemplate in $taskProvenance) {
+    if ([string]::IsNullOrWhiteSpace($taskTemplate.description) -or !@($taskTemplate.tags).Count) { throw ('Missing template research description: ' + $taskTemplate.strategy) }
     $taskSource = Join-Path $taskTemplateRoot ($taskTemplate.strategy + '.py')
     if ((Get-FileHash -LiteralPath $taskSource -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskTemplate.installed_sha256) { throw ('Template hash mismatch: ' + $taskTemplate.strategy) }
 }
@@ -23,7 +24,7 @@ foreach ($taskField in @('password', 'jwt_secret_key', 'ws_token')) {
 }
 # All checks above happen before touching the new destination or the existing setup.
 [IO.Directory]::CreateDirectory($taskDataPath) | Out-Null
-foreach ($taskFolder in @('strategies', 'data/binance/futures', 'backtest_results', 'logs')) {
+foreach ($taskFolder in @('strategies', 'data/binance/futures', 'backtest_results', 'logs', 'freqpilot/research')) {
     [IO.Directory]::CreateDirectory((Join-Path $taskDataPath $taskFolder)) | Out-Null
 }
 $taskEncoding = [Text.UTF8Encoding]::new($false)
@@ -35,6 +36,8 @@ Write-TaskNewFile (Join-Path $taskDataPath 'config.json') ($taskConfig | Convert
 foreach ($taskTemplate in $taskProvenance) {
     $taskName = $taskTemplate.strategy + '.py'
     [IO.File]::Copy((Join-Path $taskTemplateRoot $taskName), (Join-Path (Join-Path $taskDataPath 'strategies') $taskName), $false)
+    $taskResearch = @{name=$taskTemplate.strategy;idea=$taskTemplate.description;tags=@($taskTemplate.tags);is_favorite=$false;updated_at=(Get-Date).ToUniversalTime().ToString('o');notes=('Mẫu tham khảo: ' + $taskTemplate.source + '. Giữ quy tắc và giá trị gốc, chưa tối ưu. Cần backtest và kiểm định trước khi đánh giá; không có báo cáo hiệu suất nào được chép từ bộ khác.')}
+    Write-TaskNewFile (Join-Path (Join-Path $taskDataPath 'freqpilot/research') ($taskTemplate.strategy + '.json')) ($taskResearch | ConvertTo-Json -Depth 6)
 }
 $taskAccess = @"
 FreqPilot local access. Keep this file private; do not commit it.

@@ -12,7 +12,7 @@ Windows với PowerShell 7, Docker Desktop đang mở, Node.js 24 và pnpm 10.33
 ./Initialize.ps1
 ```
 
-Lệnh tạo `runtime/user_data`, `.env`, tám chiến lược mẫu và tài khoản local ngẫu nhiên. Mật khẩu nằm trong `runtime/user_data/ACCESS.txt`, không in ra màn hình. Mặc định `dry_run=true`, `initial_state=stopped`, ví 1.000 USDT, stake 100 USDT, tối đa hai lệnh, phí 0,05% mỗi chiều; không có khóa giao dịch Binance. Chưa có dữ liệu giá, báo cáo hay database giao dịch cũ được chép sang.
+Lệnh tạo `runtime/user_data`, `.env`, tám chiến lược mẫu có mô tả/nhãn và tài khoản local ngẫu nhiên. Mật khẩu nằm trong `runtime/user_data/ACCESS.txt`, không in ra màn hình. Mặc định `dry_run=true`, `initial_state=stopped`, ví 1.000 USDT, stake 100 USDT, tối đa hai lệnh, phí 0,05% mỗi chiều; không có khóa giao dịch Binance. Chưa có dữ liệu giá, báo cáo hay database giao dịch cũ được chép sang; không kế thừa yêu thích/ghi chú riêng của bộ hiện tại.
 
 Để chọn thư mục dữ liệu khác, dùng đường dẫn tuyệt đối:
 
