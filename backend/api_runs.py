@@ -185,27 +185,38 @@ def finish(uid, config):
     except Exception as error:
         record.update(status='failed', error=str(error))
     record['finished_at'] = datetime.now(timezone.utc).isoformat()
+    if record['status'] == 'success' and record.get('replay_of'):
+        from freqtrade.rpc.api_server.api_replay import compare_replay
+        record['replay_comparison'] = compare_replay(record, config)
     write_check(p / 'record.json', record)
 
 
 @router.post('/runs')
 async def start_run(req: Manifest, background_tasks: BackgroundTasks, config=Depends(get_config)):
+    from freqtrade.rpc.api_server.webserver_bgwork import ApiBG
+    if ApiBG.analysis_running:
+        raise HTTPException(409, 'Engine đang chạy một tác vụ. Chờ hoàn tất trước khi chạy tiếp.')
+    p, record = freeze(req, config)
+    return await launch_snapshot(p, record, background_tasks, config, deepcopy(config))
+
+
+async def launch_snapshot(p, record, background_tasks, config, runtime):
+    """Shared native launcher; replay supplies its archived configuration, never live defaults."""
     from freqtrade.rpc.api_server.api_backtest import api_start_backtest, api_delete_backtest
     from freqtrade.rpc.api_server.api_schemas import BacktestRequest
     from freqtrade.rpc.api_server.webserver_bgwork import ApiBG
     if ApiBG.analysis_running:
         raise HTTPException(409, 'Engine đang chạy một tác vụ. Chờ hoàn tất trước khi chạy tiếp.')
-    p, record = freeze(req, config)
-    runtime = deepcopy(config)
+    frozen = json.loads((p / 'inputs.json').read_text(encoding='utf-8'))
     runtime.update(user_data_dir=p / 'inputs', datadir=p / 'inputs/data',
                    strategy_path=str(p / 'inputs/strategies'), recursive_strategy_search=False,
                    exportdirectory=p / 'output' / ('backtest-result-freqpilot-' + record['id'] + '.json'),
-                   export='trades', original_config=reproducible_config(config, req.settings, req.strategy))
+                   export='trades', original_config=deepcopy(frozen['config']))
     # Reset via the official API so a previous run cannot donate cached data to this snapshot.
     api_delete_backtest()
     clear_local_imports(config)
     try:
-        await api_start_backtest(BacktestRequest(strategy=req.strategy, **req.settings, backtest_cache='none'), background_tasks, runtime)
+        await api_start_backtest(BacktestRequest(strategy=record['strategy'], **record['settings'], backtest_cache='none'), background_tasks, runtime)
         record.update(status='running', job_id=ApiBG.bt['job_id'])
         write_check(p / 'record.json', record)
         background_tasks.add_task(finish, record['id'], config)

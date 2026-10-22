@@ -7,3 +7,4 @@ COPY --chown=ftuser:ftuser api_studio.py /freqtrade/freqtrade/rpc/api_server/api
 COPY --chown=ftuser:ftuser api_runs.py /freqtrade/freqtrade/rpc/api_server/api_runs.py
 COPY --chown=ftuser:ftuser api_paper.py /freqtrade/freqtrade/rpc/api_server/api_paper.py
 COPY --chown=ftuser:ftuser api_presets.py /freqtrade/freqtrade/rpc/api_server/api_presets.py
+COPY --chown=ftuser:ftuser api_replay.py /freqtrade/freqtrade/rpc/api_server/api_replay.py

@@ -9,7 +9,7 @@ Mục tiêu là một workspace nghiên cứu crypto dễ dùng cùng Codex, gi�
 | Editor | Mã `.rq`, artifact `.rqc` | Monaco + API editor | Dùng lại Monaco; Python `.py`, cú pháp + phiên bản + backup |
 | Engine và thị trường | CME, compiled runtime | Fork tập trung Hyperliquid, vẫn có Binance | Freqtrade chính thức 2026.9, BTC/ETH Binance USDT-M |
 | Mô phỏng | Bar, tick và L2 khi có dữ liệu | Nền engine Freqtrade | Nến + chi tiết 1m + phí + mark/funding; không mô tả là tick/L2 |
-| Hồ sơ tái kiểm tra | Compiled artifacts và lịch sử | ZIP kết quả theo cơ chế engine | Bản sao mã/dữ liệu cho mỗi run, ZIP native, gói kiểm tra SHA-256; chưa đóng băng metadata thị trường từ mạng |
+| Hồ sơ tái kiểm tra | Compiled artifacts và lịch sử | ZIP kết quả theo cơ chế engine | Bản sao mã/dữ liệu cho mỗi run, ZIP native, gói SHA-256 và chạy lại/đối chiếu từ gói; chưa đóng băng metadata thị trường từ mạng |
 | Kết quả / so sánh | Metrics, chart/replay, lịch sử | Nhiều panel phân tích và so sánh | Tái sử dụng các panel tương thích API chính thức |
 | Kiểm định | IS/OOS, walk-forward theo gói | Hyperopt/WFA và các phân tích mở rộng | Dùng lại API lookahead/recursive, có job và lịch sử trên UI; đã khảo sát mẫu bằng CLI |
 | Tối ưu | Có nhiều phương pháp | Có launcher hyperopt/WFA | Chưa nối UI, không tối ưu tự động |
@@ -33,6 +33,8 @@ Chưa triển khai cây tệp đa mô-đun trong editor, section kéo thả, cha
 
 Các màn hình tiền tệ kế thừa đã dùng stake_currency của bot hoặc đồng thanh toán của cặp lịch sử, thay cho nhãn USDC cố định. Nguồn Direct từ chối cộng các đơn vị khác nhau hoặc chưa rõ; các panel thống kê có dữ liệu truyền trực tiếp cũng không hiển thị tổng tiền thiếu đơn vị chung. Vốn bot quản lý có giải thích phần phân bổ và dự phòng, tách với lợi nhuận. Lệnh thoát một phần bằng tay trên Binance chưa được mở khi chưa nạp bộ lọc giới hạn sàn; mức tối thiểu 10 của Hyperliquid không được áp đặt cho Binance. Việc thoát tự động của engine/chiến lược không bị đổi.
 
+Đã có luồng chạy lại từ gói trong báo cáo: xem cấu hình gốc, chủ động tạo hồ sơ mới rồi nhận đối chiếu. Dùng lại launcher/API backtest, cache reset và ZIP native; không dùng replay seeding database của fork Ultimate. Mã, tham số và dữ liệu được sao chép từ archive đã kiểm tra từng hash, không lấy từ thư viện hay biểu mẫu hiện tại. Gói gốc giữ nguyên; kết quả mới đối chiếu toàn bộ trường lệnh (kể cả lệnh con, phí, funding), thứ tự lệnh và chín chỉ số/ngữ cảnh native, không làm tròn hoặc đặt dung sai. Giá trị không hữu hạn hoặc dữ liệu đối chiếu không đủ không được xác nhận khớp. Thử thực tế FSupertrendStrategy BTC/ETH đã khớp 23/23 lệnh, có gói mới hợp lệ; kiểm tra bằng webserver riêng khi datadir thư viện trống, không bật bot. Đây là bằng chứng tái lập trên mẫu này, không chứng nhận lợi nhuận hoặc fill thực tế.
+
 Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquant.dev/docs/python-strategies .
 
 ## Nguyên tắc phát triển
@@ -50,7 +52,7 @@ Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 
 1. Diễn giải lookahead/recursive và đối chiếu ngữ cảnh đã có. Còn hướng dẫn chọn mẫu đủ lớn theo từng chiến lược; không dùng ngưỡng số lệnh chung để chứng nhận chất lượng.
 2. Luồng paper một worker, trang quản lý hồ sơ và trạng thái engine trên giám sát Direct đã có. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Gateway chưa cung cấp phần mở rộng trạng thái native này, không suy diễn từ Online. Không bật live.
-3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run và kiểm tra toàn vẹn trên UI. Còn luồng phát lại tự động từ gói, ghim metadata sàn và cơ chế quản lý dung lượng.
+3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run, kiểm tra toàn vẹn và chạy lại/đối chiếu từ gói trên UI. Còn ghim metadata sàn và cơ chế quản lý dung lượng. Gói cũ chỉ tái dùng đầu vào đã lưu, không khẳng định mạng Binance hoặc môi trường ngoài image không đổi.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
 5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.
 6. Đã có khởi tạo cài đặt độc lập, cấu hình ví dụ, kiểm tra Start/Stop và workflow CI ghim phiên bản. Bản sao Git sạch với chuyển dòng Windows đã cài theo lockfile, qua typecheck, 1.692 kiểm tra UI, 38 kiểm tra backend và kiểm tra native tám mẫu; 28 kiểm tra bảo vệ cài đặt chạy bằng dữ liệu riêng. Đăng nhập thử bằng webserver thật hiển thị đủ tám mẫu có mô tả/nhãn, không chép báo cáo cá nhân. Còn xác nhận workflow trên GitHub và cài trọn bộ trên máy khác: chưa tạo/publish repo, chưa chạy dịch vụ Compose mới vì các cổng đang thuộc bộ hiện tại. Xem [hướng dẫn](docs/INSTALL.md) và [bằng chứng cài sạch](benchmarks/portable-install-control.json).

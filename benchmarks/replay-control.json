@@ -1,0 +1,76 @@
+{
+  "checked_at": "2026-10-22T18:49:25.8863042+07:00",
+  "product": "FreqPilot 0.1.0",
+  "engine": "official Freqtrade 2026.9",
+  "feature": "Run a new native backtest from an owned verified archive and retain an exact comparison",
+  "source_id": "042ae22ecde640419ad714756061b8d2",
+  "replayed_id": "074c3280323142229ac161d1f7d35741",
+  "strategy": "FSupertrendStrategy",
+  "settings": {
+    "timeframe": "1h",
+    "timeframe_detail": "1m",
+    "timerange": "20260918-20261022",
+    "dry_run_wallet": 1000,
+    "stake_amount": "100",
+    "max_open_trades": 2,
+    "enable_protections": false
+  },
+  "comparison": {
+    "status": "matched",
+    "source_id": "042ae22ecde640419ad714756061b8d2",
+    "source_trades": 23,
+    "replayed_trades": 23,
+    "different_trades": 0,
+    "different_metrics": [],
+    "comparison": "Exact equality of every native trade field (including orders/fees/funding), list order and selected summary metrics; no rounding or tolerance.",
+    "note": "Dùng mã, tham số, nến/mark/funding và cấu hình trong gói. Metadata thị trường Binance vẫn được engine lấy qua mạng; gói cũ chưa ghim phần này nên không bảo đảm kết quả khớp. Không sửa thư viện, tải thêm nến hoặc đổi paper."
+  },
+  "real_run": {
+    "temporary_container_removed": true,
+    "source_and_replay_inputs": "copied from archive, never from current library",
+    "input_files_verified": 33,
+    "original_archive_unchanged": true,
+    "started_via_browser": true,
+    "release_comparison_rechecked_offline": true,
+    "library_data_feather_files": 0,
+    "new_artifact_valid": true,
+    "webserver_only": true
+  },
+  "tests": {
+    "ui": "passed",
+    "late_accepted_job_callback": "passed after panel unmount",
+    "nonfinite_trade_values": "comparison unavailable, never normalized to matching null",
+    "typecheck": "passed",
+    "ui_files": 113,
+    "ui_tests": 1698,
+    "backend": "passed",
+    "backend_tests": 47,
+    "build": "passed"
+  },
+  "deployed": {
+    "official_engine_core_modules_match": true,
+    "services_restarted": [
+      "backtest"
+    ],
+    "paper_containers_unchanged": true,
+    "main_preview_endpoint": true,
+    "main_ui_review_visible": true
+  },
+  "runtime": {
+    "new_main_backtests": [],
+    "main_dry_run": true,
+    "main_strategy": "StarterFutures",
+    "trading_actions_invoked": [],
+    "research_dry_run": true,
+    "downloaded_candles": [],
+    "research_open_trades": 0,
+    "research_state": "stopped",
+    "library_and_configs_unchanged": true
+  },
+  "limitations": [
+    "Binance market metadata remains external and is not frozen in old packages. Exact match is evidence on this sample only.",
+    "No assertion of profitability or real exchange fill accuracy.",
+    "No archive import or database-seeding replay is implemented; reruns use existing owned packages."
+  ],
+  "screenshot": "screenshots/replay-matched.png"
+}

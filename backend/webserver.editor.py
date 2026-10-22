@@ -288,6 +288,9 @@ class ApiServer(RPCHandler):
         from freqtrade.rpc.api_server.api_runs import router as runs
         app.include_router(runs, prefix="/api/v1/studio",
               dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
+        from freqtrade.rpc.api_server.api_replay import router as replay
+        app.include_router(replay, prefix="/api/v1/studio",
+              dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
         from freqtrade.rpc.api_server.api_paper import router as paper
         app.include_router(paper, prefix="/api/v1/studio",
                 dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
