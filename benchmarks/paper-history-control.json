@@ -1,0 +1,57 @@
+{
+  "checked_at": "2026-10-22T19:17:18.6635820+07:00",
+  "product": "FreqPilot 0.1.0",
+  "engine": "official Freqtrade 2026.9",
+  "scope": "Durable paper lifecycle requests and native observations, separate from trade databases",
+  "tests": {
+    "typecheck": "passed",
+    "production_build": "passed",
+    "transition_tests": "mocked native RPC only; no actual lifecycle actions",
+    "ui_tests": 1706,
+    "ui": "passed",
+    "added_history_backend_checks": 11,
+    "added_history_ui_checks": 8,
+    "backend": "passed",
+    "backend_tests": 58,
+    "ui_files": 114
+  },
+  "native": {
+    "first_event": "baseline",
+    "ui_baseline_visible": true,
+    "recorded_events": 1,
+    "repeated_polls_deduplicated": true,
+    "unauthenticated_http_status": 401,
+    "online": true,
+    "first_event_at": "2026-10-22T19:13:03.166652+07:00",
+    "ui_filter_verified": true,
+    "profile_id": "6a5d0f0135bc475c87184c8b8017c4d1",
+    "research_open_trades": 0,
+    "research_state": "stopped"
+  },
+  "runtime": {
+    "binance_trading_keys_present": false,
+    "protected_config_env_and_sources_unchanged": true,
+    "main_dry_run": true,
+    "new_backtests": [],
+    "restarted_services": [
+      "backtest"
+    ],
+    "main_strategy": "StarterFutures",
+    "new_downloads": [],
+    "official_core_modules_match": true,
+    "actual_lifecycle_actions_invoked": [],
+    "paper_containers_unchanged": true
+  },
+  "behavior": [
+    "A request is logged before native activation; fresh state/profile is required to report the requested state as observed.",
+    "History storage failure prevents new activation, but does not block native pause/stop or erase confirmed native state.",
+    "History read/storage errors remain separate from worker connectivity/execution state.",
+    "Records persist in a separate SQLite file; stable descending-ID pagination and profile/strategy filtering."
+  ],
+  "limitations": [
+    "No backfill of prior sessions. The first real event is the current stopped baseline.",
+    "No inferred runtime duration or per-session P&L; unobserved external transitions may be absent.",
+    "The local journal is not a tamper-proof audit log."
+  ],
+  "screenshot": "screenshots/paper-history-current.png"
+}

@@ -101,4 +101,27 @@ describe('Research paper workspace', () => {
     expect(w.text()).toContain('service unavailable');
     expect(api.post).not.toHaveBeenCalled();
   });
+  it('does not describe a received start response as confirmed execution without native evidence',async()=>{
+    const {w,api}=await page();
+    api.post.mockResolvedValueOnce({data:{online:true,state:'stopped',action_result:{outcome:'unconfirmed'}}});
+    await button(w,'Bật paper hồ sơ này').trigger('click');await flushPromises();
+    expect(w.text()).toContain('chưa xác nhận trạng thái đích');
+    expect(w.text()).not.toContain('Đã quan sát worker chạy paper');
+  });
+  it('keeps worker controls available when history alone fails',async()=>{
+    const {w,api}=await page('running');
+    api.get.mockResolvedValueOnce({data:{online:true,state:'running',open_trades:0,active_profile:'one',profiles:[profile('one','StarterFuturesResearch')],history_error:'journal unavailable'}});
+    await button(w,'Tải lại trạng thái').trigger('click');await flushPromises();
+    expect(w.text()).toContain('lỗi lịch sử không đồng nghĩa bot đã dừng');
+    expect(button(w,'Tạm ngừng vào lệnh').attributes('disabled')).toBeUndefined();
+    expect(api.post).not.toHaveBeenCalled();
+  });
+  it('keeps confirmed pause evidence visible when storing its history failed',async()=>{
+    const {w,api}=await page('running');
+    api.post.mockResolvedValueOnce({data:{online:true,state:'paused',action_result:{outcome:'observed',logged:false},history_error:'journal unavailable'}});
+    await button(w,'Tạm ngừng vào lệnh').trigger('click');await flushPromises();
+    expect(w.text()).toContain('Đã quan sát worker tạm ngừng vào lệnh');
+    expect(w.text()).toContain('Trạng thái worker và lỗi lưu lịch sử được xử lý riêng: journal unavailable');
+    expect(api.post).toHaveBeenCalledTimes(1);
+  });
 });

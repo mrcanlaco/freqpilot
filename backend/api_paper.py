@@ -24,6 +24,7 @@ from freqtrade.rpc.api_server.deps import get_config
 from freqtrade.rpc.api_server.api_local_strategies import NAME
 from freqtrade.rpc.api_server.api_runs import digest, run_path, verify_run
 from freqtrade.rpc.api_server.api_studio import storage, write_check
+from freqtrade.rpc.api_server import paper_history
 
 router = APIRouter()
 paper_lock = threading.RLock()
@@ -280,6 +281,11 @@ def checked_native(config):
 
 @router.get('/paper')
 def paper_status(config=Depends(get_config)):
+    with paper_lock:
+        return _paper_status(config)
+
+
+def _paper_status(config):
     root = paper_root(config)
     profiles = [json.loads(p.read_text(encoding='utf-8')) for p in sorted((root / 'profiles').glob('*/record.json'), key=lambda p: p.stat().st_mtime, reverse=True)]
     for profile in profiles:
@@ -292,12 +298,24 @@ def paper_status(config=Depends(get_config)):
         current = checked_native(config)
         positions = native('GET', '/status', config)
         active = next((r for r in profiles if r['wrapper'] == current['strategy']), None)
-        return {'online': True, 'state': current['state'], 'active_profile': active['id'] if active else None,
+        result = {'online': True, 'state': current['state'], 'active_profile': active['id'] if active else None,
                 'native_strategy': current['strategy'], 'open_trades': len(positions), 'profiles': profiles,
                 'dry_run': True, 'url_port': 8095}
     except HTTPException as error:
-        return {'online': False, 'error': error.detail, 'state': 'unavailable', 'profiles': profiles,
+        current = None
+        result = {'online': False, 'error': error.detail, 'state': 'unavailable', 'profiles': profiles,
                 'open_trades': None, 'active_profile': None, 'url_port': 8095}
+    try:
+        paper_history.observe(config, result, current)
+    except HTTPException as error:
+        result['history_error'] = error.detail
+    return result
+
+
+@router.get('/paper/history')
+def paper_timeline(profile_id: str | None = None, strategy: str | None = None,
+                   before: int | None = None, limit: int = 30, config=Depends(get_config)):
+    return paper_history.history(config, profile_id, strategy, before, limit)
 
 
 def reload_stopped(cfg, config):
@@ -322,6 +340,7 @@ def reload_stopped(cfg, config):
 
 
 @router.post('/paper/profiles/{uid}/start')
+@paper_history.audited('start')
 def start_paper(uid: str, config=Depends(get_config)):
     with paper_lock:
         cfg, record = verify_profile(uid, config)
@@ -341,6 +360,7 @@ def start_paper(uid: str, config=Depends(get_config)):
 
 
 @router.post('/paper/pause')
+@paper_history.audited('pause')
 def pause_paper(config=Depends(get_config)):
     with paper_lock:
         checked_native(config)
@@ -349,6 +369,7 @@ def pause_paper(config=Depends(get_config)):
 
 
 @router.post('/paper/stop')
+@paper_history.audited('stop')
 def stop_paper(config=Depends(get_config)):
     with paper_lock:
         checked_native(config)

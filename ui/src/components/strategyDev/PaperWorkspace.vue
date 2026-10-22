@@ -7,27 +7,29 @@ import { useBotStore } from '@/stores/ftbotwrapper';
 import { botKeyFromApiUrl } from '@/datasource/protocol/identity';
 import type { StrategyPreset } from '@/utils/strategyLibrary';
 import { useDataSource } from '@/composables/useDataSource';
+import PaperHistory from '@/components/strategyDev/PaperHistory.vue';
 
 type Profile = { id:string; label:string; strategy:string; revision:string; run_id:string; warnings:string[];preset?:StrategyPreset;valid?:boolean;error?:string;
   settings:{pairs:string[];timeframe:string;wallet:number;stake:number|string;max_open_trades:number;fee:number};
   summary:{total_trades?:number;profit_total_abs?:number} };
-type PaperState = {online:boolean;state:string;error?:string;active_profile?:string|null;open_trades:number|null;profiles:Profile[]};
+type PaperState = {online:boolean;state:string;error?:string;history_error?:string;active_profile?:string|null;open_trades:number|null;profiles:Profile[]};
 const props=defineProps<{api:AxiosInstance;strategy:string;revision:string;run?:{id:string;strategy:string;revision:string;status:string}}>();
 defineEmits<{openResults:[]}>();
 const router=useRouter(),bots=useBotStore();
 const dataSource=useDataSource();
 const state=ref<PaperState>(), working=ref(false),message=ref(''),bad=ref(false),label=ref('');
+const historyRefresh=ref(0);
 let poll:ReturnType<typeof setInterval>|undefined;
 let refreshFailed=false;
 const profiles=computed(()=>state.value?.profiles.filter(p=>!props.strategy||p.strategy===props.strategy)??[]);
 const active=computed(()=>state.value?.profiles.find(p=>p.id===state.value?.active_profile));
 const statusNames:Record<string,string>={running:'Đang chạy paper',paused:'Tạm ngừng vào lệnh · vẫn quản lý thoát lệnh',stopped:'Đã dừng',reload_config:'Đang nạp cấu hình · chờ xác nhận',unavailable:'Chưa kết nối'};
 function errorText(e:unknown){const err=e as {response?:{data?:{detail?:unknown}};message?:string};return String(err.response?.data?.detail??err.message??e);}
-async function refresh(){try{state.value=(await props.api.get('/studio/paper')).data;if(refreshFailed){message.value='';bad.value=false;refreshFailed=false;}}catch(e){refreshFailed=true;if(state.value)state.value={...state.value,online:false,state:'unavailable'};message.value=errorText(e);bad.value=true;}}
+async function refresh(){try{state.value=(await props.api.get('/studio/paper')).data;historyRefresh.value++;if(refreshFailed){message.value='';bad.value=false;refreshFailed=false;}}catch(e){refreshFailed=true;if(state.value)state.value={...state.value,online:false,state:'unavailable'};message.value=errorText(e);bad.value=true;}}
 async function action(fn:()=>Promise<void>){working.value=true;bad.value=false;try{await fn();await refresh();}catch(e){message.value=errorText(e);bad.value=true;}finally{working.value=false;}}
 async function prepare(){if(!props.run)return;await action(async()=>{await props.api.post('/studio/paper/profiles',{run_id:props.run!.id,label:label.value});message.value='Đã chuẩn bị mã và database paper riêng. Bot chưa được bật.';});}
-async function start(profile:Profile){await action(async()=>{message.value='Đang nạp worker paper; bước này có thể mất khoảng một phút…';await props.api.post('/studio/paper/profiles/'+profile.id+'/start',{}, {timeout:150000});message.value='Đã bật paper cho '+profile.label+'.';});}
-async function control(kind:'pause'|'stop'){await action(async()=>{message.value=kind==='pause'?'Đang tạm ngừng vào lệnh…':'Đang dừng worker sau khi kiểm tra vị thế…';await props.api.post('/studio/paper/'+kind,{}, {timeout:90000});message.value=kind==='pause'?'Đã ngừng vào lệnh mới, tiếp tục quản lý thoát lệnh.':'Đã dừng worker paper khi không còn vị thế mở.';});}
+async function start(profile:Profile){await action(async()=>{message.value='Đang nạp worker paper; bước này có thể mất khoảng một phút…';const response=await props.api.post('/studio/paper/profiles/'+profile.id+'/start',{}, {timeout:150000});message.value=response.data.action_result?.outcome==='observed'?'Đã quan sát worker chạy paper cho '+profile.label+'.':'Đã gửi yêu cầu bật paper; chưa xác nhận trạng thái đích. Theo dõi trạng thái và lịch sử, không gửi lại tự động.';if(response.data.history_error)message.value+=' Trạng thái worker và lỗi lưu lịch sử được xử lý riêng: '+response.data.history_error;});}
+async function control(kind:'pause'|'stop'){await action(async()=>{message.value=kind==='pause'?'Đang tạm ngừng vào lệnh…':'Đang dừng worker sau khi kiểm tra vị thế…';const response=await props.api.post('/studio/paper/'+kind,{}, {timeout:90000});message.value=response.data.action_result?.outcome==='observed'?(kind==='pause'?'Đã quan sát worker tạm ngừng vào lệnh, tiếp tục quản lý thoát lệnh.':'Đã quan sát worker dừng khi không còn vị thế mở.'):'Đã gửi yêu cầu; chưa xác nhận trạng thái đích. Theo dõi trạng thái và lịch sử, không gửi lại tự động.';if(response.data.history_error)message.value+=' Trạng thái worker và lỗi lưu lịch sử được xử lý riêng: '+response.data.history_error;});}
 async function monitor(){await action(async()=>{
   message.value='Đang kết nối màn hình giám sát paper…';
   const source=dataSource.requireSource();
@@ -60,10 +62,12 @@ onUnmounted(()=>{if(poll)clearInterval(poll);});
       <p v-if="active">Hồ sơ đang chọn: <strong>{{active.label}}</strong> · {{active.strategy}} · mã {{active.revision.slice(0,10)}}.</p>
       <p v-else-if="state?.online">Worker đã sẵn sàng, chưa chọn hồ sơ nghiên cứu.</p>
       <p v-if="state?.error" class="notice bad">{{state.error}}</p>
+      <p v-if="state?.history_error" class="notice bad">{{state.history_error}} Kết nối worker hiển thị riêng; lỗi lịch sử không đồng nghĩa bot đã dừng.</p>
       <p v-if="state?.online">Vị thế mô phỏng đang mở: <b>{{state.open_trades}}</b>.</p>
       <div class="row"><button :disabled="working||!state?.online||!active||!(state.state==='running'||(state.state==='stopped'&&Number(state.open_trades)>0))" @click="control('pause')">{{state?.state==='stopped'&&Number(state.open_trades)>0?'Tiếp tục quản lý thoát lệnh':'Tạm ngừng vào lệnh'}}</button><button :disabled="working||!state?.online||!['running','paused'].includes(state.state)||state.open_trades!==0" @click="control('stop')">Dừng khi đã hết vị thế</button><button class="primary" :disabled="working||!state?.online||!active" @click="monitor">Mở giám sát paper</button></div>
       <small>Đổi hồ sơ cần hết vị thế mở. Tạm ngừng vẫn cho engine quản lý thoát lệnh; bật lại cùng hồ sơ sẽ dùng tiếp database cũ. Sau khi dịch vụ khởi động lại, worker không tự vào lệnh mới. Nếu còn vị thế, worker tiếp tục quản lý thoát lệnh ở chế độ tạm ngừng; nếu không còn vị thế thì dừng.</small><p class="notice">Chế độ tạm ngừng chặn vào lệnh mới và tăng vị thế. Giảm vị thế hoặc chốt lời từng phần vẫn được xử lý theo chiến lược, cùng stoploss, ROI và tín hiệu thoát.</p>
     </article>
+    <PaperHistory :api="api" :strategy="strategy" :profiles="profiles" :refresh-key="historyRefresh" />
     <article v-if="strategy" class="box">
       <h3>1 · Chuẩn bị từ bản đã backtest</h3>
       <template v-if="run?.strategy===strategy&&run.status==='success'">

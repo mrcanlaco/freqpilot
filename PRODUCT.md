@@ -51,7 +51,7 @@ Nguồn: https://roboquant.dev/dashboard?section=strategies và https://roboquan
 Các mục sau chưa được coi là đã hoàn tất trong bản 0.1:
 
 1. Diễn giải lookahead/recursive và đối chiếu ngữ cảnh đã có. Còn hướng dẫn chọn mẫu đủ lớn theo từng chiến lược; không dùng ngưỡng số lệnh chung để chứng nhận chất lượng.
-2. Luồng paper một worker, trang quản lý hồ sơ và trạng thái engine trên giám sát Direct đã có. Còn lịch sử phiên chạy paper dài hạn, lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Gateway chưa cung cấp phần mở rộng trạng thái native này, không suy diễn từ Online. Không bật live.
+2. Luồng paper một worker, trang quản lý hồ sơ, trạng thái engine trên giám sát Direct và lịch sử thao tác/trạng thái lưu qua các lần mở trang đã có. Nhật ký phân biệt yêu cầu với native observation, lưu theo hồ sơ, có lọc và phân trang; không dựng lại phiên cũ, thời lượng hoặc P&L phiên chưa được đo. Còn lưu trữ/ẩn hồ sơ và khảo sát nhiều worker đồng thời nếu cần. Gateway chưa cung cấp phần mở rộng trạng thái native này, không suy diễn từ Online. Không bật live.
 3. Hồ sơ mã, parameter và feather đã được sao chép riêng cho từng run, kiểm tra toàn vẹn và chạy lại/đối chiếu từ gói trên UI. Còn ghim metadata sàn và cơ chế quản lý dung lượng. Gói cũ chỉ tái dùng đầu vào đã lưu, không khẳng định mạng Binance hoặc môi trường ngoài image không đổi.
 4. Nối hyperopt / out-of-sample theo nhu cầu, ưu tiên adapter từ công cụ hiện có; chỉ chạy khi người dùng yêu cầu.
 5. Hoàn thiện tiếng Việt và trạng thái rỗng/lỗi trên các trang kế thừa. Các màn hình tiền tệ chính đã dùng đơn vị của bot và giải thích vốn được phân bổ; còn dịch đầy đủ trang native và nạp bộ lọc sàn cho thao tác thoát một phần bằng tay. Gateway không thuộc luồng paper local đã kiểm chứng.
