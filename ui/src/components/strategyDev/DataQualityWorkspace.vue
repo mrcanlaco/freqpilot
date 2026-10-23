@@ -19,7 +19,7 @@ const params = computed(() => ({ timerange: props.timerange, timeframe: props.ti
 const valid = computed(() => /^\d{8}-\d{8}$/.test(props.timerange));
 function message(e: unknown) { const x = e as { response?: { data?: { detail?: unknown } }; message?: string }; return String(x.response?.data?.detail ?? x.message ?? e); }
 async function inspect(verifyFunding = false) {
-  if (!valid.value) { error.value = 'Chọn ngày bắt đầu và kết thúc ở Backtest trước khi kiểm tra.'; return; }
+  if (!valid.value) { error.value = 'Chọn ngày bắt đầu và kết thúc trước khi kiểm tra.'; return; }
   busy.value = true; error.value = ''; preview.value = undefined;
   try { quality.value = (await props.api.get('/studio/data-quality', { params: { ...params.value, verify_funding: verifyFunding } })).data; }
   catch (e) { error.value = message(e); }
@@ -59,7 +59,7 @@ onUnmounted(() => { if (poll) clearInterval(poll); });
 <template>
   <div class="quality">
     <h3>Kiểm tra dữ liệu Binance Futures</h3>
-    <p>Khoảng ngày lấy từ Backtest: <b>{{timerange}}</b> UTC, gồm nến khởi động {{warmupCandles}} cây. Ngày kết thúc không được tính. Kết quả kiểm tra gắn với dấu vân tay của dữ liệu tại thời điểm kiểm tra.</p>
+    <p>Khoảng ngày dùng chung với Backtest: <b>{{timerange}}</b> UTC, gồm nến khởi động {{warmupCandles}} cây. Ngày kết thúc không được tính. Kết quả kiểm tra gắn với dấu vân tay của dữ liệu tại thời điểm kiểm tra.</p>
     <div class="actions"><button :disabled="busy || !valid" @click="inspect(false)">Kiểm tra dữ liệu trên máy</button><button :disabled="busy || !valid" @click="inspect(true)">Đối chiếu funding với Binance</button><button :disabled="busy || !valid" @click="planRepair">Xem kế hoạch tải bù</button></div>
     <p v-if="error" class="error" role="alert">{{error}}</p>
     <div v-if="quality" class="card" role="status"><b>Trạng thái: {{quality.status}}</b><span>Kiểm tra {{new Date(quality.checked_at).toLocaleString('vi-VN')}}</span><span>Funding từ Binance: {{quality.funding_verification.status}} · {{quality.funding_verification.reason || 'Xem trạng thái từng cặp'}}</span></div>
