@@ -77,6 +77,15 @@ def clear_local_imports(config):
 
 
 def freeze(req, config):
+    # Hold the same data lock used by the repair promoter from preflight
+    # through the complete file snapshot. Per-file hashes alone cannot prevent
+    # a mixed-generation snapshot if repair replaces two files between copies.
+    from freqtrade.rpc.api_server.api_data_quality import data_source_lock
+    with data_source_lock:
+        return _freeze_locked(req, config)
+
+
+def _freeze_locked(req, config):
     prepared = manifest(req, config)
     uid = uuid4().hex
     p = run_root(config) / uid
@@ -202,6 +211,8 @@ async def start_run(req: Manifest, background_tasks: BackgroundTasks, config=Dep
 
 async def launch_snapshot(p, record, background_tasks, config, runtime):
     """Shared native launcher; replay supplies its archived configuration, never live defaults."""
+    from freqtrade.rpc.api_server.api_data_quality import guard_research
+    guard_research(config)
     from freqtrade.rpc.api_server.api_backtest import api_start_backtest, api_delete_backtest
     from freqtrade.rpc.api_server.api_schemas import BacktestRequest
     from freqtrade.rpc.api_server.webserver_bgwork import ApiBG

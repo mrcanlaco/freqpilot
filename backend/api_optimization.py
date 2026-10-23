@@ -101,6 +101,16 @@ def ensure_idle(config=None):
             if record['status'] in ACTIVE or record.get('orphan_process_alive'):
                 if orphan_alive(file.parent, record):
                     raise HTTPException(409, 'Còn tiến trình tối ưu của phiên trước. Khởi động lại riêng dịch vụ nghiên cứu để thu hồi nó trước khi chạy tiếp.')
+        # Other native child coordinators share this engine. A webserver
+        # restart can clear in-memory flags while their owned subprocess lives.
+        from freqtrade.rpc.api_server.api_walk_forward import guard_wfa_orphans
+        from freqtrade.rpc.api_server.api_sensitivity import guard_sensitivity_orphans
+        from freqtrade.rpc.api_server.api_parameter_scope import guard_seed_orphans
+        from freqtrade.rpc.api_server.api_matrix import guard_matrix_orphans
+        guard_wfa_orphans(config)
+        guard_sensitivity_orphans(config)
+        guard_seed_orphans(config)
+        guard_matrix_orphans(config)
 
 
 def guard_native_research(request: Request, config=Depends(get_config)):

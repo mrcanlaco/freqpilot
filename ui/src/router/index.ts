@@ -68,6 +68,18 @@ const routes: Array<RouteRecordRaw> = [
     meta: { page: 'studio', legacy: true },
   },
   {
+    path: '/data',
+    name: 'research-data',
+    component: () => import('@/views/FreqPilotStudio.vue'),
+    meta: { page: 'studio', legacy: true },
+  },
+  {
+    path: '/jobs',
+    name: 'research-jobs',
+    component: () => import('@/views/FreqPilotStudio.vue'),
+    meta: { page: 'studio', legacy: true },
+  },
+  {
     path: '/',
     redirect: (to) => ({ path: '/studio', query: carryQuery(to.query) }),
   },

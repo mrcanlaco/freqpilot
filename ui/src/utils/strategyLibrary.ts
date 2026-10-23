@@ -11,6 +11,7 @@ export type LibraryStrategy = {
   parameter_revision?: string;
   modified?: number;
   timeframe?: string;
+  startup_candle_count?: number;
   can_short?: boolean;
   protected?: boolean;
   invalid?: boolean;

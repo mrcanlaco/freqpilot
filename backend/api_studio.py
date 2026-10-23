@@ -64,6 +64,11 @@ def library(config=Depends(get_config)):
                     if key in {'timeframe','can_short','stoploss','startup_candle_count'}:
                         try:attrs[key]=ast.literal_eval(n.value)
                         except (ValueError,TypeError):pass
+                elif isinstance(n,ast.AnnAssign) and isinstance(n.target,ast.Name):
+                    key=n.target.id
+                    if key in {'timeframe','can_short','stoploss','startup_candle_count'} and n.value is not None:
+                        try:attrs[key]=ast.literal_eval(n.value)
+                        except (ValueError,TypeError):pass
             out.append({'name':p.stem,'revision':doc['revision'],'modified':p.stat().st_mtime,
                         'parameter_revision': hashlib.sha256(p.with_suffix('.json').read_bytes()).hexdigest() if p.with_suffix('.json').is_file() and not p.with_suffix('.json').is_symlink() else 'none',
                         'protected':p.stem=='StarterFutures','research':metadata(p.stem,config),**attrs})
@@ -206,11 +211,18 @@ def data(config=Depends(get_config)):
         if pair not in config['exchange']['pair_whitelist']:continue
         p=dh._pair_data_filename(Path(config['datadir']),pair,tf,candle_type=kind)
         if not p.is_file():continue
-        df=pd.read_feather(p)
-        dates=pd.to_datetime(df['date'],utc=True)
-        rows.append({'pair':pair,'timeframe':tf,'type':str(kind),'rows':len(df),
-                     'start':dates.min().isoformat(),'end':dates.max().isoformat(),
-                     'duplicates':int(dates.duplicated().sum()),'sorted':bool(dates.is_monotonic_increasing)})
+        try:
+            df=pd.read_feather(p)
+            dates=pd.to_datetime(df['date'],utc=True)
+            first=dates.min().isoformat() if len(dates) else None
+            last=dates.max().isoformat() if len(dates) else None
+            rows.append({'pair':pair,'timeframe':tf,'type':str(kind),'rows':len(df),
+                         'start':first,'end':last,'duplicates':int(dates.duplicated().sum()),
+                         'sorted':bool(dates.is_monotonic_increasing)})
+        except (OSError,ValueError,KeyError,TypeError) as error:
+            rows.append({'pair':pair,'timeframe':tf,'type':str(kind),'rows':0,
+                         'start':None,'end':None,'duplicates':0,'sorted':False,
+                         'error':'Không đọc được dữ liệu thô: '+type(error).__name__})
     return {'files':rows,'fee':config.get('fee'),'wallet':config.get('dry_run_wallet'),
             'stake':config.get('stake_amount'),'max_open_trades':config.get('max_open_trades'),
             'pairs':config['exchange']['pair_whitelist'],'exchange':config['exchange']['name'],
@@ -225,6 +237,12 @@ class Manifest(BaseModel):
 
 @router.post('/manifests')
 def manifest(req:Manifest,config=Depends(get_config)):
+    from freqtrade.rpc.api_server.api_data_quality import data_source_lock
+    with data_source_lock:
+        return _manifest_locked(req,config)
+
+
+def _manifest_locked(req:Manifest,config):
     doc=read(target(req.strategy,config))
     if doc['revision']!=req.revision:raise HTTPException(409,'Mã đã đổi. Tải lại trước khi chạy.')
     allowed={'timerange','timeframe','timeframe_detail','dry_run_wallet','max_open_trades','stake_amount','enable_protections'}
@@ -235,21 +253,32 @@ def manifest(req:Manifest,config=Depends(get_config)):
     try:
         BacktestRequest.model_validate({'strategy':req.strategy,**req.settings})
         dates=TimeRange.parse_timerange(req.settings.get('timerange',''))
-        if not dates.startts:raise ValueError('Chọn ngày bắt đầu.')
+        if not dates.startts or not dates.stopts:raise ValueError('Chọn ngày bắt đầu và kết thúc rõ ràng để kiểm tra toàn bộ dữ liệu.')
         if float(req.settings.get('dry_run_wallet',0))<=0 or float(req.settings.get('stake_amount',0))<=0:
             raise ValueError('Vốn và số tiền mỗi lệnh phải lớn hơn 0.')
         if not 1<=int(req.settings.get('max_open_trades',0))<=10:raise ValueError('Số lệnh tối đa phải từ 1 đến 10.')
         if config.get('fee') is None:raise ValueError('Cần khai báo phí rõ ràng trong cấu hình.')
     except (ValueError,ValidationError) as e:raise HTTPException(422,str(e))
-    inventory=data(config)['files']
-    for pair in config['exchange']['pair_whitelist']:
-        for kind,tf in [('futures',req.settings.get('timeframe')),('futures',req.settings.get('timeframe_detail')),('mark',None),('funding_rate',None)]:
-            matches=[x for x in inventory if x['pair']==pair and x['type']==kind and (tf is None or x['timeframe']==tf)]
-            if not matches:raise HTTPException(422,f'Thiếu dữ liệu {kind} {tf or ""} cho {pair}.')
-            row=matches[0]
-            if row['duplicates'] or not row['sorted']:raise HTTPException(422,f'Dữ liệu {pair} có timestamp trùng hoặc chưa sắp xếp.')
-            if dates.startts<datetime.fromisoformat(row['start']).timestamp():
-                raise HTTPException(422,f'{kind} {pair} chỉ có từ {row["start"]}. Hãy chọn ngày sau đó hoặc tải thêm.')
+    from freqtrade.rpc.api_server.api_data_quality import quality_report, guard_research
+    guard_research(config)
+    tree=ast.parse(doc['content'])
+    strategy_cls=next((node for node in tree.body if isinstance(node,ast.ClassDef) and node.name==req.strategy),None)
+    warmup=None
+    if strategy_cls:
+        for node in strategy_cls.body:
+            if isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name) and node.targets[0].id=='startup_candle_count':
+                try:warmup=int(ast.literal_eval(node.value))
+                except (ValueError,TypeError):pass
+            elif isinstance(node,ast.AnnAssign) and isinstance(node.target,ast.Name) and node.target.id=='startup_candle_count' and node.value is not None:
+                try:warmup=int(ast.literal_eval(node.value))
+                except (ValueError,TypeError):pass
+    if warmup is None or warmup<0 or warmup>10000:
+        raise HTTPException(422,'Không xác định được startup_candle_count từ mã. Khai báo một số nguyên cố định trong chiến lược trước khi chạy.')
+    audit=quality_report(config,req.settings['timerange'],req.settings.get('timeframe','15m'),
+                         req.settings.get('timeframe_detail','1m'),warmup,False)
+    if audit['status'] in ('missing','invalid'):
+        reasons='; '.join(x['message'] for x in audit['issues'][:3] if x['severity'] in ('missing','invalid'))
+        raise HTTPException(422,'Dữ liệu thô chưa đủ hoặc sai: '+(reasons or audit['status']))
     uid=uuid4().hex
     # Preserve source and imported local modules, excluding credentials and databases.
     sources={str(p.relative_to(root(config))):hashlib.sha256(p.read_bytes()).hexdigest()
@@ -257,6 +286,9 @@ def manifest(req:Manifest,config=Depends(get_config)):
     result={'id':uid,'created_at':datetime.now(timezone.utc).isoformat(),'strategy':req.strategy,
             'revision':doc['revision'],'settings':req.settings,'engine':'2026.9','fee':config.get('fee'),
             'pairs':config['exchange']['pair_whitelist'],'source_hashes':sources,
+            'data_audit':{'id':audit['id'],'status':audit['status'],'version':audit['version'],
+                          'checked_at':audit['checked_at'],'files':[{'pair':f['pair'],'timeframe':f['timeframe'],
+                          'type':f['type'],'sha256':f['sha256']} for f in audit['files']]},
             'status':'prepared','note':'Ghi nhận cấu hình trước khi gửi API backtest chính thức; không phải kết quả chạy.'}
     p=storage(config)/'manifests';p.mkdir(exist_ok=True)
     (p/(uid+'.json')).write_text(json.dumps(result,indent=2))

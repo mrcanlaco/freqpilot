@@ -51,16 +51,16 @@ class StudioChecks(unittest.TestCase):
         for tags in (['a'*33],['one\ntwo'],['x']*13):
             with self.assertRaises(ValidationError):Research(tags=tags)
     def test_manifest_rejects_stale_revision_missing_funding_and_live_knobs(self):
-        settings={'timerange':'20260918-','timeframe':'15m','timeframe_detail':'1m','dry_run_wallet':1000,'stake_amount':'100','max_open_trades':2,'enable_protections':False}
+        settings={'timerange':'20260918-20260920','timeframe':'15m','timeframe_detail':'1m','dry_run_wallet':1000,'stake_amount':'100','max_open_trades':2,'enable_protections':False}
         with self.assertRaises(HTTPException):manifest(Manifest(strategy='ResearchSample',revision='old',settings=settings),self.config)
         with self.assertRaises(HTTPException):manifest(Manifest(strategy='ResearchSample',revision=self.doc['revision'],settings={**settings,'dry_run':False}),self.config)
-        with patch('freqtrade.rpc.api_server.api_studio.data',return_value={'files':[]}):
+        missing_audit={'id':'missing-fixture','version':'test','checked_at':'2026-09-20T00:00:00+00:00',
+                       'status':'missing','issues':[{'severity':'missing','message':'Thiếu funding BTC'}],'files':[]}
+        with patch('freqtrade.rpc.api_server.api_data_quality.quality_report',return_value=missing_audit):
             with self.assertRaises(HTTPException):manifest(Manifest(strategy='ResearchSample',revision=self.doc['revision'],settings=settings),self.config)
-        rows=[]
-        for pair in self.config['exchange']['pair_whitelist']:
-            for kind,tf in [('futures','15m'),('futures','1m'),('funding_rate','1h'),('mark','1h')]:
-                rows.append({'pair':pair,'type':kind,'timeframe':tf,'duplicates':0,'sorted':True,'start':'2026-09-15T00:00:00+00:00'})
-        with patch('freqtrade.rpc.api_server.api_studio.data',return_value={'files':rows}):
+        audit={'id':'audited-fixture','version':'test','checked_at':'2026-09-20T00:00:00+00:00',
+               'status':'unknown','issues':[],'files':[]}
+        with patch('freqtrade.rpc.api_server.api_data_quality.quality_report',return_value=audit):
             result=manifest(Manifest(strategy='ResearchSample',revision=self.doc['revision'],settings=settings),self.config)
         self.assertEqual(result['status'],'prepared')
         self.assertNotIn('password',str(result))
