@@ -39,6 +39,7 @@ PREVIEW_LIFETIME = timedelta(minutes=15)
 ISSUE_LIMIT = 30
 FUNDING_URL = 'https://fapi.binance.com/fapi/v1/fundingRate'
 EXCHANGE_INFO_URL = 'https://fapi.binance.com/fapi/v1/exchangeInfo'
+FUNDING_TIME_TOLERANCE_MS = 10  # Observed Binance +4/+6 ms vs native whole-second timestamp
 _lock = threading.RLock()
 # Shared with freeze(): readers hold this across *all* feather copies.  A
 # repair may download and validate privately without it, then holds it only
@@ -48,6 +49,10 @@ _active_job: str | None = None
 _ALLOWED_PAIRS = {'BTC/USDT:USDT', 'ETH/USDT:USDT'}
 _ALLOWED_FRAMES = {'1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d'}
 _SEVERITY = {'invalid': 3, 'missing': 2, 'unknown': 1, 'ok': 0}
+
+
+class FundingEventConflict(ValueError):
+    """Distinct funding rows are too close to match without ambiguity."""
 
 
 def utcnow() -> datetime:
@@ -265,14 +270,48 @@ def _binance_events(symbol: str, start: datetime, end: datetime, session=request
         if last < cursor:
             raise RuntimeError('Phân trang funding không tiến tới.')
         cursor = last + 1
-    if len({stamp for stamp, _ in events}) != len(events):
-        raise RuntimeError('Binance trả trùng sự kiện funding.')
+    events.sort(key=lambda event: event[0])
+    if any(right[0] - left[0] <= FUNDING_TIME_TOLERANCE_MS
+           for left, right in zip(events, events[1:])):
+        raise FundingEventConflict('Binance trả sự kiện funding trùng hoặc sát nhau bất thường.')
     return events, pages
+
+
+def _compare_funding_events(remote, local, start_ms, end_ms):
+    """Monotonic one-to-one matching; never round events into a set/bucket."""
+    local = sorted((stamp, rate) for stamp, rate in local
+                   if start_ms - FUNDING_TIME_TOLERANCE_MS <= stamp < end_ms + FUNDING_TIME_TOLERANCE_MS)
+    if any(right[0] - left[0] <= FUNDING_TIME_TOLERANCE_MS
+           for left, right in zip(local, local[1:])):
+        raise FundingEventConflict('Tệp cục bộ có sự kiện funding trùng hoặc sát nhau bất thường.')
+    remote = sorted(remote)
+    missing, extra, changed = [], [], []
+    i = j = 0
+    while i < len(remote) and j < len(local):
+        remote_time, remote_rate = remote[i]
+        local_time, local_rate = local[j]
+        delta = remote_time - local_time
+        if abs(delta) <= FUNDING_TIME_TOLERANCE_MS:
+            if not math.isclose(local_rate, remote_rate, rel_tol=0, abs_tol=1e-10):
+                changed.append(remote_time)
+            i += 1
+            j += 1
+        elif local_time < remote_time - FUNDING_TIME_TOLERANCE_MS:
+            if start_ms <= local_time < end_ms:
+                extra.append(local_time)
+            j += 1
+        else:
+            missing.append(remote_time)
+            i += 1
+    missing.extend(stamp for stamp, _ in remote[i:])
+    extra.extend(stamp for stamp, _ in local[j:] if start_ms <= stamp < end_ms)
+    return missing, extra, changed
 
 
 def _verify_funding(config, request, files, session=requests):
     start, end = datetime.fromisoformat(request['start']), datetime.fromisoformat(request['end'])
     result = {'status': 'ok', 'reason': None, 'pairs': [], 'source': FUNDING_URL,
+              'time_tolerance_ms': FUNDING_TIME_TOLERANCE_MS,
               'query_start': start.isoformat(), 'query_end_exclusive': end.isoformat(), 'checked_at': utcnow().isoformat()}
     for pair in request['pairs']:
         local_row = next(x for x in files if x['pair'] == pair and x['type'] == 'funding_rate')
@@ -287,20 +326,21 @@ def _verify_funding(config, request, files, session=requests):
             else:
                 df = pd.read_feather(_file(config, pair, '1h', 'funding_rate'))
                 dates = pd.to_datetime(df['date'], utc=True)
-                local = {int(t.timestamp() * 1000): float(rate) for t, rate in zip(dates, df['funding_rate'])
-                         if start <= t.to_pydatetime() < end}
-                item['events_local'] = len(local)
-                remote = dict(events)
-                absent = sorted(set(remote) - set(local))
-                extra = sorted(set(local) - set(remote))
-                changed = sorted(stamp for stamp in set(local) & set(remote)
-                                 if not math.isclose(local[stamp], remote[stamp], rel_tol=0, abs_tol=1e-10))
+                local = [(int(t.value // 1_000_000), float(rate))
+                         for t, rate in zip(dates, df['funding_rate'])]
+                start_ms, end_ms = int(start.timestamp() * 1000), int(end.timestamp() * 1000)
+                item['events_local'] = sum(start_ms <= stamp < end_ms for stamp, _ in local)
+                absent, extra, changed = _compare_funding_events(events, local, start_ms, end_ms)
                 if absent:
                     item['issues'].append(_issue('funding_events_missing', 'missing', 'Thiếu sự kiện funding đã xác nhận trên Binance.', count=len(absent),
                                                   start=datetime.fromtimestamp(absent[0] / 1000, timezone.utc)))
                 if extra or changed:
                     item['issues'].append(_issue('funding_events_different', 'invalid', 'Sự kiện hoặc rate funding khác Binance.', count=len(extra) + len(changed)))
                 item['status'] = _status(item['issues'])
+        except FundingEventConflict:
+            item['status'] = 'invalid'
+            item['issues'].append(_issue('funding_events_duplicate', 'invalid',
+                                         'Có sự kiện funding trùng hoặc sát nhau; không thể ghép duy nhất.'))
         except (requests.RequestException, OSError, RuntimeError, ValueError, TypeError, KeyError) as exc:
             item['status'] = 'unknown'
             item['issues'].append(_issue('funding_api_unavailable', 'unknown', 'Chưa đối chiếu được funding với Binance: ' + type(exc).__name__))

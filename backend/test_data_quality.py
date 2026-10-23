@@ -127,6 +127,49 @@ class DataQualityTests(unittest.TestCase):
         self.assertEqual(report['status'], 'missing')
         self.assertEqual(report['funding_verification']['pairs'][0]['issues'][0]['code'], 'funding_events_missing')
 
+    def test_funding_four_millisecond_native_rounding_is_one_to_one(self):
+        local_events = [(self.events[2], 0.00003), (self.events[3], 0.0)]
+        remote = [{'fundingTime': int(t.timestamp() * 1000) + 4, 'fundingRate': str(rate)}
+                  for t, rate in local_events]
+        remote[1]['fundingTime'] += 2  # another real Binance case: +6 ms
+        aligned = self._report(verify_funding=True, session=FakeSession(remote))
+        pair = aligned['funding_verification']['pairs'][0]
+        self.assertEqual(aligned['status'], 'ok')
+        self.assertEqual(aligned['funding_verification']['time_tolerance_ms'], 10)
+        self.assertEqual((pair['events_binance'], pair['events_local']), (2, 2))
+        self.assertEqual(pair['issues'], [])
+
+        wrong_rate = [dict(x) for x in remote]
+        wrong_rate[0]['fundingRate'] = '0.00004'
+        changed = self._report(verify_funding=True, session=FakeSession(wrong_rate))
+        self.assertEqual(changed['status'], 'invalid')
+        self.assertEqual(changed['funding_verification']['pairs'][0]['issues'][0]['code'],
+                         'funding_events_different')
+
+        outside_tolerance = [dict(x) for x in remote]
+        outside_tolerance[0]['fundingTime'] += 7  # +11 ms must not match a whole-second local event
+        missed = self._report(verify_funding=True, session=FakeSession(outside_tolerance))
+        self.assertEqual(missed['status'], 'invalid')  # missing Binance event + unmatched local event
+        self.assertIn('funding_events_missing', {x['code'] for x in missed['issues']})
+
+    def test_funding_near_duplicate_remote_or_local_is_invalid(self):
+        stamp = int(self.events[2].timestamp() * 1000)
+        rows = [{'fundingTime': stamp + 2, 'fundingRate': '0.00003'},
+                {'fundingTime': stamp + 4, 'fundingRate': '0.00003'}]
+        report = self._report(verify_funding=True, session=FakeSession(rows))
+        self.assertEqual(report['status'], 'invalid')
+        self.assertEqual(report['funding_verification']['pairs'][0]['issues'][0]['code'],
+                         'funding_events_duplicate')
+        local_dup = pd.concat([self.funding, pd.DataFrame({
+            'date': [self.events[2] + pd.Timedelta(milliseconds=4)], 'funding_rate': [0.00003]})],
+            ignore_index=True).sort_values('date')
+        self._write('funding_rate', local_dup)
+        single = [{'fundingTime': stamp + 4, 'fundingRate': '0.00003'}]
+        report = self._report(verify_funding=True, session=FakeSession(single))
+        self.assertEqual(report['status'], 'invalid')
+        self.assertEqual(report['funding_verification']['pairs'][0]['issues'][0]['code'],
+                         'funding_events_duplicate')
+
     def test_funding_public_pagination_and_offline_unknown(self):
         start = datetime(2026, 10, 1, tzinfo=timezone.utc)
         events = [{'fundingTime': int(start.timestamp() * 1000) + x * 1000,
