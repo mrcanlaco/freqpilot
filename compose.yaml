@@ -18,6 +18,8 @@ services:
     <<: *common
     image: ${FREQPILOT_IMAGE:-codex-freqpilot:2026.9-v0.1}
     build: ./backend
+    environment:
+      PYTHONPATH: /freqtrade/user_data/freqpilot/deps
     ports:
       - "127.0.0.1:8091:8080"
     command: webserver --config user_data/config.json

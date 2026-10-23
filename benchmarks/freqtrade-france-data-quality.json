@@ -1,0 +1,92 @@
+[
+  {
+    "pair": "BTC_USDT_USDT",
+    "kind": "1h-futures",
+    "rows_in_window": 4872,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "7ccbef09b8b3136b3f62e32692d04f2c6d6daaec18c5707746028c8518887b4b"
+  },
+  {
+    "pair": "BTC_USDT_USDT",
+    "kind": "4h-futures",
+    "rows_in_window": 1218,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "91dca2a1d7f82fcdbe6be1a21cabf34703b346cef84af12454a55f301f5241c1"
+  },
+  {
+    "pair": "BTC_USDT_USDT",
+    "kind": "5m-futures",
+    "rows_in_window": 58464,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "449cf96b9898b5c7baca94f18418b11901916da9a33652eedf024a8249ab4b31"
+  },
+  {
+    "pair": "BTC_USDT_USDT",
+    "kind": "1h-mark",
+    "rows_in_window": 4872,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "ebde5b503c973d8be3ce2b57a64a801864d92e4aa814cd61ad4e1f0ff062d346"
+  },
+  {
+    "pair": "BTC_USDT_USDT",
+    "kind": "1h-funding_rate",
+    "rows_in_window": 609,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "e500236ede25a3bd645b1843d0382729651afc21bf94b542606d9ba2921e2cb9"
+  },
+  {
+    "pair": "ETH_USDT_USDT",
+    "kind": "1h-futures",
+    "rows_in_window": 4872,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "364da4d0025afd61b2641efe3c8390dc224c4f7e8472cc4803e7ee3d8124f6dd"
+  },
+  {
+    "pair": "ETH_USDT_USDT",
+    "kind": "4h-futures",
+    "rows_in_window": 1218,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "9e0e86bc2985143511f1b85d23d95b1c8ee6b39d516dd96b0c95113a907981d4"
+  },
+  {
+    "pair": "ETH_USDT_USDT",
+    "kind": "5m-futures",
+    "rows_in_window": 58464,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "7ec06e39a0923f5870986bb6d4c9cb4c132f7fe18a98245324eaddb7e8caa5fd"
+  },
+  {
+    "pair": "ETH_USDT_USDT",
+    "kind": "1h-mark",
+    "rows_in_window": 4872,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "088548afa149f355698364ca09189b6e2d175ebd3b5aa233ae07340d334e6559"
+  },
+  {
+    "pair": "ETH_USDT_USDT",
+    "kind": "1h-funding_rate",
+    "rows_in_window": 609,
+    "missing": 0,
+    "first_missing": null,
+    "engines_same": true,
+    "pilot_sha256": "91a22e8704a10a612e1cf3a0eea9771e0b6f525cd67cf2f3d0f48bb249456ccf"
+  }
+]
