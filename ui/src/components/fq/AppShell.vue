@@ -163,11 +163,13 @@ const banners = computed<Banners>(() => {
 });
 
 // ---- bell ----
-const bell = computed(() => alerts.bellCount(now.value));
+const isResearchPage = computed(() => props.page === 'studio' || props.page === 'paper');
+const bell = computed(() => (isResearchPage.value ? 0 : alerts.bellCount(now.value)));
 
 // ---- status bar ----
 const { density } = useDisplayPrefs();
 const healthLevel = computed(() => {
+  if (isResearchPage.value) return 'ok' as const;
   const l = health.health?.level;
   return l === 'critical'
     ? ('crit' as const)
@@ -186,11 +188,12 @@ const healthText = computed(() => {
   const why = isKnownReason(r.code) ? lowerFirst(t(`fq.sysh.reason.${r.code}`)) : r.code;
   return t('fq.shell.sb.withReason', { head, why });
 });
-const logErrors = computed(
-  () =>
-    alerts
-      .view(now.value, 'active')
-      .filter((a) => a.type_id === 'logErrors' || a.type_id === 'orderFailed').length,
+const logErrors = computed(() =>
+  isResearchPage.value
+    ? 0
+    : alerts
+        .view(now.value, 'active')
+        .filter((a) => a.type_id === 'logErrors' || a.type_id === 'orderFailed').length,
 );
 /** Hyperliquid quota: said only above 70 %, absent in direct mode (no budget is read there). */
 const QUOTA_SHOWN_ABOVE = 70;
@@ -354,7 +357,7 @@ function openPalette() {
           :label="t('fq.palette.label')"
           @click="openPalette"
         />
-        <span v-if="page === 'studio'" class="si">Research · local</span>
+        <span v-if="isResearchPage" class="si si-research">Research · local</span>
         <ConnectionPill
           v-else
           :kind="connKind"

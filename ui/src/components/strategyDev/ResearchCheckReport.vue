@@ -107,11 +107,16 @@ function cell(row: unknown, candle: string) {
   </article>
 </template>
 <style scoped>
+.check-report,
+.check-report * {
+  text-align: left;
+}
 .check-report {
   border: 1px solid var(--line);
-  border-radius: 9px;
-  padding: 20px;
-  margin: 18px 0;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 14px 0;
   color: var(--fg);
 }
 header {

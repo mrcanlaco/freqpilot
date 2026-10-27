@@ -206,8 +206,10 @@ const option = computed<EChartsOption>(() => {
       data: dates,
       axisLabel: {
         color: '#a6adc8',
-        fontSize: 11,
-        interval: Math.max(Math.floor(dates.length / 8), 1),
+        fontSize: 10.5,
+        hideOverlap: true,
+        formatter: (val: string) =>
+          val && val.length >= 16 ? val.slice(5, 16).replace('T', ' ') : val,
       },
       axisLine: { lineStyle: { color: '#45475a' } },
     },

@@ -268,11 +268,16 @@ onMounted(() => void action(loadList));
 </template>
 
 <style scoped>
+.preset-panel,
+.preset-panel * {
+  text-align: left;
+}
 .preset-panel {
   border: 1px solid var(--line);
+  background: var(--bg);
   border-radius: 10px;
-  padding: 20px;
-  margin: 18px 0 26px;
+  padding: 18px 20px;
+  margin: 14px 0 22px;
   color: var(--fg);
 }
 .top,
@@ -280,18 +285,20 @@ onMounted(() => void action(loadList));
 .save-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 .top {
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 .top h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 650;
 }
 .top p {
-  margin: 8px 0 16px;
+  margin: 4px 0 0;
 }
 p {
   font-size: 13px;

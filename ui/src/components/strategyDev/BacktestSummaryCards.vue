@@ -160,50 +160,53 @@ const orderCards = computed(() => {
 .summary-grid {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
+  text-align: left;
 }
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  gap: 0.65rem;
 }
 
 .summary-card {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(30, 30, 46, 0.5);
-  border: 1px solid rgba(69, 71, 90, 0.25);
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.55rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  text-align: left;
 }
 
 .card-label {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6c7086;
+  color: var(--fg-3);
 }
 
 .card-value {
-  font-family: var(--sd-font-mono);
-  font-size: 14px;
-  font-weight: 700;
-  color: #cdd6f4;
+  font-family: var(--font-num, var(--sd-font-mono));
+  font-variant-numeric: tabular-nums;
+  font-size: 14.5px;
+  font-weight: 650;
+  color: var(--fg);
 }
 
 .card-sub {
   font-size: 10px;
-  color: #6c7086;
+  color: var(--fg-3);
 }
 
 .text-green {
-  color: #a6e3a1;
+  color: #79dfb3;
 }
 .text-red {
-  color: #f38ba8;
+  color: #f29b9b;
 }
 
 .order-stats {

@@ -288,4 +288,17 @@ router.beforeResolve((to) => {
   else suspendBots();
 });
 
+
+router.onError((error, to) => {
+  const msg = String((error as Error | undefined)?.message ?? error ?? '');
+  if (
+    typeof window !== 'undefined' &&
+    to?.fullPath &&
+    (msg.includes('Failed to fetch dynamically imported module') ||
+      msg.includes('Importing a module script failed') ||
+      msg.includes('Unable to preload CSS'))
+  ) {
+    window.location.assign(to.fullPath);
+  }
+});
 export default router;

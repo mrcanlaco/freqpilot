@@ -141,15 +141,40 @@ const knownUrls = computed(() =>
     .filter(Boolean),
 );
 
+function defaultLoginInitial(): Partial<Omit<BotForm, 'password'>> {
+  const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '';
+  const wantsResearch =
+    route.name === 'login' ||
+    redirect.startsWith('/studio') ||
+    redirect.startsWith('/data') ||
+    redirect.startsWith('/jobs') ||
+    redirect.startsWith('/paper') ||
+    window.location.port === '8091';
+  if (isLocal && wantsResearch && !knownUrls.value.some((u) => u.endsWith(':8091'))) {
+    return {
+      name: 'FreqPilot Research',
+      url: `${window.location.protocol}//${window.location.hostname}:8091`,
+      username: 'freqtrader',
+    };
+  }
+  return {
+    name: isLocal ? 'FreqPilot Paper' : '',
+    url: window.location.origin,
+    username: isLocal ? 'freqtrader' : '',
+  };
+}
+
 function openAdd(initial: Partial<Omit<BotForm, 'password'>> = {}) {
+  const defaults = defaultLoginInitial();
   sheetError.value = null;
   sheet.value = {
     mode: 'add',
     uiId: null,
     initial: {
-      name: initial.name ?? '',
-      url: initial.url ?? window.location.origin,
-      username: initial.username ?? '',
+      name: initial.name ?? defaults.name ?? '',
+      url: initial.url ?? defaults.url ?? window.location.origin,
+      username: initial.username ?? defaults.username ?? '',
     },
   };
 }
@@ -195,6 +220,27 @@ async function submit(form: BotForm) {
   try {
     if (s.mode === 'add') {
       await reg.addBot(form);
+      const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+      if (isLocal) {
+        const base = `${window.location.protocol}//${window.location.hostname}`;
+        const companion = form.url.includes(':8091')
+          ? { name: 'StarterFutures Paper', url: `${base}:8090` }
+          : form.url.includes(':8090')
+            ? { name: 'FreqPilot Research', url: `${base}:8091` }
+            : null;
+        if (companion && !knownUrls.value.includes(companion.url)) {
+          try {
+            await reg.addBot({
+              name: companion.name,
+              url: companion.url,
+              username: form.username,
+              password: form.password,
+            });
+          } catch {
+            // Companion local service is optional; never block primary login.
+          }
+        }
+      }
     } else if (s.uiId) {
       if (form.password === '') reg.rename(s.uiId, form.name);
       else await reg.relogin(s.uiId, form);
@@ -232,9 +278,9 @@ function leaveLogin() {
     (bots.value.length === 0 && Object.keys(readLoginInfos()).length === 0)
   )
     return;
-  const to = typeof route.query.redirect === 'string' ? route.query.redirect : '/dashboard';
+  const to = typeof route.query.redirect === 'string' ? route.query.redirect : '/studio';
   const resolved = router.resolve(to);
-  void router.push(resolved.name === '404' ? '/dashboard' : to);
+  void router.push(resolved.name === '404' ? '/studio' : to);
 }
 
 // First run: no bot at all, the form opens by itself

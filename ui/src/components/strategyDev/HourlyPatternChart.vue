@@ -25,9 +25,11 @@ use([
 
 const props = defineProps<{
   data: {
-    hours: Array<number | { hour: number; avg_profit: number; winrate: number; trades: number }>;
-    avg_profit?: number[];
-    winrate?: number[];
+    hours: Array<
+      number | { hour: number; avg_profit: number | null; winrate: number | null; trades: number }
+    >;
+    avg_profit?: Array<number | null>;
+    winrate?: Array<number | null>;
     trade_count?: number[];
   };
 }>();
@@ -57,11 +59,13 @@ const chartOptions = computed(() => {
         let html = `<div style="font-weight:600;margin-bottom:4px">${h}:00</div>`;
         for (const p of params) {
           const val =
-            p.seriesName === winRateLabel
-              ? `${(p.value * 100).toFixed(1)}%`
-              : p.seriesName === tradesLabel
-                ? p.value
-                : `${p.value >= 0 ? '+' : ''}${(p.value * 100).toFixed(2)}%`;
+            p.value == null || !Number.isFinite(p.value)
+              ? '—'
+              : p.seriesName === winRateLabel
+                ? `${(p.value * 100).toFixed(1)}%`
+                : p.seriesName === tradesLabel
+                  ? p.value
+                  : `${p.value >= 0 ? '+' : ''}${(p.value * 100).toFixed(2)}%`;
           html += `<div>${p.marker} ${p.seriesName}: <b>${val}</b></div>`;
         }
         return html;

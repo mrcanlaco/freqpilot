@@ -14,11 +14,11 @@ const { t } = useI18n();
 interface ExitReason {
   reason: string;
   count: number;
-  avg_profit: number;
-  total_profit: number;
+  avg_profit: number | null;
+  total_profit: number | null;
   wins: number;
   losses: number;
-  winrate: number;
+  winrate: number | null;
 }
 
 const props = defineProps<{
@@ -43,12 +43,24 @@ const chartOptions = computed<EChartsOption>(() => {
         const ps = params as { dataIndex: number }[];
         if (!ps.length) return '';
         const d = sorted[ps[0].dataIndex];
+        const avgText =
+          d.avg_profit != null && Number.isFinite(d.avg_profit)
+            ? `${d.avg_profit >= 0 ? '+' : ''}${d.avg_profit.toFixed(2)}%`
+            : '—';
+        const wrText =
+          d.winrate != null && Number.isFinite(d.winrate)
+            ? `${(d.winrate * 100).toFixed(1)}%`
+            : '—';
+        const totText =
+          d.total_profit != null && Number.isFinite(d.total_profit)
+            ? `${d.total_profit >= 0 ? '+' : ''}${d.total_profit.toFixed(2)}`
+            : '—';
         return [
           `<b>${d.reason}</b>`,
           `${t('strategyDev.erCount')}: <b>${d.count}</b>`,
-          `${t('strategyDev.erAvgProfit')}: <b>${d.avg_profit >= 0 ? '+' : ''}${d.avg_profit.toFixed(2)}%</b>`,
-          `${t('strategyDev.erWinRate')}: <b>${(d.winrate * 100).toFixed(1)}%</b>`,
-          `${t('strategyDev.erTotalProfit')}: <b>${d.total_profit >= 0 ? '+' : ''}${d.total_profit.toFixed(2)}</b>`,
+          `${t('strategyDev.erAvgProfit')}: <b>${avgText}</b>`,
+          `${t('strategyDev.erWinRate')}: <b>${wrText}</b>`,
+          `${t('strategyDev.erTotalProfit')}: <b>${totText}</b>`,
         ].join('<br/>');
       },
     },
@@ -88,7 +100,14 @@ const chartOptions = computed<EChartsOption>(() => {
         xAxisIndex: 0,
         data: counts.map((v, i) => ({
           value: v,
-          itemStyle: { color: avgProfits[i] >= 0 ? '#a6e3a1' : '#f38ba8' },
+          itemStyle: {
+            color:
+              avgProfits[i] == null
+                ? '#6c7086'
+                : avgProfits[i]! >= 0
+                  ? '#a6e3a1'
+                  : '#f38ba8',
+          },
         })),
       },
       {

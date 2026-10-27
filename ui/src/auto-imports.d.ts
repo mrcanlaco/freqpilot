@@ -55,12 +55,16 @@ declare global {
   const binData: typeof import('./utils/charts/binCount').binData
   const blacklistWanted: typeof import('./stores/perBotFetchPolicy').blacklistWanted
   const botApiPort: typeof import('./stores/botApiPort').botApiPort
+  const buildEvidenceCodexPrompt: typeof import('./utils/strategyLibrary').buildEvidenceCodexPrompt
   const buildLiveBotAnalytics: typeof import('./utils/liveBotAnalytics').buildLiveBotAnalytics
   const buildPortIndex: typeof import('./stores/fleetDigestPolicy').buildPortIndex
   const buildPrefillFromBacktest: typeof import('./utils/reconstitute').buildPrefillFromBacktest
   const buildPrefillFromHyperopt: typeof import('./utils/reconstitute').buildPrefillFromHyperopt
   const buildPrefillFromLiveBot: typeof import('./utils/reconstitute').buildPrefillFromLiveBot
   const buildPrefillFromWfa: typeof import('./utils/reconstitute').buildPrefillFromWfa
+  const buildResearchDossierMarkdown: typeof import('./utils/strategyLibrary').buildResearchDossierMarkdown
+  const buildSensitivityPivot: typeof import('./utils/strategyLibrary').buildSensitivityPivot
+  const buildTradeAnalytics: typeof import('./utils/strategyLibrary').buildTradeAnalytics
   const calculateDiff: typeof import('./utils/charts/areaPlotDataset').calculateDiff
   const checkContext: typeof import('./utils/researchChecks').checkContext
   const classifyReconFailure: typeof import('./composables/useReconciliation').classifyReconFailure
@@ -131,6 +135,7 @@ declare global {
   const formatBacktestProfitFactor: typeof import('./utils/backtestMetrics').formatBacktestProfitFactor
   const formatDateToTimerange: typeof import('./utils/reconstitute').formatDateToTimerange
   const formatDecimal: typeof import('./utils/formatters/numberformat').formatDecimal
+  const formatLibraryRunSummary: typeof import('./utils/strategyLibrary').formatLibraryRunSummary
   const formatNumber: typeof import('./utils/formatters/numberformat').formatNumber
   const formatObjectForTable: typeof import('./utils/objectToTableItems').formatObjectForTable
   const formatPercent: typeof import('./utils/formatters/numberformat').formatPercent
@@ -185,6 +190,7 @@ declare global {
   const mapGetters: typeof import('pinia').mapGetters
   const mapState: typeof import('pinia').mapState
   const mapStores: typeof import('pinia').mapStores
+  const mapWalkForwardWindowRow: typeof import('./utils/strategyLibrary').mapWalkForwardWindowRow
   const mapWritableState: typeof import('pinia').mapWritableState
   const markRaw: typeof import('vue').markRaw
   const matchShortcut: typeof import('./composables/useShortcuts').matchShortcut
@@ -678,7 +684,7 @@ declare global {
   export type { ResearchConnectionError } from './utils/researchConnection'
   import('./utils/researchConnection')
   // @ts-ignore
-  export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset } from './utils/strategyLibrary'
+  export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset, WalkForwardWindowRow, SensitivityAxisInput, SensitivityCellInput, SensitivityPivotCol, SensitivityPivotCell, TradeAnalyticsResult } from './utils/strategyLibrary'
   import('./utils/strategyLibrary')
   // @ts-ignore
   export type { ResolvedTheme } from './utils/theme'
@@ -739,12 +745,16 @@ declare module 'vue' {
     readonly binData: UnwrapRef<typeof import('./utils/charts/binCount')['binData']>
     readonly blacklistWanted: UnwrapRef<typeof import('./stores/perBotFetchPolicy')['blacklistWanted']>
     readonly botApiPort: UnwrapRef<typeof import('./stores/botApiPort')['botApiPort']>
+    readonly buildEvidenceCodexPrompt: UnwrapRef<typeof import('./utils/strategyLibrary')['buildEvidenceCodexPrompt']>
     readonly buildLiveBotAnalytics: UnwrapRef<typeof import('./utils/liveBotAnalytics')['buildLiveBotAnalytics']>
     readonly buildPortIndex: UnwrapRef<typeof import('./stores/fleetDigestPolicy')['buildPortIndex']>
     readonly buildPrefillFromBacktest: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromBacktest']>
     readonly buildPrefillFromHyperopt: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromHyperopt']>
     readonly buildPrefillFromLiveBot: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromLiveBot']>
     readonly buildPrefillFromWfa: UnwrapRef<typeof import('./utils/reconstitute')['buildPrefillFromWfa']>
+    readonly buildResearchDossierMarkdown: UnwrapRef<typeof import('./utils/strategyLibrary')['buildResearchDossierMarkdown']>
+    readonly buildSensitivityPivot: UnwrapRef<typeof import('./utils/strategyLibrary')['buildSensitivityPivot']>
+    readonly buildTradeAnalytics: UnwrapRef<typeof import('./utils/strategyLibrary')['buildTradeAnalytics']>
     readonly calculateDiff: UnwrapRef<typeof import('./utils/charts/areaPlotDataset')['calculateDiff']>
     readonly checkContext: UnwrapRef<typeof import('./utils/researchChecks')['checkContext']>
     readonly classifyReconFailure: UnwrapRef<typeof import('./composables/useReconciliation')['classifyReconFailure']>
@@ -815,6 +825,7 @@ declare module 'vue' {
     readonly formatBacktestProfitFactor: UnwrapRef<typeof import('./utils/backtestMetrics')['formatBacktestProfitFactor']>
     readonly formatDateToTimerange: UnwrapRef<typeof import('./utils/reconstitute')['formatDateToTimerange']>
     readonly formatDecimal: UnwrapRef<typeof import('./utils/formatters/numberformat')['formatDecimal']>
+    readonly formatLibraryRunSummary: UnwrapRef<typeof import('./utils/strategyLibrary')['formatLibraryRunSummary']>
     readonly formatNumber: UnwrapRef<typeof import('./utils/formatters/numberformat')['formatNumber']>
     readonly formatObjectForTable: UnwrapRef<typeof import('./utils/objectToTableItems')['formatObjectForTable']>
     readonly formatPercent: UnwrapRef<typeof import('./utils/formatters/numberformat')['formatPercent']>
@@ -869,6 +880,7 @@ declare module 'vue' {
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
     readonly mapState: UnwrapRef<typeof import('pinia')['mapState']>
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
+    readonly mapWalkForwardWindowRow: UnwrapRef<typeof import('./utils/strategyLibrary')['mapWalkForwardWindowRow']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly matchShortcut: UnwrapRef<typeof import('./composables/useShortcuts')['matchShortcut']>

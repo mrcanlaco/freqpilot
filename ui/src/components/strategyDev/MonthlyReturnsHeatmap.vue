@@ -23,7 +23,7 @@ const C = {
 interface MonthlyEntry {
   year: number;
   month: number;
-  profit_abs: number;
+  profit_abs: number | null;
   trades: number;
 }
 
@@ -50,8 +50,10 @@ const chartHeight = computed(() => Math.max(200, years.value.length * 40 + 80));
 const maxAbs = computed(() => {
   let m = 0;
   for (const d of props.data) {
-    const abs = Math.abs(d.profit_abs);
-    if (abs > m) m = abs;
+    if (typeof d.profit_abs === 'number' && Number.isFinite(d.profit_abs)) {
+      const abs = Math.abs(d.profit_abs);
+      if (abs > m) m = abs;
+    }
   }
   return m || 1;
 });
@@ -65,29 +67,42 @@ function fmtProfit(v: number): string {
 const chartOptions = computed<EChartsOption>(() => {
   const yLabels = years.value.map(String);
 
-  // Build lookup for trades count
-  const lookup = new Map<string, MonthlyEntry>();
+  const lookup: Record<string, MonthlyEntry> = {};
   for (const d of props.data) {
-    lookup.set(`${d.year}-${d.month}`, d);
+    lookup[`${d.year}-${d.month}`] = d;
   }
 
-  const heatData: [number, number, number][] = [];
+  const heatData: { value: [number, number, number | null]; itemStyle?: Record<string, unknown> }[] = [];
   for (let yi = 0; yi < years.value.length; yi++) {
     for (let mi = 0; mi < 12; mi++) {
-      const entry = lookup.get(`${years.value[yi]}-${mi + 1}`);
-      heatData.push([mi, yi, entry ? entry.profit_abs : 0]);
+      const entry = lookup[`${years.value[yi]}-${mi + 1}`];
+      const val =
+        entry && typeof entry.profit_abs === 'number' && Number.isFinite(entry.profit_abs)
+          ? entry.profit_abs
+          : null;
+      heatData.push(
+        val !== null
+          ? { value: [mi, yi, val] }
+          : {
+              value: [mi, yi, null],
+              itemStyle: { color: 'rgba(255,255,255,0.02)', borderColor: C.surface0 },
+            },
+      );
     }
   }
 
   return {
     tooltip: {
       formatter: (p: unknown) => {
-        const item = p as { value: [number, number, number] };
+        const item = p as { value: [number, number, number | null] };
         const [mi, yi, val] = item.value;
         const year = years.value[yi];
         const month = MONTHS.value[mi];
-        const entry = lookup.get(`${year}-${mi + 1}`);
-        const trades = entry ? entry.trades : 0;
+        const entry = lookup[`${year}-${mi + 1}`];
+        if (!entry || val === null || !Number.isFinite(val)) {
+          return `<b>${month} ${year}</b><br/><span style="color:${C.subtext}">— (ngoài mẫu)</span>`;
+        }
+        const trades = entry.trades;
         const color = val >= 0 ? C.green : C.red;
         return (
           `<b>${month} ${year}</b><br/>` +
@@ -133,15 +148,17 @@ const chartOptions = computed<EChartsOption>(() => {
         label: {
           show: true,
           formatter: (p: unknown) => {
-            const item = p as { value: [number, number, number] };
+            const item = p as { value: [number, number, number | null] };
             const val = item.value[2];
-            if (val === 0) return '';
+            if (val === null || !Number.isFinite(val)) return '';
             return fmtProfit(val);
           },
           fontSize: 10,
           color: (p: unknown) => {
-            const item = p as { value: [number, number, number] };
-            const ratio = Math.abs(item.value[2]) / maxAbs.value;
+            const item = p as { value: [number, number, number | null] };
+            const val = item.value[2];
+            if (val === null || !Number.isFinite(val)) return C.subtext;
+            const ratio = Math.abs(val) / maxAbs.value;
             return ratio > 0.3 ? '#1e1e2e' : C.text;
           },
         },

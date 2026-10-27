@@ -97,6 +97,21 @@ const closed = computed(
     /^\d{8}-\d{8}$/.test(timerange.value) &&
     timerange.value.split('-')[0]! < timerange.value.split('-')[1]!,
 );
+const suggestedSplit = computed(() => {
+  if (!closed.value) return '';
+  const [from, to] = timerange.value.split('-');
+  if (!from || !to) return '';
+  const startMs = Date.UTC(
+    Number(from.slice(0, 4)),
+    Number(from.slice(4, 6)) - 1,
+    Number(from.slice(6, 8)),
+  );
+  const endMs = Date.UTC(Number(to.slice(0, 4)), Number(to.slice(4, 6)) - 1, Number(to.slice(6, 8)));
+  const diffDays = Math.round((endMs - startMs) / 86_400_000);
+  if (diffDays < 2) return '';
+  const trainDays = Math.max(1, Math.min(diffDays - 1, Math.round(diffDays * 0.7)));
+  return new Date(startMs + trainDays * 86_400_000).toISOString().slice(0, 10);
+});
 const stale = computed(
   () =>
     !!job.value &&
@@ -491,11 +506,22 @@ onUnmounted(() => {
             :disabled="locked || hasActive"
         /></label>
       </div>
-      <p class="hint">
-        Điểm tối ưu được tính trên tập học. Tập ngoài mẫu được giữ lại để kiểm tra riêng; một lần
-        chia không chứng minh chiến lược bền vững. Ưu tiên số lệnh, drawdown và kết quả ngoài mẫu
-        cùng với lợi nhuận.
-      </p>
+      <div class="hint-row">
+        <p class="hint">
+          Điểm tối ưu được tính trên tập học. Tập ngoài mẫu được giữ lại để kiểm tra riêng; một lần
+          chia không chứng minh chiến lược bền vững. Ưu tiên số lệnh, drawdown và kết quả ngoài mẫu
+          cùng với lợi nhuận.
+        </p>
+        <button
+          v-if="validation === 'split' && closed && suggestedSplit && splitDate !== suggestedSplit"
+          type="button"
+          class="split-btn"
+          :disabled="locked || hasActive"
+          @click="splitDate = suggestedSplit"
+        >
+          Gợi ý tách 70/30 ({{ suggestedSplit }})
+        </button>
+      </div>
       <button
         :disabled="
           locked || hasActive || !closed || !spaces.length || capabilities.available === false
@@ -653,10 +679,27 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.optimization,
+.optimization * {
+  text-align: left;
+}
 .optimization {
   min-width: 0;
   display: grid;
   gap: 1rem;
+}
+.hint-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.split-btn {
+  font-size: 12px;
+  white-space: nowrap;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .row {
   display: flex;

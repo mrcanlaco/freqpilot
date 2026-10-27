@@ -162,6 +162,31 @@ def profile_path(uid, config):
     return p
 
 
+def profile_visibility(uid, config):
+    """Mutable UI state, kept outside the frozen profile record and source hashes."""
+    path = profile_path(uid, config) / 'visibility.json'
+    if path.is_symlink():
+        raise HTTPException(409, 'Trạng thái hiển thị hồ sơ không hợp lệ.')
+    if not path.exists():
+        return {'archived': False, 'archived_at': None}
+    try:
+        value = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        raise HTTPException(409, 'Không đọc được trạng thái hiển thị hồ sơ.')
+    if not isinstance(value, dict) or type(value.get('archived')) is not bool:
+        raise HTTPException(409, 'Trạng thái hiển thị hồ sơ không hợp lệ.')
+    return {'archived': value['archived'], 'archived_at': value.get('archived_at')}
+
+
+def set_profile_visibility(uid, config, archived):
+    path = profile_path(uid, config) / 'visibility.json'
+    profile_visibility(uid, config)
+    value = {'archived': archived,
+             'archived_at': datetime.now(timezone.utc).isoformat() if archived else None}
+    write_check(path, value)
+    return value
+
+
 def load_paper_base(name, folder):
     """Import fresh local helpers after native reload_config in the paper process."""
     if not NAME.fullmatch(name):
@@ -298,6 +323,10 @@ def _paper_status(config):
             profile['valid'] = True
         except (HTTPException, OSError) as error:
             profile.update(valid=False, error=str(getattr(error, 'detail', error)))
+        try:
+            profile.update(profile_visibility(profile['id'], config))
+        except HTTPException as error:
+            profile.update(valid=False, archived=False, archived_at=None, error=error.detail)
     try:
         current = checked_native(config)
         positions = native('GET', '/status', config)
@@ -314,6 +343,22 @@ def _paper_status(config):
     except HTTPException as error:
         result['history_error'] = error.detail
     return result
+
+
+@router.post('/paper/profiles/{uid}/archive')
+def archive_profile(uid: str, config=Depends(get_config)):
+    with paper_lock:
+        _, record = verify_profile(uid, config)
+        current = checked_native(config)
+        if current['strategy'] == record['wrapper']:
+            raise HTTPException(409, 'Hồ sơ đang được worker chọn. Hãy chọn hồ sơ khác trước khi lưu trữ.')
+        return set_profile_visibility(uid, config, True)
+
+
+@router.post('/paper/profiles/{uid}/restore')
+def restore_profile(uid: str, config=Depends(get_config)):
+    with paper_lock:
+        return set_profile_visibility(uid, config, False)
 
 
 @router.get('/paper/history')
@@ -348,6 +393,8 @@ def reload_stopped(cfg, config):
 def start_paper(uid: str, config=Depends(get_config)):
     with paper_lock:
         cfg, record = verify_profile(uid, config)
+        if profile_visibility(uid, config)['archived']:
+            raise HTTPException(409, 'Hãy hiện lại hồ sơ đã lưu trữ trước khi bật paper.')
         current = checked_native(config)
         if current['strategy'] != record['wrapper']:
             if native('GET', '/status', config):

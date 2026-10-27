@@ -15,9 +15,9 @@ interface DayPattern {
   day: string;
   day_index: number;
   trades: number;
-  avg_profit: number;
-  total_profit: number;
-  winrate: number;
+  avg_profit: number | null;
+  total_profit: number | null;
+  winrate: number | null;
 }
 
 const props = defineProps<{
@@ -44,8 +44,7 @@ const chartOptions = computed<EChartsOption>(() => {
   const days = sortedDays.value;
   const labels = days.map((d) => dayNames.value[d.day_index] ?? d.day);
   const profits = days.map((d) => d.total_profit);
-  const winrates = days.map((d) => d.winrate * 100);
-
+  const winrates = days.map((d) => (d.winrate != null ? d.winrate * 100 : null));
   return {
     tooltip: {
       trigger: 'axis',
@@ -56,12 +55,24 @@ const chartOptions = computed<EChartsOption>(() => {
         const ps = params as { dataIndex: number }[];
         if (!ps.length) return '';
         const d = days[ps[0].dataIndex];
+        const totText =
+          d.total_profit != null && Number.isFinite(d.total_profit)
+            ? `${d.total_profit >= 0 ? '+' : ''}${d.total_profit.toFixed(2)}`
+            : '—';
+        const wrText =
+          d.winrate != null && Number.isFinite(d.winrate)
+            ? `${(d.winrate * 100).toFixed(1)}%`
+            : '—';
+        const avgText =
+          d.avg_profit != null && Number.isFinite(d.avg_profit)
+            ? `${d.avg_profit >= 0 ? '+' : ''}${d.avg_profit.toFixed(2)}%`
+            : '—';
         return [
           `<b>${dayNames.value[d.day_index] ?? d.day}</b>`,
-          `${t('strategyDev.wdTotalProfit')}: <b>${d.total_profit >= 0 ? '+' : ''}${d.total_profit.toFixed(2)}</b>`,
-          `${t('strategyDev.wdWinRate')}: <b>${(d.winrate * 100).toFixed(1)}%</b>`,
+          `${t('strategyDev.wdTotalProfit')}: <b>${totText}</b>`,
+          `${t('strategyDev.wdWinRate')}: <b>${wrText}</b>`,
           `${t('strategyDev.wdTrades')}: <b>${d.trades}</b>`,
-          `${t('strategyDev.wdAvgProfit')}: <b>${d.avg_profit >= 0 ? '+' : ''}${d.avg_profit.toFixed(2)}%</b>`,
+          `${t('strategyDev.wdAvgProfit')}: <b>${avgText}</b>`,
         ].join('<br/>');
       },
     },
@@ -96,7 +107,7 @@ const chartOptions = computed<EChartsOption>(() => {
         yAxisIndex: 0,
         data: profits.map((v) => ({
           value: v,
-          itemStyle: { color: v >= 0 ? '#a6e3a1' : '#f38ba8' },
+          itemStyle: { color: v == null ? '#6c7086' : v >= 0 ? '#a6e3a1' : '#f38ba8' },
         })),
       },
       {
@@ -130,9 +141,16 @@ const chartOptions = computed<EChartsOption>(() => {
         <div class="text-xs" style="color: #a6adc8">{{ d.trades }} trades</div>
         <div
           class="text-xs font-medium"
-          :style="{ color: d.avg_profit >= 0 ? '#a6e3a1' : '#f38ba8' }"
+          :style="{
+            color:
+              d.avg_profit == null ? '#a6adc8' : d.avg_profit >= 0 ? '#a6e3a1' : '#f38ba8',
+          }"
         >
-          {{ d.avg_profit >= 0 ? '+' : '' }}{{ d.avg_profit.toFixed(2) }}%
+          {{
+            d.avg_profit == null
+              ? '—'
+              : `${d.avg_profit >= 0 ? '+' : ''}${d.avg_profit.toFixed(2)}%`
+          }}
         </div>
       </div>
     </div>

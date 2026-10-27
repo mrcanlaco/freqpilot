@@ -15,7 +15,8 @@ from freqtrade.rpc.api_server.api_local_strategies import Create, create
 from freqtrade.rpc.api_server.api_runs import digest
 from freqtrade.rpc.api_server.api_studio import write_check
 from freqtrade.rpc.api_server.api_paper import (bootstrap, PreparePaper, prepare_paper, paper_root,
-    profile_path, verify_profile, start_paper, stop_paper, checked_native, load_paper_base)
+    profile_path, verify_profile, start_paper, stop_paper, checked_native, load_paper_base,
+    profile_visibility, archive_profile, restore_profile, _paper_status)
 
 
 class PaperChecks(unittest.TestCase):
@@ -112,6 +113,34 @@ class PaperChecks(unittest.TestCase):
         with patch('freqtrade.rpc.api_server.api_paper.native') as api:
             with self.assertRaises(HTTPException): start_paper(profile['id'], self.config)
         api.assert_not_called()
+
+    def test_inactive_profile_can_be_hidden_and_restored_without_changing_frozen_inputs(self):
+        profile = self.prepared()
+        folder = profile_path(profile['id'], self.config)
+        before = digest(folder / 'record.json'), digest(folder / 'config.json')
+        with patch('freqtrade.rpc.api_server.api_paper.checked_native',
+                   return_value={'strategy': 'FPPaperIdle', 'state': 'stopped', 'dry_run': True}), \
+             patch('freqtrade.rpc.api_server.api_paper.native', return_value=[]), \
+             patch('freqtrade.rpc.api_server.api_paper.paper_history.observe'):
+            archived = archive_profile(profile['id'], self.config)
+            self.assertTrue(archived['archived'])
+            self.assertTrue(_paper_status(self.config)['profiles'][0]['archived'])
+            with self.assertRaises(HTTPException) as blocked:
+                start_paper(profile['id'], self.config)
+            self.assertEqual(blocked.exception.status_code, 409)
+        self.assertEqual((digest(folder / 'record.json'), digest(folder / 'config.json')), before)
+        self.assertEqual(verify_profile(profile['id'], self.config)[1]['id'], profile['id'])
+        self.assertFalse(restore_profile(profile['id'], self.config)['archived'])
+        self.assertFalse(profile_visibility(profile['id'], self.config)['archived'])
+
+    def test_worker_selected_profile_cannot_be_archived(self):
+        profile = self.prepared()
+        with patch('freqtrade.rpc.api_server.api_paper.checked_native',
+                   return_value={'strategy': profile['wrapper']}):
+            with self.assertRaises(HTTPException) as blocked:
+                archive_profile(profile['id'], self.config)
+        self.assertEqual(blocked.exception.status_code, 409)
+        self.assertFalse(profile_visibility(profile['id'], self.config)['archived'])
 
     def test_native_resolver_keeps_archived_parameters_for_the_paper_wrapper(self):
         from freqtrade.resolvers import StrategyResolver

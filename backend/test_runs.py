@@ -13,7 +13,8 @@ from fastapi import BackgroundTasks, HTTPException
 from freqtrade.rpc.api_server.api_local_strategies import Create, create
 from freqtrade.rpc.api_server.api_studio import Manifest, write_check
 from freqtrade.rpc.api_server.api_runs import (freeze, finish, start_run, list_runs,
-                                               verify_run, run_path, download_artifact, clear_local_imports)
+                                               verify_run, run_path, download_artifact,
+                                               clear_local_imports, ImportArtifactRequest, import_artifact)
 
 
 class FrozenRunChecks(unittest.TestCase):
@@ -125,6 +126,59 @@ class FrozenRunChecks(unittest.TestCase):
             self.assertNotIn('freqpilot_test_helper', sys.modules)
             self.assertTrue('freqtrade.rpc.api_server.api_runs' in sys.modules)
 
+
+    def test_import_artifact_restores_verified_bundle_into_clean_workspace_without_touching_library(self):
+        import base64
+        from freqtrade.rpc.api_server.api_replay import replay_preview
+        self.config.update(trading_mode='futures', margin_mode='isolated', stake_currency='USDT',
+                           pairlists=[{'method': 'StaticPairList'}], stoploss=-0.02)
+        p, record = self.make_snapshot()
+        self.native_result(p, record)
+        saved = json.loads((p / 'record.json').read_text())
+        raw_zip = (p / 'artifact.zip').read_bytes()
+        b64 = base64.b64encode(raw_zip).decode('ascii')
+
+        with tempfile.TemporaryDirectory() as clean_tmp:
+            clean_base = Path(clean_tmp)
+            (clean_base / 'strategies').mkdir()
+            (clean_base / 'data').mkdir()
+            clean_cfg = {**self.config, 'user_data_dir': clean_base, 'datadir': clean_base / 'data'}
+
+            # Wrong expected SHA256 must be rejected before writing anything
+            with self.assertRaises(HTTPException):
+                import_artifact(ImportArtifactRequest(archive_base64=b64, expected_sha256='0' * 64), clean_cfg)
+            self.assertFalse((clean_base / 'freqpilot/runs' / saved['id']).exists())
+
+            # Valid import succeeds, verifies, populates backtest_results, and can be replayed without overwriting library strategies
+            imported = import_artifact(
+                ImportArtifactRequest(archive_base64=b64, expected_sha256=saved['artifact_sha256']),
+                clean_cfg,
+            )
+            self.assertEqual(imported['id'], saved['id'])
+            self.assertEqual(imported['artifact_sha256'], saved['artifact_sha256'])
+            self.assertTrue(verify_run(saved['id'], clean_cfg)['valid'])
+            self.assertTrue((clean_base / 'backtest_results/freqpilot-test.zip').is_file())
+            self.assertFalse((clean_base / 'strategies/FrozenSample.py').exists())
+            preview = replay_preview(saved['id'], clean_cfg)
+            self.assertEqual(preview['strategy'], 'FrozenSample')
+            self.assertEqual(preview['artifact_sha256'], saved['artifact_sha256'])
+
+            # Tampered member bytes inside zip must be rejected
+            with ZipFile(p / 'artifact.zip') as zf:
+                entries = [(i, zf.read(i)) for i in zf.infolist()]
+            from io import BytesIO
+            tampered_buf = BytesIO()
+            with ZipFile(tampered_buf, 'w') as zf:
+                for info, data in entries:
+                    zf.writestr(info, b'corrupted' if info.filename == 'inputs/data/BTC.feather' else data)
+            tampered_b64 = base64.b64encode(tampered_buf.getvalue()).decode('ascii')
+            with tempfile.TemporaryDirectory() as clean_tmp2:
+                clean_base2 = Path(clean_tmp2)
+                (clean_base2 / 'strategies').mkdir()
+                (clean_base2 / 'data').mkdir()
+                clean_cfg2 = {**self.config, 'user_data_dir': clean_base2, 'datadir': clean_base2 / 'data'}
+                with self.assertRaises(HTTPException):
+                    import_artifact(ImportArtifactRequest(archive_base64=tampered_b64), clean_cfg2)
 
 if __name__ == '__main__':
     unittest.main()
