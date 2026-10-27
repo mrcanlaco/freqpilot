@@ -12,15 +12,22 @@ if (Test-Path -LiteralPath $taskEnvPath) { throw 'Env file already exists. Keep 
 if (Test-Path -LiteralPath $taskDataPath) { throw 'User data path already exists. Choose a new empty destination; initialization never overwrites data.' }
 if ($taskEnvPath -eq $taskDataPath -or $taskEnvPath.StartsWith($taskDataPath + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { throw 'Keep EnvFile outside the new user_data folder.' }
 $taskTemplateRoot = Join-Path $PSScriptRoot 'templates'
-$taskProvenance = Get-Content -LiteralPath (Join-Path $taskTemplateRoot 'PROVENANCE.json') -Raw | ConvertFrom-Json
+$taskProvenance = @(Get-Content -LiteralPath (Join-Path $taskTemplateRoot 'PROVENANCE.json') -Raw -Encoding utf8 | ConvertFrom-Json | ForEach-Object { $_ })
 foreach ($taskTemplate in $taskProvenance) {
     if ([string]::IsNullOrWhiteSpace($taskTemplate.description) -or !@($taskTemplate.tags).Count) { throw ('Missing template research description: ' + $taskTemplate.strategy) }
     $taskSource = Join-Path $taskTemplateRoot ($taskTemplate.strategy + '.py')
     if ((Get-FileHash -LiteralPath $taskSource -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskTemplate.installed_sha256) { throw ('Template hash mismatch: ' + $taskTemplate.strategy) }
 }
-$taskConfig = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'config.example.json') -Raw | ConvertFrom-Json
-foreach ($taskField in @('password', 'jwt_secret_key', 'ws_token')) {
-    $taskConfig.api_server.$taskField = [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32)).ToLowerInvariant()
+$taskConfig = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'config.example.json') -Raw -Encoding utf8 | ConvertFrom-Json
+$taskRng = [Security.Cryptography.RandomNumberGenerator]::Create()
+try {
+    foreach ($taskField in @('password', 'jwt_secret_key', 'ws_token')) {
+        $taskSecretBytes = [byte[]]::new(32)
+        $taskRng.GetBytes($taskSecretBytes)
+        $taskConfig.api_server.$taskField = [BitConverter]::ToString($taskSecretBytes).Replace('-', '').ToLowerInvariant()
+    }
+} finally {
+    $taskRng.Dispose()
 }
 # All checks above happen before touching the new destination or the existing setup.
 [IO.Directory]::CreateDirectory($taskDataPath) | Out-Null
@@ -36,7 +43,9 @@ Write-TaskNewFile (Join-Path $taskDataPath 'config.json') ($taskConfig | Convert
 foreach ($taskTemplate in $taskProvenance) {
     $taskName = $taskTemplate.strategy + '.py'
     [IO.File]::Copy((Join-Path $taskTemplateRoot $taskName), (Join-Path (Join-Path $taskDataPath 'strategies') $taskName), $false)
-    $taskResearch = @{name=$taskTemplate.strategy;idea=$taskTemplate.description;tags=@($taskTemplate.tags);is_favorite=$false;updated_at=(Get-Date).ToUniversalTime().ToString('o');notes=('Mẫu tham khảo: ' + $taskTemplate.source + '. Giữ quy tắc và giá trị gốc, chưa tối ưu. Cần backtest và kiểm định trước khi đánh giá; không có báo cáo hiệu suất nào được chép từ bộ khác.')}
+    $taskNotesPrefix = [regex]::Unescape('M\u1eabu tham kh\u1ea3o: ')
+    $taskNotesSuffix = [regex]::Unescape('. Gi\u1eef quy t\u1eafc v\u00e0 gi\u00e1 tr\u1ecb g\u1ed1c, ch\u01b0a t\u1ed1i \u01b0u. C\u1ea7n backtest v\u00e0 ki\u1ec3m \u0111\u1ecbnh tr\u01b0\u1edbc khi \u0111\u00e1nh gi\u00e1; kh\u00f4ng c\u00f3 b\u00e1o c\u00e1o hi\u1ec7u su\u1ea5t n\u00e0o \u0111\u01b0\u1ee3c ch\u00e9p t\u1eeb b\u1ed9 kh\u00e1c.')
+    $taskResearch = @{name=$taskTemplate.strategy;idea=$taskTemplate.description;tags=@($taskTemplate.tags);is_favorite=$false;updated_at=(Get-Date).ToUniversalTime().ToString('o');notes=($taskNotesPrefix + $taskTemplate.source + $taskNotesSuffix)}
     Write-TaskNewFile (Join-Path (Join-Path $taskDataPath 'freqpilot/research') ($taskTemplate.strategy + '.json')) ($taskResearch | ConvertTo-Json -Depth 6)
 }
 $taskAccess = @"

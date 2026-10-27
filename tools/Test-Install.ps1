@@ -24,8 +24,8 @@ $script:taskPlan = Get-FreqPilotComposePlan $taskWorkspace
 Assert-Task ($taskWorkspace.UserData -eq $taskData) 'Quoted/dollar/space path did not round-trip.'
 Assert-Task ($taskWorkspace.Config.dry_run -eq $true -and $taskWorkspace.Config.initial_state -eq 'stopped') 'New workspace must start paper-only and stopped.'
 Assert-Task (@(Get-ChildItem -LiteralPath (Join-Path $taskData 'strategies') -Filter '*.py').Count -eq 8) 'Expected eight existing templates.'
-$taskResearch = Get-Content -LiteralPath (Join-Path $taskData 'freqpilot/research/StarterFutures.json') -Raw | ConvertFrom-Json
-Assert-Task ($taskResearch.idea -match 'EMA20/50' -and @($taskResearch.tags) -contains 'Mẫu') 'Fresh samples need a useful description and tags.'
+$taskResearch = Get-Content -LiteralPath (Join-Path $taskData 'freqpilot/research/StarterFutures.json') -Raw -Encoding utf8 | ConvertFrom-Json
+Assert-Task ($taskResearch.idea -match 'EMA20/50' -and @($taskResearch.tags) -contains ([regex]::Unescape('M\u1eabu'))) 'Fresh samples need a useful description and tags.'
 Assert-Task ($taskResearch.is_favorite -eq $false -and !(Test-Path -LiteralPath (Join-Path $taskData 'freqpilot/runs'))) 'New workspace inherited favorites or performance reports.'
 $taskSecrets = @('password','jwt_secret_key','ws_token') | ForEach-Object { $taskWorkspace.Config.api_server.$_ }
 Assert-Task (@($taskSecrets | Sort-Object -Unique).Count -eq 3) 'Each local secret must be different.'

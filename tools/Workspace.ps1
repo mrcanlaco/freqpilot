@@ -5,7 +5,7 @@ function Read-FreqPilotWorkspace {
     $taskEnvPath = [IO.Path]::GetFullPath($EnvFile)
     if (!(Test-Path -LiteralPath $taskEnvPath -PathType Leaf)) { throw 'Workspace env file is missing. Run Initialize.ps1 for a new setup.' }
     $taskValues = @{}
-    foreach ($taskLine in Get-Content -LiteralPath $taskEnvPath) {
+    foreach ($taskLine in Get-Content -LiteralPath $taskEnvPath -Encoding utf8) {
         if ($taskLine -match '^\s*(FREQPILOT_[A-Z_]+)=(.*)$') {
             $taskKey = $Matches[1]; $taskValue = $Matches[2].Trim()
             if ($taskValues.ContainsKey($taskKey)) { throw ('Duplicate env entry: ' + $taskKey) }
@@ -19,12 +19,12 @@ function Read-FreqPilotWorkspace {
         if ($taskProcessValue) { $taskValues[$taskKey] = $taskProcessValue }
     }
     if (!$taskValues.FREQPILOT_USER_DATA) { throw 'FREQPILOT_USER_DATA must point to the private user_data folder.' }
-    $taskDataPath = [IO.Path]::GetFullPath($taskValues.FREQPILOT_USER_DATA, $RepoRoot)
+    $taskDataPath = if ([IO.Path]::IsPathRooted($taskValues.FREQPILOT_USER_DATA)) { [IO.Path]::GetFullPath($taskValues.FREQPILOT_USER_DATA) } else { [IO.Path]::GetFullPath((Join-Path $RepoRoot $taskValues.FREQPILOT_USER_DATA)) }
     $taskProject = if ($taskValues.FREQPILOT_PROJECT_NAME) { $taskValues.FREQPILOT_PROJECT_NAME } else { 'codex-freqtrade' }
     if ($taskProject -notmatch '^[a-z0-9][a-z0-9_-]{1,48}$') { throw 'Invalid FREQPILOT_PROJECT_NAME.' }
     if ($IdentityOnly) { return [pscustomobject]@{ RepoRoot=$RepoRoot; EnvFile=$taskEnvPath; UserData=$taskDataPath; Project=$taskProject; Config=$null } }
     $taskConfigPath = Join-Path $taskDataPath 'config.json'
-    $taskConfig = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
+    $taskConfig = Get-Content -LiteralPath $taskConfigPath -Raw -Encoding utf8 | ConvertFrom-Json
     if ($taskConfig.dry_run -ne $true -or $taskConfig.exchange.key -or $taskConfig.exchange.secret -or $taskConfig.exchange.password) { throw 'Only dry_run=true with no exchange trading credentials is supported.' }
     if ($taskConfig.trading_mode -ne 'futures' -or $taskConfig.margin_mode -ne 'isolated' -or $taskConfig.exchange.name -ne 'binance' -or $taskConfig.stake_currency -ne 'USDT') { throw 'This workspace requires Binance USDT-M Futures isolated.' }
     $taskPairs = @($taskConfig.exchange.pair_whitelist)
@@ -44,7 +44,7 @@ function Assert-FreqPilotProject {
     $taskMountSets = @(& docker inspect --format '{{json .Mounts}}' @taskIds)
     if ($LASTEXITCODE -ne 0) { throw 'Could not inspect existing workspace mounts.' }
     foreach ($taskMountSet in $taskMountSets) {
-        $taskMounts = @($taskMountSet | ConvertFrom-Json)
+        $taskMounts = @($taskMountSet | ConvertFrom-Json | ForEach-Object { $_ })
         $taskDataMounts = @($taskMounts | Where-Object Destination -eq '/freqtrade/user_data')
         if ($taskDataMounts.Count -ne 1 -or [IO.Path]::GetFullPath($taskDataMounts[0].Source) -ne $Workspace.UserData) { throw 'This project name already belongs to different user_data. Choose another ProjectName; existing services were not changed.' }
     }
