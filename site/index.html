@@ -3,157 +3,495 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FreqPilot (freqpilot.dev) — Không gian Nghiên cứu & Kiểm định Định lượng trên Freqtrade 2026.9 Chính thức</title>
-  <meta name="description" content="Từ ý tưởng đến chiến lược có bằng chứng SHA-256 trên 100% engine Freqtrade 2026.9 chính thức: Kiểm toán dữ liệu, Lookahead/Recursive, Ma trận Độ nhạy 2D, Walk-Forward Holdout niêm phong và Đối chiếu Paper 1x." />
+  <title>FreqPilot (freqpilot.dev) — Visual Quantitative Strategy Studio on Official Freqtrade 2026.9</title>
+  <meta name="description" content="From Strategy Idea to SHA-256 Frozen Evidence on Official Freqtrade 2026.9: Lookahead/Recursive Audit, 2D Sensitivity Matrix, Walk-Forward Holdout & 1x Paper Reconciliation." />
   <link rel="canonical" href="https://freqpilot.dev/" />
-  <meta property="og:title" content="FreqPilot — Quantitative Research Studio for Official Freqtrade 2026.9" />
-  <meta property="og:description" content="Đóng băng bằng chứng SHA-256, Ma trận Độ nhạy 2D, Walk-Forward Holdout niêm phong & Đối chiếu Paper 1x trên 100% Freqtrade 2026.9 chính thức." />
+  <meta property="og:title" content="FreqPilot — Visual Quantitative Research Studio for Official Freqtrade 2026.9" />
+  <meta property="og:description" content="Don't trust backtest screenshots. Inspect SHA-256 frozen bundles, 2D sensitivity heatmaps, WFA holdout checks, and 1x paper reconciliation." />
   <meta property="og:url" content="https://freqpilot.dev/" />
   <meta property="og:type" content="website" />
   <style>
     :root {
-      --bg: #0b1114;
-      --bg-1: #10191d;
-      --bg-2: #162329;
-      --fg: #ecf4f6;
-      --fg-2: #a9bec4;
-      --fg-3: #6f878f;
-      --line: #1f3138;
-      --line-2: #2b434d;
-      --accent: #38d39f;
-      --accent-dim: rgba(56, 211, 159, 0.14);
-      --warn: #e7bb72;
-      --neg: #f29b9b;
-      --pos: #79dfb3;
-      --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --mono: "JetBrains Mono", Consolas, monospace;
+      --bg-0: #05080f;
+      --bg-1: #0b101b;
+      --bg-2: #111827;
+      --bg-3: #1a2336;
+      --fg: #f3f6fc;
+      --fg-2: #9ca9c4;
+      --fg-3: #64748b;
+      --line: rgba(148, 163, 184, 0.14);
+      --line-2: rgba(148, 163, 184, 0.25);
+      --accent: #38bdf8;
+      --accent-2: #3b82f6;
+      --pos: #10b981;
+      --pos-bright: #34d399;
+      --warn: #f59e0b;
+      --neg: #f43f5e;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
-    * { box-sizing: border-box; text-align: left; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: var(--bg);
+      background-color: var(--bg-0);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.16), transparent),
+        radial-gradient(ellipse 60% 40% at 85% 20%, rgba(16, 185, 129, 0.10), transparent),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
       color: var(--fg);
       font-family: var(--font);
-      line-height: 1.6;
-      font-size: 14.5px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
     }
     a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    code, pre, .mono { font-family: var(--mono); }
     .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-    header {
+
+    /* RoboQuant-style Floating Pill Header */
+    .nav-shell {
       position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(11, 17, 20, 0.88);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--line);
+      top: 16px;
+      z-index: 50;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
     }
-    .nav {
+    .nav-pill {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
-      gap: 16px;
+      gap: 20px;
+      width: 100%;
+      max-width: 1120px;
+      padding: 10px 16px;
+      background: rgba(11, 16, 27, 0.82);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 18px;
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.02em;
       color: var(--fg);
     }
-    .brand-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent);
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--pos));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #041019;
+      font-weight: 900;
+      font-size: 14px;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
     }
-    .nav-links { display: flex; gap: 20px; align-items: center; font-size: 13.5px; color: var(--fg-2); }
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+    .nav-links a { color: var(--fg-2); transition: color .15s; }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .lang-select {
+      background: var(--bg-2);
+      color: var(--fg);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 16px;
-      border-radius: 8px;
+      padding: 9px 18px;
+      border-radius: 999px;
       border: 1px solid var(--line-2);
       background: var(--bg-2);
       color: var(--fg);
+      font-size: 13.5px;
       font-weight: 600;
-      font-size: 13px;
       cursor: pointer;
-      text-decoration: none !important;
+      transition: all .18s;
     }
+    .btn:hover { border-color: var(--accent); transform: translateY(-1px); }
     .btn.primary {
-      background: #1b6a5c;
-      border-color: #268b77;
-      color: #f2fff9;
+      background: linear-gradient(135deg, #2563eb, #0ea5e9);
+      border-color: rgba(56, 189, 248, 0.6);
+      color: #fff;
+      box-shadow: 0 0 24px rgba(14, 165, 233, 0.38);
     }
-    .btn.primary:hover { background: #217d6d; }
-    .hero { padding: 64px 0 44px; border-bottom: 1px solid var(--line); }
-    .eyebrow {
-      display: inline-block;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: var(--accent-dim);
-      padding: 5px 11px;
+    .btn.primary:hover { filter: brightness(1.1); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 56px 0 36px;
+    }
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
       border-radius: 999px;
-      margin-bottom: 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--pos-bright);
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 20px;
     }
     h1 {
-      font-size: clamp(28px, 4vw, 44px);
-      line-height: 1.18;
-      margin: 0 0 16px;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      margin: 0 auto 18px;
       max-width: 920px;
+      background: linear-gradient(180deg, #ffffff 0%, #b4c6e7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .lead {
-      font-size: 16.5px;
+    .hero-sub {
+      font-size: 17.5px;
       color: var(--fg-2);
-      max-width: 820px;
-      margin: 0 0 26px;
+      max-width: 760px;
+      margin: 0 auto 28px;
     }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
-    .kpi-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    .hero-actions {
+      display: flex;
+      justify-content: center;
       gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
     }
-    .kpi-card {
-      background: var(--bg-1);
+    .hero-actions .btn { padding: 12px 24px; font-size: 14.5px; }
+
+    /* Ecosystem Logo / Pill Strip */
+    .eco-strip {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .eco-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.75);
       border: 1px solid var(--line);
-      border-radius: 11px;
+      font-size: 12.5px;
+      color: var(--fg-2);
+      font-weight: 500;
+    }
+    .eco-chip b { color: var(--fg); }
+
+    /* Interactive Studio Showcase Window (RoboQuant Results Card Style) */
+    .studio-window {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.95), rgba(9, 13, 22, 0.98));
+      border: 1px solid var(--line-2);
+      border-radius: 18px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(56, 189, 248, 0.08);
+      overflow: hidden;
+      text-align: left;
+      margin-bottom: 64px;
+    }
+    .win-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 18px;
+      background: rgba(5, 8, 15, 0.8);
+      border-bottom: 1px solid var(--line);
+    }
+    .win-dots { display: flex; gap: 7px; align-items: center; }
+    .win-dots .r, .win-dots .y, .win-dots .g { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .win-dots .r { background: #ef4444; }
+    .win-dots .y { background: #f59e0b; }
+    .win-dots .g { background: #10b981; }
+    .win-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--fg-2);
+      margin-left: 6px;
+    }
+    .win-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .win-tab {
+      padding: 6px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--bg-2);
+      color: var(--fg-2);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .win-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+    .win-body { padding: 22px; }
+    .win-pane { display: none; }
+    .win-pane.active { display: block; }
+
+    /* Strategy Switcher inside Pane 1 */
+    .strat-switcher {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .strat-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .strat-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-1);
+      color: var(--fg-2);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .strat-btn.active {
+      border-color: var(--pos-bright);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--fg);
+    }
+    .badge-pos {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.18);
+      color: var(--pos-bright);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    /* RoboQuant-style 10-Metric Grid */
+    .rq-metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .rq-metric {
+      background: rgba(11, 16, 27, 0.75);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .rq-metric small {
+      display: block;
+      font-size: 11.5px;
+      color: var(--fg-3);
+      margin-bottom: 4px;
+    }
+    .rq-metric b {
+      font-family: var(--mono);
+      font-size: 19px;
+      font-weight: 750;
+    }
+    .pos { color: var(--pos-bright); }
+    .neg { color: var(--neg); }
+    .warn { color: var(--warn); }
+
+    /* SVG Charts Container */
+    .chart-card {
+      background: #070b13;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: var(--fg-2);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    /* Monthly Returns Heatmap (RoboQuant Style) */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .hm-cell {
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+      border: 1px solid var(--line);
+      font-family: var(--mono);
+    }
+    .hm-cell small { display: block; font-size: 11px; color: var(--fg-2); margin-bottom: 4px; }
+    .hm-cell b { font-size: 13.5px; }
+    .hm-pos-1 { background: rgba(16, 185, 129, 0.14); border-color: rgba(16, 185, 129, 0.35); color: #6ee7b7; }
+    .hm-pos-2 { background: rgba(16, 185, 129, 0.28); border-color: rgba(16, 185, 129, 0.55); color: #a7f3d0; }
+    .hm-neg { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.35); color: #fda4af; }
+    .hm-neutral { background: rgba(148, 163, 184, 0.06); color: var(--fg-3); }
+
+    /* Section Headers */
+    section { padding: 52px 0; border-top: 1px solid var(--line); }
+    .sec-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    h2 {
+      font-size: clamp(24px, 3.2vw, 36px);
+      letter-spacing: -0.025em;
+      margin: 0 0 10px;
+    }
+    .sec-sub {
+      color: var(--fg-2);
+      font-size: 15.5px;
+      max-width: 780px;
+      margin: 0 0 28px;
+    }
+
+    /* Bento Grid (2x2 Visual Cards) */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .bento-card {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(11, 16, 27, 0.95));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .bento-card h3 { margin: 0 0 6px; font-size: 19px; }
+    .bento-card p { margin: 0; color: var(--fg-2); font-size: 13.5px; }
+    .bento-visual {
+      background: #060911;
+      border: 1px solid var(--line);
+      border-radius: 12px;
       padding: 16px;
     }
-    .kpi-card small { color: var(--fg-3); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .kpi-card b { display: block; font-size: 22px; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
-    .kpi-card span { font-size: 12px; color: var(--fg-2); }
-    section { padding: 52px 0; border-bottom: 1px solid var(--line); }
-    h2 { font-size: 25px; margin: 0 0 8px; }
-    .sec-sub { color: var(--fg-2); margin: 0 0 24px; max-width: 820px; }
-    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+
+    /* Bar Meter inside Bento & Tables */
+    .bar-row {
+      display: grid;
+      grid-template-columns: 165px 1fr 90px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      margin: 8px 0;
+    }
+    .bar-track {
+      height: 10px;
+      background: var(--bg-2);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .bar-fill { height: 100%; border-radius: 999px; }
+
+    /* Sensitivity 3x3 Visual Grid */
+    .sens-grid {
+      display: grid;
+      grid-template-columns: 100px repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+    }
+    .sens-hdr {
+      background: var(--bg-2);
+      padding: 10px;
+      border-radius: 8px;
+      color: var(--fg-2);
+      font-weight: 600;
+      text-align: center;
+    }
+    .sens-cell {
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+    .sens-cell.base {
+      background: rgba(16, 185, 129, 0.26);
+      border: 2px solid var(--pos-bright);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+    }
+    .sens-cell b { display: block; font-size: 15px; color: var(--pos-bright); }
+    .sens-cell small { color: var(--fg-2); font-size: 11px; }
+
+    /* Visual Leaderboard Table */
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .chip {
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: 999px;
       border: 1px solid var(--line-2);
       background: var(--bg-1);
       color: var(--fg-2);
       font-size: 12.5px;
+      font-weight: 600;
       cursor: pointer;
     }
     .chip.active {
+      background: rgba(56, 189, 248, 0.16);
       border-color: var(--accent);
-      background: var(--accent-dim);
-      color: var(--accent);
-      font-weight: 600;
+      color: var(--fg);
     }
     .table-wrap {
       overflow-x: auto;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 14px;
       background: var(--bg-1);
     }
     table {
@@ -163,7 +501,8 @@
       font-variant-numeric: tabular-nums;
     }
     th, td {
-      padding: 11px 14px;
+      padding: 12px 14px;
+      text-align: left;
       border-bottom: 1px solid var(--line);
       white-space: nowrap;
     }
@@ -173,136 +512,444 @@
       font-weight: 600;
       font-size: 11.5px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
-    .pos { color: var(--pos); font-weight: 600; }
-    .neg { color: var(--neg); font-weight: 600; }
-    .warn { color: var(--warn); }
+    .pnl-visual {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 190px;
+    }
+    .pnl-bar-wrap {
+      width: 84px;
+      height: 8px;
+      background: var(--bg-3);
+      border-radius: 999px;
+      overflow: hidden;
+    }
     .pill {
       display: inline-block;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 600;
       background: var(--bg-2);
       border: 1px solid var(--line-2);
     }
-    .pill.pass { color: var(--pos); border-color: #268b77; background: rgba(38, 139, 119, 0.16); }
-    .pill.drop { color: var(--neg); border-color: #7a353b; background: rgba(122, 53, 59, 0.2); }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .card {
+    .pill.pass { color: var(--pos-bright); border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.12); }
+    .pill.drop { color: #fda4af; border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.12); }
+
+    /* Screenshot Gallery */
+    .shot-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .shot-img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--line-2);
+      display: block;
+    }
+
+    /* Pricing */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .price-card {
       background: var(--bg-1);
       border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .card h3 { margin: 0 0 8px; font-size: 17px; }
-    .pivot-table td, .pivot-table th { border: 1px solid var(--line); padding: 10px; }
-    .pivot-base { outline: 1.5px solid var(--accent); outline-offset: -1.5px; background: rgba(56, 211, 159, 0.08); }
-    pre {
-      background: #070b0d;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 14px;
-      font-family: var(--mono);
-      font-size: 12.5px;
-      overflow-x: auto;
-      color: #d6e8ee;
-    }
-    .price-card {
+      border-radius: 16px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: var(--bg-1);
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      padding: 24px;
     }
     .price-card.featured {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.09), var(--bg-1));
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
     }
-    .price-tag { font-size: 28px; font-weight: 700; margin: 10px 0; }
-    .price-list { padding-left: 18px; color: var(--fg-2); margin: 12px 0 22px; }
-    .price-list li { margin: 7px 0; }
+    .price-tag { font-size: 34px; font-weight: 800; margin: 10px 0; font-family: var(--mono); }
+    .price-list { padding-left: 18px; margin: 12px 0 22px; color: var(--fg-2); font-size: 13.5px; }
+    .price-list li { margin: 8px 0; }
+
+    pre {
+      background: #060911;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 12.5px;
+      color: #dbeafe;
+    }
     .notice {
       margin-top: 20px;
-      padding: 13px 16px;
-      border-left: 3px solid var(--accent);
-      background: var(--bg-1);
-      border-radius: 7px;
-      font-size: 12.5px;
-      color: var(--fg-2);
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(17, 24, 39, 0.6);
+      font-size: 12px;
+      color: var(--fg-3);
     }
-    footer { padding: 36px 0 56px; color: var(--fg-3); font-size: 12.5px; }
-    @media (max-width: 900px) {
-      .kpi-strip, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    footer {
+      padding: 36px 0 56px;
+      border-top: 1px solid var(--line);
+      color: var(--fg-3);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 960px) {
+      .rq-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .heatmap-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .bento-grid, .grid-3 { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand"><span class="brand-dot"></span> FreqPilot <small style="font-weight:500;color:var(--fg-3);font-size:12px">for Official Freqtrade 2026.9</small></div>
+  <!-- RoboQuant-style Floating Pill Header -->
+  <div class="nav-shell">
+    <header class="nav-pill">
+      <div class="brand">
+        <span class="brand-icon">FP</span>
+        <span>FreqPilot</span>
+        <span class="brand-tag">Freqtrade 2026.9</span>
+      </div>
       <nav class="nav-links">
-        <a href="#audit" data-i18n="nav_audit">Bảng Kiểm Toán 10 Chiến Lược</a>
-        <a href="#proof" data-i18n="nav_proof">Bằng Chứng Độ Nhạy & Holdout</a>
-        <a href="#dossiers" data-i18n="nav_dossiers">Gói Hồ Sơ Dossier (.zip)</a>
-        <a href="#install" data-i18n="nav_install">Cài Đặt 3 Bước</a>
-        <a href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="#interactive-studio" data-i18n="nav_studio">Interactive Studio</a>
+        <a href="#firewall" data-i18n="nav_firewall">4-Gate Firewall</a>
+        <a href="#audit" data-i18n="nav_audit">10-Strategy Leaderboard</a>
+        <a href="#dossiers" data-i18n="nav_dossiers">Verified Dossiers (.zip)</a>
+        <a href="#install" data-i18n="nav_install">3-Step Quickstart</a>
       </nav>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <select id="lang-select" aria-label="Language" onchange="setSiteLang(this.value)" style="background:var(--bg-2);color:var(--fg);border:1px solid var(--line-2);border-radius:7px;padding:7px 10px;font:inherit;font-size:12.5px;cursor:pointer">
+      <div class="nav-right">
+        <select id="lang-select" class="lang-select" aria-label="Language" onchange="setSiteLang(this.value)">
           <option value="vi">🇻🇳 Tiếng Việt</option>
           <option value="en">🇬🇧 English</option>
           <option value="zh">🇨🇳 简体中文</option>
           <option value="ru">🇷🇺 Русский</option>
           <option value="ko">🇰🇷 한국어</option>
         </select>
-        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub →</a>
+        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
-    </div>
-  </header>
+    </header>
+  </div>
 
   <main class="wrap">
+    <!-- Hero -->
     <div class="hero">
-      <span class="eyebrow">ZERO-FORK QUANTITATIVE RESEARCH STUDIO · GPL-3.0</span>
-      <h1 data-i18n="hero_title">Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.</h1>
-      <p class="lead" data-i18n="hero_lead">
-        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout tách riêng và Đối chiếu Paper 1x thực tế.
+      <div class="eyebrow-pill" data-i18n="hero_badge">
+        ● 18 Chiến Lược Công Khai Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Futures Đóng Băng →
+      </div>
+      <h1 data-i18n="hero_title">Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.</h1>
+      <p class="hero-sub" data-i18n="hero_lead">
+        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm định lượng trực quan: Biểu đồ Equity &amp; Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Đối chiếu lệnh Paper 1x.
       </p>
       <div class="hero-actions">
-        <a class="btn primary" href="#audit" data-i18n="hero_cta_audit">Xem Bảng Kiểm Toán 10 Chiến Lược</a>
-        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở trên GitHub ↗</a>
+        <a class="btn primary" href="#interactive-studio" data-i18n="hero_cta_audit">Trải Nghiệm Bảng Kết Quả Trực Quan ↓</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở GitHub (GPL-3.0) ↗</a>
       </div>
-      <div class="kpi-strip">
-        <div class="kpi-card">
-          <small>Engine Thực Thi</small>
-          <b>Freqtrade 2026.9</b>
-          <span>100% chính thức · Không ép cài bản fork</span>
+
+      <!-- Ecosystem Badges -->
+      <div class="eco-strip">
+        <div class="eco-chip">⚡ <b>Freqtrade 2026.9</b> Official Engine</div>
+        <div class="eco-chip">🛡️ <b>1x Isolated</b> BTC &amp; ETH Futures</div>
+        <div class="eco-chip">🔐 <b>SHA-256</b> Reproducible ZIP Bundles</div>
+        <div class="eco-chip">🤖 <b>Codex / Claude</b> Evidence Prompt</div>
+        <div class="eco-chip">✅ <b>1,879 Tests</b> Automated Suite</div>
+      </div>
+
+      <!-- Interactive Studio Window (RoboQuant Results Card + Live Studio Tabs) -->
+      <div id="interactive-studio" class="studio-window">
+        <div class="win-bar">
+          <div class="win-dots">
+            <span class="r"></span><span class="y"></span><span class="g"></span>
+            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e</span>
+          </div>
+          <div class="win-tabs">
+            <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn &amp; Drawdown</button>
+            <button class="win-tab" onclick="switchStudioTab('matrix', this)" data-i18n="tab_matrix">🎛️ Ma Trận 2D &amp; WFA Holdout</button>
+            <button class="win-tab" onclick="switchStudioTab('screenshots', this)" data-i18n="tab_shots">🖥️ Giao Diện Thực Tế (/studio)</button>
+            <button class="win-tab" onclick="switchStudioTab('code', this)" data-i18n="tab_code">🐍 Mã Chiến Lược &amp; AI Prompt</button>
+          </div>
         </div>
-        <div class="kpi-card">
-          <small>Chiến Lược Đã Kiểm Toán</small>
-          <b>18 Chiến Lược</b>
-          <span>Từ 177 job quét tự động & mẫu công khai</span>
-        </div>
-        <div class="kpi-card">
-          <small>Cửa Sổ Thẩm Định Dài Hạn</small>
-          <b>6,7 Tháng (5m)</b>
-          <span>75.690 nến 5m/cặp + Mark 1h + Funding 8h</span>
-        </div>
-        <div class="kpi-card">
-          <small>Kiểm Tra Tự Động</small>
-          <b>1.878 Tests Pass</b>
-          <span>1.745 UI tests + 133 Backend container tests</span>
+
+        <div class="win-body">
+          <!-- PANE 1: RoboQuant-style Interactive Equity + Drawdown + Monthly Heatmap -->
+          <div id="pane-equity" class="win-pane active">
+            <div class="strat-switcher">
+              <div class="strat-btns">
+                <button class="strat-btn active" onclick="selectHeroStrategy('diki', this)">
+                  <span>#1 Cân bằng &amp; Đủ mẫu (30 lệnh): <b>DikibagastEmaRsi1h</b></span>
+                  <span class="badge-pos">+44.23 USDT · DD 0.73%</span>
+                </button>
+                <button class="strat-btn" onclick="selectHeroStrategy('rocket', this)">
+                  <span>#2 Lợi nhuận cao nhất: <b>RocketHunterSma501h</b></span>
+                  <span class="badge-pos">+61.83 USDT · PF 18.29</span>
+                </button>
+              </div>
+              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">run_id: 8ebeb7170c · lookahead: false · recursive: ok</span>
+            </div>
+
+            <!-- 10 KPI Cards -->
+            <div class="rq-metrics">
+              <div class="rq-metric"><small>Net P&amp;L (USDT)</small><b class="pos" id="m-pnl">+44.23 USDT</b></div>
+              <div class="rq-metric"><small>Return (%)</small><b class="pos" id="m-ret">+4.42%</b></div>
+              <div class="rq-metric"><small>Total Trades</small><b id="m-trades">30</b></div>
+              <div class="rq-metric"><small>Win Rate</small><b class="pos" id="m-win">70.0% (21W/9L)</b></div>
+              <div class="rq-metric"><small>Profit Factor</small><b class="pos" id="m-pf">3.96</b></div>
+              <div class="rq-metric"><small>Max Drawdown</small><b class="pos" id="m-dd">-0.73%</b></div>
+              <div class="rq-metric"><small>Expectancy / Trade</small><b class="pos" id="m-exp">+1.47 USDT</b></div>
+              <div class="rq-metric"><small>Lookahead Bias</small><b class="pos">0 (Verified)</b></div>
+              <div class="rq-metric"><small>Recursive Bias</small><b class="pos">0 (Verified)</b></div>
+              <div class="rq-metric"><small>Execution Mode</small><b>1x Isolated · 5m</b></div>
+            </div>
+
+            <!-- Cumulative PnL SVG Chart -->
+            <div class="chart-card">
+              <div class="chart-head">
+                <span>📈 Cumulative Closed-Trade P&amp;L (USDT · 2026-04-01 → 2026-10-21)</span>
+                <span class="pos mono" id="chart-pnl-badge">+44.23 USDT</span>
+              </div>
+              <svg id="svg-equity" viewBox="0 0 960 200" width="100%" height="200" style="display:block;overflow:visible"></svg>
+            </div>
+
+            <!-- Underwater Drawdown SVG Chart -->
+            <div class="chart-card">
+              <div class="chart-head">
+                <span>🌊 Underwater Drawdown (% of Account Equity)</span>
+                <span class="neg mono" id="chart-dd-badge">Max DD: -0.73%</span>
+              </div>
+              <svg id="svg-drawdown" viewBox="0 0 960 110" width="100%" height="110" style="display:block;overflow:visible"></svg>
+            </div>
+
+            <!-- Monthly Returns Heatmap -->
+            <div class="chart-card" style="margin-bottom:0">
+              <div class="chart-head">
+                <span>🗓️ Monthly Closed-Trade P&amp;L Heatmap (2026 · USDT)</span>
+                <span class="mono" style="color:var(--fg-3)">75,690 5m bars + 8h funding</span>
+              </div>
+              <div id="monthly-heatmap" class="heatmap-grid"></div>
+            </div>
+          </div>
+
+          <!-- PANE 2: 2D Sensitivity Heatmap & WFA Holdout Visual -->
+          <div id="pane-matrix" class="win-pane">
+            <div class="bento-grid">
+              <div>
+                <h3 style="margin:0 0 6px">🎛️ Ma Trận Độ Nhạy 2D (`d28b58b598` — 9/9 Ô Đều Dương)</h3>
+                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
+                  9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`): vùng lân cận `ema_short × rsi_offset` đều sinh lời dương từ `+26.21` đến `+46.09 USDT` với MaxDD `≤ 1.52%`.
+                </p>
+                <div class="sens-grid">
+                  <div class="sens-hdr">ema \ rsi</div>
+                  <div class="sens-hdr">rsi_off = 8</div>
+                  <div class="sens-hdr">rsi_off = 10</div>
+                  <div class="sens-hdr">rsi_off = 12</div>
+
+                  <div class="sens-hdr">ema = 45</div>
+                  <div class="sens-cell"><b>+39.68 USDT</b><small>40 lệnh · DD 1.52%</small></div>
+                  <div class="sens-cell"><b>+44.93 USDT</b><small>38 lệnh · DD 0.99%</small></div>
+                  <div class="sens-cell"><b>+42.26 USDT</b><small>38 lệnh · DD 1.00%</small></div>
+
+                  <div class="sens-hdr">ema = 50</div>
+                  <div class="sens-cell"><b>+46.09 USDT</b><small>32 lệnh · DD 0.84%</small></div>
+                  <div class="sens-cell base"><b>+44.23 USDT ★</b><small>Baseline · 30 lệnh · DD 0.73%</small></div>
+                  <div class="sens-cell"><b>+44.62 USDT</b><small>32 lệnh · DD 0.65%</small></div>
+
+                  <div class="sens-hdr">ema = 55</div>
+                  <div class="sens-cell"><b>+35.82 USDT</b><small>23 lệnh · DD 0.41%</small></div>
+                  <div class="sens-cell"><b>+26.16 USDT</b><small>20 lệnh · DD 0.37%</small></div>
+                  <div class="sens-cell"><b>+26.21 USDT</b><small>20 lệnh · DD 0.33%</small></div>
+                </div>
+              </div>
+
+              <div>
+                <h3 style="margin:0 0 6px">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`94b955e45b`)</h3>
+                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
+                  Kiểm chứng chống Overfit: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):
+                </p>
+                <div class="bento-visual">
+                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:10px;font-weight:600">Timeline Chia Cửa Sổ Walk-Forward:</div>
+                  <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:6px;margin-bottom:18px;font-family:var(--mono);font-size:11.5px;text-align:center">
+                    <div style="background:rgba(56,189,248,0.16);border:1px solid var(--accent);padding:8px;border-radius:8px;color:var(--fg)">Train (90d)<br/><small>Hyperopt 12 epochs</small></div>
+                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (30d)<br/><small>Test độc lập</small></div>
+                    <div style="background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);padding:8px;border-radius:8px;color:var(--pos-bright)">Holdout (35d)<br/><small>2026-09-16→10-21</small></div>
+                  </div>
+
+                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:6px;font-weight:600">Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):</div>
+                  <div class="bar-row">
+                    <span><b>Baseline (Untuned)</b></span>
+                    <div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--pos-bright)"></div></div>
+                    <b class="pos mono">+9.16 USDT</b>
+                  </div>
+                  <div class="bar-row">
+                    <span>Hyperopt Candidate</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--neg)"></div></div>
+                    <b class="neg mono">-3.46 USDT</b>
+                  </div>
+
+                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-06-30 → 2026-07-30`):</div>
+                  <div class="bar-row">
+                    <span><b>Baseline (Untuned)</b></span>
+                    <div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--pos-bright)"></div></div>
+                    <b class="pos mono">+13.18 USDT</b>
+                  </div>
+                  <div class="bar-row">
+                    <span>Hyperopt Candidate</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:48%;background:var(--accent)"></div></div>
+                    <b class="pos mono">+6.78 USDT</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 3: Real Studio Screenshots -->
+          <div id="pane-screenshots" class="win-pane">
+            <div class="shot-tabs">
+              <button class="chip active" onclick="switchScreenshot('assets/studio-library.webp', this)">1. Thư Viện 26 Chiến Lược &amp; Bộ Lọc Đa Chiều</button>
+              <button class="chip" onclick="switchScreenshot('assets/studio-results.webp', this)">2. Bảng Kết Quả &amp; Context Strip 4 Thẻ</button>
+              <button class="chip" onclick="switchScreenshot('assets/studio-sensitivity.webp', this)">3. Không Gian Ma Trận Độ Nhạy 2D</button>
+              <button class="chip" onclick="switchScreenshot('assets/studio-wfa.webp', this)">4. Không Gian Walk-Forward &amp; Holdout</button>
+            </div>
+            <img id="studio-shot-img" class="shot-img" src="assets/studio-library.webp" alt="FreqPilot Studio Live Screenshot" />
+          </div>
+
+          <!-- PANE 4: Real Python Strategy Code & Evidence Codex Prompt -->
+          <div id="pane-code" class="win-pane">
+            <div class="bento-grid">
+              <div>
+                <h3 style="margin:0 0 8px">🐍 Mã Nguồn Chuẩn `IStrategy` Không Lookahead</h3>
+                <pre style="margin:0">class DikibagastEmaRsi1h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    informative_timeframe = "1d"
+    can_short = False
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        # Nối khung 1d an toàn qua merge_informative_pair (chống lookahead bias)
+        inf = self.dp.get_pair_dataframe(pair=metadata["pair"], timeframe="1d")
+        inf["ema_short"] = ta.EMA(inf, timeperiod=self.ema_short.value)
+        inf["ema_long"] = ta.EMA(inf, timeperiod=self.ema_long.value)
+        dataframe = merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)
+        return dataframe
+
+    def custom_exit(self, pair: str, trade: Trade, current_time: datetime, ...):
+        # Thoát lệnh động theo 2.0 * ATR(14) + Separation Guard 21 nến
+        if current_profit > atr_threshold:
+            return "atr_trailing_exit"</pre>
+              </div>
+              <div>
+                <h3 style="margin:0 0 8px">🤖 Prompt Bằng Chứng 1 Chạm Cho Codex / Claude</h3>
+                <pre style="margin:0">Trong dự án FreqPilot, hãy triển khai/chỉnh sửa chiến lược DikibagastEmaRsi1h
+(mã b82e4ae101, khung 1h) cho BTC/ETH Binance Futures isolated 1x,
+chỉ backtest và paper. Giữ engine Freqtrade 2026.9 chính thức.
+
+Bằng chứng hiện tại trên máy:
+- Gói backtest gần nhất: 8ebeb7170c · khoảng 20260401-20261021
+  · +44.23 USDT · 30 lệnh (khớp mã hiện tại)
+- Kiểm định gần nhất: lookahead · success (has_bias=False)
+- Kiểm định đệ quy: recursive · success (has_bias=False)</pre>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Section 1: 2x2 Visual Bento Grid (4-Gate Anti-Curve-Fitting Firewall) -->
+    <section id="firewall">
+      <span class="sec-eyebrow">WHY FREQPILOT</span>
+      <h2 data-i18n="sec_fw_title">4 Lớp Tường Lửa Chống "Backtest Ảo" (Anti-Curve-Fitting Firewall)</h2>
+      <p class="sec-sub" data-i18n="sec_fw_sub">
+        Hầu hết chiến lược chia sẻ trên mạng chỉ thắng trên 1 tháng dữ liệu ngắn hoặc nhìn trộm nến tương lai. FreqPilot sàng lọc tự động qua 4 cổng kiểm định trực quan:
+      </p>
+
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div>
+            <span class="pill pass">Cổng 01 · Data Integrity</span>
+            <h3 style="margin-top:8px">Dữ Liệu Futures Đa Độ Phân Giải (5m + Mark + Funding)</h3>
+            <p>Không chạy backtest thiếu phí qua đêm. Mọi lần chạy đều khóa cứng bộ dữ liệu Feather local kèm kiểm toán độ phủ:</p>
+          </div>
+          <div class="bento-visual">
+            <div class="bar-row">
+              <span><b>5m OHLCV Detail</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent)"></div></div>
+              <b class="mono">75,690 bars</b>
+            </div>
+            <div class="bar-row">
+              <span><b>1h Mark Price</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:68%;background:var(--pos-bright)"></div></div>
+              <b class="mono">6,307 bars</b>
+            </div>
+            <div class="bar-row">
+              <span><b>8h Funding Rate</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:45%;background:var(--warn)"></div></div>
+              <b class="mono">1,576 settlements</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <span class="pill pass">Cổng 02 · Bias Verification</span>
+            <h3 style="margin-top:8px">Chặn Đứng Lookahead &amp; Recursive Indicator Bias</h3>
+            <p>Tự động cắt nến tương lai và so sánh chỉ báo ở nhiều mốc khởi đầu để phát hiện các hàm nhìn trộm đỉnh/đáy ngày hiện tại:</p>
+          </div>
+          <div class="bento-visual" style="font-family:var(--mono);font-size:12px">
+            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.35);border-radius:8px;margin-bottom:8px;color:#fda4af">
+              <span>✕ Raw 1d join on 00:00 bar</span>
+              <b>has_bias: TRUE (Blocked)</b>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(16,185,129,0.14);border:1px solid rgba(16,185,129,0.4);border-radius:8px;color:var(--pos-bright)">
+              <span>✓ merge_informative_pair(1h, 1d)</span>
+              <b>has_bias: FALSE (10/10 Pass)</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <span class="pill pass">Cổng 03 · Regime Stress Test</span>
+            <h3 style="margin-top:8px">Phơi Bày Chiến Lược "Chỉ Thắng 1 Tháng Ngắn"</h3>
+            <p>Khi mở rộng từ mẫu 1 tháng sang 6,7 tháng (`2026-04-01 → 2026-10-21`), các chiến lược overfit lập tức lộ diện:</p>
+          </div>
+          <div class="bento-visual">
+            <div class="bar-row">
+              <span><b>RocketHunterSma501h</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--pos-bright)"></div></div>
+              <b class="pos mono">+61.83 USDT</b>
+            </div>
+            <div class="bar-row">
+              <span><b>DikibagastEmaRsi1h</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--pos-bright)"></div></div>
+              <b class="pos mono">+44.23 USDT</b>
+            </div>
+            <div class="bar-row">
+              <span>CodexBotVibe4h (Overfit)</span>
+              <div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--neg)"></div></div>
+              <b class="neg mono">-20.02 USDT</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <span class="pill pass">Cổng 04 · 1x Paper Reconciliation</span>
+            <h3 style="margin-top:8px">Chuyển Tiếp Sang Paper 1x &amp; Đối Chiếu Lệnh Thực</h3>
+            <p>Hồ sơ Paper chỉ được tạo từ gói Backtest đã xác minh `SHA-256`, khởi động ở trạng thái `STOPPED` và đối chiếu từng lệnh khớp:</p>
+          </div>
+          <div class="bento-visual" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-family:var(--mono);font-size:11.5px">
+            <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">1. Verified ZIP<br/><b class="pos">8ebeb7170c</b></div>
+            <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">2. Paper Profile<br/><b style="color:var(--accent)">4e1b0cb3ef</b></div>
+            <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">3. Reconcile<br/><b class="pos">Match / Diff</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Visual 10-Strategy Audit Leaderboard -->
     <section id="audit">
-      <h2 data-i18n="sec1_title">1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
+      <span class="sec-eyebrow">EMPIRICAL BENCHMARK</span>
+      <h2 data-i18n="sec1_title">Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
       <p class="sec-sub" data-i18n="sec1_sub">
         Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
       </p>
@@ -315,223 +962,188 @@
         <table id="audit-table">
           <thead>
             <tr>
-              <th>Chiến lược (`IStrategy` 1x)</th>
-              <th>Nguồn gốc & Commit</th>
+              <th>Chiến lược</th>
               <th>Khung</th>
-              <th>1 Tháng (`1m` detail)</th>
-              <th>6,7 Tháng (`5m` detail)</th>
-              <th>Max Drawdown</th>
-              <th>Profit Factor</th>
+              <th>Kỳ 6,7 Tháng (`20260401–20261021`)</th>
+              <th>Số lệnh</th>
+              <th>Max DD</th>
+              <th>PF</th>
               <th>Lookahead / Recursive</th>
-              <th>Kết luận Sàng lọc</th>
+              <th>Phân loại</th>
             </tr>
           </thead>
           <tbody>
             <tr data-group="survived">
-              <td><b>RocketHunterSma501h</b></td>
-              <td><code>rocket-hunter (d8dae34e)</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="pos">+6,80 USDT (2 lệnh)</td>
-              <td class="pos">+61,83 USDT (8 lệnh)</td>
-              <td>0,35%</td>
-              <td><b>18,29</b></td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill pass">✓ Sẵn sàng Paper 1x</span></td>
+              <td><strong>RocketHunterSma501h</strong><br/><small style="color:var(--fg-3)">rocket-hunter · <code>6826363795</code></small></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:100%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+61.83 USDT (+6.18%)</b>
+                </div>
+              </td>
+              <td class="mono">8</td>
+              <td class="mono">0.35%</td>
+              <td class="mono"><b>18.29</b></td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill pass">★ Top 1 Profit</span></td>
             </tr>
             <tr data-group="survived">
-              <td><b>DikibagastEmaRsi1h</b></td>
-              <td><code>Dikibagast (a7af9593)</code></td>
-              <td><code>1h</code></td>
-              <td class="pos">+8,99 USDT (5 lệnh)</td>
-              <td class="pos">+44,23 USDT (30 lệnh)</td>
-              <td>0,73%</td>
-              <td><b>3,96</b></td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill pass">✓ Đạt 9/9 Ô Độ Nhạy & Holdout</span></td>
+              <td><strong>DikibagastEmaRsi1h</strong><br/><small style="color:var(--fg-3)">EMA 50/100 + ATR · <code>8ebeb7170c</code></small></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:72%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+44.23 USDT (+4.42%)</b>
+                </div>
+              </td>
+              <td class="mono"><b>30</b></td>
+              <td class="mono">0.73%</td>
+              <td class="mono"><b>3.96</b></td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill pass">✓ Đạt 9/9 Độ nhạy &amp; Holdout</span></td>
             </tr>
             <tr data-group="survived">
-              <td><b>BdrEmaRideFutures1h</b></td>
-              <td><code>BDR-Pro (0df59de9)</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="pos">+5,55 USDT (2 lệnh)</td>
-              <td class="pos">+9,37 USDT (8 lệnh)</td>
-              <td>1,41%</td>
-              <td><b>1,67</b></td>
-              <td><code>has_bias=false / ok</code></td>
+              <td><strong>BdrEmaRideFutures1h</strong><br/><small style="color:var(--fg-3)">BDR-Pro · <code>353953f473</code></small></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:18%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+9.37 USDT (+0.94%)</b>
+                </div>
+              </td>
+              <td class="mono">8</td>
+              <td class="mono">1.41%</td>
+              <td class="mono">1.67</td>
+              <td><code>false / ok</code></td>
               <td><span class="pill pass">✓ Lãi dương cả 2 kỳ</span></td>
             </tr>
             <tr data-group="survived">
-              <td><b>TrendCoreBagging1h</b></td>
-              <td><code>0x-boss/TrendCore</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="pos">+5,55 USDT (2 lệnh)</td>
-              <td class="pos">+2,15 USDT (2 lệnh)</td>
-              <td>0,15%</td>
-              <td><b>2,45</b></td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill pass">✓ Lãi dương · DD 0,15%</span></td>
+              <td><strong>TrendCoreBagging1h</strong><br/><small style="color:var(--fg-3)">quant_crypto · <code>bba655ff87</code></small></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:6%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+2.15 USDT (+0.21%)</b>
+                </div>
+              </td>
+              <td class="mono">2</td>
+              <td class="mono">0.15%</td>
+              <td class="mono">2.45</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill pass">✓ Giữ lãi dương</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>CodexBotVibe4h</b></td>
-              <td><code>erfanrhb/CodexBot (922e26ee)</code></td>
-              <td><code>4h (+1d)</code></td>
-              <td class="pos">+3,30 USDT (5 lệnh)</td>
-              <td class="neg">-20,02 USDT (30 lệnh)</td>
-              <td>2,96%</td>
-              <td>0,67</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Loại ở kỳ 6,7 tháng</span></td>
+              <td><strong>CodexBotVibe4h</strong><br/><small style="color:var(--fg-3)">erfankh · <code>c3b0b4c882</code></small></td>
+              <td><code>4h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:45%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-20.02 USDT (-2.00%)</b>
+                </div>
+              </td>
+              <td class="mono">30</td>
+              <td class="mono">2.96%</td>
+              <td class="mono">0.67</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Đảo chiều âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>CodeAlchemyLowPassFisher1h</b></td>
-              <td><code>CodeAlchemy (4b55d57f)</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="neg">-1,19 USDT (2 lệnh)</td>
-              <td>—</td>
-              <td>0,72%</td>
-              <td>0,84</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Chưa có lợi thế trên BTC/ETH</span></td>
+              <td><strong>CodeAlchemyLowPassFisher1h</strong></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:8%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-1.19 USDT (1m)</b>
+                </div>
+              </td>
+              <td class="mono">2</td>
+              <td class="mono">0.19%</td>
+              <td class="mono">0.84</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>MesaTrendFollow1h</b></td>
-              <td><code>maucarrasz/mesa (3cd1df3e)</code></td>
-              <td><code>1h (+4h)</code></td>
-              <td class="neg">-1,75 USDT (5 lệnh)</td>
-              <td>—</td>
-              <td>0,35%</td>
-              <td>0,50</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Thiếu cặp SOL của bản gốc</span></td>
+              <td><strong>MesaTrendFollow1h</strong></td>
+              <td><code>1h</code> (4h)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:12%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-1.75 USDT (1m)</b>
+                </div>
+              </td>
+              <td class="mono">5</td>
+              <td class="mono">0.35%</td>
+              <td class="mono">0.50</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>QuantgenTrendVoting1h</b></td>
-              <td><code>xkg4real/quantgen</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="neg">-4,65 USDT (2 lệnh)</td>
-              <td>—</td>
-              <td>0,56%</td>
-              <td>0,17</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Bị loại ở cửa sổ ngắn</span></td>
+              <td><strong>QuantgenTrendVoting1h</strong></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:28%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-4.32 USDT (1m)</b>
+                </div>
+              </td>
+              <td class="mono">2</td>
+              <td class="mono">0.49%</td>
+              <td class="mono">0.00</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>MirazizDonchianAtr4h</b></td>
-              <td><code>miraziz (801a5d27)</code></td>
+              <td><strong>MirazizDonchianAtr4h</strong></td>
               <td><code>4h</code></td>
-              <td class="neg">-4,92 USDT (2 lệnh)</td>
-              <td>—</td>
-              <td>0,49%</td>
-              <td>0,00</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Khác cấu trúc 5 sleeve gốc</span></td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:32%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-4.92 USDT (1m)</b>
+                </div>
+              </td>
+              <td class="mono">2</td>
+              <td class="mono">0.49%</td>
+              <td class="mono">0.00</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><b>EnriqueVolAdjusted1h</b></td>
-              <td><code>EnriqueCerv (f65acd7a)</code></td>
-              <td><code>1h (+1d)</code></td>
-              <td class="neg">-9,86 USDT (3 lệnh)</td>
-              <td>—</td>
-              <td>1,41%</td>
-              <td>0,31</td>
-              <td><code>has_bias=false / ok</code></td>
-              <td><span class="pill drop">✕ Bị loại ở cửa sổ ngắn</span></td>
+              <td><strong>EnriqueVolAdjusted1h</strong></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:55%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-9.86 USDT (1m)</b>
+                </div>
+              </td>
+              <td class="mono">3</td>
+              <td class="mono">1.41%</td>
+              <td class="mono">0.31</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section id="proof">
-      <h2 data-i18n="sec2_title">2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)</h2>
-      <p class="sec-sub" data-i18n="sec2_sub">
-        Khảo sát vùng tham số lân cận và đối chiếu giữa bộ tham số gốc (Baseline) với ứng viên Hyperopt trên cửa sổ tách khỏi tập huấn luyện Hyperopt (kiểm tra hồi cứu / retrospective check trên mẫu lịch sử 2026).
-      </p>
-      <div class="grid-2">
-        <div class="card">
-          <h3>Ma Trận Độ Nhạy 2D (`d28b58b598` — `DikibagastEmaRsi1h`)</h3>
-          <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
-            9/9 lần chạy Backtest native độc lập trên kỳ 6,7 tháng (<code>20260401-20261021</code>) đều dương (cho thấy tính liên tục lân cận trên mẫu này, không phải chứng nhận miễn nhiễm overfit):
-          </p>
-          <table class="pivot-table">
-            <thead>
-              <tr>
-                <th><code>ema_short \ rsi_offset</code></th>
-                <th><code>8</code></th>
-                <th><code>10</code> (Gốc)</th>
-                <th><code>12</code></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th><code>45</code></th>
-                <td><span class="pos">+39,68 USDT</span><br><small>40 lệnh · DD 1,52%</small></td>
-                <td><span class="pos">+44,93 USDT</span><br><small>38 lệnh · DD 0,99%</small></td>
-                <td><span class="pos">+42,26 USDT</span><br><small>38 lệnh · DD 1,00%</small></td>
-              </tr>
-              <tr>
-                <th><code>50</code> (Gốc)</th>
-                <td><span class="pos">+46,09 USDT</span><br><small>32 lệnh · DD 0,84%</small></td>
-                <td class="pivot-base"><span class="pill pass" style="margin-bottom:4px">Mặc định</span><br><span class="pos">+44,23 USDT</span><br><small>30 lệnh · DD 0,73%</small></td>
-                <td><span class="pos">+40,20 USDT</span><br><small>29 lệnh · DD 0,76%</small></td>
-              </tr>
-              <tr>
-                <th><code>55</code></th>
-                <td><span class="pos">+35,82 USDT</span><br><small>23 lệnh · DD 0,41%</small></td>
-                <td><span class="pos">+28,16 USDT</span><br><small>20 lệnh · DD 0,36%</small></td>
-                <td><span class="pos">+26,21 USDT</span><br><small>20 lệnh · DD 0,36%</small></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card">
-          <h3>Walk-Forward & Holdout Tách Khỏi Hyperopt (`94b955e45b`)</h3>
-          <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
-            So sánh hồi cứu giữa <strong>Baseline (không tối ưu)</strong> và <strong>Ứng viên thắng Hyperopt</strong> trên kỳ cuối tách khỏi quá trình tìm tham số Hyperopt (<code>20260916-20261021</code>):
-          </p>
-          <table>
-            <thead>
-              <tr>
-                <th>Giai đoạn kiểm chứng</th>
-                <th>Baseline (Gốc `50/100/10`)</th>
-                <th>Ứng viên Hyperopt (`58/102/16`)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>Cửa sổ OOS #1</b><br><small>20260804–20260908</small></td>
-                <td class="pos">+13,18 USDT (11 lệnh · PF 7,97)</td>
-                <td class="pos">+6,78 USDT (5 lệnh · PF 3,56)</td>
-              </tr>
-              <tr>
-                <td><b>Holdout Niêm Phong 🔒</b><br><small>20260916–20261021</small></td>
-                <td class="pos">+9,16 USDT (5 lệnh · PF 3,44)</td>
-                <td class="neg">-3,46 USDT (2 lệnh · DD 0,36%)</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="notice">
-            <b>Bài học thực nghiệm:</b> Tối ưu hóa Hyperopt trên cửa sổ ngắn làm giảm hiệu quả ngoài mẫu so với bộ tham số gốc. Nhờ giữ song song Baseline, FreqPilot ngăn việc thay thế nhầm tham số gốc bằng ứng viên overfit.
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- Section 3: Verified Dossiers & Pricing -->
     <section id="dossiers">
-      <h2 data-i18n="sec3_title">3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
+      <span class="sec-eyebrow">VERIFIED RESEARCH BUNDLES</span>
+      <h2 data-i18n="sec3_title">Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
       <p class="sec-sub" data-i18n="sec3_sub">
-        Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào mục <strong>Nhập gói hồ sơ (.zip)</strong> trên máy của bạn.
+        Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.
       </p>
       <div class="grid-3">
         <div class="price-card">
           <div>
             <span class="pill">Open-Source Tool</span>
-            <h3>Community Edition</h3>
-            <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ trọn đời</small></div>
+            <h3 style="margin:10px 0 4px">Community Edition</h3>
+            <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ forever</small></div>
             <ul class="price-list">
               <li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li>
-              <li>8 chiến lược mẫu chính thức + công cụ Kiểm toán Dữ liệu, Lookahead, Walk-Forward & Độ nhạy 2D.</li>
+              <li>8 chiến lược mẫu chính thức + công cụ Kiểm toán Dữ liệu, Lookahead, Walk-Forward &amp; Độ nhạy 2D.</li>
               <li>Báo cáo kiểm toán công khai hàng tuần.</li>
             </ul>
           </div>
@@ -541,8 +1153,8 @@
         <div class="price-card featured">
           <div>
             <span class="pill pass">Khuyên Dùng · Mua 1 Lần</span>
-            <h3>Verified Strategy Pack v1</h3>
-            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ trọn bộ 4 gói ZIP</small></div>
+            <h3 style="margin:10px 0 4px">Verified Strategy Pack v1</h3>
+            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ 4 gói ZIP đóng băng</small></div>
             <ul class="price-list">
               <li><strong>4 gói <code>freqpilot-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng) của <code>DikibagastEmaRsi1h</code>, <code>RocketHunterSma501h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
               <li><strong>4 tài liệu <code>Dossier (.md)</code></strong> đầy đủ công thức, tham số, mã <code>SHA-256</code> và hướng dẫn chạy <code>Archive Replay</code>.</li>
@@ -555,7 +1167,7 @@
         <div class="price-card">
           <div>
             <span class="pill">Hội Viên Định Kỳ</span>
-            <h3>Quant Lab Membership</h3>
+            <h3 style="margin:10px 0 4px">Quant Lab Membership</h3>
             <div class="price-tag">$29 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ tháng</small></div>
             <ul class="price-list">
               <li>Bao gồm toàn bộ <strong>Verified Strategy Pack v1</strong>.</li>
@@ -568,136 +1180,330 @@
       </div>
     </section>
 
+    <!-- Section 4: 3-Step Quickstart -->
     <section id="install">
-      <h2 data-i18n="sec4_title">4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước</h2>
+      <span class="sec-eyebrow">QUICKSTART</span>
+      <h2 data-i18n="sec4_title">Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Lệnh</h2>
       <p class="sec-sub" data-i18n="sec4_sub">Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.</p>
-      <pre># Bước 0: Clone kho mã nguồn mở chính thức
-git clone https://github.com/mrcanlaco/freqpilot.git
+      <pre>git clone https://github.com/mrcanlaco/freqpilot.git
 cd freqpilot
-
-# Bước 1: Khởi tạo thư mục dữ liệu riêng, mật khẩu API ngẫu nhiên và 8 chiến lược mẫu (mặc định STOPPED, dry_run=true)
 ./Initialize.ps1
-
-# Bước 2: Kiểm tra cấu hình, cổng mạng và schema chiến lược trước khi chạy
 ./Start.ps1 -CheckOnly
-
-# Bước 3: Build giao diện + image nghiên cứu và khởi động dịch vụ tại http://localhost:8090/studio
-./Start.ps1 -Build</pre>
+./Start.ps1 -Build   # Mở ngay http://localhost:8090/studio</pre>
       <div class="notice">
-        <b>Tuyên bố miễn trừ & Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.
+        <b>Tuyên bố miễn trừ &amp; Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.
       </div>
     </section>
   </main>
 
   <footer class="wrap">
-    FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 & Official Freqtrade 2026.9 Engine.
+    FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 &amp; Official Freqtrade 2026.9 Engine.
   </footer>
 
   <script>
+    // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
+    const HERO_STRATEGIES = {
+      diki: {
+        title: "DikibagastEmaRsi1h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e",
+        shaLabel: "run_id: 8ebeb7170c · lookahead: false · recursive: ok",
+        pnl: "+44.23 USDT",
+        ret: "+4.42%",
+        trades: "30",
+        win: "70.0% (21W/9L)",
+        pf: "3.96",
+        dd: "-0.73%",
+        exp: "+1.47 USDT",
+        equity: [
+          ["04-01", 0], ["04-13", -2.82], ["05-18", 0.01], ["05-23", 3.65], ["06-01", 5.63],
+          ["06-02", 6.56], ["06-02", 18.44], ["06-02", 19.57], ["06-04", 24.11], ["06-11", 23.79],
+          ["06-12", 28.07], ["07-09", 27.42], ["07-09", 26.89], ["07-18", 22.63], ["08-04", 21.83],
+          ["08-11", 20.6], ["08-20", 22.67], ["08-20", 23.9], ["08-20", 24.15], ["08-20", 24.83],
+          ["08-20", 27.06], ["08-21", 28.27], ["08-21", 29.22], ["08-21", 34.67], ["08-29", 34.09],
+          ["08-29", 35.08], ["09-21", 37.64], ["09-28", 37.98], ["09-28", 34.23], ["10-08", 39.64],
+          ["10-15", 44.23]
+        ],
+        drawdown: [
+          ["04-01", 0], ["04-13", -0.28], ["05-18", 0], ["05-23", 0], ["06-01", 0],
+          ["06-02", 0], ["06-02", 0], ["06-02", 0], ["06-04", 0], ["06-11", -0.03],
+          ["06-12", 0], ["07-09", -0.06], ["07-09", -0.12], ["07-18", -0.53], ["08-04", -0.61],
+          ["08-11", -0.73], ["08-20", -0.53], ["08-20", -0.41], ["08-20", -0.38], ["08-20", -0.32],
+          ["08-20", -0.1], ["08-21", 0], ["08-21", 0], ["08-21", 0], ["08-29", -0.06],
+          ["08-29", 0], ["09-21", 0], ["09-28", 0], ["09-28", -0.36], ["10-08", 0],
+          ["10-15", 0]
+        ],
+        monthly: [
+          ["Apr 2026", -2.82], ["May 2026", 6.46], ["Jun 2026", 24.42], ["Jul 2026", -5.45],
+          ["Aug 2026", 12.46], ["Sep 2026", -0.85], ["Oct 2026", 10.00], ["Total (6.7m)", 44.23]
+        ]
+      },
+      rocket: {
+        title: "RocketHunterSma501h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c621b60697",
+        shaLabel: "run_id: 6826363795 · lookahead: false · recursive: ok",
+        pnl: "+61.83 USDT",
+        ret: "+6.18%",
+        trades: "8",
+        win: "50.0% (4W/4L)",
+        pf: "18.29",
+        dd: "-0.35%",
+        exp: "+7.73 USDT",
+        equity: [
+          ["04-01", 0], ["05-16", 5.26], ["05-23", 11.57], ["05-27", 10.69], ["07-17", 9.67],
+          ["08-01", 8.49], ["08-15", 7.99], ["10-09", 44.06], ["10-21", 61.83]
+        ],
+        drawdown: [
+          ["04-01", 0], ["05-16", 0], ["05-23", 0], ["05-27", -0.09], ["07-17", -0.19],
+          ["08-01", -0.30], ["08-15", -0.35], ["10-09", 0], ["10-21", 0]
+        ],
+        monthly: [
+          ["Apr 2026", 0.00], ["May 2026", 10.69], ["Jun 2026", 0.00], ["Jul 2026", -1.02],
+          ["Aug 2026", -1.68], ["Sep 2026", 0.00], ["Oct 2026", 53.84], ["Total (6.7m)", 61.83]
+        ]
+      }
+    };
+
+    function renderHeroCharts(key) {
+      const s = HERO_STRATEGIES[key] || HERO_STRATEGIES.diki;
+      document.getElementById("win-header-title").textContent = s.title;
+      document.getElementById("strat-sha-label").textContent = s.shaLabel;
+      document.getElementById("m-pnl").textContent = s.pnl;
+      document.getElementById("m-ret").textContent = s.ret;
+      document.getElementById("m-trades").textContent = s.trades;
+      document.getElementById("m-win").textContent = s.win;
+      document.getElementById("m-pf").textContent = s.pf;
+      document.getElementById("m-dd").textContent = s.dd;
+      document.getElementById("m-exp").textContent = s.exp;
+      document.getElementById("chart-pnl-badge").textContent = s.pnl;
+      document.getElementById("chart-dd-badge").textContent = "Max DD: " + s.dd;
+
+      // Render Equity SVG
+      const eqPts = s.equity;
+      const w = 960, h = 200, padX = 36, padY = 22;
+      const vals = eqPts.map(p => p[1]);
+      const minV = Math.min(-5, ...vals);
+      const maxV = Math.max(10, ...vals);
+      const scaleX = i => padX + (i / (eqPts.length - 1)) * (w - padX * 2);
+      const scaleY = v => h - padY - ((v - minV) / (maxV - minV || 1)) * (h - padY * 2);
+      const zeroY = scaleY(0);
+      const coords = eqPts.map((p, i) => [scaleX(i), scaleY(p[1]), p[0], p[1]]);
+      const lineD = coords.map((c, i) => (i === 0 ? "M" : "L") + c[0].toFixed(1) + "," + c[1].toFixed(1)).join(" ");
+      const areaD = lineD + ` L${coords[coords.length - 1][0].toFixed(1)},${zeroY.toFixed(1)} L${coords[0][0].toFixed(1)},${zeroY.toFixed(1)} Z`;
+
+      const dots = coords.map((c, i) =>
+        (i === 0 || i === coords.length - 1 || i % 3 === 0)
+          ? `<circle cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="4" fill="#10b981" stroke="#05080f" stroke-width="1.5"><title>${c[2]}: ${c[3] >= 0 ? "+" : ""}${c[3]} USDT</title></circle>`
+          : ""
+      ).join("");
+
+      const labels = [0, Math.floor(coords.length / 2), coords.length - 1].map(idx => {
+        const c = coords[idx];
+        return `<text x="${c[0].toFixed(1)}" y="${h - 4}" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">${c[2]} (${c[3] >= 0 ? "+" : ""}${c[3]} USDT)</text>`;
+      }).join("");
+
+      document.getElementById("svg-equity").innerHTML = `
+        <defs>
+          <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.38"/>
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <line x1="${padX}" y1="${zeroY.toFixed(1)}" x2="${w - padX}" y2="${zeroY.toFixed(1)}" stroke="rgba(148,163,184,0.2)" stroke-dasharray="4 4"/>
+        <path d="${areaD}" fill="url(#eqGrad)"/>
+        <path d="${lineD}" fill="none" stroke="#34d399" stroke-width="2.6" stroke-linecap="round"/>
+        ${dots}
+        ${labels}
+      `;
+
+      // Render Drawdown SVG
+      const ddPts = s.drawdown;
+      const dh = 110;
+      const minD = Math.min(-1.0, ...ddPts.map(p => p[1]));
+      const dScaleX = i => padX + (i / (ddPts.length - 1)) * (w - padX * 2);
+      const dScaleY = v => 14 + (Math.abs(v) / Math.abs(minD || -1)) * (dh - 32);
+      const dCoords = ddPts.map((p, i) => [dScaleX(i), dScaleY(p[1]), p[0], p[1]]);
+      const dLine = dCoords.map((c, i) => (i === 0 ? "M" : "L") + c[0].toFixed(1) + "," + c[1].toFixed(1)).join(" ");
+      const dArea = dLine + ` L${dCoords[dCoords.length - 1][0].toFixed(1)},14 L${dCoords[0][0].toFixed(1)},14 Z`;
+
+      document.getElementById("svg-drawdown").innerHTML = `
+        <defs>
+          <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.06"/>
+            <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.36"/>
+          </linearGradient>
+        </defs>
+        <line x1="${padX}" y1="14" x2="${w - padX}" y2="14" stroke="rgba(148,163,184,0.2)" stroke-dasharray="4 4"/>
+        <path d="${dArea}" fill="url(#ddGrad)"/>
+        <path d="${dLine}" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round"/>
+      `;
+
+      // Render Monthly Heatmap
+      document.getElementById("monthly-heatmap").innerHTML = s.monthly.map(([m, val]) => {
+        const cls = val > 15 ? "hm-pos-2" : val > 0 ? "hm-pos-1" : val < 0 ? "hm-neg" : "hm-neutral";
+        const sign = val > 0 ? "+" : "";
+        return `<div class="hm-cell ${cls}"><small>${m}</small><b>${sign}${val.toFixed(2)}</b></div>`;
+      }).join("");
+    }
+
+    function selectHeroStrategy(key, btn) {
+      document.querySelectorAll(".strat-btn").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      renderHeroCharts(key);
+    }
+
+    function switchStudioTab(paneId, btn) {
+      document.querySelectorAll(".win-tab").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      document.querySelectorAll(".win-pane").forEach(el => el.classList.remove("active"));
+      document.getElementById("pane-" + paneId).classList.add("active");
+    }
+
+    function switchScreenshot(src, btn) {
+      document.querySelectorAll(".shot-tabs .chip").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("studio-shot-img").src = src;
+    }
+
+    function filterAudit(group, btn) {
+      document.querySelectorAll('.filter-bar .chip').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#audit-table tbody tr').forEach(row => {
+        row.style.display = (group === 'all' || row.dataset.group === group) ? '' : 'none';
+      });
+    }
+
     const SITE_I18N = {
       vi: {
+        nav_studio: "Interactive Studio",
+        nav_firewall: "4 Lớp Tường Lửa",
         nav_audit: "Bảng Kiểm Toán 10 Chiến Lược",
-        nav_proof: "Bằng Chứng Độ Nhạy & Holdout",
-        nav_dossiers: "Gói Hồ Sơ Dossier (.zip)",
+        nav_dossiers: "Gói Hồ Sơ (.zip)",
         nav_install: "Cài Đặt 3 Bước",
-        hero_title: "Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.",
-        hero_lead: "FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout tách riêng và Đối chiếu Paper 1x thực tế.",
-        hero_cta_audit: "Xem Bảng Kiểm Toán 10 Chiến Lược",
-        hero_cta_gh: "Mã Nguồn Mở trên GitHub ↗",
-        sec1_title: "1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
+        hero_badge: "● 18 Chiến Lược Công Khai Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Futures Đóng Băng →",
+        hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
+        hero_lead: "FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm định lượng trực quan: Biểu đồ Equity & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Đối chiếu lệnh Paper 1x.",
+        hero_cta_audit: "Trải Nghiệm Bảng Kết Quả Trực Quan ↓",
+        hero_cta_gh: "Mã Nguồn Mở GitHub (GPL-3.0) ↗",
+        tab_equity: "📈 Đường Vốn & Drawdown",
+        tab_matrix: "🎛️ Ma Trận 2D & WFA Holdout",
+        tab_shots: "🖥️ Giao Diện Thực Tế (/studio)",
+        tab_code: "🐍 Mã Chiến Lược & AI Prompt",
+        sec_fw_title: "4 Lớp Tường Lửa Chống 'Backtest Ảo' (Anti-Curve-Fitting Firewall)",
+        sec_fw_sub: "Hầu hết chiến lược chia sẻ trên mạng chỉ thắng trên 1 tháng dữ liệu ngắn hoặc nhìn trộm nến tương lai. FreqPilot sàng lọc tự động qua 4 cổng kiểm định trực quan:",
+        sec1_title: "Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
         sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
         filter_all: "Tất cả (10)",
         filter_survived: "✓ Sống sót qua 6,7 tháng (4)",
         filter_dropped: "✕ Bị loại ở mẫu dài / âm (6)",
-        sec2_title: "2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)",
-        sec2_sub: "Khảo sát vùng tham số lân cận và đối chiếu giữa bộ tham số gốc (Baseline) với ứng viên Hyperopt trên cửa sổ tách khỏi tập huấn luyện Hyperopt (kiểm tra hồi cứu / retrospective check trên mẫu lịch sử 2026).",
-        sec3_title: "3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
+        sec3_title: "Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
         sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
-        sec4_title: "4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước",
+        sec4_title: "Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Lệnh",
         sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop."
       },
       en: {
-        nav_audit: "10-Strategy Audit",
-        nav_proof: "2D Sensitivity & Holdout",
+        nav_studio: "Interactive Studio",
+        nav_firewall: "4-Gate Firewall",
+        nav_audit: "10-Strategy Leaderboard",
         nav_dossiers: "Verified Dossiers (.zip)",
         nav_install: "3-Step Quickstart",
-        hero_title: "Don't Trust Backtest Screenshots. Verify the <code>SHA-256</code> Frozen Bundle.",
-        hero_lead: "FreqPilot turns <strong>official Freqtrade 2026.9</strong> into an evidence-first quantitative studio: Funding/Mark Data Audit, Lookahead & Recursive Bias Checks, 2D Parameter Sensitivity Matrix, Rolling Walk-Forward with Post-Hyperopt Holdout, and 1x Paper Reconciliation.",
-        hero_cta_audit: "Explore 10-Strategy Audit Leaderboard",
-        hero_cta_gh: "Open-Source on GitHub ↗",
-        sec1_title: "1. Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
+        hero_badge: "● 18 Public Strategies Audited on 6.7 Months of Frozen Futures Data →",
+        hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
+        hero_lead: "FreqPilot turns <strong>official Freqtrade 2026.9</strong> into a visual quantitative studio: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Rolling Walk-Forward Holdout, and 1x Paper Reconciliation.",
+        hero_cta_audit: "Explore Interactive Results Card ↓",
+        hero_cta_gh: "Open-Source on GitHub (GPL-3.0) ↗",
+        tab_equity: "📈 Equity & Drawdown",
+        tab_matrix: "🎛️ 2D Matrix & WFA Holdout",
+        tab_shots: "🖥️ Live Studio Screenshots",
+        tab_code: "🐍 Strategy Code & AI Prompt",
+        sec_fw_title: "4-Gate Anti-Curve-Fitting Firewall",
+        sec_fw_sub: "Most public crypto strategies only win on a cherry-picked 30-day window or leak future daily bars. FreqPilot enforces four visual verification gates:",
+        sec1_title: "Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
         sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>1,000 USDT</code> wallet, <code>100 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
         filter_all: "All Audited (10)",
         filter_survived: "✓ Survived 6.7-Month Window (4)",
         filter_dropped: "✕ Eliminated on Long Window (6)",
-        sec2_title: "2. 2D Parameter Neighborhood Continuity & Retrospective WFA Holdout",
-        sec2_sub: "Evaluating parameter neighborhood continuity and comparing the untuned default Baseline against the Hyperopt-selected candidate on the post-Hyperopt interval (retrospective check on the 2026 historical sample).",
-        sec3_title: "3. Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
+        sec3_title: "Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
         sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-&lt;id&gt;.zip</code> bundles directly into your workspace.",
-        sec4_title: "4. Launch FreqPilot Locally in 3 Commands",
+        sec4_title: "Launch FreqPilot Locally in 3 Commands",
         sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop."
       },
       zh: {
-        nav_audit: "10大策略实证审计",
-        nav_proof: "2D敏感度与Holdout检验",
+        nav_studio: "交互式工作台",
+        nav_firewall: "四重防过拟合防火墙",
+        nav_audit: "10大策略实证榜单",
         nav_dossiers: "已验证档案包 (.zip)",
-        nav_install: "3步快速安装",
-        hero_title: "拒绝回测截图造假。用 <code>SHA-256</code> 冻结证据包说话。",
-        hero_lead: "FreqPilot 将<strong>官方 Freqtrade 2026.9</strong> 升级为全闭环量化工作台：资金费率/标记价格审计、前视/递归偏差检验、二维参数敏感度矩阵、滚动 Walk-Forward 对照以及 1x 模拟盘实盘对账。",
-        hero_cta_audit: "查看 10 大策略审计榜单",
-        hero_cta_gh: "GitHub 开源仓库 ↗",
-        sec1_title: "1. 公开实证审计：10 个自动发掘策略 (`01a138fe`)",
+        nav_install: "3步快速启动",
+        hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
+        hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
+        hero_lead: "FreqPilot 将<strong>官方 Freqtrade 2026.9</strong> 升级为可视化量化工作台：交互式资金与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward Holdout 对照及 1x 模拟盘对账。",
+        hero_cta_audit: "体验交互式实证报告卡 ↓",
+        hero_cta_gh: "GitHub 开源仓库 (GPL-3.0) ↗",
+        tab_equity: "📈 净值与水下回撤曲线",
+        tab_matrix: "🎛️ 2D敏感度与 Holdout",
+        tab_shots: "🖥️ 真实工作台截图 (/studio)",
+        tab_code: "🐍 策略源码与 AI 提示词",
+        sec_fw_title: "四重防过拟合工程防火墙 (Anti-Curve-Fitting Firewall)",
+        sec_fw_sub: "网上大多数策略仅在 1 个月短样本盈利或存在跨周期前视偏差。FreqPilot 通过四道可视化闸门自动筛选：",
+        sec1_title: "公开实证审计榜单：10 个自动发掘策略 (`01a138fe`)",
         sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>1,000 USDT</code> 本金，<code>100 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
         filter_all: "全部策略 (10)",
         filter_survived: "✓ 通过 6.7 个月长周期检验 (4)",
         filter_dropped: "✕ 长周期淘汰 / 亏损 (6)",
-        sec2_title: "2. 二维参数邻域连续性与 Walk-Forward Holdout 回溯对照",
-        sec2_sub: "评估参数邻域连续性，并在独立于 Hyperopt 训练窗口的区间上对比未调参 Baseline 与 Hyperopt 候选参数（基于 2026 历史样本的回溯检验）。",
-        sec3_title: "3. 密码学签名策略档案包 (`Verified Dossiers`)",
+        sec3_title: "密码学签名策略档案包 (`Verified Dossiers`)",
         sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
-        sec4_title: "4. 三步在本地启动 FreqPilot",
+        sec4_title: "三步在本地启动 FreqPilot",
         sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
       },
       ru: {
+        nav_studio: "Интерактивная студия",
+        nav_firewall: "4 уровня защиты",
         nav_audit: "Аудит 10 стратегий",
-        nav_proof: "2D-матрица и Holdout",
         nav_dossiers: "Пакеты Dossier (.zip)",
-        nav_install: "Установка за 3 шага",
-        hero_title: "Не верьте скриншотам бэктестов. Проверяйте <code>SHA-256</code> пакет.",
-        hero_lead: "FreqPilot превращает <strong>официальный Freqtrade 2026.9</strong> в студию количественных исследований: аудит фандинга, проверка Lookahead/Recursive, 2D-матрица чувствительности, Walk-Forward с контрольным Holdout и сверка 1x Paper-сделок.",
-        hero_cta_audit: "Таблица аудита 10 стратегий",
+        nav_install: "Запуск за 3 шага",
+        hero_badge: "● 18 публичных стратегий проверены на 6,7 мес. замороженных данных →",
+        hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
+        hero_lead: "FreqPilot превращает <strong>официальный Freqtrade 2026.9</strong> в визуальную студию: интерактивные кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и сверка 1x Paper-сделок.",
+        hero_cta_audit: "Открыть интерактивную карточку ↓",
         hero_cta_gh: "Открытый код на GitHub ↗",
-        sec1_title: "1. Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
+        tab_equity: "📈 Кривая капитала и DD",
+        tab_matrix: "🎛️ 2D-матрица и Holdout",
+        tab_shots: "🖥️ Скриншоты студии (/studio)",
+        tab_code: "🐍 Код стратегии и AI-промпт",
+        sec_fw_title: "4-уровневый фильтр против переоптимизации",
+        sec_fw_sub: "Большинство публичных стратегий работают только на коротком окне или подглядывают в будущие свечи. FreqPilot проверяет каждую стратегию через 4 визуальных шлюза:",
+        sec1_title: "Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
         sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>1,000 USDT</code>, ставка <code>100 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
         filter_all: "Все (10)",
         filter_survived: "✓ Прошли окно 6.7 мес. (4)",
         filter_dropped: "✕ Отсеяны на длинном окне (6)",
-        sec2_title: "2. Непрерывность 2D-окрестности параметров и ретроспективный Holdout (WFA)",
-        sec2_sub: "Оценка устойчивости соседних параметров и сравнение базовой версии (Baseline) с кандидатом Hyperopt на пост-тренировочном интервале (ретроспективная проверка на выборке 2026 г.).",
-        sec3_title: "3. Проверенные архивы стратегий (`Verified Dossiers`)",
+        sec3_title: "Проверенные архивы стратегий (`Verified Dossiers`)",
         sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
-        sec4_title: "4. Запуск FreqPilot за 3 команды",
+        sec4_title: "Запуск FreqPilot за 3 команды",
         sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
       },
       ko: {
+        nav_studio: "인터랙티브 스튜디오",
+        nav_firewall: "4단계 과최적화 방화벽",
         nav_audit: "10대 전략 감사 리더보드",
-        nav_proof: "2D 민감도 & Holdout 검증",
         nav_dossiers: "검증된 Dossier (.zip)",
         nav_install: "3단계 빠른 설치",
-        hero_title: "백테스트 스크린샷을 믿지 마세요. <code>SHA-256</code> 동결 번들을 검증하세요.",
-        hero_lead: "FreqPilot은 <strong>공식 Freqtrade 2026.9</strong>를 완벽한 퀀트 연구 스튜디오로 전환합니다: 펀딩비·마크 데이터 감사, Lookahead/Recursive 편향 검증, 2D 파라미터 민감도 행렬, Walk-Forward Holdout 비교 및 1x 페이퍼 체결 대사.",
-        hero_cta_audit: "10대 전략 감사 결과 보기",
-        hero_cta_gh: "GitHub 오픈소스 ↗",
-        sec1_title: "1. 공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
+        hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
+        hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
+        hero_lead: "FreqPilot은 <strong>공식 Freqtrade 2026.9</strong>를 시각적 퀀트 연구 스튜디오로 전환합니다: 인터랙티브 수익·낙폭 곡선, 2D 파라미터 민감도 히트맵, Walk-Forward Holdout 비교 및 1x 페이퍼 대사.",
+        hero_cta_audit: "인터랙티브 성과 카드 체험 ↓",
+        hero_cta_gh: "GitHub 오픈소스 (GPL-3.0) ↗",
+        tab_equity: "📈 누적 손익 & 낙폭 곡선",
+        tab_matrix: "🎛️ 2D 민감도 & Holdout",
+        tab_shots: "🖥️ 실제 스튜디오 화면 (/studio)",
+        tab_code: "🐍 전략 코드 & AI 프롬프트",
+        sec_fw_title: "4단계 과최적화 방지 방화벽 (Anti-Curve-Fitting Firewall)",
+        sec_fw_sub: "대부분의 공개 전략은 1개월 단기 구간에서만 작동하거나 미래 캔들을 참조합니다. FreqPilot은 4가지 시각적 게이트로 전략을 검증합니다:",
+        sec1_title: "공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
         sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
         filter_all: "전체 (10)",
         filter_survived: "✓ 6.7개월 장기 구간 통과 (4)",
         filter_dropped: "✕ 장기 구간 탈락 / 적자 (6)",
-        sec2_title: "2. 2D 파라미터 인근 연속성 및 Walk-Forward 회고 Holdout 비교",
-        sec2_sub: "파라미터 인근 영역의 연속성을 점검하고 Hyperopt 학습 구간과 분리된 구간에서 기본값(Baseline)과 Hyperopt 후보를 비교합니다(2026 역사적 표본에 대한 회고적 검증).",
-        sec3_title: "3. 암호화 검증된 전략 번들 (`Verified Dossiers`)",
+        sec3_title: "암호화 검증된 전략 번들 (`Verified Dossiers`)",
         sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
-        sec4_title: "4. 3단계 명령어로 로컬에서 FreqPilot 시작하기",
+        sec4_title: "3단계 명령어로 로컬에서 FreqPilot 시작하기",
         sec4_sub: "Windows PowerShell 5.1, PowerShell 7 및 Linux/WSL2 + Docker Desktop 완벽 지원."
       }
     };
@@ -714,15 +1520,8 @@ cd freqpilot
       try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
     }
 
-    function filterAudit(group, btn) {
-      document.querySelectorAll('.filter-bar .chip').forEach(el => el.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('#audit-table tbody tr').forEach(row => {
-        row.style.display = (group === 'all' || row.dataset.group === group) ? '' : 'none';
-      });
-    }
-
-    (function initLang() {
+    (function init() {
+      renderHeroCharts('diki');
       const urlLang = new URLSearchParams(location.search).get('lang');
       let saved = null;
       try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}

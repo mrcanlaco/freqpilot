@@ -136,6 +136,24 @@ function number(value: number | undefined, digits = 2) {
 function date(value: number | string | undefined) {
   return value ? new Date(value).toLocaleString('vi-VN') : '—';
 }
+const maxAbsProfit = computed(() => {
+  let max = 10;
+  for (const run of latest.value.values()) {
+    const p = run.summary?.profit_total_abs;
+    if (typeof p === 'number' && Number.isFinite(p)) {
+      max = Math.max(max, Math.abs(p));
+    }
+  }
+  return max;
+});
+function pnlBarPercent(value: number | undefined) {
+  if (value == null || !Number.isFinite(value) || value === 0) return 0;
+  return Math.min(100, Math.max(6, Math.round((Math.abs(value) / maxAbsProfit.value) * 100)));
+}
+function tradeBarPercent(trades: number | undefined) {
+  if (trades == null || !Number.isFinite(trades) || trades <= 0) return 0;
+  return Math.min(100, Math.round((trades / 30) * 100));
+}
 </script>
 
 <template>
@@ -150,6 +168,28 @@ function date(value: number | string | undefined) {
         <button :disabled="busy" @click="emit('refresh')">Tải lại thư viện</button
         ><button class="primary" :disabled="busy" @click="emit('create')">+ Tạo chiến lược</button>
       </div>
+    </div>
+    <div class="visual-pipeline-strip" role="region" aria-label="Phễu kiểm định trực quan">
+      <button type="button" class="vp-card" :class="{ active: !hasActiveFilters }" @click="reset">
+        <div class="vp-top"><span>01 · Tổng Chiến Lược</span><b>{{ items.length }}</b></div>
+        <div class="vp-bar"><div class="vp-fill accent" style="width: 100%" /></div>
+        <small>{{ shortCount }} hỗ trợ Short · {{ items.length - shortCount }} Long-only</small>
+      </button>
+      <button type="button" class="vp-card" :class="{ active: status === 'archived' }" @click="status = status === 'archived' ? 'all' : 'archived'">
+        <div class="vp-top"><span>02 · Đã Có Gói Backtest</span><b>{{ archivedCount }} / {{ items.length }}</b></div>
+        <div class="vp-bar"><div class="vp-fill info" :style="{ width: (items.length ? Math.round((archivedCount / items.length) * 100) : 0) + '%' }" /></div>
+        <small>{{ matchedCount }} chiến lược khớp mã hiện tại</small>
+      </button>
+      <button type="button" class="vp-card" :class="{ active: outcome === 'profitable' }" @click="outcome = outcome === 'profitable' ? 'all' : 'profitable'">
+        <div class="vp-top"><span>03 · Có Lãi Ròng (&gt; 0 USDT)</span><b class="pos-text">{{ profitableCount }} / {{ archivedCount }}</b></div>
+        <div class="vp-bar"><div class="vp-fill pos" :style="{ width: (archivedCount ? Math.round((profitableCount / archivedCount) * 100) : 0) + '%' }" /></div>
+        <small>Lọc ngay các chiến lược sinh lời</small>
+      </button>
+      <button type="button" class="vp-card" :class="{ active: outcome === 'sample30' }" @click="outcome = outcome === 'sample30' ? 'all' : 'sample30'">
+        <div class="vp-top"><span>04 · Đủ Mẫu (≥ 30 Lệnh)</span><b class="pos-text">{{ sample30Count }} / {{ archivedCount }}</b></div>
+        <div class="vp-bar"><div class="vp-fill warn" :style="{ width: (archivedCount ? Math.round((sample30Count / archivedCount) * 100) : 0) + '%' }" /></div>
+        <small>Đủ cỡ mẫu thống kê cơ bản</small>
+      </button>
     </div>
     <div class="totals" role="region" aria-label="Thống kê nhanh thư viện">
       <button
@@ -454,6 +494,28 @@ function date(value: number | string | undefined) {
                 ><b>{{ number(latest.get(item.name)?.summary?.total_trades, 0) }}</b>
               </div>
             </div>
+            <div class="visual-evidence-bars" aria-hidden="true">
+              <div class="ve-row">
+                <span>Biên độ P&amp;L</span>
+                <div class="ve-track">
+                  <div
+                    class="ve-fill"
+                    :class="pnlTone(latest.get(item.name)?.summary?.profit_total_abs)"
+                    :style="{ width: pnlBarPercent(latest.get(item.name)?.summary?.profit_total_abs) + '%' }"
+                  />
+                </div>
+              </div>
+              <div class="ve-row">
+                <span>Cỡ mẫu ({{ latest.get(item.name)?.summary?.total_trades ?? 0 }}/30)</span>
+                <div class="ve-track">
+                  <div
+                    class="ve-fill"
+                    :class="(latest.get(item.name)?.summary?.total_trades ?? 0) >= 30 ? 'pos' : 'sample-warn'"
+                    :style="{ width: tradeBarPercent(latest.get(item.name)?.summary?.total_trades) + '%' }"
+                  />
+                </div>
+              </div>
+            </div>
             <small class="run-meta"
               >Chạy {{ date(latest.get(item.name)?.created_at) }} ·
               {{ latest.get(item.name)?.settings.timeframe }} ·
@@ -594,6 +656,107 @@ button:disabled {
 .ghost-btn {
   background: transparent;
   color: var(--fg-2);
+}
+.visual-pipeline-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 6px;
+}
+.vp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  text-align: left;
+}
+.vp-card.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+}
+.vp-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  gap: 8px;
+}
+.vp-top span {
+  font-size: 12px;
+  color: var(--fg-2);
+  font-weight: 600;
+}
+.vp-top b {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+.vp-top b.pos-text {
+  color: #79dfb3;
+}
+.vp-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.vp-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+.vp-fill.accent {
+  background: #38bdf8;
+}
+.vp-fill.info {
+  background: #60a5fa;
+}
+.vp-fill.pos {
+  background: #34d399;
+}
+.vp-fill.warn {
+  background: #f59e0b;
+}
+.visual-evidence-bars {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.ve-row {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--fg-3);
+}
+.ve-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+.ve-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--fg-3);
+}
+.ve-fill.pos {
+  background: #34d399;
+}
+.ve-fill.neg {
+  background: #f43f5e;
+}
+.ve-fill.sample-warn {
+  background: #e7bb72;
 }
 .totals {
   padding: 14px 0;
