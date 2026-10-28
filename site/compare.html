@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreqPilot vs Freqtrade Gốc & FreqUI Ultimate — Đối Chiếu Kiến Trúc & Thực Nghiệm</title>
+  <meta name="description" content="So sánh chi tiết giữa FreqPilot (Official Freqtrade 2026.9 Studio), Freqtrade + FreqUI gốc và bản fork FreqUI Ultimate v2.1.0 kèm kết quả đối chiếu thực nghiệm 8 chiến lược." />
+  <link rel="canonical" href="https://freqpilot.dev/compare.html" />
+  <style>
+    :root {
+      --bg-0: #05080f;
+      --bg-1: #0b101b;
+      --bg-2: #111827;
+      --bg-3: #1a2336;
+      --fg: #f3f6fc;
+      --fg-2: #9ca9c4;
+      --fg-3: #64748b;
+      --line: rgba(148, 163, 184, 0.14);
+      --line-2: rgba(148, 163, 184, 0.25);
+      --accent: #38bdf8;
+      --pos: #10b981;
+      --pos-bright: #34d399;
+      --warn: #f59e0b;
+      --neg: #f43f5e;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: var(--bg-0);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 85% 20%, rgba(16, 185, 129, 0.10), transparent);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    code, pre, .mono { font-family: var(--mono); }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    /* Floating Pill Navbar */
+    .nav-shell {
+      position: sticky;
+      top: 16px;
+      z-index: 50;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
+    }
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      width: auto;
+      min-width: min(680px, 94vw);
+      max-width: 780px;
+      padding: 7px 10px 7px 16px;
+      background: rgba(11, 16, 27, 0.85);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+      white-space: nowrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--fg);
+    }
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), var(--pos));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #041019;
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .nav-links { display: flex; gap: 20px; font-size: 13.5px; font-weight: 500; }
+    .nav-links a { color: var(--fg-2); }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .lang-select {
+      background: var(--bg-2);
+      color: var(--fg);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-2);
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #2563eb, #0ea5e9);
+      border-color: rgba(56, 189, 248, 0.6);
+      color: #fff;
+    }
+
+    .hero { text-align: center; padding: 52px 0 36px; }
+    .eyebrow-pill {
+      display: inline-flex;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(30px, 4.4vw, 52px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin: 0 auto 16px;
+      max-width: 900px;
+    }
+    .hero-sub {
+      font-size: 16.5px;
+      color: var(--fg-2);
+      max-width: 780px;
+      margin: 0 auto 28px;
+    }
+
+    /* 3 Architecture Cards */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 48px;
+      text-align: left;
+    }
+    .arch-card {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .arch-card.highlight {
+      border: 2px solid var(--pos-bright);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.10), var(--bg-1));
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    .arch-card h3 { margin: 0; font-size: 18px; }
+    .arch-flow {
+      background: #060911;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      display: grid;
+      gap: 6px;
+    }
+    .flow-step {
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+    }
+    .flow-step.good { border-color: rgba(16, 185, 129, 0.45); color: var(--pos-bright); }
+    .flow-step.bad { border-color: rgba(244, 63, 94, 0.45); color: #fda4af; }
+    .flow-step.warn { border-color: rgba(245, 158, 11, 0.45); color: #fcd34d; }
+
+    section { padding: 48px 0; border-top: 1px solid var(--line); }
+    .sec-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    h2 { font-size: clamp(24px, 3vw, 34px); margin: 0 0 10px; }
+    .sec-sub { color: var(--fg-2); font-size: 15px; max-width: 800px; margin: 0 0 24px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--bg-1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    th {
+      background: var(--bg-2);
+      color: var(--fg-3);
+      font-weight: 600;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--bg-2);
+      border: 1px solid var(--line-2);
+    }
+    .pill.pass { color: var(--pos-bright); border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.12); }
+    .pill.drop { color: #fda4af; border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.12); }
+    .pill.warn { color: #fcd34d; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.12); }
+    .pos { color: var(--pos-bright); }
+    .neg { color: var(--neg); }
+
+    footer {
+      padding: 36px 0 56px;
+      border-top: 1px solid var(--line);
+      color: var(--fg-3);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 960px) {
+      .arch-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-shell">
+    <header class="nav-pill">
+      <a class="brand" href="/">
+        <span class="brand-icon">FP</span>
+        <span>FreqPilot</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" data-i18n="nav_home">← Trang chủ</a>
+        <a href="#arch" data-i18n="nav_arch">3 Kiến trúc</a>
+        <a href="#matrix" data-i18n="nav_matrix">12 Điểm vượt trội</a>
+        <a href="#benchmark" data-i18n="nav_bench">Thực nghiệm 8 chiến lược</a>
+      </nav>
+      <div class="nav-right">
+        <select id="lang-select" class="lang-select" aria-label="Language" onchange="setCompareLang(this.value)">
+          <option value="vi">🇻🇳 VI</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="ru">🇷🇺 RU</option>
+          <option value="ko">🇰🇷 KO</option>
+        </select>
+        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </header>
+  </div>
+
+  <main class="wrap">
+    <div class="hero">
+      <div class="eyebrow-pill" data-i18n="hero_badge">ARCHITECTURE &amp; EMPIRICAL HEAD-TO-HEAD</div>
+      <h1 data-i18n="hero_title">FreqPilot Khác Gì So Với Freqtrade Gốc &amp; Bản Fork FreqUI Ultimate?</h1>
+      <p class="hero-sub" data-i18n="hero_lead">
+        Giữ nguyên <strong>100% Engine Freqtrade 2026.9 chính thức</strong> để không bao giờ lệch lệnh, đồng thời nâng cấp toàn bộ quy trình từ Viết mã, Kiểm toán Dữ liệu, Lookahead, Walk-Forward, Độ nhạy 2D đến Paper 1x lên một giao diện duy nhất.
+      </p>
+
+      <!-- 3 Architecture Comparison Cards -->
+      <div id="arch" class="arch-grid">
+        <div class="arch-card">
+          <span class="pill">1. Bản gốc (Official Freqtrade + FreqUI)</span>
+          <h3>Engine Chuẩn · Nhưng Rời Rạc Khi Nghiên Cứu</h3>
+          <p style="font-size:13px;color:var(--fg-2);margin:0">
+            FreqUI gốc được thiết kế làm bảng điều khiển giám sát bot đang chạy, không phải phòng thí nghiệm phát triển chiến lược:
+          </p>
+          <div class="arch-flow">
+            <div class="flow-step good">✓ Engine Freqtrade 2026.9 chính thức</div>
+            <div class="flow-step warn">⚠️ Sửa mã .py phải mở VS Code bên ngoài</div>
+            <div class="flow-step warn">⚠️ Lookahead / Recursive phải gõ lệnh CLI thủ công</div>
+            <div class="flow-step bad">✕ Không có Walk-Forward + Holdout trên UI</div>
+            <div class="flow-step bad">✕ Không có Ma trận Độ nhạy 2 chiều (2D Pivot)</div>
+            <div class="flow-step bad">✕ Không có gói hồ sơ đóng băng SHA-256 (.zip)</div>
+          </div>
+        </div>
+
+        <div class="arch-card">
+          <span class="pill drop">2. Bản Fork (FreqUI Ultimate v2.1.0)</span>
+          <h3>Giao Diện Đẹp · Nhưng Khóa Vào Engine Fork</h3>
+          <p style="font-size:13px;color:var(--fg-2);margin:0">
+            Giao diện FreqUI Ultimate phụ thuộc cứng vào các API nội bộ của nhánh fork <code>freqtrade-ultimate (2026.3-dev)</code>:
+          </p>
+          <div class="arch-flow">
+            <div class="flow-step bad">✕ Ép thay thế Freqtrade chính thức bằng bản fork</div>
+            <div class="flow-step bad">✕ Lỗi 404 Endpoint Not Found trên Freqtrade gốc</div>
+            <div class="flow-step warn">⚠️ Tự động xuất/ghi đè tham số khi tối ưu</div>
+            <div class="flow-step warn">⚠️ Walk-Forward không tách Holdout niêm phong</div>
+            <div class="flow-step bad">✕ Lệch kết quả khi có dữ liệu Funding/Mark ở bản fork</div>
+            <div class="flow-step bad">✕ Không có sổ đối chiếu lệnh Paper 1x độc lập</div>
+          </div>
+        </div>
+
+        <div class="arch-card highlight">
+          <span class="pill pass">3. FreqPilot Studio (Giải Pháp Kết Hợp)</span>
+          <h3>100% Engine 2026.9 Chính Thức + Studio 11 Bước</h3>
+          <p style="font-size:13px;color:var(--fg-2);margin:0">
+            Kế thừa giao diện GPL-3.0 nhưng viết mới hoàn toàn tầng nghiên cứu để chạy trực tiếp trên <strong>Freqtrade 2026.9 chính thức</strong>:
+          </p>
+          <div class="arch-flow">
+            <div class="flow-step good">✓ 100% Official Freqtrade 2026.9 (Zero-Fork Engine)</div>
+            <div class="flow-step good">✓ Monaco Editor + Lưu nháp + So sánh Diff trực tiếp</div>
+            <div class="flow-step good">✓ Kiểm toán Dữ liệu 5m/Mark/Funding + Lookahead UI</div>
+            <div class="flow-step good">✓ Walk-Forward Rolling + Holdout tách khỏi Hyperopt</div>
+            <div class="flow-step good">✓ Ma trận Độ nhạy 2D (Tham số × Kịch bản phí)</div>
+            <div class="flow-step good">✓ Xuất/Nhập gói SHA-256 (.zip) + Paper 1x Reconcile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: 12-Point Deep Comparison Matrix -->
+    <section id="matrix">
+      <span class="sec-eyebrow">FEATURE-BY-FEATURE MATRIX</span>
+      <h2 data-i18n="sec_mat_title">Bảng Đối Chiếu 12 Hạng Mục Kỹ Thuật</h2>
+      <p class="sec-sub" data-i18n="sec_mat_sub">
+        Mọi tính năng của FreqPilot đều được kiểm chứng bằng bộ 1.879 bài test tự động (`1.746` UI tests + `133` Backend container tests):
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Hạng mục</th>
+              <th style="background:rgba(16,185,129,0.14);color:var(--pos-bright)">★ FreqPilot Studio</th>
+              <th>Freqtrade + FreqUI Gốc</th>
+              <th>FreqUI Ultimate (Fork)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Tính toàn vẹn Engine</strong></td>
+              <td><span class="pill pass">✓ Official Freqtrade 2026.9 (Unmodified)</span></td>
+              <td><span class="pill pass">✓ Official Freqtrade 2026.9</span></td>
+              <td><span class="pill drop">✕ Modified Fork (2026.3-dev)</span></td>
+            </tr>
+            <tr>
+              <td><strong>2. Quản lý Ý tưởng, Nhãn &amp; Phễu lọc</strong></td>
+              <td><span class="pill pass">✓ Phễu 4 bước + Multi-tag + Thanh P&amp;L</span></td>
+              <td><span class="pill">✕ Chỉ có dropdown chọn tên class</span></td>
+              <td><span class="pill warn">⚠️ Danh sách cơ bản</span></td>
+            </tr>
+            <tr>
+              <td><strong>3. Soạn thảo Mã &amp; Bảo vệ file .py</strong></td>
+              <td><span class="pill pass">✓ Monaco + Kho bản sao + Không ghi đè ngầm</span></td>
+              <td><span class="pill">✕ Không có trình sửa mã</span></td>
+              <td><span class="pill drop">✕ 404 trên Freqtrade chính thức</span></td>
+            </tr>
+            <tr>
+              <td><strong>4. Kiểm toán Dữ liệu (Data Quality Gate)</strong></td>
+              <td><span class="pill pass">✓ Kiểm tra khuyết nến OHLCV + Mark + Funding</span></td>
+              <td><span class="pill">✕ Không hiển thị trên UI</span></td>
+              <td><span class="pill">✕ Không kiểm toán Funding/Mark</span></td>
+            </tr>
+            <tr>
+              <td><strong>5. Đóng băng Đầu vào Backtest</strong></td>
+              <td><span class="pill pass">✓ Bản sao riêng + Băm SHA-256 mọi tệp</span></td>
+              <td><span class="pill">⚠️ Đọc trực tiếp file đang mở</span></td>
+              <td><span class="pill">⚠️ Đọc trực tiếp file đang mở</span></td>
+            </tr>
+            <tr>
+              <td><strong>6. Chạy lại từ gói đã lưu (Archive Replay)</strong></td>
+              <td><span class="pill pass">✓ Chạy lại từ ZIP đóng băng &amp; so khớp từng lệnh</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+              <td><span class="pill drop">✕ Chỉ là DB-seeding giả lập</span></td>
+            </tr>
+            <tr>
+              <td><strong>7. Kiểm định Lookahead &amp; Recursive</strong></td>
+              <td><span class="pill pass">✓ Tích hợp ở Bước 06 + Xuất kèm Dossier</span></td>
+              <td><span class="pill">⚠️ Phải chạy CLI thủ công</span></td>
+              <td><span class="pill drop">✕ Lỗi 404 trên engine chính thức</span></td>
+            </tr>
+            <tr>
+              <td><strong>8. Tối ưu Hyperopt An toàn</strong></td>
+              <td><span class="pill pass">✓ Seed cố định + Không tự ghi đè file .json</span></td>
+              <td><span class="pill">⚠️ Tự xuất .json nếu không tắt cờ</span></td>
+              <td><span class="pill warn">⚠️ Dễ ghi đè tham số gốc</span></td>
+            </tr>
+            <tr>
+              <td><strong>9. Walk-Forward + Holdout tách biệt</strong></td>
+              <td><span class="pill pass">✓ Timeline trực quan + Thẻ đối chiếu Holdout</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+              <td><span class="pill warn">⚠️ Không tách Holdout khỏi Hyperopt</span></td>
+            </tr>
+            <tr>
+              <td><strong>10. Ma trận Độ nhạy 2D (Tham số × Phí)</strong></td>
+              <td><span class="pill pass">✓ Bảng lưới 2D Pivot trực quan</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+            </tr>
+            <tr>
+              <td><strong>11. Dịch vụ Paper 1x Cô lập</strong></td>
+              <td><span class="pill pass">✓ Cổng 8095 riêng + Khởi tạo STOPPED an toàn</span></td>
+              <td><span class="pill">⚠️ Cấu hình chung</span></td>
+              <td><span class="pill">⚠️ Không tách hồ sơ từ gói xác minh</span></td>
+            </tr>
+            <tr>
+              <td><strong>12. Đối chiếu Paper vs Backtest</strong></td>
+              <td><span class="pill pass">✓ So khớp từng lệnh trên cùng khoảng thời gian</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3: Empirical 8-Strategy Benchmark (FreqPilot 2026.9 vs Ultimate Fork) -->
+    <section id="benchmark">
+      <span class="sec-eyebrow">EMPIRICAL PROOF (`benchmarks/REPORT.md`)</span>
+      <h2 data-i18n="sec_bench_title">Thực Nghiệm Đối Chiếu 8 Chiến Lược Trên Cả 2 Hệ Thống</h2>
+      <p class="sec-sub" data-i18n="sec_bench_sub">
+        Chạy cùng một giao thức đóng băng (`20260918–20261021`, `BTC/USDT:USDT` + `ETH/USDT:USDT`, `1x Isolated`, vốn `1.000 USDT`, stake `100 USDT`, phí `0,05%`) trên cả <strong>FreqPilot (`2026.9` chính thức)</strong> và <strong>FreqUI Ultimate (`2026.3-dev` fork)</strong>:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Chiến lược</th>
+              <th>Khung</th>
+              <th>Số lệnh (FreqPilot / Ultimate)</th>
+              <th>Lãi/Lỗ FreqPilot (Có Funding)</th>
+              <th>Lãi/Lỗ Khi Tách Funding</th>
+              <th>Lãi/Lỗ Ultimate Fork</th>
+              <th>Kết luận đối chiếu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>F0ttStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">6 / 6</td>
+              <td class="pos mono">+9.44 USDT</td>
+              <td class="pos mono">+9.50 USDT</td>
+              <td class="pos mono">+9.50 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở (Ultimate bỏ qua 0.06 USDT phí funding)</span></td>
+            </tr>
+            <tr>
+              <td><strong>VolatilitySystem</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">2 / 2</td>
+              <td class="pos mono">+3.24 USDT</td>
+              <td class="pos mono">+3.34 USDT</td>
+              <td class="pos mono">+3.34 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở (Ultimate bỏ qua 0.10 USDT phí funding)</span></td>
+            </tr>
+            <tr>
+              <td><strong>AdxSmaStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">2 / 2</td>
+              <td class="neg mono">-3.39 USDT</td>
+              <td class="neg mono">-3.38 USDT</td>
+              <td class="neg mono">-3.38 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở</span></td>
+            </tr>
+            <tr>
+              <td><strong>ReinforcedStrategy</strong></td>
+              <td><code>5m</code></td>
+              <td class="mono">24 / 24</td>
+              <td class="neg mono">-2.15 USDT</td>
+              <td class="neg mono">-2.14 USDT</td>
+              <td class="neg mono">-2.14 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% cả 24 lệnh</span></td>
+            </tr>
+            <tr>
+              <td><strong>SupertrendStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">23 / 23</td>
+              <td class="neg mono">-1.77 USDT</td>
+              <td class="neg mono">-1.98 USDT</td>
+              <td class="neg mono">-1.98 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% cả 23 lệnh</span></td>
+            </tr>
+            <tr>
+              <td><strong>SampleStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">5 / 5</td>
+              <td class="neg mono">-8.38 USDT</td>
+              <td class="neg mono">-8.34 USDT</td>
+              <td class="neg mono">-8.34 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% cả 5 lệnh</span></td>
+            </tr>
+            <tr>
+              <td><strong>Bandtastic</strong></td>
+              <td><code>15m</code></td>
+              <td class="mono">116 / 116</td>
+              <td class="neg mono">-17.85 USDT</td>
+              <td class="neg mono">-17.86 USDT</td>
+              <td class="neg mono">-17.86 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% cả 116 lệnh</span></td>
+            </tr>
+            <tr>
+              <td><strong>StarterFuturesResearch</strong></td>
+              <td><code>15m</code></td>
+              <td class="mono">144 / 144</td>
+              <td class="neg mono">-22.18 USDT</td>
+              <td class="neg mono">-22.14 USDT</td>
+              <td class="neg mono">-22.14 USDT</td>
+              <td><span class="pill pass">✓ Khớp 100% cả 144 lệnh</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn primary" href="/">← Quay lại Trang chủ &amp; Trải nghiệm Demo</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot/blob/main/benchmarks/REPORT.md" target="_blank" rel="noopener">Xem Báo Cáo Gốc (`benchmarks/REPORT.md`) trên GitHub ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 &amp; Official Freqtrade 2026.9 Engine.
+  </footer>
+
+  <script>
+    const CMP_I18N = {
+      vi: {
+        nav_home: "← Trang chủ",
+        nav_arch: "3 Kiến trúc",
+        nav_matrix: "12 Điểm vượt trội",
+        nav_bench: "Thực nghiệm 8 chiến lược",
+        hero_badge: "ĐỐI CHIẾU KIẾN TRÚC & THỰC NGHIỆM",
+        hero_title: "FreqPilot Khác Gì So Với Freqtrade Gốc & Bản Fork FreqUI Ultimate?",
+        hero_lead: "Giữ nguyên <strong>100% Engine Freqtrade 2026.9 chính thức</strong> để không bao giờ lệch lệnh, đồng thời nâng cấp toàn bộ quy trình từ Viết mã, Kiểm toán Dữ liệu, Lookahead, Walk-Forward, Độ nhạy 2D đến Paper 1x lên một giao diện duy nhất.",
+        sec_mat_title: "Bảng Đối Chiếu 12 Hạng Mục Kỹ Thuật",
+        sec_mat_sub: "Mọi tính năng của FreqPilot đều được kiểm chứng bằng bộ 1.879 bài test tự động (1.746 UI tests + 133 Backend container tests):",
+        sec_bench_title: "Thực Nghiệm Đối Chiếu 8 Chiến Lược Trên Cả 2 Hệ Thống",
+        sec_bench_sub: "Chạy cùng một giao thức đóng băng (20260918–20261021, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, vốn 1.000 USDT, stake 100 USDT, phí 0,05%) trên cả FreqPilot (2026.9 chính thức) và FreqUI Ultimate (2026.3-dev fork):"
+      },
+      en: {
+        nav_home: "← Home",
+        nav_arch: "3 Architectures",
+        nav_matrix: "12 Key Differences",
+        nav_bench: "8-Strategy Benchmark",
+        hero_badge: "ARCHITECTURE & EMPIRICAL HEAD-TO-HEAD",
+        hero_title: "How FreqPilot Outperforms Standard FreqUI & the FreqUI Ultimate Fork",
+        hero_lead: "Keep <strong>100% unmodified Official Freqtrade 2026.9</strong> for exact execution parity while upgrading your entire research loop—Monaco Editor, Data Audit, Lookahead Checks, Walk-Forward Holdout, 2D Sensitivity, and 1x Paper Reconciliation—into one unified studio.",
+        sec_mat_title: "12-Point Technical Comparison Matrix",
+        sec_mat_sub: "Every FreqPilot capability is backed by 1,879 automated tests (1,746 UI tests + 133 network-isolated backend tests):",
+        sec_bench_title: "Head-to-Head Empirical Benchmark Across 8 Strategies",
+        sec_bench_sub: "Executed under the exact same frozen protocol (20260918–20261021, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, 1,000 USDT wallet, 100 USDT stake, 0.05% fee) on both FreqPilot (official 2026.9) and FreqUI Ultimate (2026.3-dev fork):"
+      },
+      zh: {
+        nav_home: "← 返回首页",
+        nav_arch: "三大架构对比",
+        nav_matrix: "12项核心优势",
+        nav_bench: "8大策略实测对标",
+        hero_badge: "架构与实证全方位对比",
+        hero_title: "FreqPilot 相比原版 FreqUI 与 FreqUI Ultimate 分支版强在哪里？",
+        hero_lead: "100% 保持<strong>官方 Freqtrade 2026.9 引擎零修改</strong>以确保实盘/回测完全一致，同时将代码编辑、数据审计、前视检验、Walk-Forward、2D 敏感度矩阵与 1x 模拟盘整合至统一工作台。",
+        sec_mat_title: "12 项核心技术指标全面对比",
+        sec_mat_sub: "FreqPilot 的每一项能力均通过 1,879 项自动化测试验证（1,746 项前端测试 + 133 项无网络容器后端测试）：",
+        sec_bench_title: "8 大策略双引擎同协议实证对标报告",
+        sec_bench_sub: "在完全相同的冻结协议（20260918–20261021，BTC/ETH 逐仓 1x，1,000 USDT 本金，100 USDT 单笔，0.05% 手续费）下对比 FreqPilot (2026.9 官方引擎) 与 FreqUI Ultimate (2026.3-dev 分支)："
+      },
+      ru: {
+        nav_home: "← На главную",
+        nav_arch: "3 архитектуры",
+        nav_matrix: "12 преимуществ",
+        nav_bench: "Тест 8 стратегий",
+        hero_badge: "СРАВНЕНИЕ АРХИТЕКТУРЫ И БЭКТЕСТОВ",
+        hero_title: "Чем FreqPilot лучше стандартного FreqUI и форка FreqUI Ultimate?",
+        hero_lead: "Сохраняйте <strong>100% официальный движок Freqtrade 2026.9</strong> без модификаций, получая единую студию: редактор кода, аудит данных, проверки Lookahead, Walk-Forward Holdout, 2D-матрицу и сверку 1x Paper.",
+        sec_mat_title: "Сравнение по 12 техническим критериям",
+        sec_mat_sub: "Каждая функция FreqPilot проверена 1 879 автоматическими тестами:",
+        sec_bench_title: "Эмпирическое сравнение 8 стратегий на обоих движках",
+        sec_bench_sub: "Запуск по единому замороженному протоколу (20260918–20261021, BTC/ETH Isolated 1x, депозит 1 000 USDT, ставка 100 USDT, комиссия 0,05%):"
+      },
+      ko: {
+        nav_home: "← 홈으로",
+        nav_arch: "3대 아키텍처 비교",
+        nav_matrix: "12가지 핵심 차별점",
+        nav_bench: "8대 전략 실증 비교",
+        hero_badge: "아키텍처 및 실증 벤치마크 비교",
+        hero_title: "FreqPilot은 순정 FreqUI 및 FreqUI Ultimate 포크와 무엇이 다른가요?",
+        hero_lead: "<strong>100% 공식 Freqtrade 2026.9 엔진</strong>을 그대로 유지하여 체결 오차를 원천 차단하면서, 코드 편집·데이터 감사·Lookahead 검증·Walk-Forward·2D 민감도·1x 페이퍼 대사를 하나의 스튜디오로 통합했습니다.",
+        sec_mat_title: "12개 핵심 기술 항목 상세 비교",
+        sec_mat_sub: "FreqPilot의 모든 기능은 1,879개의 자동화 테스트로 검증되었습니다:",
+        sec_bench_title: "8개 전략 양쪽 시스템 실증 벤치마크",
+        sec_bench_sub: "동일한 동결 프로토콜(20260918–20261021, BTC/ETH 1x 격리, 1,000 USDT 시드, 100 USDT 스테이크, 수수료 0.05%)에서 실행한 결과:"
+      }
+    };
+
+    function setCompareLang(lang) {
+      const dict = CMP_I18N[lang] || CMP_I18N.vi;
+      document.documentElement.lang = lang;
+      const sel = document.getElementById('lang-select');
+      if (sel && sel.value !== lang) sel.value = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+      try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
+    }
+
+    (function init() {
+      const urlLang = new URLSearchParams(location.search).get('lang');
+      let saved = null;
+      try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}
+      const initial = (urlLang && CMP_I18N[urlLang]) ? urlLang : (saved && CMP_I18N[saved]) ? saved : 'vi';
+      if (initial !== 'vi') setCompareLang(initial);
+    })();
+  </script>
+</body>
+</html>

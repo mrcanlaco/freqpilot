@@ -609,10 +609,10 @@
       </div>
       <nav class="nav-links">
         <a href="#interactive-studio" data-i18n="nav_studio">Demo</a>
-        <a href="#firewall" data-i18n="nav_firewall">Tường lửa</a>
+        <a href="#compare" data-i18n="nav_compare">So sánh</a>
         <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
         <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
-        <a href="#install" data-i18n="nav_install">Cài đặt</a>
+        <a href="/compare.html" data-i18n="nav_deep">vs FreqUI ↗</a>
       </nav>
       <div class="nav-right">
         <select id="lang-select" class="lang-select" aria-label="Language" onchange="setSiteLang(this.value)">
@@ -976,6 +976,85 @@ Bằng chứng hiện tại trên máy:
             <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">3. Reconcile<br/><b class="pos">Match / Diff</b></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Section 1.5: Switching from Official FreqUI or FreqUI Ultimate? (RoboQuant-style Visual Matrix) -->
+    <section id="compare">
+      <span class="sec-eyebrow">HEAD-TO-HEAD COMPARISON</span>
+      <h2 data-i18n="sec_cmp_title">Đang Dùng Freqtrade Gốc Hoặc Bản Fork FreqUI Ultimate?</h2>
+      <p class="sec-sub" data-i18n="sec_cmp_sub">
+        FreqUI gốc thiếu công cụ kiểm định nghiên cứu khép kín; trong khi bản fork FreqUI Ultimate buộc thay thế engine chính thức và báo lỗi <code>404 Endpoint Not Found</code> khi nối vào Freqtrade gốc. FreqPilot giải quyết triệt để cả hai:
+      </p>
+
+      <div class="table-wrap" style="margin-bottom:18px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:28%">Tiêu chí kỹ thuật &amp; Nghiên cứu</th>
+              <th style="width:26%;background:rgba(16,185,129,0.14);color:var(--pos-bright)">★ FreqPilot Studio (2026.9)</th>
+              <th style="width:23%">Freqtrade + FreqUI Gốc</th>
+              <th style="width:23%">Bản Fork FreqUI Ultimate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Engine thực thi bên dưới</strong></td>
+              <td><span class="pill pass">✓ 100% Freqtrade 2026.9 chính thức</span></td>
+              <td><span class="pill pass">✓ Freqtrade 2026.9 chính thức</span></td>
+              <td><span class="pill drop">✕ Bắt cài bản fork riêng (2026.3-dev)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Trình sửa mã Monaco + Kho phiên bản</strong></td>
+              <td><span class="pill pass">✓ Tích hợp sẵn + Diff + Khôi phục nháp</span></td>
+              <td><span class="pill">✕ Phải sửa file .py ngoài IDE</span></td>
+              <td><span class="pill drop">⚠️ Lỗi 404 nếu chạy trên Freqtrade gốc</span></td>
+            </tr>
+            <tr>
+              <td><strong>Kiểm định Lookahead &amp; Recursive trên UI</strong></td>
+              <td><span class="pill pass">✓ 1 chạm ngay trong Bước 06</span></td>
+              <td><span class="pill">✕ Chỉ có lệnh CLI rời rạc</span></td>
+              <td><span class="pill drop">✕ Không hỗ trợ trên Freqtrade gốc</span></td>
+            </tr>
+            <tr>
+              <td><strong>Walk-Forward + Holdout tách khỏi Hyperopt</strong></td>
+              <td><span class="pill pass">✓ Rolling Train/OOS + Holdout riêng</span></td>
+              <td><span class="pill">✕ Phải tự cắt ngày thủ công</span></td>
+              <td><span class="pill">⚠️ Không tách Holdout độc lập</span></td>
+            </tr>
+            <tr>
+              <td><strong>Ma trận Độ nhạy Tham số &amp; Phí 2 chiều</strong></td>
+              <td><span class="pill pass">✓ Bảng Pivot 2D trực quan (9–25 ô)</span></td>
+              <td><span class="pill">✕ Không có</span></td>
+              <td><span class="pill">✕ Không có trên engine chính thức</span></td>
+            </tr>
+            <tr>
+              <td><strong>Gói Hồ sơ Đóng băng <code>SHA-256</code> (.zip)</strong></td>
+              <td><span class="pill pass">✓ Xuất/Nhập 1 chạm + Archive Replay</span></td>
+              <td><span class="pill">✕ Chỉ lưu JSON kết quả rời rạc</span></td>
+              <td><span class="pill">✕ Không có gói kiểm chứng SHA-256</span></td>
+            </tr>
+            <tr>
+              <td><strong>Paper 1x Cô lập &amp; Đối chiếu Lệnh Thực</strong></td>
+              <td><span class="pill pass">✓ Worker riêng (8095) + So khớp lệnh</span></td>
+              <td><span class="pill">⚠️ Dùng chung DB, dễ lệch cấu hình</span></td>
+              <td><span class="pill">⚠️ Không có sổ nhật ký đối chiếu riêng</span></td>
+            </tr>
+            <tr>
+              <td><strong>Kiểm thử Tự động &amp; Bảo vệ An toàn</strong></td>
+              <td><span class="pill pass">✓ 1.879 Tests Pass · Khóa cứng 1x Dry-Run</span></td>
+              <td><span class="pill">✓ Engine test gốc</span></td>
+              <td><span class="pill">⚠️ Thiếu cổng chặn kích hoạt nhầm</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:12px">
+        <div style="font-size:13.5px;color:var(--fg-2)">
+          <strong style="color:var(--fg)">Bằng chứng thực nghiệm trên 8 chiến lược:</strong> Xem báo cáo chạy đối chiếu trực tiếp cùng bộ chiến lược giữa FreqPilot (`2026.9` chính thức) và bản fork `freqtrade-ultimate`.
+        </div>
+        <a class="btn primary" href="/compare.html" data-i18n="cmp_cta_btn">Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →</a>
       </div>
     </section>
 
@@ -1406,10 +1485,10 @@ cd freqpilot
     const SITE_I18N = {
       vi: {
         nav_studio: "Demo",
-        nav_firewall: "Tường lửa",
+        nav_compare: "So sánh",
         nav_audit: "Kiểm toán",
         nav_dossiers: "Bảng giá",
-        nav_install: "Cài đặt",
+        nav_deep: "vs FreqUI ↗",
         hero_badge: "● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →",
         hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
@@ -1421,6 +1500,9 @@ cd freqpilot
         tab_code: "🐍 Mã & AI Prompt",
         sec_fw_title: "4 Lớp Tường Lửa Chống 'Backtest Ảo' (Anti-Curve-Fitting Firewall)",
         sec_fw_sub: "Hầu hết chiến lược chia sẻ trên mạng chỉ thắng trên 1 tháng dữ liệu ngắn hoặc nhìn trộm nến tương lai. FreqPilot sàng lọc tự động qua 4 cổng kiểm định trực quan:",
+        sec_cmp_title: "Đang Dùng Freqtrade Gốc Hoặc Bản Fork FreqUI Ultimate?",
+        sec_cmp_sub: "FreqUI gốc thiếu công cụ kiểm định nghiên cứu khép kín; trong khi bản fork FreqUI Ultimate buộc thay thế engine chính thức và báo lỗi <code>404 Endpoint Not Found</code> khi nối vào Freqtrade gốc. FreqPilot giải quyết triệt để cả hai:",
+        cmp_cta_btn: "Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →",
         sec1_title: "Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
         sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
         filter_all: "Tất cả (10)",
@@ -1433,10 +1515,10 @@ cd freqpilot
       },
       en: {
         nav_studio: "Demo",
-        nav_firewall: "Firewall",
+        nav_compare: "Compare",
         nav_audit: "Leaderboard",
         nav_dossiers: "Pricing",
-        nav_install: "Quickstart",
+        nav_deep: "vs FreqUI ↗",
         hero_badge: "● 18 Strategies Audited on 6.7 Months of Frozen Futures Data →",
         hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
@@ -1448,6 +1530,9 @@ cd freqpilot
         tab_code: "🐍 Code & AI Prompt",
         sec_fw_title: "4-Gate Anti-Curve-Fitting Firewall",
         sec_fw_sub: "Most public crypto strategies only win on a cherry-picked 30-day window or leak future daily bars. FreqPilot enforces four visual verification gates:",
+        sec_cmp_title: "Switching from Standard FreqUI or FreqUI Ultimate?",
+        sec_cmp_sub: "Standard FreqUI is a bot monitor, not a research studio; meanwhile, the FreqUI Ultimate fork forces you off the official Freqtrade engine (returning <code>404</code> on official backends). FreqPilot gives you the best of both:",
+        cmp_cta_btn: "Read Full Architecture & 8-Strategy Benchmark →",
         sec1_title: "Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
         sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>1,000 USDT</code> wallet, <code>100 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
         filter_all: "All Audited (10)",
@@ -1460,10 +1545,10 @@ cd freqpilot
       },
       zh: {
         nav_studio: "演示",
-        nav_firewall: "防火墙",
+        nav_compare: "版本对比",
         nav_audit: "实证榜单",
         nav_dossiers: "方案",
-        nav_install: "安装",
+        nav_deep: "对比原版 ↗",
         hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
         hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
@@ -1475,6 +1560,9 @@ cd freqpilot
         tab_code: "🐍 源码与AI提示词",
         sec_fw_title: "四重防过拟合工程防火墙 (Anti-Curve-Fitting Firewall)",
         sec_fw_sub: "网上大多数策略仅在 1 个月短样本盈利或存在跨周期前视偏差。FreqPilot 通过四道可视化闸门自动筛选：",
+        sec_cmp_title: "正在使用原版 FreqUI 或 FreqUI Ultimate 分支版？",
+        sec_cmp_sub: "原版 FreqUI 缺乏策略研发闭环工具；而 FreqUI Ultimate 强迫替换官方引擎（连接官方后端会报 <code>404</code>）。FreqPilot 完美兼具两者优势：",
+        cmp_cta_btn: "查看完整架构与 8 策略对标报告 →",
         sec1_title: "公开实证审计榜单：10 个自动发掘策略 (`01a138fe`)",
         sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>1,000 USDT</code> 本金，<code>100 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
         filter_all: "全部策略 (10)",
@@ -1487,10 +1575,10 @@ cd freqpilot
       },
       ru: {
         nav_studio: "Демо",
-        nav_firewall: "Защита",
+        nav_compare: "Сравнение",
         nav_audit: "Аудит",
         nav_dossiers: "Тарифы",
-        nav_install: "Старт",
+        nav_deep: "vs FreqUI ↗",
         hero_badge: "● 18 стратегий проверены на 6,7 мес. замороженных данных →",
         hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
@@ -1502,6 +1590,9 @@ cd freqpilot
         tab_code: "🐍 Код и AI",
         sec_fw_title: "4-уровневый фильтр против переоптимизации",
         sec_fw_sub: "Большинство публичных стратегий работают только на коротком окне или подглядывают в будущие свечи. FreqPilot проверяет каждую стратегию через 4 визуальных шлюза:",
+        sec_cmp_title: "Переходите с оригинального FreqUI или форка FreqUI Ultimate?",
+        sec_cmp_sub: "В стандартном FreqUI нет исследовательской среды, а форк FreqUI Ultimate требует замены официального движка. FreqPilot объединяет лучшее:",
+        cmp_cta_btn: "Подробное сравнение архитектуры и 8 стратегий →",
         sec1_title: "Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
         sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>1,000 USDT</code>, ставка <code>100 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
         filter_all: "Все (10)",
@@ -1514,10 +1605,10 @@ cd freqpilot
       },
       ko: {
         nav_studio: "데모",
-        nav_firewall: "방화벽",
+        nav_compare: "비교",
         nav_audit: "리더보드",
         nav_dossiers: "요금제",
-        nav_install: "설치",
+        nav_deep: "vs FreqUI ↗",
         hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
         hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
@@ -1527,7 +1618,11 @@ cd freqpilot
         tab_matrix: "🎛️ 2D 민감도 & WFA",
         tab_shots: "🧭 워크플로 & Paper",
         tab_code: "🐍 코드 & AI",
+        sec_fw_title: "4단계 과최적화 방지 방화벽 (Anti-Curve-Fitting Firewall)",
         sec_fw_sub: "대부분의 공개 전략은 1개월 단기 구간에서만 작동하거나 미래 캔들을 참조합니다. FreqPilot은 4가지 시각적 게이트로 전략을 검증합니다:",
+        sec_cmp_title: "순정 FreqUI 또는 FreqUI Ultimate 포크에서 전환하시나요?",
+        sec_cmp_sub: "순정 FreqUI는 연구 도구가 부족하고, FreqUI Ultimate 포크는 공식 엔진 교체를 강제합니다. FreqPilot은 공식 2026.9 엔진 위에서 완벽한 연구 스튜디오를 제공합니다:",
+        cmp_cta_btn: "아키텍처 및 8대 전략 비교 보고서 보기 →",
         sec1_title: "공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
         sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
         filter_all: "전체 (10)",

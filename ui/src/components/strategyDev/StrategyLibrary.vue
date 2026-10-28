@@ -240,7 +240,7 @@ function tradeBarPercent(trades: number | undefined) {
         So sánh ({{ selection.length }})
       </button>
     </div>
-    <div v-if="showAdvancedFilters || hasActiveFilters" class="advanced-filter-drawer">
+    <div v-if="showAdvancedFilters" class="advanced-filter-drawer">
       <div class="filters">
         <label
           >Khung tín hiệu<select v-model="timeframe">
