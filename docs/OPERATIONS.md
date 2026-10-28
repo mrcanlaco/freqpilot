@@ -76,3 +76,14 @@ Script dùng API backup SQLite để chứa giao dịch đã commit trong WAL, h
   - `buildResearchDossierMarkdown`: xuất tài liệu Markdown gồm nguồn gốc (`revision`, `preset`, `artifact_sha256`), giao thức đóng băng, bảng kết quả & `exit_reason`, trạng thái Lookahead/Recursive, hướng dẫn 3 bước kiểm chứng và tuyên bố rõ giới hạn không đóng băng metadata thị trường trực tuyến của Binance ở gói cũ.
   - `POST /studio/runs/import` (`backend/api_runs.py`): kiểm tra SHA256 tổng của gói ZIP (tối đa 64 MB nén / 256 MB giải nén), chặn path traversal / symlink / tệp lạ, đối chiếu SHA256 từng tệp đầu vào và mã nhúng trong ZIP kết quả native, xác thực `validate_saved_config` rồi nạp vào `user_data/freqpilot/runs/<id>` và `user_data/backtest_results/` mà không ghi đè tệp `.py` trong thư viện.
 - **Bằng chứng kiểm chứng**: `pnpm --dir ui typecheck` (0 lỗi), `pnpm --dir ui exec vitest run` (118/118 tệp, 1.743/1.743 kiểm tra đạt), `docker run ... unittest discover` (133/133 kiểm tra backend đạt), và kiểm chứng trực tiếp trên trình duyệt tại `http://localhost:8091/studio` & `http://localhost:8090/studio`.
+
+## Kiểm chứng triển khai & khôi phục trên máy thứ hai (Máy MSI `JIGMENGUYEN`), 28/10/2026
+
+- Đã tạo bản sao lưu nhất quán từ máy Desktop bằng `tools/workspace_backup.py backup` (`3.892` tệp khớp `SHA-256`, gồm SQLite online backup).
+- Đã chuyển sang máy thứ hai **`storage-msi-vpn` (`100.88.76.126` — `JIGMENGUYEN`, môi trường Linux WSL2 `DaoVangServer`)**, chạy `tools/workspace_backup.py verify` (`3.892` tệp đạt) và `tools/workspace_backup.py restore` vào `/opt/freqpilot/user_data` (`restore complete: 3892 files verified`, `PRAGMA integrity_check = ok`).
+- Đã dựng image `freqpilot-msi:2026.9-v0.1` và khởi chạy cả 3 container (`freqpilot-msi-paper-1` ở cổng `8090`, `freqpilot-msi-backtest-1` ở cổng `8091`, `freqpilot-msi-research-paper-1` ở cổng `8095`).
+- Kiểm chứng trực tiếp API trên máy thứ hai:
+  - `GET http://127.0.0.1:8091/api/v1/studio/library`: trả về `FreqPilot 2026.9`, `dry_run=true`, đầy đủ `26` chiến lược.
+  - `GET http://127.0.0.1:8091/api/v1/studio/runs`: đầy đủ `33` gói backtest đóng băng.
+  - `GET http://127.0.0.1:8091/api/v1/studio/paper`: đầy đủ `3` hồ sơ Paper `1x Isolated` đã chuẩn bị (`DikibagastEmaRsi1h`, `RocketHunterSma501h`, `StarterFuturesResearch`).
+  - `GET http://127.0.0.1:8090/studio` & `GET http://127.0.0.1:8095/`: trả về `HTTP 200`.
