@@ -63,79 +63,76 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-      max-width: 1120px;
-      padding: 10px 16px;
-      background: rgba(11, 16, 27, 0.82);
+      gap: 18px;
+      width: auto;
+      min-width: min(680px, 94vw);
+      max-width: 760px;
+      padding: 7px 10px 7px 16px;
+      background: rgba(11, 16, 27, 0.85);
       backdrop-filter: blur(18px);
       border: 1px solid var(--line-2);
       border-radius: 999px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+      white-space: nowrap;
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       font-weight: 800;
-      font-size: 17px;
+      font-size: 16px;
       letter-spacing: -0.02em;
       color: var(--fg);
+      white-space: nowrap;
     }
     .brand-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
       background: linear-gradient(135deg, var(--accent), var(--pos));
       display: inline-flex;
       align-items: center;
       justify-content: center;
       color: #041019;
       font-weight: 900;
-      font-size: 14px;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
-    }
-    .brand-tag {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.12);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.28);
+      font-size: 13px;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
     }
     .nav-links {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 22px;
       font-size: 13.5px;
       font-weight: 500;
+      white-space: nowrap;
     }
-    .nav-links a { color: var(--fg-2); transition: color .15s; }
+    .nav-links a { color: var(--fg-2); transition: color .15s; white-space: nowrap; }
     .nav-links a:hover { color: var(--fg); }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-right { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
     .lang-select {
       background: var(--bg-2);
       color: var(--fg);
       border: 1px solid var(--line-2);
       border-radius: 999px;
-      padding: 6px 12px;
+      padding: 6px 10px;
       font: inherit;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 18px;
+      gap: 6px;
+      padding: 7px 16px;
       border-radius: 999px;
       border: 1px solid var(--line-2);
       background: var(--bg-2);
       color: var(--fg);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
       transition: all .18s;
     }
     .btn:hover { border-color: var(--accent); transform: translateY(-1px); }
@@ -609,22 +606,21 @@
       <div class="brand">
         <span class="brand-icon">FP</span>
         <span>FreqPilot</span>
-        <span class="brand-tag">Freqtrade 2026.9</span>
       </div>
       <nav class="nav-links">
-        <a href="#interactive-studio" data-i18n="nav_studio">Interactive Studio</a>
-        <a href="#firewall" data-i18n="nav_firewall">4-Gate Firewall</a>
-        <a href="#audit" data-i18n="nav_audit">10-Strategy Leaderboard</a>
-        <a href="#dossiers" data-i18n="nav_dossiers">Verified Dossiers (.zip)</a>
-        <a href="#install" data-i18n="nav_install">3-Step Quickstart</a>
+        <a href="#interactive-studio" data-i18n="nav_studio">Demo</a>
+        <a href="#firewall" data-i18n="nav_firewall">Tường lửa</a>
+        <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
+        <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
+        <a href="#install" data-i18n="nav_install">Cài đặt</a>
       </nav>
       <div class="nav-right">
         <select id="lang-select" class="lang-select" aria-label="Language" onchange="setSiteLang(this.value)">
-          <option value="vi">🇻🇳 Tiếng Việt</option>
-          <option value="en">🇬🇧 English</option>
-          <option value="zh">🇨🇳 简体中文</option>
-          <option value="ru">🇷🇺 Русский</option>
-          <option value="ko">🇰🇷 한국어</option>
+          <option value="vi">🇻🇳 VI</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="ru">🇷🇺 RU</option>
+          <option value="ko">🇰🇷 KO</option>
         </select>
         <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
@@ -635,24 +631,15 @@
     <!-- Hero -->
     <div class="hero">
       <div class="eyebrow-pill" data-i18n="hero_badge">
-        ● 18 Chiến Lược Công Khai Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Futures Đóng Băng →
+        ● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →
       </div>
       <h1 data-i18n="hero_title">Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.</h1>
       <p class="hero-sub" data-i18n="hero_lead">
-        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm định lượng trực quan: Biểu đồ Equity &amp; Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Đối chiếu lệnh Paper 1x.
+        Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn &amp; Drawdown, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.
       </p>
       <div class="hero-actions">
-        <a class="btn primary" href="#interactive-studio" data-i18n="hero_cta_audit">Trải Nghiệm Bảng Kết Quả Trực Quan ↓</a>
-        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở GitHub (GPL-3.0) ↗</a>
-      </div>
-
-      <!-- Ecosystem Badges -->
-      <div class="eco-strip">
-        <div class="eco-chip">⚡ <b>Freqtrade 2026.9</b> Official Engine</div>
-        <div class="eco-chip">🛡️ <b>1x Isolated</b> BTC &amp; ETH Futures</div>
-        <div class="eco-chip">🔐 <b>SHA-256</b> Reproducible ZIP Bundles</div>
-        <div class="eco-chip">🤖 <b>Codex / Claude</b> Evidence Prompt</div>
-        <div class="eco-chip">✅ <b>1,879 Tests</b> Automated Suite</div>
+        <a class="btn primary" href="#interactive-studio" data-i18n="hero_cta_audit">Xem Bảng Kết Quả Tương Tác ↓</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở GitHub ↗</a>
       </div>
 
       <!-- Interactive Studio Window (RoboQuant Results Card + Live Studio Tabs) -->
@@ -660,13 +647,13 @@
         <div class="win-bar">
           <div class="win-dots">
             <span class="r"></span><span class="y"></span><span class="g"></span>
-            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e</span>
+            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · 1h · SHA-256: c331b8980e</span>
           </div>
           <div class="win-tabs">
-            <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn &amp; Drawdown</button>
-            <button class="win-tab" onclick="switchStudioTab('matrix', this)" data-i18n="tab_matrix">🎛️ Ma Trận 2D &amp; WFA Holdout</button>
-            <button class="win-tab" onclick="switchStudioTab('screenshots', this)" data-i18n="tab_shots">🖥️ Giao Diện Thực Tế (/studio)</button>
-            <button class="win-tab" onclick="switchStudioTab('code', this)" data-i18n="tab_code">🐍 Mã Chiến Lược &amp; AI Prompt</button>
+            <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn</button>
+            <button class="win-tab" onclick="switchStudioTab('matrix', this)" data-i18n="tab_matrix">🎛️ Độ Nhạy 2D &amp; WFA</button>
+            <button class="win-tab" onclick="switchStudioTab('screenshots', this)" data-i18n="tab_shots">🧭 Quy Trình &amp; Paper</button>
+            <button class="win-tab" onclick="switchStudioTab('code', this)" data-i18n="tab_code">🐍 Mã &amp; AI Prompt</button>
           </div>
         </div>
 
@@ -676,15 +663,15 @@
             <div class="strat-switcher">
               <div class="strat-btns">
                 <button class="strat-btn active" onclick="selectHeroStrategy('diki', this)">
-                  <span>#1 Cân bằng &amp; Đủ mẫu (30 lệnh): <b>DikibagastEmaRsi1h</b></span>
+                  <span><b>DikibagastEmaRsi1h</b> (30 lệnh)</span>
                   <span class="badge-pos">+44.23 USDT · DD 0.73%</span>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('rocket', this)">
-                  <span>#2 Lợi nhuận cao nhất: <b>RocketHunterSma501h</b></span>
+                  <span><b>RocketHunterSma501h</b> (8 lệnh)</span>
                   <span class="badge-pos">+61.83 USDT · PF 18.29</span>
                 </button>
               </div>
-              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">run_id: 8ebeb7170c · lookahead: false · recursive: ok</span>
+              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">8ebeb7170c · lookahead: false</span>
             </div>
 
             <!-- 10 KPI Cards -->
@@ -1250,8 +1237,8 @@ cd freqpilot
     // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
     const HERO_STRATEGIES = {
       diki: {
-        title: "DikibagastEmaRsi1h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e",
-        shaLabel: "run_id: 8ebeb7170c · lookahead: false · recursive: ok",
+        title: "DikibagastEmaRsi1h · 1h · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e",
+        shaLabel: "8ebeb7170c · lookahead: false · recursive: ok",
         pnl: "+44.23 USDT",
         ret: "+4.42%",
         trades: "30",
@@ -1283,8 +1270,8 @@ cd freqpilot
         ]
       },
       rocket: {
-        title: "RocketHunterSma501h · BTC/ETH 1h (detail 5m) · 2026-04-01 → 2026-10-21 · SHA-256: c621b60697",
-        shaLabel: "run_id: 6826363795 · lookahead: false · recursive: ok",
+        title: "RocketHunterSma501h · 1h · 2026-04-01 → 2026-10-21 · SHA-256: c621b60697",
+        shaLabel: "6826363795 · lookahead: false · recursive: ok",
         pnl: "+61.83 USDT",
         ret: "+6.18%",
         trades: "8",
@@ -1418,20 +1405,20 @@ cd freqpilot
 
     const SITE_I18N = {
       vi: {
-        nav_studio: "Interactive Studio",
-        nav_firewall: "4 Lớp Tường Lửa",
-        nav_audit: "Bảng Kiểm Toán 10 Chiến Lược",
-        nav_dossiers: "Gói Hồ Sơ (.zip)",
-        nav_install: "Cài Đặt 3 Bước",
-        hero_badge: "● 18 Chiến Lược Công Khai Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Futures Đóng Băng →",
+        nav_studio: "Demo",
+        nav_firewall: "Tường lửa",
+        nav_audit: "Kiểm toán",
+        nav_dossiers: "Bảng giá",
+        nav_install: "Cài đặt",
+        hero_badge: "● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →",
         hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
-        hero_lead: "FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm định lượng trực quan: Biểu đồ Equity & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Đối chiếu lệnh Paper 1x.",
-        hero_cta_audit: "Trải Nghiệm Bảng Kết Quả Trực Quan ↓",
-        hero_cta_gh: "Mã Nguồn Mở GitHub (GPL-3.0) ↗",
-        tab_equity: "📈 Đường Vốn & Drawdown",
-        tab_matrix: "🎛️ Ma Trận 2D & WFA Holdout",
-        tab_shots: "🖥️ Giao Diện Thực Tế (/studio)",
-        tab_code: "🐍 Mã Chiến Lược & AI Prompt",
+        hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
+        hero_cta_audit: "Xem Bảng Kết Quả Tương Tác ↓",
+        hero_cta_gh: "Mã Nguồn Mở GitHub ↗",
+        tab_equity: "📈 Đường Vốn",
+        tab_matrix: "🎛️ Độ Nhạy 2D & WFA",
+        tab_shots: "🧭 Quy Trình & Paper",
+        tab_code: "🐍 Mã & AI Prompt",
         sec_fw_title: "4 Lớp Tường Lửa Chống 'Backtest Ảo' (Anti-Curve-Fitting Firewall)",
         sec_fw_sub: "Hầu hết chiến lược chia sẻ trên mạng chỉ thắng trên 1 tháng dữ liệu ngắn hoặc nhìn trộm nến tương lai. FreqPilot sàng lọc tự động qua 4 cổng kiểm định trực quan:",
         sec1_title: "Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
@@ -1445,20 +1432,20 @@ cd freqpilot
         sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop."
       },
       en: {
-        nav_studio: "Interactive Studio",
-        nav_firewall: "4-Gate Firewall",
-        nav_audit: "10-Strategy Leaderboard",
-        nav_dossiers: "Verified Dossiers (.zip)",
-        nav_install: "3-Step Quickstart",
-        hero_badge: "● 18 Public Strategies Audited on 6.7 Months of Frozen Futures Data →",
+        nav_studio: "Demo",
+        nav_firewall: "Firewall",
+        nav_audit: "Leaderboard",
+        nav_dossiers: "Pricing",
+        nav_install: "Quickstart",
+        hero_badge: "● 18 Strategies Audited on 6.7 Months of Frozen Futures Data →",
         hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
-        hero_lead: "FreqPilot turns <strong>official Freqtrade 2026.9</strong> into a visual quantitative studio: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Rolling Walk-Forward Holdout, and 1x Paper Reconciliation.",
-        hero_cta_audit: "Explore Interactive Results Card ↓",
-        hero_cta_gh: "Open-Source on GitHub (GPL-3.0) ↗",
-        tab_equity: "📈 Equity & Drawdown",
-        tab_matrix: "🎛️ 2D Matrix & WFA Holdout",
-        tab_shots: "🖥️ Live Studio Screenshots",
-        tab_code: "🐍 Strategy Code & AI Prompt",
+        hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
+        hero_cta_audit: "Explore Interactive Results ↓",
+        hero_cta_gh: "Open-Source on GitHub ↗",
+        tab_equity: "📈 Equity Curve",
+        tab_matrix: "🎛️ 2D Matrix & WFA",
+        tab_shots: "🧭 Workflow & Paper",
+        tab_code: "🐍 Code & AI Prompt",
         sec_fw_title: "4-Gate Anti-Curve-Fitting Firewall",
         sec_fw_sub: "Most public crypto strategies only win on a cherry-picked 30-day window or leak future daily bars. FreqPilot enforces four visual verification gates:",
         sec1_title: "Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
@@ -1472,20 +1459,20 @@ cd freqpilot
         sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop."
       },
       zh: {
-        nav_studio: "交互式工作台",
-        nav_firewall: "四重防过拟合防火墙",
-        nav_audit: "10大策略实证榜单",
-        nav_dossiers: "已验证档案包 (.zip)",
-        nav_install: "3步快速启动",
+        nav_studio: "演示",
+        nav_firewall: "防火墙",
+        nav_audit: "实证榜单",
+        nav_dossiers: "方案",
+        nav_install: "安装",
         hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
         hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
-        hero_lead: "FreqPilot 将<strong>官方 Freqtrade 2026.9</strong> 升级为可视化量化工作台：交互式资金与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward Holdout 对照及 1x 模拟盘对账。",
-        hero_cta_audit: "体验交互式实证报告卡 ↓",
-        hero_cta_gh: "GitHub 开源仓库 (GPL-3.0) ↗",
-        tab_equity: "📈 净值与水下回撤曲线",
-        tab_matrix: "🎛️ 2D敏感度与 Holdout",
-        tab_shots: "🖥️ 真实工作台截图 (/studio)",
-        tab_code: "🐍 策略源码与 AI 提示词",
+        hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
+        hero_cta_audit: "查看交互式实证报告 ↓",
+        hero_cta_gh: "GitHub 开源仓库 ↗",
+        tab_equity: "📈 净值曲线",
+        tab_matrix: "🎛️ 2D敏感度与WFA",
+        tab_shots: "🧭 流程与模拟盘",
+        tab_code: "🐍 源码与AI提示词",
         sec_fw_title: "四重防过拟合工程防火墙 (Anti-Curve-Fitting Firewall)",
         sec_fw_sub: "网上大多数策略仅在 1 个月短样本盈利或存在跨周期前视偏差。FreqPilot 通过四道可视化闸门自动筛选：",
         sec1_title: "公开实证审计榜单：10 个自动发掘策略 (`01a138fe`)",
@@ -1499,20 +1486,20 @@ cd freqpilot
         sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
       },
       ru: {
-        nav_studio: "Интерактивная студия",
-        nav_firewall: "4 уровня защиты",
-        nav_audit: "Аудит 10 стратегий",
-        nav_dossiers: "Пакеты Dossier (.zip)",
-        nav_install: "Запуск за 3 шага",
-        hero_badge: "● 18 публичных стратегий проверены на 6,7 мес. замороженных данных →",
+        nav_studio: "Демо",
+        nav_firewall: "Защита",
+        nav_audit: "Аудит",
+        nav_dossiers: "Тарифы",
+        nav_install: "Старт",
+        hero_badge: "● 18 стратегий проверены на 6,7 мес. замороженных данных →",
         hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
-        hero_lead: "FreqPilot превращает <strong>официальный Freqtrade 2026.9</strong> в визуальную студию: интерактивные кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и сверка 1x Paper-сделок.",
-        hero_cta_audit: "Открыть интерактивную карточку ↓",
-        hero_cta_gh: "Открытый код на GitHub ↗",
-        tab_equity: "📈 Кривая капитала и DD",
-        tab_matrix: "🎛️ 2D-матрица и Holdout",
-        tab_shots: "🖥️ Скриншоты студии (/studio)",
-        tab_code: "🐍 Код стратегии и AI-промпт",
+        hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
+        hero_cta_audit: "Открыть интерактивный отчет ↓",
+        hero_cta_gh: "Открытый код GitHub ↗",
+        tab_equity: "📈 Кривая капитала",
+        tab_matrix: "🎛️ 2D-матрица и WFA",
+        tab_shots: "🧭 Процесс и Paper",
+        tab_code: "🐍 Код и AI",
         sec_fw_title: "4-уровневый фильтр против переоптимизации",
         sec_fw_sub: "Большинство публичных стратегий работают только на коротком окне или подглядывают в будущие свечи. FreqPilot проверяет каждую стратегию через 4 визуальных шлюза:",
         sec1_title: "Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
@@ -1526,21 +1513,20 @@ cd freqpilot
         sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
       },
       ko: {
-        nav_studio: "인터랙티브 스튜디오",
-        nav_firewall: "4단계 과최적화 방화벽",
-        nav_audit: "10대 전략 감사 리더보드",
-        nav_dossiers: "검증된 Dossier (.zip)",
-        nav_install: "3단계 빠른 설치",
+        nav_studio: "데모",
+        nav_firewall: "방화벽",
+        nav_audit: "리더보드",
+        nav_dossiers: "요금제",
+        nav_install: "설치",
         hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
         hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
-        hero_lead: "FreqPilot은 <strong>공식 Freqtrade 2026.9</strong>를 시각적 퀀트 연구 스튜디오로 전환합니다: 인터랙티브 수익·낙폭 곡선, 2D 파라미터 민감도 히트맵, Walk-Forward Holdout 비교 및 1x 페이퍼 대사.",
-        hero_cta_audit: "인터랙티브 성과 카드 체험 ↓",
-        hero_cta_gh: "GitHub 오픈소스 (GPL-3.0) ↗",
-        tab_equity: "📈 누적 손익 & 낙폭 곡선",
-        tab_matrix: "🎛️ 2D 민감도 & Holdout",
-        tab_shots: "🖥️ 실제 스튜디오 화면 (/studio)",
-        tab_code: "🐍 전략 코드 & AI 프롬프트",
-        sec_fw_title: "4단계 과최적화 방지 방화벽 (Anti-Curve-Fitting Firewall)",
+        hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
+        hero_cta_audit: "인터랙티브 성과 카드 보기 ↓",
+        hero_cta_gh: "GitHub 오픈소스 ↗",
+        tab_equity: "📈 수익 곡선",
+        tab_matrix: "🎛️ 2D 민감도 & WFA",
+        tab_shots: "🧭 워크플로 & Paper",
+        tab_code: "🐍 코드 & AI",
         sec_fw_sub: "대부분의 공개 전략은 1개월 단기 구간에서만 작동하거나 미래 캔들을 참조합니다. FreqPilot은 4가지 시각적 게이트로 전략을 검증합니다:",
         sec1_title: "공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
         sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",

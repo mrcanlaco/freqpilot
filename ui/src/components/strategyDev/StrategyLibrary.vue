@@ -27,6 +27,7 @@ const query = ref(''),
   outcome = ref<'all' | 'profitable' | 'loss' | 'sample30' | 'small_sample'>('all'),
   sort = ref<StrategySortKey>('evidence'),
   view = ref('cards'),
+  showAdvancedFilters = ref(false),
   chosen = ref<string[]>([]);
 const latest = computed(() => latestLibraryRuns(props.runs));
 const tags = computed(() =>
@@ -160,12 +161,10 @@ function tradeBarPercent(trades: number | undefined) {
   <section class="strategy-library" aria-label="Thư viện chiến lược">
     <div class="library-title">
       <div>
-        <span class="eyebrow">STRATEGIES · FREQPILOT</span>
         <h2>Thư viện chiến lược</h2>
-        <p>Chọn một ý tưởng, xem bằng chứng rồi tiếp tục nghiên cứu.</p>
       </div>
       <div class="actions">
-        <button :disabled="busy" @click="emit('refresh')">Tải lại thư viện</button
+        <button :disabled="busy" @click="emit('refresh')">Tải lại</button
         ><button class="primary" :disabled="busy" @click="emit('create')">+ Tạo chiến lược</button>
       </div>
     </div>
@@ -191,183 +190,118 @@ function tradeBarPercent(trades: number | undefined) {
         <small>Đủ cỡ mẫu thống kê cơ bản</small>
       </button>
     </div>
-    <div class="totals" role="region" aria-label="Thống kê nhanh thư viện">
+    <div class="compact-control-bar">
+      <input
+        v-model="query"
+        class="compact-search"
+        type="search"
+        aria-label="Tìm chiến lược"
+        placeholder="Tìm tên chiến lược, ý tưởng, mã commit hoặc #nhãn…"
+      />
+      <select v-model="sort" class="compact-select" aria-label="Sắp xếp">
+        <option value="evidence">Sắp xếp: Có gói backtest trước</option>
+        <option value="profit_desc">Sắp xếp: Lãi/lỗ USDT (Cao → Thấp)</option>
+        <option value="profit_asc">Sắp xếp: Lãi/lỗ USDT (Thấp → Cao)</option>
+        <option value="return_desc">Sắp xếp: Tỷ suất % (Cao → Thấp)</option>
+        <option value="drawdown_asc">Sắp xếp: Drawdown thấp nhất</option>
+        <option value="trades_desc">Sắp xếp: Số lệnh (Nhiều → Ít)</option>
+        <option value="run">Sắp xếp: Backtest gần nhất</option>
+        <option value="updated">Sắp xếp: Cập nhật gần nhất</option>
+        <option value="name">Sắp xếp: Tên A–Z</option>
+        <option value="name_desc">Sắp xếp: Tên Z–A</option>
+      </select>
       <button
         type="button"
-        class="total-pill"
-        :class="{ active: !hasActiveFilters }"
-        @click="reset"
+        :class="{ active: showAdvancedFilters || hasActiveFilters }"
+        @click="showAdvancedFilters = !showAdvancedFilters"
       >
-        <span>Tổng cộng</span><b>{{ items.length }}</b>
+        Bộ lọc &amp; Nhãn {{ hasActiveFilters ? '●' : '▾' }}
       </button>
-      <span class="total-pill static">
-        <span>Đang hiển thị</span><b>{{ visible.length }}</b>
-      </span>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: favorites }"
-        @click="favorites = !favorites"
-      >
-        <span>Yêu thích</span><b>{{ items.filter((x) => x.research?.is_favorite).length }}</b>
-      </button>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: status === 'archived' }"
-        @click="status = status === 'archived' ? 'all' : 'archived'"
-      >
-        <span>Có gói backtest</span><b>{{ archivedCount }}</b>
-      </button>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: status === 'matched' }"
-        @click="status = status === 'matched' ? 'all' : 'matched'"
-      >
-        <span>✓ Mã khớp</span><b>{{ matchedCount }}</b>
-      </button>
-      <button
-        v-if="archivedCount - matchedCount > 0"
-        type="button"
-        class="total-pill"
-        :class="{ active: status === 'changed' }"
-        @click="status = status === 'changed' ? 'all' : 'changed'"
-      >
-        <span>● Mã đã đổi</span><b>{{ archivedCount - matchedCount }}</b>
-      </button>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: outcome === 'profitable' }"
-        @click="outcome = outcome === 'profitable' ? 'all' : 'profitable'"
-      >
-        <span>Có lãi (&gt; 0 USDT)</span><b>{{ profitableCount }}</b>
-      </button>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: direction === 'short' }"
-        @click="direction = direction === 'short' ? 'all' : 'short'"
-      >
-        <span>Hỗ trợ Short</span><b>{{ shortCount }}</b>
-      </button>
-      <button
-        type="button"
-        class="total-pill"
-        :class="{ active: outcome === 'sample30' }"
-        @click="outcome = outcome === 'sample30' ? 'all' : 'sample30'"
-      >
-        <span>Mẫu ≥ 30 lệnh</span><b>{{ sample30Count }}</b>
-      </button>
-    </div>
-    <div class="filters">
-      <label class="search"
-        >Tìm chiến lược<input
-          v-model="query"
-          type="search"
-          placeholder="Tên, ý tưởng, ghi chú, commit hoặc nhãn…" /></label
-      ><label
-        >Khung tín hiệu<select v-model="timeframe">
-          <option value="">Tất cả khung</option>
-          <option v-for="tf in frames" :key="tf">{{ tf }}</option>
-        </select></label
-      ><label
-        >Chiều &amp; Chế độ<select v-model="direction">
-          <option value="all">Tất cả chiều</option>
-          <option value="short">Hỗ trợ Short</option>
-          <option value="long_only">Chỉ Long (không short)</option>
-          <option value="protected">Đang bảo vệ Paper</option>
-        </select></label
-      ><label
-        >Hồ sơ<select v-model="status">
-          <option value="all">Tất cả hồ sơ</option>
-          <option value="archived">Có gói backtest</option>
-          <option value="matched">Mã khớp lần chạy gần nhất</option>
-          <option value="changed">Mã khác lần chạy gần nhất</option>
-          <option value="unarchived">Chưa có gói backtest</option>
-          <option value="invalid">Cần sửa mã</option>
-        </select></label
-      ><label
-        >Kết quả &amp; Cỡ mẫu<select v-model="outcome">
-          <option value="all">Mọi kết quả</option>
-          <option value="profitable">Có lãi ròng (&gt; 0 USDT)</option>
-          <option value="loss">Đang lỗ (&lt; 0 USDT)</option>
-          <option value="sample30">Đủ mẫu cơ bản (≥ 30 lệnh)</option>
-          <option value="small_sample">Mẫu nhỏ (&lt; 30 lệnh)</option>
-        </select></label
-      ><label
-        >Nhãn<select v-model="tag">
-          <option value="">Tất cả nhãn</option>
-          <option v-for="t in tags" :key="t">{{ t }}</option>
-        </select></label
-      ><label
-        >Sắp xếp<select v-model="sort">
-          <option value="evidence">Có gói backtest trước</option>
-          <option value="profit_desc">Lãi/lỗ USDT (Cao → Thấp)</option>
-          <option value="profit_asc">Lãi/lỗ USDT (Thấp → Cao)</option>
-          <option value="return_desc">Tỷ suất lợi nhuận % (Cao → Thấp)</option>
-          <option value="drawdown_asc">Drawdown thấp nhất trước</option>
-          <option value="trades_desc">Số lệnh (Nhiều → Ít)</option>
-          <option value="run">Backtest gần nhất</option>
-          <option value="updated">Cập nhật gần nhất</option>
-          <option value="name">Tên A–Z</option>
-          <option value="name_desc">Tên Z–A</option>
-        </select></label
-      >
-    </div>
-    <div v-if="tagCounts.length" class="tag-filter-bar" role="region" aria-label="Lọc nhanh theo nhãn">
-      <span class="tag-bar-label">Nhãn nhanh:</span>
-      <button
-        v-for="t in tagCounts"
-        :key="t.name"
-        type="button"
-        class="tag-chip"
-        :class="{ active: selectedTags.includes(t.name) || tag === t.name }"
-        @click="toggleTagChip(t.name)"
-      >
-        #{{ t.name }} <small>{{ t.count }}</small>
-      </button>
-      <button
-        v-if="selectedTags.length || tag"
-        type="button"
-        class="tag-chip clear"
-        @click="selectedTags = []; tag = ''"
-      >
-        Bỏ lọc nhãn
-      </button>
-    </div>
-    <div class="toolbar">
-      <label class="check"><input v-model="favorites" type="checkbox" /> Chỉ yêu thích</label>
       <div class="views" aria-label="Cách xem thư viện">
         <button :aria-pressed="view === 'cards'" @click="view = 'cards'">Thẻ</button
         ><button :aria-pressed="view === 'rows'" @click="view = 'rows'">Danh sách</button>
       </div>
-      <button v-if="hasActiveFilters" class="ghost-btn" @click="reset">Xóa bộ lọc</button>
+      <button v-if="hasActiveFilters" class="ghost-btn" @click="reset">Xóa lọc</button>
       <span class="spacer" />
       <button
         v-if="visibleArchivedNames.length >= 2 && selection.length < visibleArchivedNames.length"
         :disabled="busy"
         @click="selectVisibleArchived"
       >
-        Chọn nhanh có gói ({{ visibleArchivedNames.length }})
+        Chọn nhanh ({{ visibleArchivedNames.length }})
       </button>
-      <span v-if="selection.length" class="selection-badge"
-        >Đã chọn {{ selection.length }} · kể cả mục đang lọc</span
-      ><button v-if="selection.length" @click="chosen = []">Bỏ chọn</button
-      ><button
+      <button v-if="selection.length" @click="chosen = []">Bỏ chọn ({{ selection.length }})</button>
+      <button
+        v-if="selection.length >= 2"
         class="primary"
-        :disabled="busy || selection.length < 2"
+        :disabled="busy"
         @click="emit('compare', selection)"
       >
-        So sánh đã chọn ({{ selection.length }})
+        So sánh ({{ selection.length }})
       </button>
     </div>
-    <p class="evidence-note">
-      Chỉ số lấy từ gói backtest hoàn tất gần nhất đã tải, không chọn kết quả tốt nhất. Khung, ngày
-      và mã có thể khác nhau; đây không phải xếp hạng chất lượng. Báo cáo cũ chưa có gói vẫn xem
-      được trong trang chiến lược.
-    </p>
+    <div v-if="showAdvancedFilters || hasActiveFilters" class="advanced-filter-drawer">
+      <div class="filters">
+        <label
+          >Khung tín hiệu<select v-model="timeframe">
+            <option value="">Tất cả khung</option>
+            <option v-for="tf in frames" :key="tf">{{ tf }}</option>
+          </select></label
+        ><label
+          >Chiều &amp; Chế độ<select v-model="direction">
+            <option value="all">Tất cả chiều</option>
+            <option value="short">Hỗ trợ Short</option>
+            <option value="long_only">Chỉ Long (không short)</option>
+            <option value="protected">Đang bảo vệ Paper</option>
+          </select></label
+        ><label
+          >Hồ sơ<select v-model="status">
+            <option value="all">Tất cả hồ sơ</option>
+            <option value="archived">Có gói backtest</option>
+            <option value="matched">Mã khớp lần chạy gần nhất</option>
+            <option value="changed">Mã khác lần chạy gần nhất</option>
+            <option value="unarchived">Chưa có gói backtest</option>
+            <option value="invalid">Cần sửa mã</option>
+          </select></label
+        ><label
+          >Kết quả &amp; Cỡ mẫu<select v-model="outcome">
+            <option value="all">Mọi kết quả</option>
+            <option value="profitable">Có lãi ròng (&gt; 0 USDT)</option>
+            <option value="loss">Đang lỗ (&lt; 0 USDT)</option>
+            <option value="sample30">Đủ mẫu cơ bản (≥ 30 lệnh)</option>
+            <option value="small_sample">Mẫu nhỏ (&lt; 30 lệnh)</option>
+          </select></label
+        ><label
+          >Nhãn<select v-model="tag">
+            <option value="">Tất cả nhãn</option>
+            <option v-for="t in tags" :key="t">{{ t }}</option>
+          </select></label
+        ><label class="check" style="align-self:end;padding-bottom:8px"
+          ><input v-model="favorites" type="checkbox" /> Chỉ yêu thích ({{ items.filter((x) => x.research?.is_favorite).length }})</label
+        >
+      </div>
+      <div v-if="tagCounts.length" class="tag-filter-bar" role="region" aria-label="Lọc nhanh theo nhãn">
+        <span class="tag-bar-label">Nhãn nhanh:</span>
+        <button
+          v-for="t in tagCounts"
+          :key="t.name"
+          type="button"
+          class="tag-chip"
+          :class="{ active: selectedTags.includes(t.name) || tag === t.name }"
+          @click="toggleTagChip(t.name)"
+        >
+          #{{ t.name }} <small>{{ t.count }}</small>
+        </button>
+        <button
+          v-if="selectedTags.length || tag"
+          type="button"
+          class="tag-chip clear"
+          @click="selectedTags = []; tag = ''"
+        >
+          Bỏ lọc nhãn
+        </button>
+      </div>
+    </div>
     <div v-if="!visible.length" class="empty">
       <h3>Không có chiến lược phù hợp</h3>
       <p>Thử tên, nhãn hoặc bộ lọc khác.</p>
@@ -757,6 +691,30 @@ button:disabled {
 }
 .ve-fill.sample-warn {
   background: #e7bb72;
+}
+.compact-control-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0 14px;
+}
+.compact-search {
+  flex: 1 1 260px;
+  max-width: 420px;
+  margin: 0 !important;
+}
+.compact-select {
+  width: auto !important;
+  min-width: 220px;
+  margin: 0 !important;
+}
+.advanced-filter-drawer {
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
 }
 .totals {
   padding: 14px 0;

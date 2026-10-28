@@ -326,33 +326,26 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
 <template>
   <div class="pilot">
     <div class="pilot-heading" :class="{'library-mode':libraryOpen}">
-      <div>
-        <span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span>
-        <h1>{{uiText.title}}</h1>
-        <p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p>
-      </div>
+      <nav class="area-nav" aria-label="Khu vực nghiên cứu">
+        <button :class="{active:route.name==='studio'&&libraryOpen}" @click="openLibrary">{{uiText.areaLibrary}}</button>
+        <button v-if="selected" :class="{active:route.name==='studio'&&!libraryOpen}" @click="libraryOpen=false;router.push('/studio')">Workspace: {{selected}}</button>
+        <button :class="{active:route.name==='research-data'}" @click="router.push('/data')">{{uiText.areaData}}</button>
+        <button :class="{active:route.name==='research-jobs'}" @click="router.push('/jobs')">{{uiText.areaJobs}}</button>
+        <button :class="{active:paperView}" @click="router.push('/paper')">{{uiText.areaPaper}}</button>
+        <button @click="router.push('/settings')">{{uiText.areaSettings}}</button>
+      </nav>
       <div class="row">
         <select v-model="studioLang" class="studio-lang-select" aria-label="Ngôn ngữ Studio">
           <option value="vi">🇻🇳 VI</option>
           <option value="en">🇬🇧 EN</option>
           <option value="zh">🇨🇳 中文</option>
           <option value="ru">🇷🇺 RU</option>
-          <option value="ko">🇰🇷 한국어</option>
+          <option value="ko">🇰🇷 KO</option>
         </select>
-        <button v-if="ready&&api&&(!libraryOpen||paperView)" @click="openLibrary">{{uiText.backLibrary}}</button>
-        <button v-if="ready&&api&&!paperView" @click="router.push('/paper')">{{uiText.paperResearch}}</button>
         <button v-if="ready&&api&&!paperView" :disabled="working||running" @click="compareLatest()">{{uiText.compareLibrary}}</button>
-        <div class="safe">{{uiText.safeBadge}}</div>
+        <div class="safe">● 1x Isolated</div>
       </div>
     </div>
-    <nav class="area-nav" aria-label="Khu vực nghiên cứu">
-      <button :class="{active:route.name==='studio'&&libraryOpen}" @click="openLibrary">{{uiText.areaLibrary}}</button>
-      <button v-if="selected" :class="{active:route.name==='studio'&&!libraryOpen}" @click="libraryOpen=false;router.push('/studio')">Workspace: {{selected}}</button>
-      <button :class="{active:route.name==='research-data'}" @click="router.push('/data')">{{uiText.areaData}}</button>
-      <button :class="{active:route.name==='research-jobs'}" @click="router.push('/jobs')">{{uiText.areaJobs}}</button>
-      <button :class="{active:paperView}" @click="router.push('/paper')">{{uiText.areaPaper}}</button>
-      <button @click="router.push('/settings')">{{uiText.areaSettings}}</button>
-    </nav>
     <div v-if="message&&(!libraryOpen||failure)" class="feedback" :class="{bad:failure}" role="status">{{message}}</div>
     <div v-if="running&&!libraryOpen&&tab==='results'" class="progress" role="status"><progress :value="active?.backtestProgress??0" max="1"/><span>{{active?.backtestStep}} · {{Math.round((active?.backtestProgress??0)*100)}}%</span></div>
     <ResearchConnectionNotice v-if="!ready" :phase="connection.phase.value" :attempt="connection.attempt.value" :max-attempts="connection.maxAttempts" :error="connection.error.value" :has-bots="bots.hasBots" @retry="connection.start" @settings="router.push('/settings')" />
@@ -782,17 +775,11 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
 }
 .pilot-heading {
   justify-content: space-between;
-  margin-bottom: 16px;
-}
-.library-mode .eyebrow {
-  display: none;
-}
-.library-mode h1 {
-  font-size: 22px;
-  margin: 0;
-}
-.library-mode p {
-  margin: 4px 0 0;
+  margin-bottom: 14px;
+  padding: 6px 10px;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
 .eyebrow {
   font-size: 11px;
@@ -847,11 +834,8 @@ small,
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  margin: 0 0 18px;
-  padding: 6px;
-  background: var(--bg-1);
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  margin: 0;
+  padding: 0;
 }
 .area-nav button {
   background: transparent;
