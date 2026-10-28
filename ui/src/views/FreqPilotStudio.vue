@@ -23,8 +23,7 @@ import { useResearchBootstrap } from '@/composables/useResearchBootstrap';
 import type { ResearchCheck } from '@/utils/researchChecks';
 import StrategyLibrary from '@/components/strategyDev/StrategyLibrary.vue';
 import DiffViewer from '@/components/strategyDev/DiffViewer.vue';
-import { buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, formatLibraryRunSummary, latestLibraryRuns, libraryMatches } from '@/utils/strategyLibrary';
-import type { LibraryStrategy, LibraryRun, StrategyPreset } from '@/utils/strategyLibrary';
+import { buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, filterAndSortStrategies, formatLibraryRunSummary, latestLibraryRuns, type LibraryStrategy, type LibraryRun, type StrategyPreset, type StrategySortKey } from '@/utils/strategyLibrary';
 import EquityCurveChart from '@/components/strategyDev/EquityCurveChart.vue';
 import UnderwaterChart from '@/components/strategyDev/UnderwaterChart.vue';
 import MonthlyReturnsHeatmap from '@/components/strategyDev/MonthlyReturnsHeatmap.vue';
@@ -48,7 +47,7 @@ type FrozenRun = LibraryRun & { filename?:string; native_run_id?:string; artifac
 const router=useRouter(); const route=useRoute(); const bots=useBotStore();
 const paperView=computed(()=>route.name==='research-paper'||route.query.paper==='active');
 function openLibrary(){libraryOpen.value=true;void router.push('/studio');}
-const items=ref<Item[]>([]), query=ref(''), selected=ref(''), tab=ref('idea');
+const items=ref<Item[]>([]), query=ref(''), sidebarFilter=ref<'all'|'favorite'|'archived'|'profitable'|'short'>('all'), sidebarSort=ref<StrategySortKey>('evidence'), selected=ref(''), tab=ref('idea');
 const preset=ref<StrategyPreset>(),parameterBusy=ref(false);
 const libraryOpen=ref(true), sidebarOpen=ref(true), sidebarWidth=ref(275), runSplitEditor=ref(false), tagsText=ref(''), favorite=ref(false), versionPreview=ref('');
 function startSidebarResize(event:MouseEvent){
@@ -98,7 +97,14 @@ const comparisonIds=ref<string[]>([]);
 const comparison=computed(()=>Object.fromEntries(Object.entries(active.value?.backtestHistory??{}).filter(([,r])=>comparisonIds.value.includes(String(r.metadata.run_id??'')))));
 let poll: ReturnType<typeof setInterval>|undefined;
 const selectedItem=computed(()=>items.value.find(x=>x.name===selected.value));
-const filtered=computed(()=>items.value.filter(x=>libraryMatches(x,query.value)));
+const filtered=computed(()=>filterAndSortStrategies(items.value,latestRunsMap.value,{
+  query:query.value,
+  favorites:sidebarFilter.value==='favorite',
+  status:sidebarFilter.value==='archived'?'archived':'all',
+  outcome:sidebarFilter.value==='profitable'?'profitable':'all',
+  direction:sidebarFilter.value==='short'?'short':'all',
+  sort:sidebarSort.value,
+}));
 const selectedLatestRun=computed(()=>latestRunsMap.value.get(selected.value));
 const dataBounds=computed(()=>{
   const tf=interval.value||selectedItem.value?.timeframe;
@@ -355,6 +361,23 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
         </div>
         <button class="primary wide" @click="createDialog()">＋ Tạo chiến lược</button>
         <input v-model="query" aria-label="Tìm chiến lược" placeholder="Tên, mô tả hoặc nhãn…">
+        <div class="sidebar-controls">
+          <select v-model="sidebarFilter" aria-label="Lọc danh sách chiến lược">
+            <option value="all">Tất cả ({{items.length}})</option>
+            <option value="archived">Có gói backtest</option>
+            <option value="profitable">Có lãi (&gt; 0 USDT)</option>
+            <option value="favorite">★ Yêu thích</option>
+            <option value="short">Hỗ trợ Short</option>
+          </select>
+          <select v-model="sidebarSort" aria-label="Sắp xếp danh sách chiến lược">
+            <option value="evidence">Có gói trước</option>
+            <option value="profit_desc">Lãi USDT ↓</option>
+            <option value="drawdown_asc">Drawdown ↑</option>
+            <option value="trades_desc">Số lệnh ↓</option>
+            <option value="updated">Mới cập nhật</option>
+            <option value="name">Tên A–Z</option>
+          </select>
+        </div>
         <div class="library">
           <button v-for="item in filtered" :key="item.name" class="strategy" :class="{chosen:selected===item.name}" @click="openStrategy(item.name, tab)">
             <div class="strategy-title-row">
@@ -860,6 +883,16 @@ small,
 .sidebar-resize-handle:hover {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: 4px;
+}
+.sidebar-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 6px;
+}
+.sidebar-controls select {
+  padding: 6px 8px;
+  font-size: 11.5px;
 }
 .run-split-layout {
   display: grid;

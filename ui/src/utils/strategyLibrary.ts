@@ -60,14 +60,139 @@ export function latestLibraryRuns(runs: LibraryRun[]): Map<string, LibraryRun> {
 }
 
 export function libraryMatches(item: LibraryStrategy, query: string): boolean {
-  const text = [item.name, item.research?.idea, ...(item.research?.tags ?? [])]
+  const q = query.trim().toLocaleLowerCase();
+  if (!q) return true;
+  const text = [
+    item.name,
+    item.timeframe,
+    item.research?.idea,
+    item.research?.notes,
+    ...(item.research?.tags ?? []),
+  ]
     .join(' ')
     .toLocaleLowerCase();
-  return query
-    .trim()
-    .toLocaleLowerCase()
-    .split(/\s+/)
-    .every((word) => text.includes(word));
+  return q.split(/\s+/).every((word) => text.includes(word));
+}
+
+export type StrategySortKey =
+  | 'evidence'
+  | 'updated'
+  | 'name'
+  | 'name_desc'
+  | 'run'
+  | 'profit_desc'
+  | 'profit_asc'
+  | 'return_desc'
+  | 'drawdown_asc'
+  | 'trades_desc';
+
+export type StrategyFilterOptions = {
+  query?: string;
+  favorites?: boolean;
+  timeframe?: string;
+  tag?: string;
+  tags?: string[];
+  direction?: 'all' | 'short' | 'long_only' | 'protected';
+  status?: 'all' | 'archived' | 'matched' | 'changed' | 'unarchived' | 'invalid';
+  outcome?: 'all' | 'profitable' | 'loss' | 'sample30' | 'small_sample';
+  sort?: StrategySortKey;
+};
+
+export function filterAndSortStrategies(
+  items: LibraryStrategy[],
+  latest: Map<string, LibraryRun>,
+  options: StrategyFilterOptions = {},
+): LibraryStrategy[] {
+  const {
+    query = '',
+    favorites = false,
+    timeframe = '',
+    tag = '',
+    tags = [],
+    direction = 'all',
+    status = 'all',
+    outcome = 'all',
+    sort = 'evidence',
+  } = options;
+
+  const compareMetric = (
+    a: LibraryStrategy,
+    b: LibraryStrategy,
+    getter: (run?: LibraryRun) => number | null,
+    ascending = false,
+  ) => {
+    const va = getter(latest.get(a.name));
+    const vb = getter(latest.get(b.name));
+    if (va === null && vb === null) return a.name.localeCompare(b.name);
+    if (va === null) return 1;
+    if (vb === null) return -1;
+    if (va !== vb) return ascending ? va - vb : vb - va;
+    return a.name.localeCompare(b.name);
+  };
+
+  return items
+    .filter((item) => {
+      if (!libraryMatches(item, query)) return false;
+      if (favorites && !item.research?.is_favorite) return false;
+      if (timeframe && item.timeframe !== timeframe) return false;
+      if (tag && !item.research?.tags?.includes(tag)) return false;
+      if (tags.length && !tags.every((t) => item.research?.tags?.includes(t))) return false;
+
+      if (direction === 'short' && item.can_short !== true) return false;
+      if (direction === 'long_only' && item.can_short !== false) return false;
+      if (direction === 'protected' && !item.protected) return false;
+
+      const run = latest.get(item.name);
+      if (status === 'archived' && !run) return false;
+      if (status === 'matched' && (!run || run.revision !== item.revision)) return false;
+      if (status === 'changed' && (!run || run.revision === item.revision)) return false;
+      if (status === 'unarchived' && (!!run || !!item.invalid)) return false;
+      if (status === 'invalid' && !item.invalid) return false;
+
+      if (outcome !== 'all') {
+        const profitAbs = finiteNumber(run?.summary?.profit_total_abs);
+        const trades = finiteNumber(run?.summary?.total_trades);
+        if (outcome === 'profitable' && (profitAbs === null || profitAbs <= 0)) return false;
+        if (outcome === 'loss' && (profitAbs === null || profitAbs >= 0)) return false;
+        if (outcome === 'sample30' && (trades === null || trades < 30)) return false;
+        if (outcome === 'small_sample' && (trades === null || trades >= 30)) return false;
+      }
+
+      return true;
+    })
+    .sort((a, b) => {
+      if (sort === 'name') return a.name.localeCompare(b.name);
+      if (sort === 'name_desc') return b.name.localeCompare(a.name);
+      if (sort === 'run') {
+        return compareMetric(
+          a,
+          b,
+          (r) => (r?.created_at ? Date.parse(r.created_at) || null : null),
+          false,
+        );
+      }
+      if (sort === 'profit_desc') {
+        return compareMetric(a, b, (r) => finiteNumber(r?.summary?.profit_total_abs), false);
+      }
+      if (sort === 'profit_asc') {
+        return compareMetric(a, b, (r) => finiteNumber(r?.summary?.profit_total_abs), true);
+      }
+      if (sort === 'return_desc') {
+        return compareMetric(a, b, (r) => finiteNumber(r?.summary?.profit_total), false);
+      }
+      if (sort === 'drawdown_asc') {
+        return compareMetric(a, b, (r) => finiteNumber(r?.summary?.max_drawdown_account), true);
+      }
+      if (sort === 'trades_desc') {
+        return compareMetric(a, b, (r) => finiteNumber(r?.summary?.total_trades), false);
+      }
+      if (sort === 'evidence') {
+        const hasA = latest.has(a.name) ? 1 : 0;
+        const hasB = latest.has(b.name) ? 1 : 0;
+        if (hasA !== hasB) return hasB - hasA;
+      }
+      return libraryUpdated(b) - libraryUpdated(a) || a.name.localeCompare(b.name);
+    });
 }
 
 export function libraryUpdated(item: LibraryStrategy): number {

@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { latestLibraryRuns, libraryMatches, libraryUpdated } from '@/utils/strategyLibrary';
-import type { LibraryStrategy, LibraryRun } from '@/utils/strategyLibrary';
+import {
+  filterAndSortStrategies,
+  latestLibraryRuns,
+  libraryUpdated,
+  type LibraryRun,
+  type LibraryStrategy,
+  type StrategySortKey,
+} from '@/utils/strategyLibrary';
 
 const props = defineProps<{ items: LibraryStrategy[]; runs: LibraryRun[]; busy: boolean }>();
 const emit = defineEmits<{
@@ -15,8 +21,11 @@ const query = ref(''),
   favorites = ref(false),
   timeframe = ref(''),
   tag = ref(''),
-  status = ref('all'),
-  sort = ref('evidence'),
+  selectedTags = ref<string[]>([]),
+  direction = ref<'all' | 'short' | 'long_only' | 'protected'>('all'),
+  status = ref<'all' | 'archived' | 'matched' | 'changed' | 'unarchived' | 'invalid'>('all'),
+  outcome = ref<'all' | 'profitable' | 'loss' | 'sample30' | 'small_sample'>('all'),
+  sort = ref<StrategySortKey>('evidence'),
   view = ref('cards'),
   chosen = ref<string[]>([]);
 const latest = computed(() => latestLibraryRuns(props.runs));
@@ -25,40 +34,32 @@ const tags = computed(() =>
     a.localeCompare(b, 'vi'),
   ),
 );
+const tagCounts = computed(() => {
+  const counts: Record<string, number> = {};
+  for (const item of props.items) {
+    for (const t of item.research?.tags ?? []) {
+      counts[t] = (counts[t] ?? 0) + 1;
+    }
+  }
+  return Object.entries(counts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'vi'));
+});
 const frames = computed(() =>
   [...new Set(props.items.map((x) => x.timeframe).filter((x): x is string => !!x))].sort(),
 );
 const visible = computed(() =>
-  props.items
-    .filter(
-      (x) =>
-        libraryMatches(x, query.value) &&
-        (!favorites.value || x.research?.is_favorite) &&
-        (!timeframe.value || x.timeframe === timeframe.value) &&
-        (!tag.value || x.research?.tags?.includes(tag.value)) &&
-        (status.value === 'all' ||
-          (status.value === 'archived'
-            ? latest.value.has(x.name)
-            : status.value === 'changed'
-              ? !!latest.value.get(x.name) && latest.value.get(x.name)?.revision !== x.revision
-              : status.value === 'invalid'
-                ? x.invalid
-                : !latest.value.has(x.name))),
-    )
-    .sort((a, b) => {
-      if (sort.value === 'name') return a.name.localeCompare(b.name);
-      if (sort.value === 'run')
-        return (
-          (Date.parse(latest.value.get(b.name)?.created_at ?? '') || 0) -
-          (Date.parse(latest.value.get(a.name)?.created_at ?? '') || 0)
-        );
-      if (sort.value === 'evidence') {
-        const hasA = latest.value.has(a.name) ? 1 : 0;
-        const hasB = latest.value.has(b.name) ? 1 : 0;
-        if (hasA !== hasB) return hasB - hasA;
-      }
-      return libraryUpdated(b) - libraryUpdated(a);
-    }),
+  filterAndSortStrategies(props.items, latest.value, {
+    query: query.value,
+    favorites: favorites.value,
+    timeframe: timeframe.value,
+    tag: tag.value,
+    tags: selectedTags.value,
+    direction: direction.value,
+    status: status.value,
+    outcome: outcome.value,
+    sort: sort.value,
+  }),
 );
 const archivedCount = computed(() => props.items.filter((x) => latest.value.has(x.name)).length);
 const matchedCount = computed(
@@ -66,6 +67,21 @@ const matchedCount = computed(
     props.items.filter(
       (x) => latest.value.has(x.name) && latest.value.get(x.name)?.revision === x.revision,
     ).length,
+);
+const profitableCount = computed(
+  () =>
+    props.items.filter((x) => {
+      const p = latest.value.get(x.name)?.summary?.profit_total_abs;
+      return typeof p === 'number' && Number.isFinite(p) && p > 0;
+    }).length,
+);
+const shortCount = computed(() => props.items.filter((x) => x.can_short === true).length);
+const sample30Count = computed(
+  () =>
+    props.items.filter((x) => {
+      const n = latest.value.get(x.name)?.summary?.total_trades;
+      return typeof n === 'number' && Number.isFinite(n) && n >= 30;
+    }).length,
 );
 const visibleArchivedNames = computed(() =>
   visible.value.filter((x) => latest.value.has(x.name)).map((x) => x.name),
@@ -79,17 +95,31 @@ const hasActiveFilters = computed(
     favorites.value ||
     !!timeframe.value ||
     !!tag.value ||
-    status.value !== 'all',
+    selectedTags.value.length > 0 ||
+    direction.value !== 'all' ||
+    status.value !== 'all' ||
+    outcome.value !== 'all',
 );
 function selectVisibleArchived() {
   chosen.value = [...new Set([...chosen.value, ...visibleArchivedNames.value])];
+}
+function toggleTagChip(name: string) {
+  if (tag.value === name) tag.value = '';
+  if (selectedTags.value.includes(name)) {
+    selectedTags.value = selectedTags.value.filter((x) => x !== name);
+  } else {
+    selectedTags.value = [...selectedTags.value, name];
+  }
 }
 function reset() {
   query.value = '';
   favorites.value = false;
   timeframe.value = '';
   tag.value = '';
+  selectedTags.value = [];
+  direction.value = 'all';
   status.value = 'all';
+  outcome.value = 'all';
 }
 function pnlTone(value: number | undefined) {
   if (value == null || !Number.isFinite(value) || value === 0) return '';
@@ -152,10 +182,43 @@ function date(value: number | string | undefined) {
       <button
         type="button"
         class="total-pill"
+        :class="{ active: status === 'matched' }"
+        @click="status = status === 'matched' ? 'all' : 'matched'"
+      >
+        <span>✓ Mã khớp</span><b>{{ matchedCount }}</b>
+      </button>
+      <button
+        v-if="archivedCount - matchedCount > 0"
+        type="button"
+        class="total-pill"
         :class="{ active: status === 'changed' }"
         @click="status = status === 'changed' ? 'all' : 'changed'"
       >
-        <span>Mã khớp / đã đổi</span><b>{{ matchedCount }} / {{ archivedCount - matchedCount }}</b>
+        <span>● Mã đã đổi</span><b>{{ archivedCount - matchedCount }}</b>
+      </button>
+      <button
+        type="button"
+        class="total-pill"
+        :class="{ active: outcome === 'profitable' }"
+        @click="outcome = outcome === 'profitable' ? 'all' : 'profitable'"
+      >
+        <span>Có lãi (&gt; 0 USDT)</span><b>{{ profitableCount }}</b>
+      </button>
+      <button
+        type="button"
+        class="total-pill"
+        :class="{ active: direction === 'short' }"
+        @click="direction = direction === 'short' ? 'all' : 'short'"
+      >
+        <span>Hỗ trợ Short</span><b>{{ shortCount }}</b>
+      </button>
+      <button
+        type="button"
+        class="total-pill"
+        :class="{ active: outcome === 'sample30' }"
+        @click="outcome = outcome === 'sample30' ? 'all' : 'sample30'"
+      >
+        <span>Mẫu ≥ 30 lệnh</span><b>{{ sample30Count }}</b>
       </button>
     </div>
     <div class="filters">
@@ -163,11 +226,35 @@ function date(value: number | string | undefined) {
         >Tìm chiến lược<input
           v-model="query"
           type="search"
-          placeholder="Tên, mô tả hoặc nhãn…" /></label
+          placeholder="Tên, ý tưởng, ghi chú, commit hoặc nhãn…" /></label
       ><label
         >Khung tín hiệu<select v-model="timeframe">
           <option value="">Tất cả khung</option>
           <option v-for="tf in frames" :key="tf">{{ tf }}</option>
+        </select></label
+      ><label
+        >Chiều &amp; Chế độ<select v-model="direction">
+          <option value="all">Tất cả chiều</option>
+          <option value="short">Hỗ trợ Short</option>
+          <option value="long_only">Chỉ Long (không short)</option>
+          <option value="protected">Đang bảo vệ Paper</option>
+        </select></label
+      ><label
+        >Hồ sơ<select v-model="status">
+          <option value="all">Tất cả hồ sơ</option>
+          <option value="archived">Có gói backtest</option>
+          <option value="matched">Mã khớp lần chạy gần nhất</option>
+          <option value="changed">Mã khác lần chạy gần nhất</option>
+          <option value="unarchived">Chưa có gói backtest</option>
+          <option value="invalid">Cần sửa mã</option>
+        </select></label
+      ><label
+        >Kết quả &amp; Cỡ mẫu<select v-model="outcome">
+          <option value="all">Mọi kết quả</option>
+          <option value="profitable">Có lãi ròng (&gt; 0 USDT)</option>
+          <option value="loss">Đang lỗ (&lt; 0 USDT)</option>
+          <option value="sample30">Đủ mẫu cơ bản (≥ 30 lệnh)</option>
+          <option value="small_sample">Mẫu nhỏ (&lt; 30 lệnh)</option>
         </select></label
       ><label
         >Nhãn<select v-model="tag">
@@ -175,21 +262,40 @@ function date(value: number | string | undefined) {
           <option v-for="t in tags" :key="t">{{ t }}</option>
         </select></label
       ><label
-        >Hồ sơ<select v-model="status">
-          <option value="all">Tất cả</option>
-          <option value="archived">Có gói backtest</option>
-          <option value="changed">Mã khác lần chạy gần nhất</option>
-          <option value="unarchived">Chưa có gói backtest</option>
-          <option value="invalid">Cần sửa mã</option>
-        </select></label
-      ><label
         >Sắp xếp<select v-model="sort">
           <option value="evidence">Có gói backtest trước</option>
+          <option value="profit_desc">Lãi/lỗ USDT (Cao → Thấp)</option>
+          <option value="profit_asc">Lãi/lỗ USDT (Thấp → Cao)</option>
+          <option value="return_desc">Tỷ suất lợi nhuận % (Cao → Thấp)</option>
+          <option value="drawdown_asc">Drawdown thấp nhất trước</option>
+          <option value="trades_desc">Số lệnh (Nhiều → Ít)</option>
+          <option value="run">Backtest gần nhất</option>
           <option value="updated">Cập nhật gần nhất</option>
           <option value="name">Tên A–Z</option>
-          <option value="run">Backtest gần nhất</option>
+          <option value="name_desc">Tên Z–A</option>
         </select></label
       >
+    </div>
+    <div v-if="tagCounts.length" class="tag-filter-bar" role="region" aria-label="Lọc nhanh theo nhãn">
+      <span class="tag-bar-label">Nhãn nhanh:</span>
+      <button
+        v-for="t in tagCounts"
+        :key="t.name"
+        type="button"
+        class="tag-chip"
+        :class="{ active: selectedTags.includes(t.name) || tag === t.name }"
+        @click="toggleTagChip(t.name)"
+      >
+        #{{ t.name }} <small>{{ t.count }}</small>
+      </button>
+      <button
+        v-if="selectedTags.length || tag"
+        type="button"
+        class="tag-chip clear"
+        @click="selectedTags = []; tag = ''"
+      >
+        Bỏ lọc nhãn
+      </button>
     </div>
     <div class="toolbar">
       <label class="check"><input v-model="favorites" type="checkbox" /> Chỉ yêu thích</label>
@@ -227,6 +333,26 @@ function date(value: number | string | undefined) {
       <p>Thử tên, nhãn hoặc bộ lọc khác.</p>
       <button @click="reset">Xóa bộ lọc</button>
     </div>
+    <div v-if="view === 'rows' && visible.length" class="rows-sort-header" role="region" aria-label="Sắp xếp nhanh danh sách">
+      <button type="button" :class="{ active: sort === 'name' || sort === 'name_desc' }" @click="sort = sort === 'name' ? 'name_desc' : 'name'">
+        Chiến lược {{ sort === 'name' ? '↑' : sort === 'name_desc' ? '↓' : '' }}
+      </button>
+      <button type="button" :class="{ active: sort === 'profit_desc' || sort === 'profit_asc' }" @click="sort = sort === 'profit_desc' ? 'profit_asc' : 'profit_desc'">
+        Lãi/lỗ USDT {{ sort === 'profit_desc' ? '↓' : sort === 'profit_asc' ? '↑' : '' }}
+      </button>
+      <button type="button" :class="{ active: sort === 'return_desc' }" @click="sort = 'return_desc'">
+        Tỷ suất % {{ sort === 'return_desc' ? '↓' : '' }}
+      </button>
+      <button type="button" :class="{ active: sort === 'drawdown_asc' }" @click="sort = 'drawdown_asc'">
+        Drawdown {{ sort === 'drawdown_asc' ? '↑' : '' }}
+      </button>
+      <button type="button" :class="{ active: sort === 'trades_desc' }" @click="sort = 'trades_desc'">
+        Số lệnh {{ sort === 'trades_desc' ? '↓' : '' }}
+      </button>
+      <button type="button" :class="{ active: sort === 'run' }" @click="sort = 'run'">
+        Lần chạy gần nhất {{ sort === 'run' ? '↓' : '' }}
+      </button>
+    </div>
     <div class="entries" :class="view">
       <article
         v-for="item in visible"
@@ -257,17 +383,33 @@ function date(value: number | string | undefined) {
             {{ item.research?.idea || 'Chưa có mô tả. Mở chiến lược để ghi lại ý tưởng.' }}
           </p>
           <div class="badges">
-            <span class="tf-badge">{{ item.timeframe ?? 'Chưa rõ khung' }}</span
-            ><span>{{
+            <button
+              type="button"
+              class="badge-btn tf-badge"
+              :class="{ active: timeframe === item.timeframe }"
+              @click="timeframe = timeframe === (item.timeframe ?? '') ? '' : (item.timeframe ?? '')"
+            >
+              {{ item.timeframe ?? 'Chưa rõ khung' }}
+            </button>
+            <span>{{
               item.can_short == null
                 ? 'Chưa rõ chiều'
                 : item.can_short
                   ? 'Hỗ trợ short'
                   : 'Không khai báo short'
-            }}</span
-            ><span v-if="item.protected" class="protected-badge">Paper chính · bảo vệ mã</span
-            ><span v-if="item.invalid" class="warning">Cần sửa mã</span
-            ><span v-for="t in item.research?.tags" :key="t" class="tag">{{ t }}</span>
+            }}</span>
+            <span v-if="item.protected" class="protected-badge">Paper chính · bảo vệ mã</span>
+            <span v-if="item.invalid" class="warning">Cần sửa mã</span>
+            <button
+              v-for="t in item.research?.tags"
+              :key="t"
+              type="button"
+              class="badge-btn tag"
+              :class="{ active: selectedTags.includes(t) || tag === t }"
+              @click="toggleTagChip(t)"
+            >
+              #{{ t }}
+            </button>
           </div>
           <small>Cập nhật {{ date(libraryUpdated(item)) }}</small>
         </div>
@@ -485,9 +627,78 @@ button:disabled {
 }
 .filters {
   display: grid;
-  grid-template-columns: 2fr repeat(4, 1fr);
-  gap: 12px;
-  margin: 16px 0;
+  grid-template-columns: 1.8fr repeat(6, minmax(120px, 1fr));
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+.tag-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.tag-bar-label {
+  font-size: 11.5px;
+  color: var(--fg-3);
+  font-weight: 600;
+  margin-right: 4px;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  border-radius: 999px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-2);
+  color: var(--fg-2);
+}
+.tag-chip.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--bg-1));
+  color: var(--accent);
+}
+.tag-chip.clear {
+  border-style: dashed;
+  color: var(--fg-3);
+}
+.rows-sort-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.rows-sort-header button {
+  padding: 5px 10px;
+  font-size: 11.5px;
+}
+.rows-sort-header button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-2));
+}
+.badge-btn {
+  font-size: 10.5px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 3px 7px;
+  border-radius: 5px;
+  line-height: 1.3;
+}
+.badge-btn.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg-2));
 }
 .filters label {
   font-size: 12px;

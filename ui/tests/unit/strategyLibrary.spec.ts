@@ -4,6 +4,7 @@ import {
   buildResearchDossierMarkdown,
   buildSensitivityPivot,
   buildTradeAnalytics,
+  filterAndSortStrategies,
   formatLibraryRunSummary,
   latestLibraryRuns,
   libraryMatches,
@@ -409,5 +410,98 @@ describe('Strategy library evidence', () => {
     expect(md).toContain('+28.50 USDT');
     expect(md).toContain('| `roi` | 10 | 100.0% | +1.20% | +35.00 USDT |');
     expect(md).toContain('không đóng băng metadata thị trường trực tuyến của Binance');
+  });
+
+  it('filters by multi-tag, direction, status, outcome and sorts metrics with missing runs at the bottom', () => {
+    const items = [
+      {
+        name: 'AlphaShort',
+        revision: 'r1',
+        timeframe: '1h',
+        can_short: true,
+        research: { idea: 'EMA RSI', notes: 'commit a7af9593', tags: ['quét-tự-động', 'short'], is_favorite: true },
+      },
+      {
+        name: 'BetaLong',
+        revision: 'r2-new',
+        timeframe: '4h',
+        can_short: false,
+        research: { idea: 'Donchian', notes: '', tags: ['quét-tự-động', 'donchian'], is_favorite: false },
+      },
+      {
+        name: 'GammaUnarchived',
+        revision: 'r3',
+        timeframe: '1h',
+        can_short: false,
+        research: { idea: 'Untested', notes: '', tags: ['draft'], is_favorite: false },
+      },
+    ];
+    const latest = latestLibraryRuns([
+      {
+        id: 'run-alpha',
+        strategy: 'AlphaShort',
+        revision: 'r1',
+        status: 'success',
+        created_at: '2026-10-28T01:00:00Z',
+        settings: { timeframe: '1h' },
+        summary: { profit_total_abs: 8.99, profit_total: 0.00899, max_drawdown_account: 0.0037, total_trades: 35 },
+      },
+      {
+        id: 'run-beta',
+        strategy: 'BetaLong',
+        revision: 'r2-old',
+        status: 'success',
+        created_at: '2026-10-28T02:00:00Z',
+        settings: { timeframe: '4h' },
+        summary: { profit_total_abs: -4.92, profit_total: -0.00492, max_drawdown_account: 0.0049, total_trades: 5 },
+      },
+    ]);
+
+    // Search matches notes (commit hash) and timeframe
+    expect(filterAndSortStrategies(items, latest, { query: 'a7af9593 1h' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+    ]);
+
+    // Multi-tag AND filter
+    expect(
+      filterAndSortStrategies(items, latest, { tags: ['quét-tự-động', 'short'] }).map((x) => x.name),
+    ).toEqual(['AlphaShort']);
+
+    // Direction filter
+    expect(filterAndSortStrategies(items, latest, { direction: 'short' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+    ]);
+    expect(filterAndSortStrategies(items, latest, { direction: 'long_only' }).map((x) => x.name)).toEqual([
+      'BetaLong',
+      'GammaUnarchived',
+    ]);
+
+    // Status filter: matched vs changed
+    expect(filterAndSortStrategies(items, latest, { status: 'matched' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+    ]);
+    expect(filterAndSortStrategies(items, latest, { status: 'changed' }).map((x) => x.name)).toEqual([
+      'BetaLong',
+    ]);
+
+    // Outcome filter: profitable vs sample30
+    expect(filterAndSortStrategies(items, latest, { outcome: 'profitable' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+    ]);
+    expect(filterAndSortStrategies(items, latest, { outcome: 'sample30' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+    ]);
+
+    // Sorting by profit_asc puts negative (-4.92) before positive (+8.99), and keeps missing (GammaUnarchived) at the bottom
+    expect(filterAndSortStrategies(items, latest, { sort: 'profit_asc' }).map((x) => x.name)).toEqual([
+      'BetaLong',
+      'AlphaShort',
+      'GammaUnarchived',
+    ]);
+    expect(filterAndSortStrategies(items, latest, { sort: 'profit_desc' }).map((x) => x.name)).toEqual([
+      'AlphaShort',
+      'BetaLong',
+      'GammaUnarchived',
+    ]);
   });
 });
