@@ -125,6 +125,7 @@ declare global {
   const extendRef: typeof import('@vueuse/core').extendRef
   const fetchBenchmarkHistory: typeof import('./utils/benchmarkData').fetchBenchmarkHistory
   const fetchCoinHistory: typeof import('./utils/benchmarkData').fetchCoinHistory
+  const filterAndSortStrategies: typeof import('./utils/strategyLibrary').filterAndSortStrategies
   const fleetDigestAgeFor: typeof import('./stores/fleetDigestPolicy').fleetDigestAgeFor
   const fleetDigestAgeForBot: typeof import('./stores/fleetDigestPolicy').fleetDigestAgeForBot
   const fleetDigestCovers: typeof import('./stores/fleetDigestPolicy').fleetDigestCovers
@@ -684,7 +685,7 @@ declare global {
   export type { ResearchConnectionError } from './utils/researchConnection'
   import('./utils/researchConnection')
   // @ts-ignore
-  export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset, WalkForwardWindowRow, SensitivityAxisInput, SensitivityCellInput, SensitivityPivotCol, SensitivityPivotCell, TradeAnalyticsResult } from './utils/strategyLibrary'
+  export type { ResearchMetadata, LibraryStrategy, LibraryRun, StrategyPreset, StrategySortKey, StrategyFilterOptions, WalkForwardWindowRow, SensitivityAxisInput, SensitivityCellInput, SensitivityPivotCol, SensitivityPivotCell, TradeAnalyticsResult } from './utils/strategyLibrary'
   import('./utils/strategyLibrary')
   // @ts-ignore
   export type { ResolvedTheme } from './utils/theme'
@@ -815,6 +816,7 @@ declare module 'vue' {
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly fetchBenchmarkHistory: UnwrapRef<typeof import('./utils/benchmarkData')['fetchBenchmarkHistory']>
     readonly fetchCoinHistory: UnwrapRef<typeof import('./utils/benchmarkData')['fetchCoinHistory']>
+    readonly filterAndSortStrategies: UnwrapRef<typeof import('./utils/strategyLibrary')['filterAndSortStrategies']>
     readonly fleetDigestAgeFor: UnwrapRef<typeof import('./stores/fleetDigestPolicy')['fleetDigestAgeFor']>
     readonly fleetDigestAgeForBot: UnwrapRef<typeof import('./stores/fleetDigestPolicy')['fleetDigestAgeForBot']>
     readonly fleetDigestCovers: UnwrapRef<typeof import('./stores/fleetDigestPolicy')['fleetDigestCovers']>

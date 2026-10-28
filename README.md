@@ -1,85 +1,95 @@
-# FreqPilot
+# FreqPilot — Không gian Nghiên cứu, Kiểm định & Paper Trading Chiến lược Định lượng trên Freqtrade 2026.9 Chính thức
 
-Tên làm việc cho workspace nghiên cứu Binance Futures của riêng bạn: ý tưởng → mã → backtest → phân tích → paper. Phiên bản đầu 0.1.0 ưu tiên tái sử dụng FreqUI Ultimate v2.1.0 và API chính thức Freqtrade 2026.9. Đây là tên tạm, chưa xác minh khả năng sử dụng thương hiệu hay tên GitHub công khai.
+**FreqPilot** là không gian làm việc tập trung vào vòng đời chiến lược (*Ý tưởng → Mã nguồn → Kiểm toán Dữ liệu → Backtest Đóng băng → Kiểm định Lookahead/Recursive → Walk-Forward & Độ nhạy 2D → Paper 1x & Đối chiếu lệnh*), kết hợp giao diện kế thừa từ **FreqUI Ultimate v2.1.0** với **100% engine Freqtrade `2026.9` chính thức**.
 
-Đã đối chiếu các yêu cầu bàn giao với source, ZIP kết quả và bộ đang chạy; xem [bảng kiểm bằng chứng](benchmarks/delivery-audit.json) và [trạng thái khi bàn giao](benchmarks/delivery-audit-runtime.json). Kiểm tra mới nhất xác nhận 118 tệp lõi engine của hai dịch vụ nghiên cứu khớp bản chính thức. Những mục “Còn phát triển tiếp” trong PRODUCT là các hướng mở rộng; chưa có tuyên bố tương đương toàn bộ RoboQuant hoặc đã phát hành trên GitHub.
+- **Không cần đổi sang bản fork**: Hoạt động trực tiếp trên image `freqtradeorg/freqtrade` `2026.9` chính thức (118 tệp lõi engine giữ nguyên từng byte).
+- **Bằng chứng đóng băng có dấu vân tay `SHA-256`**: Mỗi lần chạy tự động đóng băng bản sao mã `.py`, bộ tham số `preset`, cấu hình nghiên cứu và tệp dữ liệu `feather` (nến + mark + funding) thành gói `freqpilot-<id>.zip` có thể kiểm tra toàn vẹn, xuất `Dossier (.md)`, nhập lại trên máy khác và chạy `Archive Replay`.
+- **An toàn tuyệt đối theo thiết kế**: Khóa cứng `dry_run=true`, `Binance USDT-M Futures Isolated 1x`, không nhận khóa API giao dịch tiền thật, không tự động tối ưu ngầm và không tự ý thay đổi chiến lược Paper đang chạy.
 
-Đã thử năm chiến lược công khai của Freqtrade France trên cả FreqPilot và Ultimate với cùng dữ liệu BTC/ETH Binance Futures; xem [giao thức, kết quả và giới hạn](docs/FREQTRADE-FRANCE-TRIAL.md).
+---
 
-## Mở bộ cài hiện tại
+## 1. Tại sao chọn FreqPilot thay vì FreqUI mặc định hoặc bản Fork?
 
-- FreqPilot: http://localhost:8090/studio
-- Paper nghiên cứu: http://localhost:8090/paper
-- Backtest workspace: http://localhost:8091/studio
-- Ultimate độc lập để tham khảo: http://localhost:8092/tools/strategy-dev
-- Paper Ultimate độc lập: http://localhost:8093
-- Worker paper nghiên cứu riêng: http://localhost:8095 (giám sát từ workspace chính)
+| Tiêu chí | FreqUI Mặc định | Bản Fork `frequi-ultimate` (`/strategy-dev`) | **FreqPilot (`/studio`)** |
+| :--- | :--- | :--- | :--- |
+| **Tương thích Engine Freqtrade `2026.9` gốc** | Có | **Không** (báo lỗi `404 Endpoint Not Found` nếu không cài bản fork `freqtrade-ultimate`) | **Có (100% Freqtrade `2026.9` chính thức)** |
+| **Kiểm toán dữ liệu trước khi chạy** | Không | Không | **Kiểm tra nến, mark, funding 8h, khoảng trống timestamp & warmup candles** |
+| **Đóng băng bằng chứng & Nhập/Xuất gói `.zip`** | Chỉ lưu JSON/ZIP rời | Điền lại biểu mẫu (`reconstitute`) | **Gói `artifact.zip` có `SHA-256`, `Import .zip`, `Archive Replay` khớp từng trường lệnh & xuất `Dossier (.md)`** |
+| **Kiểm định Lookahead & Recursive** | Chỉ chạy qua CLI rời | Không tích hợp trong luồng chiến lược | **Tích hợp trực tiếp ở Bước `06 · Kiểm định`, gắn chặt với `revision` mã và `preset`** |
+| **Walk-Forward & Holdout niêm phong** | Không | Ghép phần trăm cửa sổ & chia `WFE` qua 0 | **Rolling Train/OOS độc lập, đối chiếu Baseline không tối ưu vs Ứng viên và khóa Holdout riêng** |
+| **Ma trận Độ nhạy 2 chiều (`.sensitivity-pivot`)** | Không | Nhiễu tham số hậu kiểm | **Backtest native thực cho từng ô `(Tham số 1 × Tham số 2 / Kịch bản phí)`** |
+| **Đối chiếu Paper 1x vs Backtest** | Không | Chỉ đọc trạng thái bot live | **Quản lý hồ sơ Paper 1x riêng (`8095`), nhật ký `history.sqlite` và đối chiếu lệch lệnh `PaperReconcileWorkspace`** |
 
-Các chiến lược, dữ liệu, cấu hình và database của bộ chính vẫn ở thư mục `../freqtrade/user_data`. Repo này không chứa tài khoản Binance hoặc thông tin đăng nhập. Dùng tài khoản local hiện tại để đăng nhập trên UI nếu được hỏi. Trạng thái vận hành: **chỉ backtest và paper**, không có khóa giao dịch Binance, giữ isolated và 1x cho bộ mẫu so sánh.
+---
 
-## Các mốc mở rộng 23/10/2026
+## 2. Quy trình 11 bước nghiên cứu khép kín trên `/studio`
 
-- **Dữ liệu:** kiểm tra nến thô, mark, funding theo sự kiện Binance, warmup và hash; xem trước rồi chủ động tải bù bằng downloader chính thức vào vùng riêng.
-- **Paper:** mở phiên quan sát, lưu khoảng không quan sát được và đối chiếu lệnh với backtest cùng hồ sơ. Nếu chưa có lệnh hoàn tất, kết luận là chưa đủ bằng chứng.
-- **Tối ưu:** Hyperopt nhiều seed, walk-forward rolling có baseline và holdout riêng, quét độ nhạy bằng backtest native; từng tác vụ có xem trước ngân sách, dừng và lịch sử. Không có kết luận chất lượng tự động từ một job thành công.
-- **Chiến lược:** nháp editor, ghi chú và baseline cho gói đã lưu, so sánh cùng giao thức, ma trận BTC/ETH × khung nến với ví độc lập cho từng ô.
-- **Vận hành:** trang Tác vụ cho tuổi dữ liệu/dung lượng/trạng thái, script đo dung lượng, backup SQLite nhất quán và khôi phục có hash. Xem [hướng dẫn sử dụng và giới hạn](docs/OPERATIONS.md), [kế hoạch và nghiệm thu](docs/DEVELOPMENT-PLAN.md).
+1. **`01 · Ý tưởng`**: Ghi rõ giả thuyết, điều kiện vào/ra, gắn nhãn (`#tag`) và xuất prompt kèm bằng chứng gói chạy gần nhất cho Codex (`buildEvidenceCodexPrompt`).
+2. **`02 · Mã chiến lược`**: Biên tập Python bằng Monaco Editor, tự lưu nháp theo `revision`, khôi phục/bỏ nháp 1 chạm, so sánh lịch sử bằng `DiffViewer` và khóa bảo vệ mã đang chạy Paper.
+3. **`03 · Dữ liệu`**: Kiểm toán nến futures, mark price, funding rate và warmup; xem trước ngân sách và tải bù dữ liệu qua vùng tạm an toàn.
+4. **`04 · Backtest`**: Chọn bộ tham số định danh (`ParameterPresets`), mở khung mã song song ngay cạnh biểu mẫu (`.run-split-layout`), đóng băng đầu vào hoặc **Nhập gói hồ sơ ngoại vi (`.zip`)**.
+5. **`05 · Kết quả`**: Xem KPI cốt lõi, đường vốn đóng lệnh (`EquityCurveChart`), đường sụt giảm vốn (`UnderwaterChart`), bản đồ nhiệt tháng (`MonthlyReturnsHeatmap`), phân bố lý do thoát lệnh (`ExitReasonChart`), hiệu suất theo giờ/thứ UTC (`HourlyPatternChart`, `WeekdayPatternChart`), chạy `Archive Replay`, so sánh khóa giao thức (`protocol_hash`) và **Xuất Dossier (`.md`)**.
+6. **`06 · Kiểm định`**: Chạy `lookahead-analysis` và `recursive-analysis` chính thức của Freqtrade 2026.9.
+7. **`07 · Tối ưu`**: Chạy Hyperopt CLI chính thức với seed cố định, tách ngày Train / OOS bắt buộc và thí nghiệm đa seed (`SeedExperimentsWorkspace`).
+8. **`08 · Walk-forward`**: Chuỗi rolling Train/OOS có `.wfa-timeline`, cột `Train tốt nhất`, đối chiếu Baseline và thẻ **Holdout niêm phong (`.holdout-grid`)**.
+9. **`09 · Độ nhạy`**: Bảng ma trận 2 chiều `.sensitivity-pivot` đánh dấu ô `Mặc định`, không ngụy tạo số `0` cho các ô chưa chạy.
+10. **`10 · Ma trận`**: Chạy kiểm thử độc lập trên từng cặp và khung thời gian với ví riêng.
+11. **`11 · Paper`**: Chuẩn bị hồ sơ Paper `1x Isolated` từ gói backtest đã xác minh, quản lý vòng đời qua RPC chính thức và mở phiên quan sát đối chiếu lệnh thực tế với backtest.
 
-Các mục dưới đây mô tả chức năng nền trước đợt mở rộng; quy trình mới nhất ở `docs/OPERATIONS.md`.
+---
 
-## Đã có
+## 3. Bằng chứng thực nghiệm đã kiểm chứng trong kho này
 
-- Khi mở workspace, tự tìm dịch vụ nghiên cứu tương thích trong các kết nối đã đăng ký. Lỗi tạm thời được thử tối đa ba lần; có nút **Thử kết nối lại** và hướng dẫn xác thực khi cần. Không tự gửi lại lệnh backtest/paper hoặc tải lại editor đã mở thành công.
-- Thư viện chiến lược cùng mô tả, ý tưởng và ghi chú lưu trên máy.
-- Thư viện dạng thẻ/danh sách tham khảo Strategies của RoboQuant: tìm tên/mô tả/nhãn, yêu thích, lọc khung và hồ sơ, sắp xếp theo cập nhật hoặc lần chạy. Chỉ số từ gói backtest hoàn tất gần nhất, ghi rõ mã khớp/đã đổi và mẫu ít lệnh. Chọn các chiến lược để so sánh bằng bảng native có sẵn; không cố định vào tám mẫu benchmark.
-- Tạo mới hoặc sao chép mẫu có sẵn; editor Monaco tái sử dụng từ Ultimate.
-- Lưu mã có kiểm tra cú pháp, chống ghi đè phiên bản cũ, bản sao dự phòng và xem/khôi phục mã cũ.
-- So sánh bản sao cũ với mã trong editor bằng DiffViewer có sẵn của Ultimate, không thay hoặc lưu mã khi chỉ xem khác biệt.
-- Bộ tham số có tên: đọc bằng API strategy gốc, kiểm tra kiểu/giới hạn/lựa chọn, lưu riêng và tải JSON native. Khi chạy, JSON chỉ được chép vào bản sao backtest/kiểm định; kết quả và hồ sơ paper ghi rõ bộ đã dùng. Không ghi đè tệp tham số cạnh mã gốc và không tự tối ưu.
-- Tab **06 · Tối ưu** dùng Hyperopt gốc: chọn nhóm tham số được hỗ trợ, tiêu chí, số lượt, seed và số lệnh tối thiểu. Có bước xem lại trước khi chạy, tiến độ, dừng và toàn bộ bảng lượt thử có phân trang. Có thể giữ riêng giai đoạn ngoài mẫu; việc backtest lại tập học/ngoài mẫu và lưu ứng viên thành bộ mới đều là thao tác riêng. Không tự áp dụng kết quả lên mã hoặc paper.
-- Backtest ngay trong workspace bằng API/engine chính thức: ngày, khung tín hiệu, chi tiết 1m, vốn, số tiền mỗi lệnh và số lệnh tối đa.
-- Kiểm định lookahead/recursive bằng API gốc, tiến trình và lịch sử kết quả gắn với hash mã; kết quả hoàn tất được lưu ngay cả khi đóng trình duyệt.
-- Diễn giải kiểm định tách khỏi trạng thái job: nêu số tín hiệu và giới hạn mẫu, bảng biến thiên indicator theo warmup, phân biệt ô thiếu/không tính được với 0. Đối chiếu mã chính, tham số, khung và khoảng ngày để tránh dùng nhầm kiểm định cũ.
-- Kiểm tra dữ liệu local và chặn hồ sơ chạy nếu thiếu nến/mark/funding hoặc ngày bắt đầu nằm trước phạm vi dữ liệu.
-- Mỗi lần chạy mới sao chép mã Python local, parameter của chiến lược và dữ liệu feather (nến/mark/funding) vào thư mục riêng; engine chính thức chạy trực tiếp từ bản sao. Lưu ZIP gốc và gói đầu vào/kết quả có SHA-256 để kiểm tra toàn vẹn, xem mã đã chạy và tải về. Báo cáo cũ được ghi rõ là chưa có gói đầy đủ. Gói không đóng băng metadata thị trường lấy qua mạng hoặc môi trường bên ngoài image engine.
-- Lịch sử, KPI, đường vốn theo lệnh đóng, bảng chỉ số/giao dịch, biểu đồ lệnh và so sánh nhiều chiến lược. Tái sử dụng chart/report từ Ultimate và FreqUI.
-- Chạy lại từ gói đã lưu: xem lại cấu hình gốc rồi tạo backtest mới bằng mã, JSON tham số và feather trong ZIP, bỏ qua thư viện/biểu mẫu hiện tại. Tự đối chiếu chính xác toàn bộ trường của từng lệnh, lệnh con, phí/funding và chín chỉ số/ngữ cảnh native; báo khớp, khác hoặc chưa đủ dữ liệu đối chiếu. Không sửa kết quả gốc hoặc database paper. Metadata Binance lấy qua mạng chưa được đóng băng.
-- Soạn yêu cầu cho Codex từ ý tưởng/ghi chú. Chưa có chatbot AI tích hợp riêng.
-- Paper trên UI: chuẩn bị hồ sơ từ đúng gói backtest, giữ mã và tham số, tạo database riêng, xem cấu hình trước khi bật. Worker nghiên cứu 8095 dùng CLI --dry-run và lớp chiến lược giới hạn 1x; tái sử dụng API start/pause/reload_config của Freqtrade. Bot paper chính 8090 độc lập.
-- Mục Paper mở trang quản lý các hồ sơ nghiên cứu đã chuẩn bị. Giám sát Direct phân biệt kết nối API với trạng thái engine chạy/tạm ngừng/dừng/đang nạp cấu hình, có hạn cập nhật riêng cho trạng thái. Worker 8095 quay về trang Paper để bật/tiếp tục/dừng qua hồ sơ đã kiểm tra; các nút lifecycle native chung không gửi thẳng tới worker. Kết quả thao tác chưa được coi là trạng thái mới cho đến khi đọc lại cấu hình native.
-- Lịch sử thao tác và trạng thái paper lưu bền vững trong `freqpilot/paper/history.sqlite`, tách database giao dịch. Có lọc hồ sơ và đọc các trang cũ bằng cursor; yêu cầu, kết quả phản hồi và lần quan sát native là các sự kiện riêng. Lỗi kết nối không bị ghi thành bot dừng; lỗi lưu lịch sử không ngăn tạm ngừng/dừng, nhưng chặn bật mới nếu chưa ghi được yêu cầu. Không dựng lịch sử trước khi có tính năng hoặc tự gán lợi nhuận cho một phiên.
-- Nhãn tiền trên các màn hình theo dõi lấy từ bot/cặp lịch sử: Binance USDT-M hiển thị USDT. Nguồn Direct không cộng tiền khác đơn vị. Vốn được bot quản lý có giải thích tỷ lệ phân bổ và dự phòng. Thoát một phần bằng tay trên Binance hiện chưa mở khi chưa đọc được giới hạn sàn; thoát toàn bộ và các quy tắc thoát tự động của engine giữ nguyên.
+Toàn bộ các phép thử dưới đây đều chạy trên engine **Freqtrade 2026.9 chính thức** (`BTC/USDT:USDT` + `ETH/USDT:USDT`, Isolated `1x`, vốn `1.000 USDT`, stake `100 USDT`, tối đa `2` vị thế, phí `0,05%` mỗi chiều, có đầy đủ mark và funding thực tế, **không tinh chỉnh tham số để làm đẹp kết quả**):
 
-## Cách dùng
+### 3.1. Sàng lọc 6,7 tháng (`01/04/2026–21/10/2026`, chi tiết `5m`) từ 10 chiến lược trong phiên quét tự động
+Chi tiết đầy đủ về nguồn gốc, công thức đa khung (`merge_informative_pair`), Ma trận Độ nhạy `3×3` và Walk-Forward/Holdout nằm tại **[`docs/SCANNED-STRATEGIES-TRIAL.md`](docs/SCANNED-STRATEGIES-TRIAL.md)** và **[`benchmarks/scanned-strategies-summary.json`](benchmarks/scanned-strategies-summary.json)**:
 
-1. Mở thư viện, tìm/lọc và chọn chiến lược hoặc **Tạo chiến lược**. Có thể đổi dạng thẻ/danh sách, chọn nhiều chiến lược để so sánh. Có 7 mẫu futures từ repo freqtrade-strategies chính thức bên cạnh các chiến lược hiện có; nguồn và các sửa đổi tương thích nằm ở `templates/PROVENANCE.json`.
-2. Viết ý tưởng, gắn nhãn phân cách bằng dấu phẩy, đánh dấu yêu thích và lưu nghiên cứu; sao chép yêu cầu sang Codex nếu cần phát triển quy tắc. Đánh dấu sao tại thư viện không xóa ý tưởng/ghi chú/nhãn đã lưu.
-3. Mở tab Mã, sửa rồi lưu. StarterFutures đang chạy paper được bảo vệ; sửa trên bản sao.
-4. Ở tab Backtest, có thể **Đọc / tải lại tham số**, đặt tên rồi **Lưu thành bộ mới và chọn**. Chỉ các khai báo Parameter của Freqtrade mới hiện thành ô nhập; `load=false` chỉ đọc. Giữ lựa chọn gốc nếu chưa cần bộ riêng. Vốn/ngày/phí vẫn thuộc cấu hình lần chạy, tách khỏi bộ tham số. Sau đó chạy backtest; phí hiện tại 0.05% mỗi chiều, dữ liệu chi tiết 1m. Đây là mô phỏng nến, không phải tick/L2.
-5. Đọc kết quả, biểu đồ và cảnh báo mẫu nhỏ. **So sánh kết quả thư viện** ưu tiên các kết quả có gói lưu mới nhất, dùng bảng so sánh có sẵn. Trong báo cáo có gói, chọn **Chạy lại từ gói đã lưu**, xem ngày/vốn/phí/tham số gốc rồi **Chạy bản sao & đối chiếu**. Bước xem chưa chạy gì; bước chạy tạo hồ sơ mới và giữ nguyên biểu mẫu/mã đang mở. Kết quả khớp không chứng nhận khớp lệnh thực tế; cả hai báo cáo không có lệnh cũng chưa kiểm tra được hành vi khớp lệnh.
-6. Kiểm tra lookahead/recursive trước khi đánh giá khả năng sử dụng. Tab Kiểm định dùng bộ tham số đang chọn và bản sao riêng của mã/JSON, giữ dấu vân tay lúc gửi. Công cụ native có thể ghi đè một số thiết lập mô phỏng theo mục đích chẩn đoán; không coi đây là backtest hiệu suất thay thế. Dữ liệu nến vẫn đọc từ datadir hiện tại. Lưu mã/backtest không tự đổi chiến lược paper đang chạy.
-7. Nếu cần tối ưu, nhập ngày kết thúc trong Backtest rồi mở **07 · Tối ưu** → **Đọc phạm vi tối ưu**. Chọn nhóm, số lượt, seed, tiêu chí và ngày tách ngoài mẫu; xem lại rồi mới bấm **Bắt đầu tối ưu**. Phạm vi lấy từ khai báo Parameter hoặc nhóm ROI/cắt lỗ/trailing native; nhóm bị cấu hình cố định hoặc không nạp lại được bị khóa và có lý do. Chọn một lượt đủ điều kiện để **Backtest lại tập học** / **Backtest ngoài mẫu**. Sau đó mới cân nhắc **Lưu bộ mới và chọn**; toàn bộ JSON native được giữ, kể cả ROI/cắt lỗ/trailing nếu đã tối ưu. Walk-forward rolling và nhiều seed nằm ở các khu riêng; Pareto và sampler khác chưa mở.
-8. Mở **11 · Paper**, chọn **Chuẩn bị hồ sơ paper**, đọc lại mã nguồn, vốn/stake, phí và cảnh báo mẫu nhỏ. Bước chuẩn bị chưa bật bot. Hồ sơ từ tối ưu ghi rõ ứng viên và nguồn tập học/ngoài mẫu; lưu bộ tham số chưa tạo hoặc bật hồ sơ paper.
-9. Chọn **Bật paper hồ sơ này**. Worker 8095 nạp cấu hình từ hồ sơ và dùng database riêng; mỗi lần đổi hồ sơ cần không còn vị thế đang mở. Lớp thực thi kế thừa tín hiệu gốc, giới hạn leverage 1x và đổi tên metadata của tệp tham số để Freqtrade nạp đúng bộ số cũ.
-10. **Tạm ngừng vào lệnh** tiếp tục quản lý thoát lệnh và dừng tăng vị thế theo PAUSED của 2026.9. Các điều chỉnh giảm vị thế / chốt lời từng phần vẫn hoạt động; đã kiểm tra trực tiếp phương thức gốc với State.PAUSED. **Bật / tiếp tục** dùng lại database cũ. **Dừng khi đã hết vị thế** từ chối nếu còn vị thế; không ép đóng lệnh. Khi dịch vụ khởi động lại, worker không tự vào lệnh mới; còn vị thế thì khôi phục PAUSED để quản lý thoát lệnh, không còn thì STOPPED.
-11. **Mở giám sát paper** đăng ký kết nối token trong UI hiện tại, dùng lại màn hình Bot/Chart/History/Logs, không cần nhập lại mật khẩu. Luồng local này dùng nguồn Direct; Gateway chưa được nối với worker. Một worker nghiên cứu dùng một hồ sơ tại một thời điểm, có thể giữ nhiều hồ sơ đã chuẩn bị.
-11. Từ thanh điều hướng, **Paper** mở tất cả hồ sơ nghiên cứu. Trong màn hình giám sát, **Research paper workspace** quay lại trang quản lý này; không trực tiếp gọi start/reload từ menu bot. Nếu worker đã dừng nhưng còn vị thế, có thể chủ động **Tiếp tục quản lý thoát lệnh** mà chưa bật vào lệnh mới. Khi mất kết nối hoặc đang nạp cấu hình, các nút tương ứng sẽ chờ trạng thái rõ ràng.
-12. Chọn **Xem lịch sử paper** để xem yêu cầu và trạng thái đã ghi, lọc theo hồ sơ hoặc xem sự kiện cũ hơn. Khi đang đọc các trang cũ, giao diện giữ vị trí; chọn **Tải lại lịch sử** để trở về mới nhất. “Đã gửi yêu cầu” chưa chứng minh worker đã đổi trạng thái. Những thay đổi ngoài workspace trong khoảng không có lần đọc có thể không xuất hiện; không suy thời lượng chạy hay lợi nhuận phiên từ nhật ký này.
+| Chiến lược | Nguồn gốc quy tắc | Khung | Gói lưu (`run_id`) | Số lệnh (6,7 tháng) | Lãi / lỗ ròng (USDT) | Max Drawdown | Profit Factor | Kết quả thẩm định độ bền |
+| :--- | :--- | :---: | :--- | ---: | ---: | ---: | ---: | :--- |
+| **`RocketHunterSma501h`** | `rocket-hunter-research` (`d8dae34e`) | `1h` (`+1d`) | `6826363795` | **8** | **+61,83 USDT** (+6,18%) | **0,35%** | **18,29** | Lãi cao nhất, drawdown thấp (`0,35%`), đã chuẩn bị hồ sơ Paper 1x. |
+| **`DikibagastEmaRsi1h`** | `Dikibagast EMA RSI` (`a7af9593`) | `1h` | `8ebeb7170c` | **30** | **+44,23 USDT** (+4,42%) | **0,73%** | **3,96** | **Đạt 9/9 ô Độ nhạy 2D có lãi (`+26` → `+46 USDT`)**; Baseline thắng trên Holdout (`+9,16 USDT`). |
+| **`BdrEmaRideFutures1h`** | `BDR-Pro/crypto-futures` (`0df59de9`) | `1h` (`+1d`) | `353953f473` | **8** | **+9,37 USDT** (+0,94%) | **1,41%** | **1,67** | Giữ lãi dương qua cả cửa sổ ngắn (1m) và dài (6,7 tháng). |
+| **`TrendCoreBagging1h`** | `0x-boss/quant_crypto_strategy` | `1h` (`+1d`) | `bba655ff87` | **2** | **+2,15 USDT** (+0,21%) | **0,15%** | **2,45** | Giữ lãi dương, bộ lọc 100/150/200 ngày khắt khe. |
+| **`CodexBotVibe4h`** | `erfanrhb/CodexBot` (`922e26ee`) | `4h` (`+1d`) | `c3b0b4c882` | **30** | **-20,02 USDT** (-2,00%) | **2,96%** | **0,67** | Minh chứng chống overfit: Lãi `+3,30 USDT` ở 1 tháng cuối nhưng lỗ `-20,02 USDT` khi xét đủ 6,7 tháng. |
 
-## Phát triển lại
+### 3.2. Các báo cáo đối chứng khác trong kho
+- **Đối chiếu 5 chiến lược công khai của Freqtrade France (FreqPilot vs Ultimate)**: Khớp từng giao dịch, lệnh con, phí và funding giữa 2 engine — xem **[`docs/FREQTRADE-FRANCE-TRIAL.md`](docs/FREQTRADE-FRANCE-TRIAL.md)**.
+- **Đối chiếu 8 chiến lược mẫu từ `freqtrade-strategies`**: Xem **[`benchmarks/REPORT.md`](benchmarks/REPORT.md)** và **[`templates/PROVENANCE.json`](templates/PROVENANCE.json)**.
 
-Cài trên thư mục/máy mới: xem [hướng dẫn cài độc lập](docs/INSTALL.md). `Initialize.ps1` tạo dữ liệu và tài khoản local riêng, mặc định dừng; không chép dữ liệu cá nhân từ bộ đang dùng. `Start.ps1 -CheckOnly` kiểm tra trước khi mở dịch vụ, `Start.ps1 -Build` build/mở và `Stop.ps1` giữ lại database. Bộ hiện có tiếp tục dùng `.env` cũ, không chạy lại Initialize.
+---
 
-`Check.ps1 -InstallDependencies` kiểm tra UI/backend và bộ khởi tạo bằng dữ liệu thử riêng; không thay UI đang phục vụ hoặc bật bot. Root workflow `.github/workflows/check.yml` chuẩn bị cùng các bước cho GitHub; chưa có run GitHub hay repo công khai được tạo.
+## 4. Cài đặt & Khởi chạy trong 3 bước
 
-Yêu cầu Node.js 24, pnpm 10.33.2 và Docker Desktop. Cài UI theo lockfile, build UI trong thư mục `ui/`; backend dùng Dockerfile ở `backend/` trên image chính thức đã ghim. `Start.ps1` dùng `.env` để trỏ tới dữ liệu ngoài repo. `.env.example` không có bí mật. Tài khoản, dữ liệu, ZIP kết quả và database không được đưa vào Git.
+Yêu cầu: **Node.js 24**, **pnpm 10.33.2**, **Docker Desktop** và **PowerShell** (tương thích cả Windows PowerShell 5.1 và PowerShell 7).
 
-Kiểm tra: `pnpm --dir ui typecheck`, `pnpm --dir ui exec vitest run tests/unit/datasource/directSource.spec.ts`, `pnpm --dir ui build`; backend chạy unittest `test_*.py` trong image. Bộ UI đầy đủ gần nhất đạt 1.736 kiểm tra trong 118 tệp (gồm 43 kiểm tra Direct data source, 5 kiểm tra diễn giải/ngữ cảnh kiểm định và 4 kiểm tra tiền tệ); backend hiện đạt 79 kiểm tra trong container không có mạng. Sau bộ UI đầy đủ, đã thêm một hồi quy đổi bộ tham số và chạy lại 18 kiểm tra tập trung; typecheck và build cuối đạt. Luồng tối ưu đã thử 3 epoch thực trên bộ riêng: backtest tập học khớp cả 5 chỉ số đối chiếu của epoch, backtest ngoài mẫu lưu gói hợp lệ, bộ tham số không ghi đè thư viện và phiên đang chạy dừng đúng tiến trình sau khi mở lại trang. Xem `benchmarks/optimization-control.json`. Luồng kết nối ban đầu có thêm 16 kiểm tra UI cho chọn dịch vụ tương thích, giới hạn thử lại, hủy khi rời trang và giữ editor đã sẵn sàng. Luồng chạy lại có 6 kiểm tra UI và 9 kiểm tra backend bổ sung; đã thử từ giao diện bằng gói FSupertrendStrategy thực và khớp toàn bộ 23 lệnh, gồm lệnh con/phí/funding. Bằng chứng ở `benchmarks/replay-control.json`. Đã sửa một số fixture/harness cũ để phù hợp thương hiệu, trang mở đầu, schema đơn vị tiền và thứ tự chờ show_config; không bỏ qua kiểm tra hoặc nâng timeout. Build, typecheck, thao tác UI tạo/sửa/lưu nghiên cứu, backtest từ snapshot, kiểm tra hash, mở mã gốc, tải gói và kiểm định lookahead/recursive đã được kiểm tra. Báo cáo kiểm định đã kiểm tra trên UI bằng dữ liệu FAdxSma thật: 2 tín hiệu lookahead, 3 ô recursive không tính được, tỷ lệ được đổi sang phần trăm và cảnh báo khi chọn bộ tham số khác. Trang Paper, trạng thái native và quy tắc nút điều khiển có 19 kiểm tra mới; các kiểm tra trạng thái/điều hướng, cache nến rỗng và PaperWorkspace đã chạy riêng trong quá trình sửa, rồi bộ đầy đủ được chạy lại. Bố cục Paper được kiểm tra thêm bằng 6 bài kiểm tra sau lần chạy đầy đủ cuối. Các kiểm tra lifecycle dùng HTTP giả lập, không gửi lệnh tới bot thật. Màn hình paper hiển thị vốn 950 USDT và P&L bằng USDT; trong lần kiểm tra giao diện đó, worker nghiên cứu ở STOPPED và không được bật lại chỉ để kiểm tra. Bộ tham số đã thử đọc/lưu/chọn/tải JSON trên UI, backtest gốc khớp từng lệnh, lookahead/recursive dùng cùng hash tham số; unit test xác nhận paper wrapper nạp đúng giá trị qua StrategyResolver. Thư viện đã thử lưu/tải lại yêu thích và nhãn, lọc tìm kiếm, chế độ danh sách, so sánh hai chiến lược và xem khác biệt phiên bản không thay mã. Paper đã kiểm tra chuẩn bị, bật, tạm ngừng, tiếp tục, giám sát và dừng khi không còn vị thế bằng engine thực; tệp tham số được kiểm tra bằng StrategyResolver gốc. Lỗi chuyển stake dạng chuỗi đã có kiểm tra hồi quy và schema native chặn trước khi nạp worker.
+```powershell
+# Bước 1: Khởi tạo thư mục dữ liệu riêng, mật khẩu API ngẫu nhiên và 8 chiến lược mẫu (mặc định STOPPED, dry_run=true)
+./Initialize.ps1
 
-`tools/run_benchmark.py` ghi rõ protocol, dùng timeframe gốc và mặc định chạy riêng từng chiến lược, tránh dùng chung warmup; `tools/compare_benchmark.py` đọc ZIP kết quả thực và đối chiếu từng lệnh. Không tối ưu tham số tự động.
+# Bước 2: Kiểm tra cấu hình, cổng mạng và schema chiến lược trước khi chạy
+./Start.ps1 -CheckOnly
 
-## Phạm vi và nguồn
+# Bước 3: Build giao diện + image nghiên cứu và khởi động dịch vụ
+./Start.ps1 -Build
+```
 
-Xem `PRODUCT.md` cho định hướng so với RoboQuant/Ultimate, `benchmarks/REPORT.md` cho kết quả 8 chiến lược và các giới hạn kiểm định. Bản Ultimate độc lập là công cụ so sánh, không phải engine vận hành chính. Chưa tạo repo GitHub hay xuất bản công khai.
+Sau khi khởi động:
+- **FreqPilot Studio**: `http://localhost:8090/studio` (hoặc trực tiếp tại dịch vụ nghiên cứu `http://localhost:8091/studio`)
+- **Quản lý Hồ sơ Paper 1x**: `http://localhost:8090/paper`
+- **Tài khoản đăng nhập local**: Được tạo riêng trong tệp `<user_data>/ACCESS.txt` (không bao giờ lưu trong Git).
 
-FreqPilot là tác phẩm phái sinh GPL-3.0 của FreqUI Ultimate / FreqUI. Giữ LICENSE và các ghi nhận nguồn ở `SOURCES.md`; mã engine Freqtrade không bị thay bằng fork Ultimate.
+Để chạy toàn bộ bộ kiểm định tự động (Typecheck, `1.745` bài test UI, `133` bài test backend trong container cô lập không mạng, `28` bài kiểm tra bảo vệ cài đặt):
+```powershell
+./Check.ps1
+```
+
+---
+
+## 5. Tài liệu & Giấy phép
+
+- **Hướng dẫn vận hành, sao lưu & khôi phục**: [`docs/OPERATIONS.md`](docs/OPERATIONS.md)
+- **Hướng dẫn cài đặt độc lập**: [`docs/INSTALL.md`](docs/INSTALL.md)
+- **Định hướng sản phẩm & Giới hạn hiện tại**: [`PRODUCT.md`](PRODUCT.md)
+- **Chiến lược Thương hiệu & Định vị thị trường**: [`docs/BRAND-AND-MARKETING-PLAN.md`](docs/BRAND-AND-MARKETING-PLAN.md)
+- **Giấy phép**: FreqPilot là phần mềm nguồn mở phát hành theo giấy phép **GNU GPL-3.0**, kế thừa từ FreqUI Ultimate v2.1.0 và FreqUI/Freqtrade. Xem đầy đủ ghi nhận bản quyền tại [`SOURCES.md`](SOURCES.md).
