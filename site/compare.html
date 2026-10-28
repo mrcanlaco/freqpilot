@@ -313,14 +313,14 @@
           <span class="pill drop">2. Bản Fork (FreqUI Ultimate v2.1.0)</span>
           <h3>Giao Diện Đẹp · Nhưng Khóa Vào Engine Fork</h3>
           <p style="font-size:13px;color:var(--fg-2);margin:0">
-            Giao diện FreqUI Ultimate phụ thuộc cứng vào các API nội bộ của nhánh fork <code>freqtrade-ultimate (2026.3-dev)</code>:
+            Giao diện FreqUI Ultimate phụ thuộc cứng vào các API nội bộ của nhánh fork <code>freqtrade-ultimate (2026.6)</code>:
           </p>
           <div class="arch-flow">
             <div class="flow-step bad">✕ Ép thay thế Freqtrade chính thức bằng bản fork</div>
             <div class="flow-step bad">✕ Lỗi 404 Endpoint Not Found trên Freqtrade gốc</div>
             <div class="flow-step warn">⚠️ Tự động xuất/ghi đè tham số khi tối ưu</div>
             <div class="flow-step warn">⚠️ Walk-Forward không tách Holdout niêm phong</div>
-            <div class="flow-step bad">✕ Lệch kết quả khi có dữ liệu Funding/Mark ở bản fork</div>
+            <div class="flow-step warn">⚠️ Đổi quy tắc validate_stake_amount (nâng 80% vs 30% chuẩn)</div>
             <div class="flow-step bad">✕ Không có sổ đối chiếu lệnh Paper 1x độc lập</div>
           </div>
         </div>
@@ -365,7 +365,7 @@
               <td><strong>1. Tính toàn vẹn Engine</strong></td>
               <td><span class="pill pass">✓ Official Freqtrade 2026.9 (Unmodified)</span></td>
               <td><span class="pill pass">✓ Official Freqtrade 2026.9</span></td>
-              <td><span class="pill drop">✕ Modified Fork (2026.3-dev)</span></td>
+              <td><span class="pill drop">✕ Modified Fork (2026.6)</span></td>
             </tr>
             <tr>
               <td><strong>2. Quản lý Ý tưởng, Nhãn &amp; Phễu lọc</strong></td>
@@ -443,7 +443,7 @@
       <span class="sec-eyebrow">EMPIRICAL PROOF (`benchmarks/REPORT.md`)</span>
       <h2 data-i18n="sec_bench_title">Thực Nghiệm Đối Chiếu 8 Chiến Lược Trên Cả 2 Hệ Thống</h2>
       <p class="sec-sub" data-i18n="sec_bench_sub">
-        Chạy cùng một giao thức đóng băng (`20260918–20261021`, `BTC/USDT:USDT` + `ETH/USDT:USDT`, `1x Isolated`, vốn `1.000 USDT`, stake `100 USDT`, phí `0,05%`) trên cả <strong>FreqPilot (`2026.9` chính thức)</strong> và <strong>FreqUI Ultimate (`2026.3-dev` fork)</strong>:
+        Chạy riêng từng chiến lược trên cùng giao thức đóng băng (`18/09/2026–22/10/2026`, `BTC/USDT:USDT` + `ETH/USDT:USDT`, `1x Isolated`, vốn `1.000 USDT`, stake khai báo `100 USDT`, phí `0,05%`, chi tiết `1m`) giữa <strong>FreqPilot (`2026.9` chính thức)</strong> và <strong>Ultimate (`2026.6` fork)</strong>:
       </p>
       <div class="table-wrap">
         <table>
@@ -451,85 +451,94 @@
             <tr>
               <th>Chiến lược</th>
               <th>Khung</th>
-              <th>Số lệnh (FreqPilot / Ultimate)</th>
-              <th>Lãi/Lỗ FreqPilot (Có Funding)</th>
-              <th>Lãi/Lỗ Khi Tách Funding</th>
-              <th>Lãi/Lỗ Ultimate Fork</th>
-              <th>Kết luận đối chiếu</th>
+              <th>Lệnh (Chính thức 2026.9)</th>
+              <th>Lãi/Lỗ USDT (2026.9)</th>
+              <th>Drawdown</th>
+              <th>Win rate</th>
+              <th>PF</th>
+              <th>So với Ultimate (2026.6 Fork)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>F0ttStrategy</strong></td>
-              <td><code>1h</code></td>
-              <td class="mono">6 / 6</td>
-              <td class="pos mono">+9.44 USDT</td>
-              <td class="pos mono">+9.50 USDT</td>
-              <td class="pos mono">+9.50 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở (Ultimate bỏ qua 0.06 USDT phí funding)</span></td>
+              <td><strong>TrendFollowingStrategy</strong></td>
+              <td><code>5m</code></td>
+              <td class="mono">6</td>
+              <td class="pos mono">+9.441 USDT</td>
+              <td class="mono">0.81%</td>
+              <td class="mono">66.67%</td>
+              <td class="mono">2.14</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (gồm cả giá, lượng, phí &amp; funding)</span></td>
             </tr>
             <tr>
               <td><strong>VolatilitySystem</strong></td>
               <td><code>1h</code></td>
-              <td class="mono">2 / 2</td>
-              <td class="pos mono">+3.24 USDT</td>
-              <td class="pos mono">+3.34 USDT</td>
-              <td class="pos mono">+3.34 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở (Ultimate bỏ qua 0.10 USDT phí funding)</span></td>
+              <td class="mono">2 (Ultimate: 5)</td>
+              <td class="pos mono">+2.327 USDT (Ult: +1.604)</td>
+              <td class="mono">0.00%</td>
+              <td class="mono">100.00%</td>
+              <td class="mono">—</td>
+              <td><span class="pill warn">⚠️ Khác quy tắc sizing (`validate_stake_amount`: chuẩn 30% vs fork 80%)</span></td>
             </tr>
             <tr>
-              <td><strong>AdxSmaStrategy</strong></td>
-              <td><code>1h</code></td>
-              <td class="mono">2 / 2</td>
-              <td class="neg mono">-3.39 USDT</td>
-              <td class="neg mono">-3.38 USDT</td>
-              <td class="neg mono">-3.38 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% lệnh &amp; P&amp;L cơ sở</span></td>
-            </tr>
-            <tr>
-              <td><strong>ReinforcedStrategy</strong></td>
+              <td><strong>FReinforcedStrategy</strong></td>
               <td><code>5m</code></td>
-              <td class="mono">24 / 24</td>
-              <td class="neg mono">-2.15 USDT</td>
-              <td class="neg mono">-2.14 USDT</td>
-              <td class="neg mono">-2.14 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% cả 24 lệnh</span></td>
+              <td class="mono">24</td>
+              <td class="neg mono">-1.215 USDT</td>
+              <td class="mono">0.25%</td>
+              <td class="mono">8.33%</td>
+              <td class="mono">0.70</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (cả 24/24 lệnh &amp; funding)</span></td>
             </tr>
             <tr>
-              <td><strong>SupertrendStrategy</strong></td>
+              <td><strong>FSupertrendStrategy</strong></td>
               <td><code>1h</code></td>
-              <td class="mono">23 / 23</td>
-              <td class="neg mono">-1.77 USDT</td>
-              <td class="neg mono">-1.98 USDT</td>
-              <td class="neg mono">-1.98 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% cả 23 lệnh</span></td>
+              <td class="mono">23</td>
+              <td class="neg mono">-1.773 USDT</td>
+              <td class="mono">1.65%</td>
+              <td class="mono">43.48%</td>
+              <td class="mono">0.90</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (cả 23/23 lệnh &amp; funding)</span></td>
             </tr>
             <tr>
-              <td><strong>SampleStrategy</strong></td>
+              <td><strong>FOttStrategy</strong></td>
               <td><code>1h</code></td>
-              <td class="mono">5 / 5</td>
-              <td class="neg mono">-8.38 USDT</td>
-              <td class="neg mono">-8.34 USDT</td>
-              <td class="neg mono">-8.34 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% cả 5 lệnh</span></td>
+              <td class="mono">6</td>
+              <td class="neg mono">-3.186 USDT</td>
+              <td class="mono">0.76%</td>
+              <td class="mono">50.00%</td>
+              <td class="mono">0.69</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (cả 6/6 lệnh &amp; funding)</span></td>
             </tr>
             <tr>
-              <td><strong>Bandtastic</strong></td>
-              <td><code>15m</code></td>
-              <td class="mono">116 / 116</td>
-              <td class="neg mono">-17.85 USDT</td>
-              <td class="neg mono">-17.86 USDT</td>
-              <td class="neg mono">-17.86 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% cả 116 lệnh</span></td>
+              <td><strong>FAdxSmaStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">2</td>
+              <td class="neg mono">-3.385 USDT</td>
+              <td class="mono">0.34%</td>
+              <td class="mono">0.00%</td>
+              <td class="mono">0.00</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (14 trường lệnh + preset JSON)</span></td>
             </tr>
             <tr>
-              <td><strong>StarterFuturesResearch</strong></td>
+              <td><strong>FSampleStrategy</strong></td>
+              <td><code>1h</code></td>
+              <td class="mono">5</td>
+              <td class="neg mono">-8.379 USDT</td>
+              <td class="mono">1.52%</td>
+              <td class="mono">40.00%</td>
+              <td class="mono">0.45</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (cả 5/5 lệnh &amp; funding)</span></td>
+            </tr>
+            <tr>
+              <td><strong>StarterFutures</strong></td>
               <td><code>15m</code></td>
-              <td class="mono">144 / 144</td>
-              <td class="neg mono">-22.18 USDT</td>
-              <td class="neg mono">-22.14 USDT</td>
-              <td class="neg mono">-22.14 USDT</td>
-              <td><span class="pill pass">✓ Khớp 100% cả 144 lệnh</span></td>
+              <td class="mono">144</td>
+              <td class="neg mono">-22.181 USDT</td>
+              <td class="mono">3.80%</td>
+              <td class="mono">20.14%</td>
+              <td class="mono">0.65</td>
+              <td><span class="pill pass">✓ Khớp từng lệnh (cả 144/144 lệnh &amp; funding)</span></td>
             </tr>
           </tbody>
         </table>
@@ -558,7 +567,7 @@
         sec_mat_title: "Bảng Đối Chiếu 12 Hạng Mục Kỹ Thuật",
         sec_mat_sub: "Mọi tính năng của FreqPilot đều được kiểm chứng bằng bộ 1.879 bài test tự động (1.746 UI tests + 133 Backend container tests):",
         sec_bench_title: "Thực Nghiệm Đối Chiếu 8 Chiến Lược Trên Cả 2 Hệ Thống",
-        sec_bench_sub: "Chạy cùng một giao thức đóng băng (20260918–20261021, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, vốn 1.000 USDT, stake 100 USDT, phí 0,05%) trên cả FreqPilot (2026.9 chính thức) và FreqUI Ultimate (2026.3-dev fork):"
+        sec_bench_sub: "Chạy riêng từng chiến lược trên cùng giao thức đóng băng (18/09/2026–22/10/2026, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, vốn 1.000 USDT, stake 100 USDT, phí 0,05%, chi tiết 1m) giữa FreqPilot (2026.9 chính thức) và Ultimate (2026.6 fork):"
       },
       en: {
         nav_home: "← Home",
@@ -571,7 +580,7 @@
         sec_mat_title: "12-Point Technical Comparison Matrix",
         sec_mat_sub: "Every FreqPilot capability is backed by 1,879 automated tests (1,746 UI tests + 133 network-isolated backend tests):",
         sec_bench_title: "Head-to-Head Empirical Benchmark Across 8 Strategies",
-        sec_bench_sub: "Executed under the exact same frozen protocol (20260918–20261021, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, 1,000 USDT wallet, 100 USDT stake, 0.05% fee) on both FreqPilot (official 2026.9) and FreqUI Ultimate (2026.3-dev fork):"
+        sec_bench_sub: "Executed individually under the exact same frozen protocol (2026-09-18 to 2026-10-22, BTC/USDT:USDT + ETH/USDT:USDT, 1x Isolated, 1,000 USDT wallet, 100 USDT stake, 0.05% fee, 1m detail) on FreqPilot (official 2026.9) vs FreqUI Ultimate (2026.6 fork):"
       },
       zh: {
         nav_home: "← 返回首页",
@@ -584,7 +593,7 @@
         sec_mat_title: "12 项核心技术指标全面对比",
         sec_mat_sub: "FreqPilot 的每一项能力均通过 1,879 项自动化测试验证（1,746 项前端测试 + 133 项无网络容器后端测试）：",
         sec_bench_title: "8 大策略双引擎同协议实证对标报告",
-        sec_bench_sub: "在完全相同的冻结协议（20260918–20261021，BTC/ETH 逐仓 1x，1,000 USDT 本金，100 USDT 单笔，0.05% 手续费）下对比 FreqPilot (2026.9 官方引擎) 与 FreqUI Ultimate (2026.3-dev 分支)："
+        sec_bench_sub: "在完全相同的冻结协议（2026-09-18 至 2026-10-22，BTC/ETH 逐仓 1x，1,000 USDT 本金，100 USDT 单笔，0.05% 手续费，1m 细节）下独立运行对比 FreqPilot (2026.9 官方引擎) 与 FreqUI Ultimate (2026.6 分支)："
       },
       ru: {
         nav_home: "← На главную",
@@ -597,7 +606,7 @@
         sec_mat_title: "Сравнение по 12 техническим критериям",
         sec_mat_sub: "Каждая функция FreqPilot проверена 1 879 автоматическими тестами:",
         sec_bench_title: "Эмпирическое сравнение 8 стратегий на обоих движках",
-        sec_bench_sub: "Запуск по единому замороженному протоколу (20260918–20261021, BTC/ETH Isolated 1x, депозит 1 000 USDT, ставка 100 USDT, комиссия 0,05%):"
+        sec_bench_sub: "Индивидуальный запуск по единому замороженному протоколу (18.09.2026–22.10.2026, BTC/ETH Isolated 1x, депозит 1 000 USDT, ставка 100 USDT, комиссия 0,05%) на FreqPilot (2026.9) и Ultimate (2026.6 fork):"
       },
       ko: {
         nav_home: "← 홈으로",
@@ -610,7 +619,7 @@
         sec_mat_title: "12개 핵심 기술 항목 상세 비교",
         sec_mat_sub: "FreqPilot의 모든 기능은 1,879개의 자동화 테스트로 검증되었습니다:",
         sec_bench_title: "8개 전략 양쪽 시스템 실증 벤치마크",
-        sec_bench_sub: "동일한 동결 프로토콜(20260918–20261021, BTC/ETH 1x 격리, 1,000 USDT 시드, 100 USDT 스테이크, 수수료 0.05%)에서 실행한 결과:"
+        sec_bench_sub: "동일한 동결 프로토콜(2026-09-18 ~ 2026-10-22, BTC/ETH 1x 격리, 1,000 USDT 시드, 100 USDT 스테이크, 수수료 0.05%)에서 개별 실행한 결과 (공식 2026.9 vs 2026.6 포크):"
       }
     };
 
