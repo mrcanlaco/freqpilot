@@ -4,23 +4,22 @@ Tài liệu này cung cấp sẵn **cấu hình trỏ tên miền `.dev` trên C
 
 ---
 
-## 1. Kết nối tên miền `.dev` của bạn trên Cloudflare (Chỉ mất 2 phút)
+## 1. Kết nối tên miền `freqpilot.dev` trên Cloudflare (Chỉ mất 2 phút)
 
-Trang Landing Page tĩnh (`site/index.html`) đã được dựng sẵn và triển khai trên cả repo lẫn Nginx container tại máy MSI (`http://127.0.0.1:8088`). Bạn có **2 cách** trỏ tên miền `.dev` vừa mua trên Cloudflare:
+Trang Landing Page tĩnh (`site/index.html`) đã được gắn canonical `https://freqpilot.dev/` và triển khai trên cả repo lẫn Nginx container tại máy MSI (`http://127.0.0.1:8088`). Bạn có **2 cách** đưa `freqpilot.dev` lên sóng:
 
 ### Cách A (Khuyên dùng số 1 — Miễn phí 100%, CDN toàn cầu, không phụ thuộc máy MSI): Cloudflare Pages
 1. Vào **Cloudflare Dashboard** → **Workers & Pages** → **Create** → **Pages** → **Upload assets** (hoặc kết nối GitHub repo `freqpilot` với thư mục build là `site`).
 2. Kéo thả thư mục `E:\FreqPilot\freqpilot\site` lên.
-3. Vào tab **Custom domains** → nhập tên miền `<ten-mien-cua-ban>.dev` → Cloudflare tự động trỏ DNS và cấp SSL trong 30 giây.
+3. Vào tab **Custom domains** → nhập `freqpilot.dev` → Cloudflare tự động trỏ DNS và cấp SSL trong 30 giây.
 
 ### Cách B: Trỏ trực tiếp về Nginx trên Máy MSI (`100.88.76.126:8088`) qua Cloudflare Tunnel sẵn có
 Trên máy MSI (`DaoVangServer`), container `freqpilot-landing-web` đang chạy sẵn ở cổng `127.0.0.1:8088`.
 Nếu bạn dùng Cloudflare Zero Trust Dashboard (**Networks → Tunnels**):
 - Chọn Tunnel của máy MSI → **Public Hostname** → **Add a public hostname**:
-  - **Domain**: `<ten-mien-cua-ban>.dev`
+  - **Domain**: `freqpilot.dev`
   - **Service Type**: `HTTP`
   - **URL**: `localhost:8088` (hoặc `host.docker.internal:8088`).
-
 ---
 
 ## 2. Gói Sản Phẩm Đã Xuất Sẵn Để Đưa Lên BuyMeACoffee / Gumroad (`work/release-dossiers/`)
