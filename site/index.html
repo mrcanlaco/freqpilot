@@ -251,8 +251,9 @@
         <a href="#proof">Bằng Chứng Độ Nhạy & Holdout</a>
         <a href="#dossiers">Gói Hồ Sơ Dossier (.zip)</a>
         <a href="#install">Cài Đặt 3 Bước</a>
+        <a href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
       </nav>
-      <a class="btn primary" href="#dossiers">Nhận Gói Hồ Sơ Đã Xác Minh →</a>
+      <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub: mrcanlaco/freqpilot →</a>
     </div>
   </header>
 
@@ -265,7 +266,7 @@
       </p>
       <div class="hero-actions">
         <a class="btn primary" href="#audit">Xem Bảng Kiểm Toán 10 Chiến Lược</a>
-        <a class="btn" href="#install">Tải Công Cụ Mã Nguồn Mở</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">Mã Nguồn Mở trên GitHub ↗</a>
       </div>
       <div class="kpi-strip">
         <div class="kpi-card">
@@ -525,7 +526,7 @@
               <li>Báo cáo kiểm toán công khai hàng tuần.</li>
             </ul>
           </div>
-          <a class="btn" href="#install">Cài Đặt Từ GitHub</a>
+          <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">Cài Đặt Từ GitHub ↗</a>
         </div>
 
         <div class="price-card featured">
@@ -561,7 +562,11 @@
     <section id="install">
       <h2>4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước</h2>
       <p class="sec-sub">Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.</p>
-      <pre># Bước 1: Khởi tạo thư mục dữ liệu riêng, mật khẩu API ngẫu nhiên và 8 chiến lược mẫu (mặc định STOPPED, dry_run=true)
+      <pre># Bước 0: Clone kho mã nguồn mở chính thức
+git clone https://github.com/mrcanlaco/freqpilot.git
+cd freqpilot
+
+# Bước 1: Khởi tạo thư mục dữ liệu riêng, mật khẩu API ngẫu nhiên và 8 chiến lược mẫu (mặc định STOPPED, dry_run=true)
 ./Initialize.ps1
 
 # Bước 2: Kiểm tra cấu hình, cổng mạng và schema chiến lược trước khi chạy
