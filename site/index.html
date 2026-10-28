@@ -801,15 +801,61 @@
             </div>
           </div>
 
-          <!-- PANE 3: Real Studio Screenshots -->
+          <!-- PANE 3: Interactive 11-Step Studio & Paper 1x Reconcile Explorer -->
           <div id="pane-screenshots" class="win-pane">
-            <div class="shot-tabs">
-              <button class="chip active" onclick="switchScreenshot('assets/studio-library.webp', this)">1. Thư Viện 26 Chiến Lược &amp; Bộ Lọc Đa Chiều</button>
-              <button class="chip" onclick="switchScreenshot('assets/studio-results.webp', this)">2. Bảng Kết Quả &amp; Context Strip 4 Thẻ</button>
-              <button class="chip" onclick="switchScreenshot('assets/studio-sensitivity.webp', this)">3. Không Gian Ma Trận Độ Nhạy 2D</button>
-              <button class="chip" onclick="switchScreenshot('assets/studio-wfa.webp', this)">4. Không Gian Walk-Forward &amp; Holdout</button>
+            <div class="bento-grid">
+              <div class="bento-visual">
+                <h3 style="margin:0 0 8px">🧭 Quy Trình 11 Bước Dẫn Đường Theo Trạng Thái Thực</h3>
+                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px">
+                  Thanh Context Strip 4 thẻ &amp; Banner gợi ý tự động kiểm tra trạng thái mã, dữ liệu, gói ZIP và kiểm định trước khi mở khóa bước tiếp theo:
+                </p>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:12px">
+                  <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
+                    <small style="color:var(--fg-3)">01 · MÃ NGUỒN</small><br/>
+                    <b class="pos">✓ Đã lưu · b82e4ae1</b><br/>
+                    <small style="color:var(--fg-2)">2 bản sao dự phòng</small>
+                  </div>
+                  <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
+                    <small style="color:var(--fg-3)">02 · CẤU HÌNH &amp; DỮ LIỆU</small><br/>
+                    <b>75.690 nến 5m + Funding 8h</b><br/>
+                    <small style="color:var(--fg-2)">2026-04-01 → 2026-10-21</small>
+                  </div>
+                  <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--pos-bright)">
+                    <small style="color:var(--fg-3)">03 · GÓI BACKTEST GẦN NHẤT</small><br/>
+                    <b class="pos">+44.23 USDT · 30 lệnh</b><br/>
+                    <small class="pos">✓ Khớp mã đang mở (SHA-256)</small>
+                  </div>
+                  <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
+                    <small style="color:var(--fg-3)">04 · KIỂM ĐỊNH &amp; PAPER</small><br/>
+                    <b class="pos">Lookahead: False · Recursive: OK</b><br/>
+                    <small style="color:var(--fg-2)">Isolated 1x · Sẵn sàng Paper</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bento-visual">
+                <h3 style="margin:0 0 8px">🛡️ Hồ Sơ Paper 1x Độc Lập (`localhost:8095`) &amp; Đối Chiếu Lệnh</h3>
+                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px">
+                  Không dùng chung DB với bot chính. Hồ sơ Paper được đóng gói kèm wrapper `1x Isolated` và giữ ở trạng thái `STOPPED` cho tới khi bạn bấm chạy:
+                </p>
+                <div style="display:grid;gap:8px;font-family:var(--mono);font-size:12px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--pos-bright);border-radius:8px">
+                    <div>
+                      <b>DikibagastEmaRsi1h - 6.7m Verified 1x</b><br/>
+                      <small style="color:var(--fg-3)">profile: 4e1b0cb3ef · run: 8ebeb7170c</small>
+                    </div>
+                    <span class="pill pass">1x Isolated · Ready</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px">
+                    <div>
+                      <b>RocketHunterSma501h - 6.7m Verified 1x</b><br/>
+                      <small style="color:var(--fg-3)">profile: f26d19d9d7 · run: 6826363795</small>
+                    </div>
+                    <span class="pill pass">1x Isolated · Ready</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <img id="studio-shot-img" class="shot-img" src="assets/studio-library.webp" alt="FreqPilot Studio Live Screenshot" />
           </div>
 
           <!-- PANE 4: Real Python Strategy Code & Evidence Codex Prompt -->
