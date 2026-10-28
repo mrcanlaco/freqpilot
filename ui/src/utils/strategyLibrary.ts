@@ -801,3 +801,154 @@ export function buildResearchDossierMarkdown(input: {
     '> **Giới hạn bằng chứng**: Gói lưu đóng băng mã Python local, bộ tham số và tệp nến/mark/funding local, nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ; kết quả này là bằng chứng thực nghiệm trên mẫu lịch sử, không phải cam kết lợi nhuận hay khả năng khớp lệnh tương lai.',
   ].join('\n');
 }
+
+export type StudioLocale = 'vi' | 'en' | 'zh' | 'ru' | 'ko';
+
+export const STUDIO_UI_TEXT: Record<
+  StudioLocale,
+  {
+    title: string;
+    backLibrary: string;
+    paperResearch: string;
+    compareLibrary: string;
+    safeBadge: string;
+    areaLibrary: string;
+    areaData: string;
+    areaJobs: string;
+    areaPaper: string;
+    areaSettings: string;
+    nextStepBadge: string;
+    tabs: [string, string][];
+  }
+> = {
+  vi: {
+    title: 'Từ ý tưởng đến chiến lược có bằng chứng',
+    backLibrary: '← Thư viện chiến lược',
+    paperResearch: 'Paper nghiên cứu',
+    compareLibrary: 'So sánh kết quả thư viện',
+    safeBadge: '● Chỉ backtest & paper · 1x Isolated',
+    areaLibrary: 'Thư viện chiến lược',
+    areaData: 'Dữ liệu',
+    areaJobs: 'Tác vụ',
+    areaPaper: 'Paper',
+    areaSettings: 'Cài đặt',
+    nextStepBadge: 'Bước tiếp theo đề xuất',
+    tabs: [
+      ['idea', '01 · Ý tưởng'],
+      ['code', '02 · Mã chiến lược'],
+      ['data', '03 · Dữ liệu'],
+      ['run', '04 · Backtest'],
+      ['results', '05 · Kết quả'],
+      ['checks', '06 · Kiểm định'],
+      ['optimize', '07 · Tối ưu'],
+      ['walk', '08 · Walk-forward'],
+      ['sensitivity', '09 · Độ nhạy'],
+      ['matrix', '10 · Ma trận'],
+      ['paper', '11 · Paper'],
+    ],
+  },
+  en: {
+    title: 'From Strategy Idea to Cryptographic Evidence',
+    backLibrary: '← Strategy Library',
+    paperResearch: 'Research Paper',
+    compareLibrary: 'Compare Library Runs',
+    safeBadge: '● Backtest & Paper Only · 1x Isolated',
+    areaLibrary: 'Strategy Library',
+    areaData: 'Data Quality',
+    areaJobs: 'Operations',
+    areaPaper: 'Paper 1x',
+    areaSettings: 'Settings',
+    nextStepBadge: 'Recommended Next Step',
+    tabs: [
+      ['idea', '01 · Idea'],
+      ['code', '02 · Strategy Code'],
+      ['data', '03 · Data Audit'],
+      ['run', '04 · Backtest'],
+      ['results', '05 · Results'],
+      ['checks', '06 · Bias Checks'],
+      ['optimize', '07 · Optimize'],
+      ['walk', '08 · Walk-forward'],
+      ['sensitivity', '09 · Sensitivity'],
+      ['matrix', '10 · Matrix'],
+      ['paper', '11 · Paper'],
+    ],
+  },
+  zh: {
+    title: '从策略构思到 SHA-256 实证研究',
+    backLibrary: '← 返回策略库',
+    paperResearch: '研究模拟盘',
+    compareLibrary: '对比策略库结果',
+    safeBadge: '● 仅限回测与模拟盘 · 1x 逐仓',
+    areaLibrary: '策略库',
+    areaData: '数据审计',
+    areaJobs: '任务监控',
+    areaPaper: '1x 模拟盘',
+    areaSettings: '设置',
+    nextStepBadge: '建议下一步',
+    tabs: [
+      ['idea', '01 · 策略构思'],
+      ['code', '02 · 策略代码'],
+      ['data', '03 · 数据审计'],
+      ['run', '04 · 冻结回测'],
+      ['results', '05 · 回测报告'],
+      ['checks', '06 · 偏差检验'],
+      ['optimize', '07 · 参数优化'],
+      ['walk', '08 · 滚动步进'],
+      ['sensitivity', '09 · 敏感度矩阵'],
+      ['matrix', '10 · 多维矩阵'],
+      ['paper', '11 · 模拟盘'],
+    ],
+  },
+  ru: {
+    title: 'От идеи стратегии к проверенным доказательствам',
+    backLibrary: '← Библиотека стратегий',
+    paperResearch: 'Paper-исследования',
+    compareLibrary: 'Сравнить результаты',
+    safeBadge: '● Только бэктест и Paper · 1x Isolated',
+    areaLibrary: 'Библиотека стратегий',
+    areaData: 'Аудит данных',
+    areaJobs: 'Операции',
+    areaPaper: 'Paper 1x',
+    areaSettings: 'Настройки',
+    nextStepBadge: 'Рекомендуемый шаг',
+    tabs: [
+      ['idea', '01 · Идея'],
+      ['code', '02 · Код стратегии'],
+      ['data', '03 · Данные'],
+      ['run', '04 · Бэктест'],
+      ['results', '05 · Результаты'],
+      ['checks', '06 · Проверки'],
+      ['optimize', '07 · Оптимизация'],
+      ['walk', '08 · Walk-forward'],
+      ['sensitivity', '09 · Чувствительность'],
+      ['matrix', '10 · Матрица'],
+      ['paper', '11 · Paper'],
+    ],
+  },
+  ko: {
+    title: '아이디어에서 SHA-256 검증된 퀀트 전략까지',
+    backLibrary: '← 전략 라이브러리',
+    paperResearch: '연구 페이퍼',
+    compareLibrary: '라이브러리 결과 비교',
+    safeBadge: '● 백테스트 & 페이퍼 전용 · 1x 격리',
+    areaLibrary: '전략 라이브러리',
+    areaData: '데이터 감사',
+    areaJobs: '작업 모니터',
+    areaPaper: 'Paper 1x',
+    areaSettings: '설정',
+    nextStepBadge: '권장 다음 단계',
+    tabs: [
+      ['idea', '01 · 아이디어'],
+      ['code', '02 · 전략 코드'],
+      ['data', '03 · 데이터'],
+      ['run', '04 · 백테스트'],
+      ['results', '05 · 결과 분석'],
+      ['checks', '06 · 편향 검증'],
+      ['optimize', '07 · 최적화'],
+      ['walk', '08 · Walk-forward'],
+      ['sensitivity', '09 · 민감도 행렬'],
+      ['matrix', '10 · 매트릭스'],
+      ['paper', '11 · Paper'],
+    ],
+  },
+};

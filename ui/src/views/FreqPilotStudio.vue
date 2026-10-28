@@ -23,7 +23,7 @@ import { useResearchBootstrap } from '@/composables/useResearchBootstrap';
 import type { ResearchCheck } from '@/utils/researchChecks';
 import StrategyLibrary from '@/components/strategyDev/StrategyLibrary.vue';
 import DiffViewer from '@/components/strategyDev/DiffViewer.vue';
-import { buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, filterAndSortStrategies, formatLibraryRunSummary, latestLibraryRuns, type LibraryStrategy, type LibraryRun, type StrategyPreset, type StrategySortKey } from '@/utils/strategyLibrary';
+import { buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, filterAndSortStrategies, formatLibraryRunSummary, latestLibraryRuns, STUDIO_UI_TEXT, type LibraryStrategy, type LibraryRun, type StrategyPreset, type StrategySortKey, type StudioLocale } from '@/utils/strategyLibrary';
 import EquityCurveChart from '@/components/strategyDev/EquityCurveChart.vue';
 import UnderwaterChart from '@/components/strategyDev/UnderwaterChart.vue';
 import MonthlyReturnsHeatmap from '@/components/strategyDev/MonthlyReturnsHeatmap.vue';
@@ -47,7 +47,8 @@ type FrozenRun = LibraryRun & { filename?:string; native_run_id?:string; artifac
 const router=useRouter(); const route=useRoute(); const bots=useBotStore();
 const paperView=computed(()=>route.name==='research-paper'||route.query.paper==='active');
 function openLibrary(){libraryOpen.value=true;void router.push('/studio');}
-const items=ref<Item[]>([]), query=ref(''), sidebarFilter=ref<'all'|'favorite'|'archived'|'profitable'|'short'>('all'), sidebarSort=ref<StrategySortKey>('evidence'), selected=ref(''), tab=ref('idea');
+const items=ref<Item[]>([]), query=ref(''), sidebarFilter=ref<'all'|'favorite'|'archived'|'profitable'|'short'>('all'), sidebarSort=ref<StrategySortKey>('evidence'), selected=ref(''), tab=ref('idea'), studioLang=ref<StudioLocale>('vi');
+const uiText=computed(()=>STUDIO_UI_TEXT[studioLang.value]??STUDIO_UI_TEXT.vi);
 const preset=ref<StrategyPreset>(),parameterBusy=ref(false);
 const libraryOpen=ref(true), sidebarOpen=ref(true), sidebarWidth=ref(275), runSplitEditor=ref(false), tagsText=ref(''), favorite=ref(false), versionPreview=ref('');
 function startSidebarResize(event:MouseEvent){
@@ -62,7 +63,7 @@ function startSidebarResize(event:MouseEvent){
   document.addEventListener('mouseup',onUp);
 }
 watch(()=>route.name,(name)=>{if(name==='research-data'){libraryOpen.value=false;tab.value='data';}else if(name==='research-jobs'){libraryOpen.value=false;tab.value='walk';}},{immediate:true});
-const tabs=[['idea','01 · Ý tưởng'],['code','02 · Mã chiến lược'],['data','03 · Dữ liệu'],['run','04 · Backtest'],['results','05 · Kết quả'],['checks','06 · Kiểm định'],['optimize','07 · Tối ưu'],['walk','08 · Walk-forward'],['sensitivity','09 · Độ nhạy'],['matrix','10 · Ma trận'],['paper','11 · Paper']];
+const tabs=computed(()=>uiText.value.tabs);
 const code=ref(''), original=ref(''), revision=ref(''), idea=ref(''), notes=ref('');
 function draftKey(name:string){return 'freqpilot.strategy-draft.'+name;}
 watch([selected,code,revision],()=>{if(!selected.value||!revision.value)return;try{if(code.value===original.value)localStorage.removeItem(draftKey(selected.value));else localStorage.setItem(draftKey(selected.value),JSON.stringify({revision:revision.value,code:code.value,updated_at:Date.now()}));}catch{/* The editor still retains the in-memory draft if browser storage is unavailable. */}});
@@ -327,23 +328,30 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
     <div class="pilot-heading" :class="{'library-mode':libraryOpen}">
       <div>
         <span class="eyebrow">FREQPILOT · RESEARCH WORKSPACE</span>
-        <h1>Từ ý tưởng đến chiến lược có bằng chứng</h1>
+        <h1>{{uiText.title}}</h1>
         <p>Binance Futures · BTC / ETH · Freqtrade 2026.9</p>
       </div>
       <div class="row">
-        <button v-if="ready&&api&&(!libraryOpen||paperView)" @click="openLibrary">← Thư viện chiến lược</button>
-        <button v-if="ready&&api&&!paperView" @click="router.push('/paper')">Paper nghiên cứu</button>
-        <button v-if="ready&&api&&!paperView" :disabled="working||running" @click="compareLatest()">So sánh kết quả thư viện</button>
-        <div class="safe">● Chỉ backtest & paper · 1x Isolated</div>
+        <select v-model="studioLang" class="studio-lang-select" aria-label="Ngôn ngữ Studio">
+          <option value="vi">🇻🇳 VI</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="ru">🇷🇺 RU</option>
+          <option value="ko">🇰🇷 한국어</option>
+        </select>
+        <button v-if="ready&&api&&(!libraryOpen||paperView)" @click="openLibrary">{{uiText.backLibrary}}</button>
+        <button v-if="ready&&api&&!paperView" @click="router.push('/paper')">{{uiText.paperResearch}}</button>
+        <button v-if="ready&&api&&!paperView" :disabled="working||running" @click="compareLatest()">{{uiText.compareLibrary}}</button>
+        <div class="safe">{{uiText.safeBadge}}</div>
       </div>
     </div>
     <nav class="area-nav" aria-label="Khu vực nghiên cứu">
-      <button :class="{active:route.name==='studio'&&libraryOpen}" @click="openLibrary">Thư viện chiến lược</button>
+      <button :class="{active:route.name==='studio'&&libraryOpen}" @click="openLibrary">{{uiText.areaLibrary}}</button>
       <button v-if="selected" :class="{active:route.name==='studio'&&!libraryOpen}" @click="libraryOpen=false;router.push('/studio')">Workspace: {{selected}}</button>
-      <button :class="{active:route.name==='research-data'}" @click="router.push('/data')">Dữ liệu</button>
-      <button :class="{active:route.name==='research-jobs'}" @click="router.push('/jobs')">Tác vụ</button>
-      <button :class="{active:paperView}" @click="router.push('/paper')">Paper</button>
-      <button @click="router.push('/settings')">Cài đặt</button>
+      <button :class="{active:route.name==='research-data'}" @click="router.push('/data')">{{uiText.areaData}}</button>
+      <button :class="{active:route.name==='research-jobs'}" @click="router.push('/jobs')">{{uiText.areaJobs}}</button>
+      <button :class="{active:paperView}" @click="router.push('/paper')">{{uiText.areaPaper}}</button>
+      <button @click="router.push('/settings')">{{uiText.areaSettings}}</button>
     </nav>
     <div v-if="message&&(!libraryOpen||failure)" class="feedback" :class="{bad:failure}" role="status">{{message}}</div>
     <div v-if="running&&!libraryOpen&&tab==='results'" class="progress" role="status"><progress :value="active?.backtestProgress??0" max="1"/><span>{{active?.backtestStep}} · {{Math.round((active?.backtestProgress??0)*100)}}%</span></div>
@@ -813,6 +821,13 @@ p {
   color: var(--fg-2);
   margin: 8px 0 14px;
   font-size: 13px;
+}
+.studio-lang-select {
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg-2);
 }
 small,
 .muted {

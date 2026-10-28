@@ -1,4 +1,13 @@
-# FreqPilot — Không gian Nghiên cứu, Kiểm định & Paper Trading Chiến lược Định lượng trên Freqtrade 2026.9 Chính thức
+# ⚡ FreqPilot — Không gian Nghiên cứu, Kiểm định & Paper Trading Chiến lược Định lượng trên Freqtrade 2026.9 Chính thức
+
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL%203.0-blue.svg)](SOURCES.md)
+[![Engine: Freqtrade 2026.9](https://img.shields.io/badge/Engine-Freqtrade%202026.9-brightgreen.svg)](#)
+[![Tests: 1,878+ Passed](https://img.shields.io/badge/Tests-1%2C878%2B%20Passed-brightgreen.svg)](#)
+[![Languages](https://img.shields.io/badge/Language-Vi%E1%BA%BFt%20%7C%20English%20%7C%20%E4%B8%AD%E6%96%87%20%7C%20%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F%20%7C%20%ED%95%9C%EA%B5%AD%EC%96%B4-blue)](#)
+
+[🇻🇳 Tiếng Việt](README.md) | [🇬🇧 English](README.en.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇷🇺 Русский](README.ru.md) | [🇰🇷 한국어](README.ko.md)
+
+---
 
 **FreqPilot** là không gian làm việc tập trung vào vòng đời chiến lược (*Ý tưởng → Mã nguồn → Kiểm toán Dữ liệu → Backtest Đóng băng → Kiểm định Lookahead/Recursive → Walk-Forward & Độ nhạy 2D → Paper 1x & Đối chiếu lệnh*), kết hợp giao diện kế thừa từ **FreqUI Ultimate v2.1.0** với **100% engine Freqtrade `2026.9` chính thức**.
 

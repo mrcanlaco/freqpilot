@@ -10,6 +10,7 @@ import {
   libraryMatches,
   libraryUpdated,
   mapWalkForwardWindowRow,
+  STUDIO_UI_TEXT,
 } from '@/utils/strategyLibrary';
 import type { LibraryRun } from '@/utils/strategyLibrary';
 
@@ -503,5 +504,25 @@ describe('Strategy library evidence', () => {
       'BetaLong',
       'GammaUnarchived',
     ]);
+  });
+
+  it('provides complete 11-step Studio language packs for vi, en, zh, ru, and ko', () => {
+    for (const lang of ['vi', 'en', 'zh', 'ru', 'ko'] as const) {
+      expect(STUDIO_UI_TEXT[lang].title.length).toBeGreaterThan(5);
+      expect(STUDIO_UI_TEXT[lang].tabs).toHaveLength(11);
+      expect(STUDIO_UI_TEXT[lang].tabs.map((x) => x[0])).toEqual([
+        'idea',
+        'code',
+        'data',
+        'run',
+        'results',
+        'checks',
+        'optimize',
+        'walk',
+        'sensitivity',
+        'matrix',
+        'paper',
+      ]);
+    }
   });
 });

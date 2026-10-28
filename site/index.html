@@ -247,26 +247,35 @@
     <div class="wrap nav">
       <div class="brand"><span class="brand-dot"></span> FreqPilot <small style="font-weight:500;color:var(--fg-3);font-size:12px">for Official Freqtrade 2026.9</small></div>
       <nav class="nav-links">
-        <a href="#audit">Bảng Kiểm Toán 10 Chiến Lược</a>
-        <a href="#proof">Bằng Chứng Độ Nhạy & Holdout</a>
-        <a href="#dossiers">Gói Hồ Sơ Dossier (.zip)</a>
-        <a href="#install">Cài Đặt 3 Bước</a>
+        <a href="#audit" data-i18n="nav_audit">Bảng Kiểm Toán 10 Chiến Lược</a>
+        <a href="#proof" data-i18n="nav_proof">Bằng Chứng Độ Nhạy & Holdout</a>
+        <a href="#dossiers" data-i18n="nav_dossiers">Gói Hồ Sơ Dossier (.zip)</a>
+        <a href="#install" data-i18n="nav_install">Cài Đặt 3 Bước</a>
         <a href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
       </nav>
-      <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub: mrcanlaco/freqpilot →</a>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <select id="lang-select" aria-label="Language" onchange="setSiteLang(this.value)" style="background:var(--bg-2);color:var(--fg);border:1px solid var(--line-2);border-radius:7px;padding:7px 10px;font:inherit;font-size:12.5px;cursor:pointer">
+          <option value="vi">🇻🇳 Tiếng Việt</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="zh">🇨🇳 简体中文</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="ko">🇰🇷 한국어</option>
+        </select>
+        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub →</a>
+      </div>
     </div>
   </header>
 
   <main class="wrap">
     <div class="hero">
       <span class="eyebrow">ZERO-FORK QUANTITATIVE RESEARCH STUDIO · GPL-3.0</span>
-      <h1>Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.</h1>
-      <p class="lead">
-        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout niêm phong và Đối chiếu Paper 1x thực tế.
+      <h1 data-i18n="hero_title">Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.</h1>
+      <p class="lead" data-i18n="hero_lead">
+        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout tách riêng và Đối chiếu Paper 1x thực tế.
       </p>
       <div class="hero-actions">
-        <a class="btn primary" href="#audit">Xem Bảng Kiểm Toán 10 Chiến Lược</a>
-        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">Mã Nguồn Mở trên GitHub ↗</a>
+        <a class="btn primary" href="#audit" data-i18n="hero_cta_audit">Xem Bảng Kiểm Toán 10 Chiến Lược</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở trên GitHub ↗</a>
       </div>
       <div class="kpi-strip">
         <div class="kpi-card">
@@ -293,14 +302,14 @@
     </div>
 
     <section id="audit">
-      <h2>1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
-      <p class="sec-sub">
+      <h2 data-i18n="sec1_title">1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
+      <p class="sec-sub" data-i18n="sec1_sub">
         Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
       </p>
       <div class="filter-bar">
-        <button class="chip active" onclick="filterAudit('all', this)">Tất cả (10)</button>
-        <button class="chip" onclick="filterAudit('survived', this)">✓ Sống sót qua 6,7 tháng (4)</button>
-        <button class="chip" onclick="filterAudit('dropped', this)">✕ Bị loại ở mẫu dài / âm (6)</button>
+        <button class="chip active" onclick="filterAudit('all', this)" data-i18n="filter_all">Tất cả (10)</button>
+        <button class="chip" onclick="filterAudit('survived', this)" data-i18n="filter_survived">✓ Sống sót qua 6,7 tháng (4)</button>
+        <button class="chip" onclick="filterAudit('dropped', this)" data-i18n="filter_dropped">✕ Bị loại ở mẫu dài / âm (6)</button>
       </div>
       <div class="table-wrap">
         <table id="audit-table">
@@ -434,8 +443,8 @@
     </section>
 
     <section id="proof">
-      <h2>2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)</h2>
-      <p class="sec-sub">
+      <h2 data-i18n="sec2_title">2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)</h2>
+      <p class="sec-sub" data-i18n="sec2_sub">
         Khảo sát vùng tham số lân cận và đối chiếu giữa bộ tham số gốc (Baseline) với ứng viên Hyperopt trên cửa sổ tách khỏi tập huấn luyện Hyperopt (kiểm tra hồi cứu / retrospective check trên mẫu lịch sử 2026).
       </p>
       <div class="grid-2">
@@ -510,8 +519,8 @@
     </section>
 
     <section id="dossiers">
-      <h2>3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
-      <p class="sec-sub">
+      <h2 data-i18n="sec3_title">3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
+      <p class="sec-sub" data-i18n="sec3_sub">
         Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào mục <strong>Nhập gói hồ sơ (.zip)</strong> trên máy của bạn.
       </p>
       <div class="grid-3">
@@ -560,8 +569,8 @@
     </section>
 
     <section id="install">
-      <h2>4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước</h2>
-      <p class="sec-sub">Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.</p>
+      <h2 data-i18n="sec4_title">4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước</h2>
+      <p class="sec-sub" data-i18n="sec4_sub">Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.</p>
       <pre># Bước 0: Clone kho mã nguồn mở chính thức
 git clone https://github.com/mrcanlaco/freqpilot.git
 cd freqpilot
@@ -585,6 +594,126 @@ cd freqpilot
   </footer>
 
   <script>
+    const SITE_I18N = {
+      vi: {
+        nav_audit: "Bảng Kiểm Toán 10 Chiến Lược",
+        nav_proof: "Bằng Chứng Độ Nhạy & Holdout",
+        nav_dossiers: "Gói Hồ Sơ Dossier (.zip)",
+        nav_install: "Cài Đặt 3 Bước",
+        hero_title: "Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.",
+        hero_lead: "FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout tách riêng và Đối chiếu Paper 1x thực tế.",
+        hero_cta_audit: "Xem Bảng Kiểm Toán 10 Chiến Lược",
+        hero_cta_gh: "Mã Nguồn Mở trên GitHub ↗",
+        sec1_title: "1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
+        sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
+        filter_all: "Tất cả (10)",
+        filter_survived: "✓ Sống sót qua 6,7 tháng (4)",
+        filter_dropped: "✕ Bị loại ở mẫu dài / âm (6)",
+        sec2_title: "2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)",
+        sec2_sub: "Khảo sát vùng tham số lân cận và đối chiếu giữa bộ tham số gốc (Baseline) với ứng viên Hyperopt trên cửa sổ tách khỏi tập huấn luyện Hyperopt (kiểm tra hồi cứu / retrospective check trên mẫu lịch sử 2026).",
+        sec3_title: "3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
+        sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
+        sec4_title: "4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước",
+        sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop."
+      },
+      en: {
+        nav_audit: "10-Strategy Audit",
+        nav_proof: "2D Sensitivity & Holdout",
+        nav_dossiers: "Verified Dossiers (.zip)",
+        nav_install: "3-Step Quickstart",
+        hero_title: "Don't Trust Backtest Screenshots. Verify the <code>SHA-256</code> Frozen Bundle.",
+        hero_lead: "FreqPilot turns <strong>official Freqtrade 2026.9</strong> into an evidence-first quantitative studio: Funding/Mark Data Audit, Lookahead & Recursive Bias Checks, 2D Parameter Sensitivity Matrix, Rolling Walk-Forward with Post-Hyperopt Holdout, and 1x Paper Reconciliation.",
+        hero_cta_audit: "Explore 10-Strategy Audit Leaderboard",
+        hero_cta_gh: "Open-Source on GitHub ↗",
+        sec1_title: "1. Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
+        sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>1,000 USDT</code> wallet, <code>100 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
+        filter_all: "All Audited (10)",
+        filter_survived: "✓ Survived 6.7-Month Window (4)",
+        filter_dropped: "✕ Eliminated on Long Window (6)",
+        sec2_title: "2. 2D Parameter Neighborhood Continuity & Retrospective WFA Holdout",
+        sec2_sub: "Evaluating parameter neighborhood continuity and comparing the untuned default Baseline against the Hyperopt-selected candidate on the post-Hyperopt interval (retrospective check on the 2026 historical sample).",
+        sec3_title: "3. Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
+        sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-&lt;id&gt;.zip</code> bundles directly into your workspace.",
+        sec4_title: "4. Launch FreqPilot Locally in 3 Commands",
+        sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop."
+      },
+      zh: {
+        nav_audit: "10大策略实证审计",
+        nav_proof: "2D敏感度与Holdout检验",
+        nav_dossiers: "已验证档案包 (.zip)",
+        nav_install: "3步快速安装",
+        hero_title: "拒绝回测截图造假。用 <code>SHA-256</code> 冻结证据包说话。",
+        hero_lead: "FreqPilot 将<strong>官方 Freqtrade 2026.9</strong> 升级为全闭环量化工作台：资金费率/标记价格审计、前视/递归偏差检验、二维参数敏感度矩阵、滚动 Walk-Forward 对照以及 1x 模拟盘实盘对账。",
+        hero_cta_audit: "查看 10 大策略审计榜单",
+        hero_cta_gh: "GitHub 开源仓库 ↗",
+        sec1_title: "1. 公开实证审计：10 个自动发掘策略 (`01a138fe`)",
+        sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>1,000 USDT</code> 本金，<code>100 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
+        filter_all: "全部策略 (10)",
+        filter_survived: "✓ 通过 6.7 个月长周期检验 (4)",
+        filter_dropped: "✕ 长周期淘汰 / 亏损 (6)",
+        sec2_title: "2. 二维参数邻域连续性与 Walk-Forward Holdout 回溯对照",
+        sec2_sub: "评估参数邻域连续性，并在独立于 Hyperopt 训练窗口的区间上对比未调参 Baseline 与 Hyperopt 候选参数（基于 2026 历史样本的回溯检验）。",
+        sec3_title: "3. 密码学签名策略档案包 (`Verified Dossiers`)",
+        sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
+        sec4_title: "4. 三步在本地启动 FreqPilot",
+        sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
+      },
+      ru: {
+        nav_audit: "Аудит 10 стратегий",
+        nav_proof: "2D-матрица и Holdout",
+        nav_dossiers: "Пакеты Dossier (.zip)",
+        nav_install: "Установка за 3 шага",
+        hero_title: "Не верьте скриншотам бэктестов. Проверяйте <code>SHA-256</code> пакет.",
+        hero_lead: "FreqPilot превращает <strong>официальный Freqtrade 2026.9</strong> в студию количественных исследований: аудит фандинга, проверка Lookahead/Recursive, 2D-матрица чувствительности, Walk-Forward с контрольным Holdout и сверка 1x Paper-сделок.",
+        hero_cta_audit: "Таблица аудита 10 стратегий",
+        hero_cta_gh: "Открытый код на GitHub ↗",
+        sec1_title: "1. Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
+        sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>1,000 USDT</code>, ставка <code>100 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
+        filter_all: "Все (10)",
+        filter_survived: "✓ Прошли окно 6.7 мес. (4)",
+        filter_dropped: "✕ Отсеяны на длинном окне (6)",
+        sec2_title: "2. Непрерывность 2D-окрестности параметров и ретроспективный Holdout (WFA)",
+        sec2_sub: "Оценка устойчивости соседних параметров и сравнение базовой версии (Baseline) с кандидатом Hyperopt на пост-тренировочном интервале (ретроспективная проверка на выборке 2026 г.).",
+        sec3_title: "3. Проверенные архивы стратегий (`Verified Dossiers`)",
+        sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
+        sec4_title: "4. Запуск FreqPilot за 3 команды",
+        sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
+      },
+      ko: {
+        nav_audit: "10대 전략 감사 리더보드",
+        nav_proof: "2D 민감도 & Holdout 검증",
+        nav_dossiers: "검증된 Dossier (.zip)",
+        nav_install: "3단계 빠른 설치",
+        hero_title: "백테스트 스크린샷을 믿지 마세요. <code>SHA-256</code> 동결 번들을 검증하세요.",
+        hero_lead: "FreqPilot은 <strong>공식 Freqtrade 2026.9</strong>를 완벽한 퀀트 연구 스튜디오로 전환합니다: 펀딩비·마크 데이터 감사, Lookahead/Recursive 편향 검증, 2D 파라미터 민감도 행렬, Walk-Forward Holdout 비교 및 1x 페이퍼 체결 대사.",
+        hero_cta_audit: "10대 전략 감사 결과 보기",
+        hero_cta_gh: "GitHub 오픈소스 ↗",
+        sec1_title: "1. 공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
+        sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
+        filter_all: "전체 (10)",
+        filter_survived: "✓ 6.7개월 장기 구간 통과 (4)",
+        filter_dropped: "✕ 장기 구간 탈락 / 적자 (6)",
+        sec2_title: "2. 2D 파라미터 인근 연속성 및 Walk-Forward 회고 Holdout 비교",
+        sec2_sub: "파라미터 인근 영역의 연속성을 점검하고 Hyperopt 학습 구간과 분리된 구간에서 기본값(Baseline)과 Hyperopt 후보를 비교합니다(2026 역사적 표본에 대한 회고적 검증).",
+        sec3_title: "3. 암호화 검증된 전략 번들 (`Verified Dossiers`)",
+        sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
+        sec4_title: "4. 3단계 명령어로 로컬에서 FreqPilot 시작하기",
+        sec4_sub: "Windows PowerShell 5.1, PowerShell 7 및 Linux/WSL2 + Docker Desktop 완벽 지원."
+      }
+    };
+
+    function setSiteLang(lang) {
+      const dict = SITE_I18N[lang] || SITE_I18N.vi;
+      document.documentElement.lang = lang;
+      const sel = document.getElementById('lang-select');
+      if (sel && sel.value !== lang) sel.value = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+      try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
+    }
+
     function filterAudit(group, btn) {
       document.querySelectorAll('.filter-bar .chip').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
@@ -592,6 +721,14 @@ cd freqpilot
         row.style.display = (group === 'all' || row.dataset.group === group) ? '' : 'none';
       });
     }
+
+    (function initLang() {
+      const urlLang = new URLSearchParams(location.search).get('lang');
+      let saved = null;
+      try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}
+      const initial = (urlLang && SITE_I18N[urlLang]) ? urlLang : (saved && SITE_I18N[saved]) ? saved : 'vi';
+      if (initial !== 'vi') setSiteLang(initial);
+    })();
   </script>
 </body>
 </html>
