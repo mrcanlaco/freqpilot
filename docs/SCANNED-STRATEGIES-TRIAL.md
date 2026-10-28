@@ -57,7 +57,7 @@ Khi mở rộng cửa sổ kiểm thử lên **6,7 tháng (`01/04/2026–21/10/2
 ## 4. Ma trận Độ nhạy 2D (`d28b58b598`) & Walk-Forward + Holdout (`94b955e45b`) của `DikibagastEmaRsi1h`
 
 ### 4.1. Ma trận Độ nhạy 2D (`ema_short` $\in \{45, 50, 55\} \times$ `rsi_entry_offset` $\in \{8, 10, 12\}$, kỳ `20260401-20261021`)
-Toàn bộ **9/9 ô lân cận** đều có lãi ròng dương (từ **`+26,21 USDT`** đến **`+46,09 USDT`**) và Drawdown dưới **`1,53%`**, chứng minh vùng tham số gốc `(50, 10)` không phải đỉnh nhọn overfit:
+Toàn bộ **9/9 ô lân cận** đều có lãi ròng dương (từ **`+26,21 USDT`** đến **`+46,09 USDT`**) và Drawdown dưới **`1,53%`**, phản ánh tính liên tục của vùng tham số lân cận `(50, 10)` trên mẫu 6,7 tháng này (không phải chứng minh tuyệt đối không overfit):
 
 | `ema_short` \ `rsi_entry_offset` | `8` | `10` *(Gốc)* | `12` |
 | :--- | :--- | :--- | :--- |
@@ -65,15 +65,15 @@ Toàn bộ **9/9 ô lân cận** đều có lãi ròng dương (từ **`+26,21 U
 | **`50` *(Gốc)*** | `+46,09 USDT` · 32 lệnh · DD `0,84%` | **`+44,23 USDT` · 30 lệnh · DD `0,73%` [Mặc định]** | `+40,20 USDT` · 29 lệnh · DD `0,76%` |
 | **`55`** | `+35,82 USDT` · 23 lệnh · DD `0,41%` | `+28,16 USDT` · 20 lệnh · DD `0,36%` | `+26,21 USDT` · 20 lệnh · DD `0,36%` |
 
-### 4.2. Walk-Forward (`2` cửa sổ rolling `90d Train / 35d OOS`) & Holdout niêm phong (`20260916-20261021`)
+### 4.2. Walk-Forward (`2` cửa sổ rolling `90d Train / 35d OOS`) & Holdout tách khỏi Hyperopt (`20260916-20261021`)
 - **Cửa sổ #0 (`Train 20260401-20260630` → `OOS 20260630-20260804`)**:
   - Train tốt nhất (`epoch #1`): `+6,09 USDT` (`5` lệnh) | Baseline OOS: `-6,42 USDT` (`4` lệnh) | Ứng viên OOS: `-0,60 USDT` (`3` lệnh, `DD 0,27%`).
 - **Cửa sổ #1 (`Train 20260506-20260804` → `OOS 20260804-20260908`)**:
   - Train tốt nhất (`epoch #1`): `+5,54 USDT` (`8` lệnh) | **Baseline OOS: `+13,18 USDT` (`11` lệnh, `PF 7,97`)** | Ứng viên OOS: `+6,78 USDT` (`5` lệnh, `PF 3,56`).
-- **Holdout niêm phong (`20260916-20261021`)**:
+- **Holdout tách khỏi Hyperopt (`20260916-20261021` — đối chiếu hồi cứu / retrospective check, do bản baseline & ma trận độ nhạy đã chạy qua cửa sổ 01/04–21/10)**:
   - **Baseline (không tối ưu — `50/100/10/30/2.0`)**: **`+9,16 USDT` (`5` lệnh, `+0,92%`, `MaxDD 0,37%`, `PF 3,44`)**.
   - **Ứng viên Hyperopt (`58/102/16/22/2.2`)**: `-3,46 USDT` (`2` lệnh, `MaxDD 0,36%`).
-- **Kết luận từ Holdout**: Bộ tham số gốc không tối ưu (**Baseline**) vượt trội hoàn toàn so với ứng viên Hyperopt trên cả OOS #1 lẫn Holdout niêm phong → **giữ nguyên bộ tham số gốc để đưa sang Paper 1x**.
+- **Kết luận từ phép đối chiếu**: Bộ tham số gốc không tối ưu (**Baseline**) vượt trội hơn ứng viên Hyperopt trên cả OOS #1 lẫn kỳ `20260916-20261021` → **giữ nguyên bộ tham số gốc để đưa sang Paper 1x**.
 
 ---
 

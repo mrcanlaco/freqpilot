@@ -43,14 +43,12 @@ Trong thư mục `E:\FreqPilot\freqpilot\work\release-dossiers\` đã có sẵn 
 ### Mô tả Gói Hội Viên ($29/tháng) hoặc Gói Mua Lẻ ($39):
 > **Không bán lời hứa lợi nhuận. Bán bằng chứng thực nghiệm có thể tái lập kèm dấu vân tay `SHA-256`.**
 >
-> Mọi chiến lược trong **FreqPilot Quant Lab** đều được sàng lọc từ hơn 920+ nguồn nghiên cứu công khai và bắt buộc vượt qua 4 vòng kiểm định trên **Engine Freqtrade 2026.9 chính thức** (`BTC/USDT:USDT` & `ETH/USDT:USDT` Isolated `1x`):
-> 1. **Kiểm toán Dữ liệu & Phí thực**: Có đầy đủ nến chi tiết `5m`/`1m`, mark price `1h` và phí funding `8h` thực tế của Binance.
-> 2. **Kiểm định Kỹ thuật**: Vượt qua `lookahead-analysis` (`has_bias = false`) và `recursive-analysis`.
-> 3. **Bền vững Vùng Tham Số**: Vượt qua bảng **Ma trận Độ nhạy 2D (`3×3`)** mà không phụ thuộc vào một điểm tham số nhọn.
-> 4. **Kiểm chứng Ngoài mẫu (Walk-Forward & Sealed Holdout)**: Đối chiếu trực tiếp bộ tham số gốc (**Baseline**) với ứng viên Hyperopt trên cửa sổ Holdout niêm phong.
+> Các chiến lược trong **FreqPilot Quant Lab** được sàng lọc từ hơn 920+ nguồn nghiên cứu công khai và kiểm chứng trên **Engine Freqtrade 2026.9 chính thức** (`BTC/USDT:USDT` & `ETH/USDT:USDT` Isolated `1x`) với phạm vi bằng chứng rõ ràng cho từng chiến lược:
+> 1. **Toàn bộ 4 chiến lược trong gói (`DikibagastEmaRsi1h`, `RocketHunterSma501h`, `BdrEmaRideFutures1h`, `TrendCoreBagging1h`)**: Đã hoàn tất kiểm toán dữ liệu & phí funding 8h thực tế, kiểm định `lookahead-analysis` (`has_bias = false`) + `recursive-analysis`, và có gói đóng băng `SHA-256` trên cả cửa sổ ngắn (`1m` detail) lẫn cửa sổ dài 6,7 tháng (`20260401-20261021`, `5m` detail).
+> 2. **Riêng `DikibagastEmaRsi1h`**: Đã chạy thêm bảng **Ma trận Độ nhạy 2D (`3×3` — `d28b58b598`, 9/9 ô dương)** và **Walk-Forward 2 cửa sổ + Holdout hồi cứu tách khỏi Hyperopt (`94b955e45b`)** để đối chiếu trực tiếp bộ tham số gốc (**Baseline**) với ứng viên Hyperopt.
 >
 > **Những gì bạn nhận được ngay khi tham gia:**
-> - Trọn bộ tệp **`freqpilot-<id>.zip` (`SHA-256`)** + **`Dossier (.md)`** của các chiến lược đạt chuẩn (`DikibagastEmaRsi1h`, `RocketHunterSma501h`, `BdrEmaRideFutures1h`).
+> - Trọn bộ tệp **`freqpilot-<id>.zip` (`SHA-256`)** + **`Dossier (.md)`** của các chiến lược trong gói.
 > - Nạp 1 chạm vào mục **Nhập gói hồ sơ (`.zip`)** trong FreqPilot `/studio` và bấm **Archive Replay** để tự kiểm chứng.
 > - Cập nhật **Báo cáo Đối chiếu Paper 1x vs Backtest** hàng tuần từ cụm máy chủ chạy 24/7.
 
@@ -68,7 +66,6 @@ Trong thư mục `E:\FreqPilot\freqpilot\work\release-dossiers\` đã có sẵn 
 >
 > **Key findings from auditing 10 rule-based strategies (`BTC/USDT:USDT` + `ETH/USDT:USDT`, 1x Isolated, 0.05% fee/side, actual funding):**
 > 1. **Why 1-month tests lie:** `CodexBotVibe4h` (4h 20-bar breakout + daily EMA50/RSI14 filter) was profitable (`+3.30 USDT`, PF `1.44`) on the last 33-day `1m` window, but dropped to **`-20.02 USDT` (30 trades, PF `0.67`)** when expanded to the full 6.7-month `5m` window (`2026-04-01` to `2026-10-21`).
-> 2. **2D Parameter Neighbor Robustness:** `DikibagastEmaRsi1h` (EMA 50/100 + 21-bar slope + `2.0 * ATR(14)` separation + RSI 14 offset 10/30) finished the 6.7-month window at **`+44.23 USDT` (30 trades, MaxDD `0.73%`, PF `3.96`)**, and **all 9/9 cells** in its `3×3` 2D Sensitivity Matrix (`ema_short ∈ {45,50,55} × rsi_offset ∈ {8,10,12}`) remained profitable (`+26.21` to `+46.09 USDT`).
-> 3. **Untuned Baseline vs. Hyperopt on a Sealed Holdout:** In a rolling Walk-Forward test (`94b955e45b`), the untuned default baseline beat the Hyperopt-selected candidate on both Window #1 OOS (`+13.18 USDT` vs `+6.78 USDT`) and the **Sealed Holdout (`+9.16 USDT, PF 3.44` vs `-3.46 USDT`)**.
->
+> 2. **2D Parameter Neighbor Continuity (Historical Sample):** `DikibagastEmaRsi1h` (EMA 50/100 + 21-bar slope + `2.0 * ATR(14)` separation + RSI 14 offset 10/30) finished the 6.7-month window at **`+44.23 USDT` (30 trades, MaxDD `0.73%`, PF `3.96`)**, and all 9/9 cells in its `3×3` 2D Sensitivity Matrix (`ema_short ∈ {45,50,55} × rsi_offset ∈ {8,10,12}`) were positive (`+26.21` to `+46.09 USDT` in this sample).
+> 3. **Untuned Baseline vs. Hyperopt (Retrospective WFA Holdout Check):** In a 2-window Walk-Forward test (`94b955e45b`), the untuned default baseline outperformed the Hyperopt-selected candidate on both Window #1 OOS (`+13.18 USDT` vs `+6.78 USDT`) and the post-Hyperopt `2026-09-16` to `2026-10-21` interval (`+9.16 USDT, PF 3.44` vs `-3.46 USDT`).
 > Full benchmark report, provenance hashes, and open-source studio code are in the repo. Feedback and critiques on the methodology are very welcome!

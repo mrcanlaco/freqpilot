@@ -433,15 +433,15 @@
     </section>
 
     <section id="proof">
-      <h2>2. Bằng Chứng Chống Overfit: Ma Trận Độ Nhạy 2D & Holdout Niêm Phong</h2>
+      <h2>2. Đối Chiếu Độ Bền Vùng Tham Số (2D Sensitivity) & Holdout Hồi Cứu (WFA)</h2>
       <p class="sec-sub">
-        Một chiến lược chỉ đáng đưa sang Paper 1x khi toàn bộ vùng tham số lân cận đều dương và bộ tham số gốc không sụp đổ trên cửa sổ Holdout chưa từng chạm tới.
+        Khảo sát vùng tham số lân cận và đối chiếu giữa bộ tham số gốc (Baseline) với ứng viên Hyperopt trên cửa sổ tách khỏi tập huấn luyện Hyperopt (kiểm tra hồi cứu / retrospective check trên mẫu lịch sử 2026).
       </p>
       <div class="grid-2">
         <div class="card">
           <h3>Ma Trận Độ Nhạy 2D (`d28b58b598` — `DikibagastEmaRsi1h`)</h3>
           <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
-            9/9 lần chạy Backtest native độc lập trên kỳ 6,7 tháng (<code>20260401-20261021</code>) đều có lãi ròng dương:
+            9/9 lần chạy Backtest native độc lập trên kỳ 6,7 tháng (<code>20260401-20261021</code>) đều dương (cho thấy tính liên tục lân cận trên mẫu này, không phải chứng nhận miễn nhiễm overfit):
           </p>
           <table class="pivot-table">
             <thead>
@@ -476,9 +476,9 @@
         </div>
 
         <div class="card">
-          <h3>Walk-Forward & Holdout Niêm Phong (`94b955e45b`)</h3>
+          <h3>Walk-Forward & Holdout Tách Khỏi Hyperopt (`94b955e45b`)</h3>
           <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
-            So sánh trực tiếp giữa <strong>Baseline (không tối ưu)</strong> và <strong>Ứng viên thắng Hyperopt</strong> trên kỳ Holdout khóa riêng (<code>20260916-20261021</code>):
+            So sánh hồi cứu giữa <strong>Baseline (không tối ưu)</strong> và <strong>Ứng viên thắng Hyperopt</strong> trên kỳ cuối tách khỏi quá trình tìm tham số Hyperopt (<code>20260916-20261021</code>):
           </p>
           <table>
             <thead>
