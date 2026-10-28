@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreqPilot — Không gian Nghiên cứu & Kiểm định Định lượng trên Freqtrade 2026.9 Chính thức</title>
+  <meta name="description" content="Từ ý tưởng đến chiến lược có bằng chứng SHA-256 trên 100% engine Freqtrade 2026.9 chính thức: Kiểm toán dữ liệu, Lookahead/Recursive, Ma trận Độ nhạy 2D, Walk-Forward Holdout niêm phong và Đối chiếu Paper 1x." />
+  <style>
+    :root {
+      --bg: #0b1114;
+      --bg-1: #10191d;
+      --bg-2: #162329;
+      --fg: #ecf4f6;
+      --fg-2: #a9bec4;
+      --fg-3: #6f878f;
+      --line: #1f3138;
+      --line-2: #2b434d;
+      --accent: #38d39f;
+      --accent-dim: rgba(56, 211, 159, 0.14);
+      --warn: #e7bb72;
+      --neg: #f29b9b;
+      --pos: #79dfb3;
+      --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", Consolas, monospace;
+    }
+    * { box-sizing: border-box; text-align: left; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.6;
+      font-size: 14.5px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(11, 17, 20, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--fg);
+    }
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .nav-links { display: flex; gap: 20px; align-items: center; font-size: 13.5px; color: var(--fg-2); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-2);
+      color: var(--fg);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none !important;
+    }
+    .btn.primary {
+      background: #1b6a5c;
+      border-color: #268b77;
+      color: #f2fff9;
+    }
+    .btn.primary:hover { background: #217d6d; }
+    .hero { padding: 64px 0 44px; border-bottom: 1px solid var(--line); }
+    .eyebrow {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.18;
+      margin: 0 0 16px;
+      max-width: 920px;
+    }
+    .lead {
+      font-size: 16.5px;
+      color: var(--fg-2);
+      max-width: 820px;
+      margin: 0 0 26px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 16px;
+    }
+    .kpi-card small { color: var(--fg-3); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kpi-card b { display: block; font-size: 22px; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+    .kpi-card span { font-size: 12px; color: var(--fg-2); }
+    section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+    h2 { font-size: 25px; margin: 0 0 8px; }
+    .sec-sub { color: var(--fg-2); margin: 0 0 24px; max-width: 820px; }
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-1);
+      color: var(--fg-2);
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .chip.active {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg-1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    th, td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    th {
+      background: var(--bg-2);
+      color: var(--fg-3);
+      font-weight: 600;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .pos { color: var(--pos); font-weight: 600; }
+    .neg { color: var(--neg); font-weight: 600; }
+    .warn { color: var(--warn); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--bg-2);
+      border: 1px solid var(--line-2);
+    }
+    .pill.pass { color: var(--pos); border-color: #268b77; background: rgba(38, 139, 119, 0.16); }
+    .pill.drop { color: var(--neg); border-color: #7a353b; background: rgba(122, 53, 59, 0.2); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .card {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 17px; }
+    .pivot-table td, .pivot-table th { border: 1px solid var(--line); padding: 10px; }
+    .pivot-base { outline: 1.5px solid var(--accent); outline-offset: -1.5px; background: rgba(56, 211, 159, 0.08); }
+    pre {
+      background: #070b0d;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 14px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      overflow-x: auto;
+      color: #d6e8ee;
+    }
+    .price-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 24px;
+    }
+    .price-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .price-tag { font-size: 28px; font-weight: 700; margin: 10px 0; }
+    .price-list { padding-left: 18px; color: var(--fg-2); margin: 12px 0 22px; }
+    .price-list li { margin: 7px 0; }
+    .notice {
+      margin-top: 20px;
+      padding: 13px 16px;
+      border-left: 3px solid var(--accent);
+      background: var(--bg-1);
+      border-radius: 7px;
+      font-size: 12.5px;
+      color: var(--fg-2);
+    }
+    footer { padding: 36px 0 56px; color: var(--fg-3); font-size: 12.5px; }
+    @media (max-width: 900px) {
+      .kpi-strip, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><span class="brand-dot"></span> FreqPilot <small style="font-weight:500;color:var(--fg-3);font-size:12px">for Official Freqtrade 2026.9</small></div>
+      <nav class="nav-links">
+        <a href="#audit">Bảng Kiểm Toán 10 Chiến Lược</a>
+        <a href="#proof">Bằng Chứng Độ Nhạy & Holdout</a>
+        <a href="#dossiers">Gói Hồ Sơ Dossier (.zip)</a>
+        <a href="#install">Cài Đặt 3 Bước</a>
+      </nav>
+      <a class="btn primary" href="#dossiers">Nhận Gói Hồ Sơ Đã Xác Minh →</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="hero">
+      <span class="eyebrow">ZERO-FORK QUANTITATIVE RESEARCH STUDIO · GPL-3.0</span>
+      <h1>Đừng tin vào ảnh chụp Backtest. Hãy kiểm tra Gói Đóng Băng <code>SHA-256</code>.</h1>
+      <p class="lead">
+        FreqPilot biến <strong>Freqtrade 2026.9 chính thức</strong> thành phòng thí nghiệm chiến lược khép kín: Kiểm toán dữ liệu Funding/Mark, Kiểm định Lookahead/Recursive, Ma trận Độ nhạy 2 chiều, Walk-Forward có Holdout niêm phong và Đối chiếu Paper 1x thực tế.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#audit">Xem Bảng Kiểm Toán 10 Chiến Lược</a>
+        <a class="btn" href="#install">Tải Công Cụ Mã Nguồn Mở</a>
+      </div>
+      <div class="kpi-strip">
+        <div class="kpi-card">
+          <small>Engine Thực Thi</small>
+          <b>Freqtrade 2026.9</b>
+          <span>100% chính thức · Không ép cài bản fork</span>
+        </div>
+        <div class="kpi-card">
+          <small>Chiến Lược Đã Kiểm Toán</small>
+          <b>18 Chiến Lược</b>
+          <span>Từ 177 job quét tự động & mẫu công khai</span>
+        </div>
+        <div class="kpi-card">
+          <small>Cửa Sổ Thẩm Định Dài Hạn</small>
+          <b>6,7 Tháng (5m)</b>
+          <span>75.690 nến 5m/cặp + Mark 1h + Funding 8h</span>
+        </div>
+        <div class="kpi-card">
+          <small>Kiểm Tra Tự Động</small>
+          <b>1.878 Tests Pass</b>
+          <span>1.745 UI tests + 133 Backend container tests</span>
+        </div>
+      </div>
+    </div>
+
+    <section id="audit">
+      <h2>1. Bảng Kiểm Toán Công Khai: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
+      <p class="sec-sub">
+        Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
+      </p>
+      <div class="filter-bar">
+        <button class="chip active" onclick="filterAudit('all', this)">Tất cả (10)</button>
+        <button class="chip" onclick="filterAudit('survived', this)">✓ Sống sót qua 6,7 tháng (4)</button>
+        <button class="chip" onclick="filterAudit('dropped', this)">✕ Bị loại ở mẫu dài / âm (6)</button>
+      </div>
+      <div class="table-wrap">
+        <table id="audit-table">
+          <thead>
+            <tr>
+              <th>Chiến lược (`IStrategy` 1x)</th>
+              <th>Nguồn gốc & Commit</th>
+              <th>Khung</th>
+              <th>1 Tháng (`1m` detail)</th>
+              <th>6,7 Tháng (`5m` detail)</th>
+              <th>Max Drawdown</th>
+              <th>Profit Factor</th>
+              <th>Lookahead / Recursive</th>
+              <th>Kết luận Sàng lọc</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-group="survived">
+              <td><b>RocketHunterSma501h</b></td>
+              <td><code>rocket-hunter (d8dae34e)</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="pos">+6,80 USDT (2 lệnh)</td>
+              <td class="pos">+61,83 USDT (8 lệnh)</td>
+              <td>0,35%</td>
+              <td><b>18,29</b></td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill pass">✓ Sẵn sàng Paper 1x</span></td>
+            </tr>
+            <tr data-group="survived">
+              <td><b>DikibagastEmaRsi1h</b></td>
+              <td><code>Dikibagast (a7af9593)</code></td>
+              <td><code>1h</code></td>
+              <td class="pos">+8,99 USDT (5 lệnh)</td>
+              <td class="pos">+44,23 USDT (30 lệnh)</td>
+              <td>0,73%</td>
+              <td><b>3,96</b></td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill pass">✓ Đạt 9/9 Ô Độ Nhạy & Holdout</span></td>
+            </tr>
+            <tr data-group="survived">
+              <td><b>BdrEmaRideFutures1h</b></td>
+              <td><code>BDR-Pro (0df59de9)</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="pos">+5,55 USDT (2 lệnh)</td>
+              <td class="pos">+9,37 USDT (8 lệnh)</td>
+              <td>1,41%</td>
+              <td><b>1,67</b></td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill pass">✓ Lãi dương cả 2 kỳ</span></td>
+            </tr>
+            <tr data-group="survived">
+              <td><b>TrendCoreBagging1h</b></td>
+              <td><code>0x-boss/TrendCore</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="pos">+5,55 USDT (2 lệnh)</td>
+              <td class="pos">+2,15 USDT (2 lệnh)</td>
+              <td>0,15%</td>
+              <td><b>2,45</b></td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill pass">✓ Lãi dương · DD 0,15%</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>CodexBotVibe4h</b></td>
+              <td><code>erfanrhb/CodexBot (922e26ee)</code></td>
+              <td><code>4h (+1d)</code></td>
+              <td class="pos">+3,30 USDT (5 lệnh)</td>
+              <td class="neg">-20,02 USDT (30 lệnh)</td>
+              <td>2,96%</td>
+              <td>0,67</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Loại ở kỳ 6,7 tháng</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>CodeAlchemyLowPassFisher1h</b></td>
+              <td><code>CodeAlchemy (4b55d57f)</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="neg">-1,19 USDT (2 lệnh)</td>
+              <td>—</td>
+              <td>0,72%</td>
+              <td>0,84</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Chưa có lợi thế trên BTC/ETH</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>MesaTrendFollow1h</b></td>
+              <td><code>maucarrasz/mesa (3cd1df3e)</code></td>
+              <td><code>1h (+4h)</code></td>
+              <td class="neg">-1,75 USDT (5 lệnh)</td>
+              <td>—</td>
+              <td>0,35%</td>
+              <td>0,50</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Thiếu cặp SOL của bản gốc</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>QuantgenTrendVoting1h</b></td>
+              <td><code>xkg4real/quantgen</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="neg">-4,65 USDT (2 lệnh)</td>
+              <td>—</td>
+              <td>0,56%</td>
+              <td>0,17</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Bị loại ở cửa sổ ngắn</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>MirazizDonchianAtr4h</b></td>
+              <td><code>miraziz (801a5d27)</code></td>
+              <td><code>4h</code></td>
+              <td class="neg">-4,92 USDT (2 lệnh)</td>
+              <td>—</td>
+              <td>0,49%</td>
+              <td>0,00</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Khác cấu trúc 5 sleeve gốc</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><b>EnriqueVolAdjusted1h</b></td>
+              <td><code>EnriqueCerv (f65acd7a)</code></td>
+              <td><code>1h (+1d)</code></td>
+              <td class="neg">-9,86 USDT (3 lệnh)</td>
+              <td>—</td>
+              <td>1,41%</td>
+              <td>0,31</td>
+              <td><code>has_bias=false / ok</code></td>
+              <td><span class="pill drop">✕ Bị loại ở cửa sổ ngắn</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="proof">
+      <h2>2. Bằng Chứng Chống Overfit: Ma Trận Độ Nhạy 2D & Holdout Niêm Phong</h2>
+      <p class="sec-sub">
+        Một chiến lược chỉ đáng đưa sang Paper 1x khi toàn bộ vùng tham số lân cận đều dương và bộ tham số gốc không sụp đổ trên cửa sổ Holdout chưa từng chạm tới.
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Ma Trận Độ Nhạy 2D (`d28b58b598` — `DikibagastEmaRsi1h`)</h3>
+          <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
+            9/9 lần chạy Backtest native độc lập trên kỳ 6,7 tháng (<code>20260401-20261021</code>) đều có lãi ròng dương:
+          </p>
+          <table class="pivot-table">
+            <thead>
+              <tr>
+                <th><code>ema_short \ rsi_offset</code></th>
+                <th><code>8</code></th>
+                <th><code>10</code> (Gốc)</th>
+                <th><code>12</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th><code>45</code></th>
+                <td><span class="pos">+39,68 USDT</span><br><small>40 lệnh · DD 1,52%</small></td>
+                <td><span class="pos">+44,93 USDT</span><br><small>38 lệnh · DD 0,99%</small></td>
+                <td><span class="pos">+42,26 USDT</span><br><small>38 lệnh · DD 1,00%</small></td>
+              </tr>
+              <tr>
+                <th><code>50</code> (Gốc)</th>
+                <td><span class="pos">+46,09 USDT</span><br><small>32 lệnh · DD 0,84%</small></td>
+                <td class="pivot-base"><span class="pill pass" style="margin-bottom:4px">Mặc định</span><br><span class="pos">+44,23 USDT</span><br><small>30 lệnh · DD 0,73%</small></td>
+                <td><span class="pos">+40,20 USDT</span><br><small>29 lệnh · DD 0,76%</small></td>
+              </tr>
+              <tr>
+                <th><code>55</code></th>
+                <td><span class="pos">+35,82 USDT</span><br><small>23 lệnh · DD 0,41%</small></td>
+                <td><span class="pos">+28,16 USDT</span><br><small>20 lệnh · DD 0,36%</small></td>
+                <td><span class="pos">+26,21 USDT</span><br><small>20 lệnh · DD 0,36%</small></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Walk-Forward & Holdout Niêm Phong (`94b955e45b`)</h3>
+          <p style="color:var(--fg-2);font-size:13px;margin:0 0 12px">
+            So sánh trực tiếp giữa <strong>Baseline (không tối ưu)</strong> và <strong>Ứng viên thắng Hyperopt</strong> trên kỳ Holdout khóa riêng (<code>20260916-20261021</code>):
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Giai đoạn kiểm chứng</th>
+                <th>Baseline (Gốc `50/100/10`)</th>
+                <th>Ứng viên Hyperopt (`58/102/16`)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Cửa sổ OOS #1</b><br><small>20260804–20260908</small></td>
+                <td class="pos">+13,18 USDT (11 lệnh · PF 7,97)</td>
+                <td class="pos">+6,78 USDT (5 lệnh · PF 3,56)</td>
+              </tr>
+              <tr>
+                <td><b>Holdout Niêm Phong 🔒</b><br><small>20260916–20261021</small></td>
+                <td class="pos">+9,16 USDT (5 lệnh · PF 3,44)</td>
+                <td class="neg">-3,46 USDT (2 lệnh · DD 0,36%)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="notice">
+            <b>Bài học thực nghiệm:</b> Tối ưu hóa Hyperopt trên cửa sổ ngắn làm giảm hiệu quả ngoài mẫu so với bộ tham số gốc. Nhờ giữ song song Baseline, FreqPilot ngăn việc thay thế nhầm tham số gốc bằng ứng viên overfit.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dossiers">
+      <h2>3. Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
+      <p class="sec-sub">
+        Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào mục <strong>Nhập gói hồ sơ (.zip)</strong> trên máy của bạn.
+      </p>
+      <div class="grid-3">
+        <div class="price-card">
+          <div>
+            <span class="pill">Open-Source Tool</span>
+            <h3>Community Edition</h3>
+            <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ trọn đời</small></div>
+            <ul class="price-list">
+              <li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li>
+              <li>8 chiến lược mẫu chính thức + công cụ Kiểm toán Dữ liệu, Lookahead, Walk-Forward & Độ nhạy 2D.</li>
+              <li>Báo cáo kiểm toán công khai hàng tuần.</li>
+            </ul>
+          </div>
+          <a class="btn" href="#install">Cài Đặt Từ GitHub</a>
+        </div>
+
+        <div class="price-card featured">
+          <div>
+            <span class="pill pass">Khuyên Dùng · Mua 1 Lần</span>
+            <h3>Verified Strategy Pack v1</h3>
+            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ trọn bộ 4 gói ZIP</small></div>
+            <ul class="price-list">
+              <li><strong>4 gói <code>freqpilot-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng) của <code>DikibagastEmaRsi1h</code>, <code>RocketHunterSma501h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
+              <li><strong>4 tài liệu <code>Dossier (.md)</code></strong> đầy đủ công thức, tham số, mã <code>SHA-256</code> và hướng dẫn chạy <code>Archive Replay</code>.</li>
+              <li>Nạp trực tiếp vào FreqPilot trong 5 giây.</li>
+            </ul>
+          </div>
+          <a class="btn primary" href="#install">Nhận Gói Verified Pack v1 →</a>
+        </div>
+
+        <div class="price-card">
+          <div>
+            <span class="pill">Hội Viên Định Kỳ</span>
+            <h3>Quant Lab Membership</h3>
+            <div class="price-tag">$29 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ tháng</small></div>
+            <ul class="price-list">
+              <li>Bao gồm toàn bộ <strong>Verified Strategy Pack v1</strong>.</li>
+              <li><strong>2–4 Hồ sơ Chiến lược mới mỗi tháng</strong> được sàng lọc từ nhà máy quét 920+ nguồn nghiên cứu.</li>
+              <li><strong>Báo cáo Đối chiếu Paper 1x hàng tuần</strong> (lệnh khớp thực tế vs backtest từ cụm server 24/7).</li>
+            </ul>
+          </div>
+          <a class="btn" href="#install">Tham Gia Quant Lab →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="install">
+      <h2>4. Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Bước</h2>
+      <p class="sec-sub">Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.</p>
+      <pre># Bước 1: Khởi tạo thư mục dữ liệu riêng, mật khẩu API ngẫu nhiên và 8 chiến lược mẫu (mặc định STOPPED, dry_run=true)
+./Initialize.ps1
+
+# Bước 2: Kiểm tra cấu hình, cổng mạng và schema chiến lược trước khi chạy
+./Start.ps1 -CheckOnly
+
+# Bước 3: Build giao diện + image nghiên cứu và khởi động dịch vụ tại http://localhost:8090/studio
+./Start.ps1 -Build</pre>
+      <div class="notice">
+        <b>Tuyên bố miễn trừ & Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 & Official Freqtrade 2026.9 Engine.
+  </footer>
+
+  <script>
+    function filterAudit(group, btn) {
+      document.querySelectorAll('.filter-bar .chip').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#audit-table tbody tr').forEach(row => {
+        row.style.display = (group === 'all' || row.dataset.group === group) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
