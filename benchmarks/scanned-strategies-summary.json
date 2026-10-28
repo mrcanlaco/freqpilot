@@ -225,6 +225,150 @@
           "error": null
         }
       }
+    },
+    {
+      "strategy": "QuantgenTrendVoting1h",
+      "timeframe": "1h",
+      "revision": "eb8ed665d519ec3c2556bd411c1389a9b4507e370f1d7ebd9c89fd8c9bf096bf",
+      "run_id": "2e729fd2e6ea42f6994e311f027b1be9",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "b57d8675e6c9f94bd891f41c525e399b6a8139eee7037739b7287a7807867719",
+      "summary": {
+        "total_trades": 2,
+        "profit_total_abs": -4.64779349,
+        "profit_total": -0.00464779349,
+        "max_drawdown_account": 0.005625506080000037,
+        "profit_factor": 0.17379993481404254,
+        "wins": 1,
+        "losses": 1,
+        "backtest_start": "2026-09-18 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      },
+      "error": null,
+      "checks": {
+        "lookahead": {
+          "id": "7995bd11-4305-4e96-a11e-990a0b34504d",
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "id": "0b519e79-dd6f-4262-a4a6-6baadd891067",
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "strategy": "TrendCoreBagging1h",
+      "timeframe": "1h",
+      "revision": "f1260f2655d0d1cec9988811ac867acd4f43be0f46528d826ff5d64e1c3ea855",
+      "run_id": "54fba830a78b4d129d56864e4b842fe1",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "88208dda5140c70ea72f4099024f7302ef74ca8d81525d4aa4b9451b7c3594f6",
+      "summary": {
+        "total_trades": 2,
+        "profit_total_abs": 5.5485113,
+        "profit_total": 0.0055485113,
+        "max_drawdown_account": 0.0004985803052715256,
+        "profit_factor": 12.061696629346317,
+        "wins": 1,
+        "losses": 1,
+        "backtest_start": "2026-09-18 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      },
+      "error": null,
+      "checks": {
+        "lookahead": {
+          "id": "aefab270-c09f-4c00-a16b-63ef300c13d7",
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "id": "b9e01f06-89fe-4349-bbea-18e51cb2f1d7",
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "strategy": "CodeAlchemyLowPassFisher1h",
+      "timeframe": "1h",
+      "revision": "95c0f731db2c93209dcd4a7ebeacb4a9cc9850cdee238cf268a5aab9922eaf09",
+      "run_id": "9d17fd6fcc7746ef9e69f7eff462acd6",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "826b72492309ee61bf9a2d23860c9f8705e8c2b47a0a3f536b01b005b918d9ef",
+      "summary": {
+        "total_trades": 2,
+        "profit_total_abs": -1.1857297399999993,
+        "profit_total": -0.0011857297399999994,
+        "max_drawdown_account": 0.007192323475697539,
+        "profit_factor": 0.836130967672975,
+        "wins": 1,
+        "losses": 1,
+        "backtest_start": "2026-09-18 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      },
+      "error": null,
+      "checks": {
+        "lookahead": {
+          "id": "ffaa3fc4-abe6-43f5-92b2-4c927a96ff40",
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "id": "74f67eb9-e1bf-48b3-aaba-497cfa8b1f79",
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        }
+      }
+    },
+    {
+      "strategy": "RocketHunterSma501h",
+      "timeframe": "1h",
+      "revision": "484cebfefabdb02966797488d23a0fbd17011a1000b1e87d0d1dbed791ef8613",
+      "run_id": "38ee6b1c1215494a9271724f678e60e3",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "700bd07833a31dc9567ecd0a711a4f3c78d79748fa5f0c8ac03a8dcdd7af2c9a",
+      "summary": {
+        "total_trades": 2,
+        "profit_total_abs": 6.80493255,
+        "profit_total": 0.00680493255,
+        "max_drawdown_account": 0.0,
+        "profit_factor": 0.0,
+        "wins": 2,
+        "losses": 0,
+        "backtest_start": "2026-09-18 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      },
+      "error": null,
+      "checks": {
+        "lookahead": {
+          "id": "437a4d4c-b74d-4b81-be29-72fa9e7adfe8",
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "id": "2b4b6f0d-c850-454a-86af-682e1266fa0a",
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        }
+      }
     }
   ],
   "freqtrade_france_runs": [
@@ -489,6 +633,551 @@
           "error": null
         }
       }
+    }
+  ],
+  "long_window_20260401_20261021_runs": [
+    {
+      "strategy": "DikibagastEmaRsi1h",
+      "timeframe": "1h",
+      "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
+      "run_id": "8ebeb7170c97494bb7e304304502e8f8",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "96ffff805cc37d79ecc44fe81c1e25f9fd6e59411802bc140fc036db00773f0d",
+      "summary": {
+        "total_trades": 30,
+        "profit_total_abs": 44.231605509999994,
+        "profit_total": 0.044231605509999994,
+        "max_drawdown_account": 0.007273614084076887,
+        "profit_factor": 3.9572451295541153,
+        "wins": 21,
+        "losses": 9,
+        "backtest_start": "2026-04-01 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      }
+    },
+    {
+      "strategy": "BdrEmaRideFutures1h",
+      "timeframe": "1h",
+      "revision": "1474053fd71fadb635b0018eb1ea2c1cfd3c96411f1fa6410132b18eefdd4896",
+      "run_id": "353953f473c64104b7c79f7142c6f72f",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "9ba4df42c391349a8b679c00776a13bedca923668a21f8949927b7edfb74beeb",
+      "summary": {
+        "total_trades": 8,
+        "profit_total_abs": 9.373736540000001,
+        "profit_total": 0.009373736540000002,
+        "max_drawdown_account": 0.014063594650000026,
+        "profit_factor": 1.666524937136182,
+        "wins": 4,
+        "losses": 4,
+        "backtest_start": "2026-04-01 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      }
+    },
+    {
+      "strategy": "CodexBotVibe4h",
+      "timeframe": "4h",
+      "revision": "c1e250bee2ccd79fcf65292247ccc624ca6827bee2f454c77fa84859c09981cb",
+      "run_id": "c3b0b4c882db474f8b60bf326838288d",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "7de64d63c6fd8ada9c7a306fcee87c9376801487d6681ef012d14b51d18f2724",
+      "summary": {
+        "total_trades": 30,
+        "profit_total_abs": -20.02348547,
+        "profit_total": -0.02002348547,
+        "max_drawdown_account": 0.02960007353912453,
+        "profit_factor": 0.6657388223357099,
+        "wins": 9,
+        "losses": 21,
+        "backtest_start": "2026-04-01 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "4h"
+      }
+    },
+    {
+      "strategy": "RocketHunterSma501h",
+      "timeframe": "1h",
+      "revision": "484cebfefabdb02966797488d23a0fbd17011a1000b1e87d0d1dbed791ef8613",
+      "run_id": "68263637951c4bc2902a22b8c6cdbf00",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "e81609f0bc60f94b1ea3d9d0be1d63929c26f6c822b68cce661d3afb5097f43d",
+      "summary": {
+        "total_trades": 8,
+        "profit_total_abs": 61.83174004999999,
+        "profit_total": 0.06183174004999999,
+        "max_drawdown_account": 0.0035345414660427586,
+        "profit_factor": 18.293537150164184,
+        "wins": 4,
+        "losses": 4,
+        "backtest_start": "2026-04-01 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      }
+    },
+    {
+      "strategy": "TrendCoreBagging1h",
+      "timeframe": "1h",
+      "revision": "f1260f2655d0d1cec9988811ac867acd4f43be0f46528d826ff5d64e1c3ea855",
+      "run_id": "bba655ff87f8437c8624bc93fb9684be",
+      "status": "success",
+      "verified": true,
+      "artifact_sha256": "190276c89787a033abd6f2246d6c165d529bd0a9161b4915ef0bdeade9ae5a7c",
+      "summary": {
+        "total_trades": 2,
+        "profit_total_abs": 2.14985317,
+        "profit_total": 0.00214985317,
+        "max_drawdown_account": 0.0014782266261937917,
+        "profit_factor": 2.449080963451756,
+        "wins": 1,
+        "losses": 1,
+        "backtest_start": "2026-04-01 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h"
+      }
+    }
+  ],
+  "dikibagast_sensitivity_2d": {
+    "id": "d28b58b598a547b29b49be11f63acbdd",
+    "status": "success",
+    "axes": [
+      {
+        "name": "ema_short",
+        "space": "buy",
+        "base": 50,
+        "values": [
+          45,
+          50,
+          55
+        ],
+        "step": 5.0,
+        "radius": 1
+      },
+      {
+        "name": "rsi_entry_offset",
+        "space": "buy",
+        "base": 10,
+        "values": [
+          8,
+          10,
+          12
+        ],
+        "step": 2.0,
+        "radius": 1
+      }
+    ],
+    "cells": [
+      {
+        "parameters": {
+          "ema_short": 45,
+          "rsi_entry_offset": 8
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 40,
+          "profit_total_abs": 39.675138579999995,
+          "profit_total": 0.03967513858,
+          "max_drawdown_account": 0.01523784177722095,
+          "profit_factor": 2.223443059571424,
+          "wins": 24,
+          "losses": 16,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 6525.979008824999,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 45,
+          "rsi_entry_offset": 10
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 38,
+          "profit_total_abs": 44.934353890000004,
+          "profit_total": 0.04493435389000001,
+          "max_drawdown_account": 0.009850043583299472,
+          "profit_factor": 2.6730858580203263,
+          "wins": 24,
+          "losses": 14,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 6207.117957975,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 45,
+          "rsi_entry_offset": 12
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 38,
+          "profit_total_abs": 42.25928925,
+          "profit_total": 0.042259289250000005,
+          "max_drawdown_account": 0.009963826382930092,
+          "profit_factor": 2.495655761685298,
+          "wins": 23,
+          "losses": 15,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 6209.782989825,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 50,
+          "rsi_entry_offset": 8
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 32,
+          "profit_total_abs": 46.085673889999995,
+          "profit_total": 0.04608567389,
+          "max_drawdown_account": 0.008441282707935073,
+          "profit_factor": 3.9568351742509633,
+          "wins": 22,
+          "losses": 10,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 5248.369343235,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 50,
+          "rsi_entry_offset": 10
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 30,
+          "profit_total_abs": 44.231605509999994,
+          "profit_total": 0.044231605509999994,
+          "max_drawdown_account": 0.007273614084076887,
+          "profit_factor": 3.9572451295541153,
+          "wins": 21,
+          "losses": 9,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 4968.25172442,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 50,
+          "rsi_entry_offset": 12
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 29,
+          "profit_total_abs": 40.20042115,
+          "profit_total": 0.04020042115,
+          "max_drawdown_account": 0.007565178131775931,
+          "profit_factor": 3.6392312239747366,
+          "wins": 20,
+          "losses": 9,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 4827.34002378,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 55,
+          "rsi_entry_offset": 8
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 23,
+          "profit_total_abs": 35.82091596999999,
+          "profit_total": 0.035820915969999985,
+          "max_drawdown_account": 0.004090163401468393,
+          "profit_factor": 4.45418022557247,
+          "wins": 17,
+          "losses": 6,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 3898.9928621699996,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 55,
+          "rsi_entry_offset": 10
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 20,
+          "profit_total_abs": 28.162570600000002,
+          "profit_total": 0.028162570600000002,
+          "max_drawdown_account": 0.0036200484042597796,
+          "profit_factor": 3.894465072077781,
+          "wins": 15,
+          "losses": 5,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 3422.2536316799997,
+          "fee_total": null
+        }
+      },
+      {
+        "parameters": {
+          "ema_short": 55,
+          "rsi_entry_offset": 12
+        },
+        "fee": 0.0005,
+        "status": "success",
+        "summary": {
+          "total_trades": 20,
+          "profit_total_abs": 26.21405051,
+          "profit_total": 0.02621405051,
+          "max_drawdown_account": 0.0036268970279565984,
+          "profit_factor": 3.5913127681043204,
+          "wins": 14,
+          "losses": 6,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 3420.85311177,
+          "fee_total": null
+        }
+      }
+    ]
+  },
+  "dikibagast_walk_forward": {
+    "id": "94b955e45bca479cbf943854b0a7afa8",
+    "status": "success",
+    "research_status": "review",
+    "holdout_timerange": "20260916-20261021",
+    "holdout_status": "success",
+    "windows": [
+      {
+        "index": 0,
+        "train_timerange": "20260401-20260630",
+        "oos_timerange": "20260630-20260804",
+        "status": "success",
+        "train_best_epoch": {
+          "epoch": 1,
+          "loss": -3.9346815233630914,
+          "eligible": true,
+          "params_details": {
+            "buy": {
+              "ema_long": 102,
+              "ema_short": 58,
+              "rsi_entry_offset": 16,
+              "sep_mult": 2.2
+            },
+            "sell": {
+              "rsi_exit_offset": 22
+            }
+          },
+          "metrics": {
+            "total_trades": 5,
+            "profit_total_abs": 6.09402272,
+            "profit_total": 0.00609402272,
+            "max_drawdown_account": 0.0,
+            "profit_factor": 0.0
+          }
+        },
+        "baseline_summary": {
+          "total_trades": 4,
+          "profit_total_abs": -6.419911280000001,
+          "profit_total": -0.006419911280000001,
+          "max_drawdown_account": 0.0064199112799999515,
+          "profit_factor": 0.0,
+          "wins": 0,
+          "losses": 4,
+          "backtest_start": "2026-06-30 00:00:00",
+          "backtest_end": "2026-08-04 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 645.145281435,
+          "fee_total": null
+        },
+        "candidate_summary": {
+          "total_trades": 3,
+          "profit_total_abs": -0.5987927500000003,
+          "profit_total": -0.0005987927500000003,
+          "max_drawdown_account": 0.002720610283454889,
+          "profit_factor": 0.7803722703547239,
+          "wins": 2,
+          "losses": 1,
+          "backtest_start": "2026-06-30 00:00:00",
+          "backtest_end": "2026-08-04 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 591.03781122,
+          "fee_total": null
+        }
+      },
+      {
+        "index": 1,
+        "train_timerange": "20260506-20260804",
+        "oos_timerange": "20260804-20260908",
+        "status": "success",
+        "train_best_epoch": {
+          "epoch": 1,
+          "loss": -2.4197356965032357,
+          "eligible": true,
+          "params_details": {
+            "buy": {
+              "ema_long": 102,
+              "ema_short": 58,
+              "rsi_entry_offset": 16,
+              "sep_mult": 2.2
+            },
+            "sell": {
+              "rsi_exit_offset": 22
+            }
+          },
+          "metrics": {
+            "total_trades": 8,
+            "profit_total_abs": 5.5397577,
+            "profit_total": 0.0055397577,
+            "max_drawdown_account": 0.002660001396337386,
+            "profit_factor": 3.0656317264841983
+          }
+        },
+        "baseline_summary": {
+          "total_trades": 11,
+          "profit_total_abs": 13.175151520000002,
+          "profit_total": 0.013175151520000001,
+          "max_drawdown_account": 0.0013070927200000142,
+          "profit_factor": 7.969700976657859,
+          "wins": 9,
+          "losses": 2,
+          "backtest_start": "2026-08-04 00:00:00",
+          "backtest_end": "2026-09-08 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 1864.5305693849998,
+          "fee_total": null
+        },
+        "candidate_summary": {
+          "total_trades": 5,
+          "profit_total_abs": 6.783637389999999,
+          "profit_total": 0.006783637389999999,
+          "max_drawdown_account": 0.0026278932465878904,
+          "profit_factor": 3.5572664212130163,
+          "wins": 4,
+          "losses": 1,
+          "backtest_start": "2026-08-04 00:00:00",
+          "backtest_end": "2026-09-08 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 916.6256137649999,
+          "fee_total": null
+        }
+      }
+    ],
+    "holdout": {
+      "baseline": {
+        "artifact": "holdout/1/backtest_baseline/backtest-result-2026-10-28_10-55-42.zip",
+        "artifact_sha256": "6595dece109cb3e54b633c55776814ae9fef546a84004f468af1ce7f5a232518",
+        "summary": {
+          "total_trades": 5,
+          "profit_total_abs": 9.16392796,
+          "profit_total": 0.00916392796,
+          "max_drawdown_account": 0.0037412199964936563,
+          "profit_factor": 3.4423381158850788,
+          "wins": 4,
+          "losses": 1,
+          "backtest_start": "2026-09-16 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 914.52717507,
+          "fee_total": null
+        },
+        "force_exit_trades": 0,
+        "native_backtest_start": "2026-09-16 00:00:00",
+        "native_backtest_end": "2026-10-21 00:00:00",
+        "note": "OOS là backtest độc lập; native có thể force-exit ở ranh giới.",
+        "status": "success",
+        "timerange": "20260916-20261021",
+        "parameter_sha256": null,
+        "runtime_sha256": "cdaa6f3d4ae7bc3704dea5e4bfa40c7cd137c86f2c1868a2a9de637cdd853758"
+      },
+      "candidate": {
+        "artifact": "holdout/1/backtest_candidate/backtest-result-2026-10-28_10-55-47.zip",
+        "artifact_sha256": "2785d31481c2ec4cd1d4dcb5bfeb33c6f250cd0058cdf766bfb6a3a5e584727c",
+        "summary": {
+          "total_trades": 2,
+          "profit_total_abs": -3.4552364900000003,
+          "profit_total": -0.00345523649,
+          "max_drawdown_account": 0.0036454297670103137,
+          "profit_factor": 0.052353969349229555,
+          "wins": 1,
+          "losses": 1,
+          "backtest_start": "2026-09-16 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h",
+          "total_volume": 331.8066204,
+          "fee_total": null
+        },
+        "force_exit_trades": 0,
+        "native_backtest_start": "2026-09-16 00:00:00",
+        "native_backtest_end": "2026-10-21 00:00:00",
+        "note": "OOS là backtest độc lập; native có thể force-exit ở ranh giới.",
+        "status": "success",
+        "timerange": "20260916-20261021",
+        "parameter_sha256": "fd1ec55c522cbcaed08b93e0000bb036f6bfafea389dd77a8bb6624c9e57b05b",
+        "runtime_sha256": "cdaa6f3d4ae7bc3704dea5e4bfa40c7cd137c86f2c1868a2a9de637cdd853758"
+      },
+      "timerange": "20260916-20261021",
+      "selection": {
+        "window": 1,
+        "epoch": 1,
+        "rule": "latest successful train winner; no OOS reranking"
+      },
+      "attempt": 1
+    }
+  },
+  "prepared_paper_profiles": [
+    {
+      "id": "4e1b0cb3ef0745e6b73b39000d08dd0f",
+      "run_id": "8ebeb7170c97494bb7e304304502e8f8",
+      "strategy": "DikibagastEmaRsi1h",
+      "wrapper": "FPPaper_4e1b0cb3ef0745e6",
+      "label": "DikibagastEmaRsi1h · 6.7m Verified 1x",
+      "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
+      "config_sha256": "ab94379faddc14b3c24312f56f5b679ccd556aab1997bff2300ffc4cc7202832",
+      "leverage": 1,
+      "dry_run": true
+    },
+    {
+      "id": "f26d19d9d7254c1bb5e9c459a9588783",
+      "run_id": "68263637951c4bc2902a22b8c6cdbf00",
+      "strategy": "RocketHunterSma501h",
+      "wrapper": "FPPaper_f26d19d9d7254c1b",
+      "label": "RocketHunterSma501h · 6.7m Verified 1x",
+      "revision": "484cebfefabdb02966797488d23a0fbd17011a1000b1e87d0d1dbed791ef8613",
+      "config_sha256": "ffa32cf968a04ff458edde0cebb05c48f8b723b74ad0a90334469944bed2bff5",
+      "leverage": 1,
+      "dry_run": true
     }
   ]
 }
