@@ -1450,6 +1450,7 @@
         "walk_forward_id": null,
         "paper_profile_id": null
       }
-    }
+    },
+    "methodology_classification": "Simplified Freqtrade IStrategy 1x Futures adaptations under the common 1000 USDT / 100 USDT stake protocol. Not source-parity reproductions or refutations of upstream multi-sleeve/rebalanced/300d-warmup engines (e.g., TarsisVolTargetSma501h scales entry stake only without 10% drift rebalancing or BNB sleeve; HermesAdxBreakout4h uses 59d local warmup ewm(min_periods=50) and 4h Chandelier check rather than 300d SMA-seeded daily-ratcheted stop)."
   }
 }

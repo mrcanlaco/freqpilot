@@ -550,8 +550,8 @@
         dd: 0.35,
         pf: 16.29,
         tags: ["#tarsis7", "#vol-targeting", "#9/9-độ-nhạy", "#pf-16.29"],
-        idea: "Kết hợp bộ lọc xu hướng ngày close_1d > SMA(50) với cơ chế điều tiết quy mô lệnh theo biến động thực tế 20 ngày (Volatility Targeting 40%/năm) từ Tarsis7/crypto-portfolio-walkforward (@ b4394885).",
-        notes: "Chiến binh mới phát hiện từ đợt rà 291 lượt quét: Đạt +54.68 USDT (MaxDD 0.35%, PF 16.29) trên 6,7 tháng Futures có Funding; toàn bộ 9/9 ô Ma trận Độ nhạy 2D đều dương (+38.48 đến +58.95 USDT) và thắng cả kỳ Holdout (+9.50 USDT).",
+        idea: "Biến thể IStrategy 1x lấy cảm hứng từ Tarsis7/crypto-portfolio-walkforward (@ b4394885): giữ lệnh Long khi close_1d > SMA(50) kết hợp định cỡ vốn lúc vào lệnh (entry stake scaling) theo biến động thực tế 20 ngày (40%/năm).",
+        notes: "Khác với danh mục Spot 3 coin có tái cân bằng >10% của Tarsis7 gốc, biến thể FreqPilot này định cỡ lúc mở lệnh trên BTC/ETH Futures 1x (stake cơ sở 100 USDT). Đạt +54.68 USDT (MaxDD 0.35%, PF 16.29), 9/9 ô Độ nhạy dương và thắng kỳ Holdout (+9.50 USDT).",
         code: `class TarsisVolTargetSma501h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
