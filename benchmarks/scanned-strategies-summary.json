@@ -1179,5 +1179,277 @@
       "leverage": 1,
       "dry_run": true
     }
-  ]
+  ],
+  "batch3_291_audit": {
+    "source_dashboard": "http://127.0.0.1:8880/api/dashboard (291 completed runs: 10 achieved, 21 near)",
+    "audited_at": "2026-10-31",
+    "strategies": {
+      "C31VolumeDisplacement1h": {
+        "timeframe": "1h",
+        "revision": "4470551ae3570ea41d52aa0e057a9b069add9a40b512446052714420ac06dc5b",
+        "run_1m": {
+          "id": "15a91813e1",
+          "full_id": "15a91813e13b416fa2af77b92e60696b",
+          "status": "success",
+          "valid": true,
+          "sha256": "e4567597efcbc190f7e89b022e63a9a24d96e32acffc36a08d7303ceb3174855",
+          "summary": {
+            "total_trades": 33,
+            "profit_total_abs": -6.21679695,
+            "profit_total": -0.00621679695,
+            "max_drawdown_account": 0.019809093778139678,
+            "profit_factor": 0.8150977889125598,
+            "wins": 12,
+            "losses": 21,
+            "backtest_start": "2026-09-18 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "run_67m": {
+          "id": "566dba5139",
+          "full_id": "566dba5139234c83a829b56a2caac95d",
+          "status": "success",
+          "valid": true,
+          "sha256": "3dcccbf0fe61d18072b94b203e138d8617fd5aa5be57bef89b11ab9c2e257351",
+          "summary": {
+            "total_trades": 169,
+            "profit_total_abs": -47.718579559999995,
+            "profit_total": -0.047718579559999995,
+            "max_drawdown_account": 0.04771857955999997,
+            "profit_factor": 0.7637462108504761,
+            "wins": 50,
+            "losses": 119,
+            "backtest_start": "2026-04-01 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "lookahead": {
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        },
+        "sensitivity_id": null,
+        "walk_forward_id": null,
+        "paper_profile_id": null
+      },
+      "TarsisVolTargetSma501h": {
+        "timeframe": "1h",
+        "revision": "71d5550cb1bb7719141356ea5c5eb6fdc518f46a66ad4021f6a4528c2bb9d474",
+        "run_1m": {
+          "id": "33c7e77fd5",
+          "full_id": "33c7e77fd5de41cfbb100861a6fe578f",
+          "status": "success",
+          "valid": true,
+          "sha256": "16de20334ef43d18f85710403e4e0072c43c8e7392c307b2b2b8e86875de2f90",
+          "summary": {
+            "total_trades": 2,
+            "profit_total_abs": 6.80493255,
+            "profit_total": 0.00680493255,
+            "max_drawdown_account": 0.0,
+            "profit_factor": 0.0,
+            "wins": 2,
+            "losses": 0,
+            "backtest_start": "2026-09-18 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "run_67m": {
+          "id": "a12a2dd1ad",
+          "full_id": "a12a2dd1ad9c4c54a3a322516ba176fb",
+          "status": "success",
+          "valid": true,
+          "sha256": "2ceeabff5c29fa77210ffdbe9f63ac30793f813eec76bb14a0f0b44cb794c41f",
+          "summary": {
+            "total_trades": 8,
+            "profit_total_abs": 54.68160554,
+            "profit_total": 0.05468160554,
+            "max_drawdown_account": 0.0035412056323113755,
+            "profit_factor": 16.29373710123517,
+            "wins": 4,
+            "losses": 4,
+            "backtest_start": "2026-04-01 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "lookahead": {
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        },
+        "sensitivity_id": "b0d1e4b1064c4fc49ef76181a3612d66",
+        "walk_forward_id": "fa73a3f58f384887b538fb878b5e0543",
+        "paper_profile_id": "41b999f3f64248a98c74a3722b819eba"
+      },
+      "TsTerminalPauseBreakout15m": {
+        "timeframe": "15m",
+        "revision": "b9303b3b635874426d6186815c13187ccfdd3b9c0efa65bbf5f3e3ef4e2874c7",
+        "run_1m": {
+          "id": "e7c0b6acef",
+          "full_id": "e7c0b6acef3948fcadace8894f2cd097",
+          "status": "success",
+          "valid": true,
+          "sha256": "1312e29cd8c24fb38c5100840fbd3ee3a1d8d37b94cb58b6385428777771dda4",
+          "summary": {
+            "total_trades": 20,
+            "profit_total_abs": 2.18640762,
+            "profit_total": 0.00218640762,
+            "max_drawdown_account": 0.0033599105589411436,
+            "profit_factor": 1.3146132162355386,
+            "wins": 8,
+            "losses": 12,
+            "backtest_start": "2026-09-18 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "15m"
+          },
+          "error": null
+        },
+        "run_67m": null,
+        "lookahead": {
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        },
+        "sensitivity_id": null,
+        "walk_forward_id": null,
+        "paper_profile_id": null
+      },
+      "ChamaraBosContinuation1h": {
+        "timeframe": "1h",
+        "revision": "4264aad701488eda9617f836ca271ae335c8ecb0a17a02a9b6901f85ea12bc0c",
+        "run_1m": {
+          "id": "ffb205a708",
+          "full_id": "ffb205a708f442bc9129a9cb7af58425",
+          "status": "success",
+          "valid": true,
+          "sha256": "6358573bfa757f62581814ad1fcb0489a48878ed204cd096d89ca6bc2dd3357b",
+          "summary": {
+            "total_trades": 5,
+            "profit_total_abs": -9.73863993,
+            "profit_total": -0.00973863993,
+            "max_drawdown_account": 0.009738639929999977,
+            "profit_factor": 0.0,
+            "wins": 0,
+            "losses": 5,
+            "backtest_start": "2026-09-18 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "run_67m": {
+          "id": "a798e00c78",
+          "full_id": "a798e00c78bb4534ba2c4b4911d281e1",
+          "status": "success",
+          "valid": true,
+          "sha256": "3b10c25b83b930aff82e0ca5fbfa1e5e54aa2544c22ed458c0fc2dc4ae7da180",
+          "summary": {
+            "total_trades": 36,
+            "profit_total_abs": -17.55106559,
+            "profit_total": -0.01755106559,
+            "max_drawdown_account": 0.019343347403261473,
+            "profit_factor": 0.6896502729845432,
+            "wins": 10,
+            "losses": 26,
+            "backtest_start": "2026-04-01 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "1h"
+          },
+          "error": null
+        },
+        "lookahead": {
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        },
+        "sensitivity_id": null,
+        "walk_forward_id": null,
+        "paper_profile_id": null
+      },
+      "HermesAdxBreakout4h": {
+        "timeframe": "4h",
+        "revision": "7aa0a977be70c1e676fd633f9ca3d405a1ff30461dd1851590e688c7bc7d7306",
+        "run_1m": {
+          "id": "0f8d56ec1b",
+          "full_id": "0f8d56ec1bc24b9abdf0aaba62d74b0c",
+          "status": "success",
+          "valid": true,
+          "sha256": "60ff622a4b9947fd6e897d27e901697d6719517f43462dcb6b86258554a6a7a9",
+          "summary": {
+            "total_trades": 3,
+            "profit_total_abs": -1.4379475899999998,
+            "profit_total": -0.0014379475899999998,
+            "max_drawdown_account": 0.004528451111040962,
+            "profit_factor": 0.6834464647305992,
+            "wins": 1,
+            "losses": 2,
+            "backtest_start": "2026-09-18 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "4h"
+          },
+          "error": null
+        },
+        "run_67m": {
+          "id": "1bb4de2153",
+          "full_id": "1bb4de21536f4802b2cd941eacc751b6",
+          "status": "success",
+          "valid": true,
+          "sha256": "f128f4315b2ea0e1b261a48d940b7503afd246288ed2adf0986c945ed402c3ac",
+          "summary": {
+            "total_trades": 15,
+            "profit_total_abs": -19.179288640000003,
+            "profit_total": -0.019179288640000004,
+            "max_drawdown_account": 0.019179288639999983,
+            "profit_factor": 0.29848126464179553,
+            "wins": 3,
+            "losses": 12,
+            "backtest_start": "2026-04-01 00:00:00",
+            "backtest_end": "2026-10-21 00:00:00",
+            "timeframe": "4h"
+          },
+          "error": null
+        },
+        "lookahead": {
+          "status": "success",
+          "has_bias": false,
+          "error": null
+        },
+        "recursive": {
+          "status": "success",
+          "has_bias": null,
+          "error": null
+        },
+        "sensitivity_id": null,
+        "walk_forward_id": null,
+        "paper_profile_id": null
+      }
+    }
+  }
 }

@@ -79,6 +79,31 @@ Toàn bộ **9/9 ô lân cận** đều có lãi ròng dương (từ **`+26,21 U
 
 ## 5. Hồ sơ Paper 1x Isolated đã chuẩn bị sẵn sàng (`/paper`)
 
-Từ hai gói backtest 6,7 tháng đã xác minh `SHA256`, hai hồ sơ Paper `1x Isolated` (`dry_run=true`, `initial_state=stopped`) đã được chuẩn bị trong `user_data/freqpilot/paper/profiles/` (không tự động thay thế hoặc khởi động đè lên worker hiện tại):
+Từ ba gói backtest 6,7 tháng xuất sắc nhất đã xác minh `SHA256`, ba hồ sơ Paper `1x Isolated` (`dry_run=true`, `initial_state=stopped`) đã được chuẩn bị trong `user_data/freqpilot/paper/profiles/` (không tự động thay thế hoặc khởi động đè lên worker hiện tại):
 1. **`DikibagastEmaRsi1h · 6.7m Verified 1x`** (`profile_id = 4e1b0cb3ef0745e69a5c7bd1ab837e8f`, wrapper `FPPaper_4e1b0cb3ef0745e6`, từ gói `8ebeb7170c`).
 2. **`RocketHunterSma501h · 6.7m Verified 1x`** (`profile_id = f26d19d9d7254c1b87d3ea8701fd5a87`, wrapper `FPPaper_f26d19d9d7254c1b`, từ gói `6826363795`).
+3. **`TarsisVolTargetSma501h · 6.7m Verified 1x`** (`profile_id = 41b999f3f64248a98c74a3722b819eba`, từ gói `a12a2dd1ad`, `SHA256 = 2ceeabff5c29fa77210ffdbe9f63ac30793f813eec76bb14a0f0b44cb794c41f`).
+
+---
+
+## 6. Đợt Kiểm Toán Số 3 (Từ mốc `291` lượt quét — Rà sâu nhóm "Đạt" & "Gần đạt" mới, 31/10/2026)
+
+Sau khi hệ thống quét đạt **291 lượt hoàn tất** (`10` lượt Đạt — gom về `6` chiến lược gốc — và `21` lượt Gần đạt), đã loại bỏ các bản trùng (`4` lượt `Sobreiro XGBoost` trên Spot) và bản phát lại tệp dự báo có sẵn (`CR_MODEL` `forecast.db`), đồng thời chuyển thể **5 chiến lược quy tắc mở mới** sang `IStrategy` `1x Isolated` trên `BTC/USDT:USDT` + `ETH/USDT:USDT`:
+
+| Chiến lược | Nguồn gốc (`291` runs) | Khung | Kỳ 1 Tháng (`20260918–20261021`, `1m`) | Kỳ 6,7 Tháng (`20260401–20261021`, `5m`) | MaxDD (6,7m) | PF (6,7m) | Lookahead / Recursive | Kết luận kiểm toán |
+| :--- | :--- | :---: | :--- | :--- | :---: | :---: | :---: | :--- |
+| **`TarsisVolTargetSma501h`** | `Tarsis7/crypto-portfolio-walkforward` (`b4394885` · **Đạt**) | `1h` (`1d`) | `+6,80 USDT` (`2` lệnh, gói `33c7e77fd5`) | **`+54,68 USDT` (`+5,47%`, `8` lệnh, gói `a12a2dd1ad`, SHA `2ceeabff5c29`)** | **`0,35%`** | **`16,29`** | `false / ok` | **★ Vượt qua cả 4 cổng (`9/9` Độ nhạy dương + thắng Holdout)** |
+| **`TsTerminalPauseBreakout15m`** | `teshmi9z-beep/TS_Terminal` (`ba5537b7` · **Đạt trên DOGE**) | `15m` (`4h`) | **`+2,19 USDT` (`20` lệnh, DD `0,34%`, PF `1,31`, gói `e7c0b6acef`)** | *(Kho nến `15m` local bắt đầu từ `15/09/2026`)* | `0,34%` *(1m)* | `1,31` *(1m)* | `false / ok` | **Lãi nhẹ ngoài mẫu `DOGE` trên kỳ 1 tháng (`20` lệnh), cần mở rộng kho nến `15m` dài hạn trước khi kết luận** |
+| **`ChamaraBosContinuation1h`** | `Chamara-Dilshan/ai-analysis` (`81f3703e` · Gần đạt) | `1h` (`4h/1d`) | `-9,74 USDT` (`5` lệnh, gói `ffb205a708`) | `-17,55 USDT` (`36` lệnh, gói `a798e00c78`) | `1,93%` | `0,69` | `false / ok` | Loại (Âm trên cả hai kỳ khi tính phí & funding thực) |
+| **`HermesAdxBreakout4h`** | `ricardoafo/hermes` (`615bf771` · Gần đạt) | `4h` (`1d`) | `-1,44 USDT` (`3` lệnh, gói `0f8d56ec1b`) | `-19,18 USDT` (`15` lệnh, gói `1bb4de2153`) | `1,92%` | `0,30` | `false / ok` | Loại (Bị nhiễu breakout giả giai đoạn đi ngang 2026) |
+| **`C31VolumeDisplacement1h`** | `zihadzafarzisan/Ai-Trading-Bot` (`fd771276` · **Đạt ở 1h-close 5x**) | `1h` | `-6,22 USDT` (`33` lệnh, gói `15a91813e1`) | `-47,72 USDT` (`169` lệnh, gói `566dba5139`) | `4,77%` | `0,76` | `false / ok` | **Loại — Minh chứng giá trị kiểm định chi tiết `5m` của FreqPilot**: Bản quét gốc chỉ chấm trên giá đóng `1h` và gộp `5x` từ bull-run 2025; khi kiểm định chi tiết nến `5m` thực tế năm 2026 với `169` lệnh, râu nến `5m` và phí giao dịch bào mòn lợi thế (`PF 0,76`). |
+
+### 6.1. Ma trận Độ nhạy 2D (`b0d1e4b106`) & Walk-Forward Holdout (`fa73a3f58f`) của `TarsisVolTargetSma501h`
+- **Ma trận Độ nhạy 2D (`3×3` = `9/9` ô đều dương trên kỳ 6,7 tháng `20260401-20261021`)**:
+  - `sma_period = 45`: `+45,42` (`vol=0,35`) · `+49,62` (`vol=0,40`) · `+53,66 USDT` (`vol=0,45`) — `10` lệnh, MaxDD `0,61%–0,67%`.
+  - `sma_period = 50` *(Gốc)*: `+50,30` (`vol=0,35`) · **`+54,68 USDT` (`vol=0,40` — Mặc định, `8` lệnh, DD `0,35%`, PF `16,29`)** · `+58,95 USDT` (`vol=0,45`).
+  - `sma_period = 55`: `+38,48` (`vol=0,35`) · `+41,51` (`vol=0,40`) · `+45,00 USDT` (`vol=0,45`) — `9` lệnh, MaxDD `0,51%–0,56%`.
+- **Walk-Forward (`fa73a3f58f` — `2` cửa sổ `90d Train / 35d OOS` + Holdout `20260916-20261021` đối chiếu hồi cứu)**:
+  - Cửa sổ #0 OOS (`20260630-20260804`): **Baseline `+0,79 USDT` (`4` lệnh)** vs Ứng viên Hyperopt `-5,26 USDT`.
+  - Cửa sổ #1 OOS (`20260804-20260908`): **Baseline `+47,46 USDT` (`3` lệnh)** vs Ứng viên Hyperopt `+44,63 USDT` (`5` lệnh).
+  - Kỳ Holdout tách khỏi Hyperopt (`20260916-20261021`): **Baseline `+9,50 USDT` (`2` lệnh)** vs Ứng viên Hyperopt `+3,62 USDT` (`4` lệnh, PF `2,14`).

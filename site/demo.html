@@ -536,6 +536,36 @@
         paperProfile: "f26d19d9d7254c1b (STOPPED · 1x Isolated)"
       },
       {
+        id: "TarsisVolTargetSma501h",
+        tier: "★ VERIFIED PACK V1 ($39) · ĐẠT 9/9 ĐỘ NHẠY & HOLDOUT (ĐỢT 3)",
+        paid: true,
+        tf: "1h (1d)",
+        rev: "71d5550cb1",
+        runId: "a12a2dd1ad",
+        sha: "2ceeabff5c29fa77210ffdbe9f63ac30793f813e",
+        pnl: 54.68,
+        ret: 5.47,
+        trades: 8,
+        win: "50.0% (4W/4L)",
+        dd: 0.35,
+        pf: 16.29,
+        tags: ["#tarsis7", "#vol-targeting", "#9/9-độ-nhạy", "#pf-16.29"],
+        idea: "Kết hợp bộ lọc xu hướng ngày close_1d > SMA(50) với cơ chế điều tiết quy mô lệnh theo biến động thực tế 20 ngày (Volatility Targeting 40%/năm) từ Tarsis7/crypto-portfolio-walkforward (@ b4394885).",
+        notes: "Chiến binh mới phát hiện từ đợt rà 291 lượt quét: Đạt +54.68 USDT (MaxDD 0.35%, PF 16.29) trên 6,7 tháng Futures có Funding; toàn bộ 9/9 ô Ma trận Độ nhạy 2D đều dương (+38.48 đến +58.95 USDT) và thắng cả kỳ Holdout (+9.50 USDT).",
+        code: `class TarsisVolTargetSma501h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    can_short = False
+    sma_period = IntParameter(30, 80, default=50, space="buy")
+    vol_window = IntParameter(14, 30, default=20, space="buy")
+    vol_target = DecimalParameter(0.25, 0.60, default=0.40, decimals=2, space="buy")
+    # ... [Trọn bộ hàm custom_stake_amount điều tiết biến động & gói .zip SHA-256 nằm trong Verified Pack v1]`,
+        equity: [["04-01",0],["05-16",3.36],["05-23",9.66],["05-27",8.79],["07-17",7.77],["08-01",6.58],["08-15",6.09],["10-09",36.91],["10-21",54.68]],
+        drawdown: [["04-01",0],["05-23",0],["05-27",-0.09],["07-17",-0.19],["08-01",-0.31],["08-15",-0.35],["10-09",0],["10-21",0]],
+        monthly: [["Apr",0],["May",8.79],["Jun",0],["Jul",-1.02],["Aug",-1.68],["Sep",0],["Oct",48.59],["Total",54.68]],
+        paperProfile: "41b999f3f64248a9 (STOPPED · 1x Isolated)"
+      },
+      {
         id: "BdrEmaRideFutures1h",
         tier: "★ VERIFIED PACK V1 ($39) · LONG & SHORT 1X",
         paid: true,

@@ -749,7 +749,7 @@
     <!-- Hero -->
     <div class="hero">
       <div class="eyebrow-pill" data-i18n="hero_badge">
-        ● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →
+        ● 23 Chiến Lược (Từ 291 Lượt Quét) Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →
       </div>
       <h1 data-i18n="hero_title">Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.</h1>
       <p class="hero-sub" data-i18n="hero_lead">
@@ -1180,14 +1180,14 @@ Bằng chứng hiện tại trên máy:
     <!-- Section 2: Visual 10-Strategy Audit Leaderboard -->
     <section id="audit">
       <span class="sec-eyebrow">EMPIRICAL BENCHMARK</span>
-      <h2 data-i18n="sec1_title">Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)</h2>
+      <h2 data-i18n="sec1_title">Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)</h2>
       <p class="sec-sub" data-i18n="sec1_sub">
         Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
       </p>
       <div class="filter-bar">
-        <button class="chip active" onclick="filterAudit('all', this)" data-i18n="filter_all">Tất cả (10)</button>
-        <button class="chip" onclick="filterAudit('survived', this)" data-i18n="filter_survived">✓ Sống sót qua 6,7 tháng (4)</button>
-        <button class="chip" onclick="filterAudit('dropped', this)" data-i18n="filter_dropped">✕ Bị loại ở mẫu dài / âm (6)</button>
+        <button class="chip active" onclick="filterAudit('all', this)" data-i18n="filter_all">Tất cả (15)</button>
+        <button class="chip" onclick="filterAudit('survived', this)" data-i18n="filter_survived">✓ Sống sót qua 6,7 tháng (5)</button>
+        <button class="chip" onclick="filterAudit('dropped', this)" data-i18n="filter_dropped">✕ Bị loại / mẫu ngắn (10)</button>
       </div>
       <div class="table-wrap">
         <table id="audit-table">
@@ -1218,6 +1218,21 @@ Bằng chứng hiện tại trên máy:
               <td class="mono"><b>18.29</b></td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">★ Top 1 Profit</span></td>
+            </tr>
+            <tr data-group="survived">
+              <td><strong>TarsisVolTargetSma501h</strong><br/><small style="color:var(--fg-3)">Tarsis7 Vol-Target · <code>a12a2dd1ad</code></small></td>
+              <td><code>1h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:88%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+54.68 USDT (+5.47%)</b>
+                </div>
+              </td>
+              <td class="mono">8</td>
+              <td class="mono">0.35%</td>
+              <td class="mono"><b>16.29</b></td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill pass">★ Đạt 9/9 Độ nhạy &amp; Holdout</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>DikibagastEmaRsi1h</strong><br/><small style="color:var(--fg-3)">EMA 50/100 + ATR · <code>8ebeb7170c</code></small></td>
@@ -1263,6 +1278,21 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">2.45</td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">✓ Giữ lãi dương</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><strong>TsTerminalPauseBreakout15m</strong><br/><small style="color:var(--fg-3)">TS_Terminal cross-test · <code>e7c0b6acef</code></small></td>
+              <td><code>15m</code> (4h)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:8%;height:100%;background:var(--accent)"></div></div>
+                  <b class="pos mono">+2.19 USDT (Kỳ 1m)</b>
+                </div>
+              </td>
+              <td class="mono">20</td>
+              <td class="mono">0.34%</td>
+              <td class="mono">1.31</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill">⏳ Mới có nến 15m kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>CodexBotVibe4h</strong><br/><small style="color:var(--fg-3)">erfankh · <code>c3b0b4c882</code></small></td>
@@ -1353,6 +1383,51 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.31</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><strong>ChamaraBosContinuation1h</strong><br/><small style="color:var(--fg-3)">4h/1d Fractal BOS · <code>a798e00c78</code></small></td>
+              <td><code>1h</code> (4h/1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:40%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-17.55 USDT (-1.76%)</b>
+                </div>
+              </td>
+              <td class="mono">36</td>
+              <td class="mono">1.93%</td>
+              <td class="mono">0.69</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Âm sau phí &amp; funding 6,7m</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><strong>HermesAdxBreakout4h</strong><br/><small style="color:var(--fg-3)">Hermes MVP1 v2 · <code>1bb4de2153</code></small></td>
+              <td><code>4h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:43%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-19.18 USDT (-1.92%)</b>
+                </div>
+              </td>
+              <td class="mono">15</td>
+              <td class="mono">1.92%</td>
+              <td class="mono">0.30</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Nhiễu breakout giả 6,7m</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><strong>C31VolumeDisplacement1h</strong><br/><small style="color:var(--fg-3)">C31 1h->5m stress · <code>566dba5139</code></small></td>
+              <td><code>1h</code></td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:85%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-47.72 USDT (-4.77%)</b>
+                </div>
+              </td>
+              <td class="mono">169</td>
+              <td class="mono">4.77%</td>
+              <td class="mono">0.76</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Bị râu nến 5m &amp; phí bào mòn</span></td>
             </tr>
           </tbody>
         </table>
@@ -1675,11 +1750,11 @@ cd freqpilot
         sec_cmp_title: "Đang Dùng Freqtrade Gốc Hoặc Bản Fork FreqUI Ultimate?",
         sec_cmp_sub: "FreqUI gốc thiếu công cụ kiểm định nghiên cứu khép kín; trong khi bản fork FreqUI Ultimate buộc thay thế engine chính thức và báo lỗi <code>404 Endpoint Not Found</code> khi nối vào Freqtrade gốc. FreqPilot giải quyết triệt để cả hai:",
         cmp_cta_btn: "Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →",
-        sec1_title: "Bảng Kiểm Toán Trực Quan: 10 Chiến Lược Quét Tự Động (`01a138fe`)",
+        sec1_title: "Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)",
         sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
-        filter_all: "Tất cả (10)",
-        filter_survived: "✓ Sống sót qua 6,7 tháng (4)",
-        filter_dropped: "✕ Bị loại ở mẫu dài / âm (6)",
+        filter_all: "Tất cả (15)",
+        filter_survived: "✓ Sống sót qua 6,7 tháng (5)",
+        filter_dropped: "✕ Bị loại / mẫu ngắn (10)",
         sec3_title: "Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
         sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
         sec4_title: "Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Lệnh",
@@ -1716,11 +1791,11 @@ cd freqpilot
         sec_cmp_title: "Switching from Standard FreqUI or FreqUI Ultimate?",
         sec_cmp_sub: "Standard FreqUI is a bot monitor, not a research studio; meanwhile, the FreqUI Ultimate fork forces you off the official Freqtrade engine (returning <code>404</code> on official backends). FreqPilot gives you the best of both:",
         cmp_cta_btn: "Read Full Architecture & 8-Strategy Benchmark →",
-        sec1_title: "Public Audit Leaderboard: 10 Automated Discovery Strategies (`01a138fe`)",
+        sec1_title: "Public Audit Leaderboard: 15 Automated Discovery Strategies (291 Scanner Runs)",
         sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>1,000 USDT</code> wallet, <code>100 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
-        filter_all: "All Audited (10)",
-        filter_survived: "✓ Survived 6.7-Month Window (4)",
-        filter_dropped: "✕ Eliminated on Long Window (6)",
+        filter_all: "All Audited (15)",
+        filter_survived: "✓ Survived 6.7-Month Window (5)",
+        filter_dropped: "✕ Eliminated / Short-Only (10)",
         sec3_title: "Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
         sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-&lt;id&gt;.zip</code> bundles directly into your workspace.",
         sec4_title: "Launch FreqPilot Locally in 3 Commands",
@@ -1757,11 +1832,11 @@ cd freqpilot
         sec_cmp_title: "正在使用原版 FreqUI 或 FreqUI Ultimate 分支版？",
         sec_cmp_sub: "原版 FreqUI 缺乏策略研发闭环工具；而 FreqUI Ultimate 强迫替换官方引擎（连接官方后端会报 <code>404</code>）。FreqPilot 完美兼具两者优势：",
         cmp_cta_btn: "查看完整架构与 8 策略对标报告 →",
-        sec1_title: "公开实证审计榜单：10 个自动发掘策略 (`01a138fe`)",
+        sec1_title: "公开实证审计榜单：15 个自动发掘策略（源自 291 次扫描）",
         sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>1,000 USDT</code> 本金，<code>100 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
-        filter_all: "全部策略 (10)",
-        filter_survived: "✓ 通过 6.7 个月长周期检验 (4)",
-        filter_dropped: "✕ 长周期淘汰 / 亏损 (6)",
+        filter_all: "全部策略 (15)",
+        filter_survived: "✓ 通过 6.7 个月长周期检验 (5)",
+        filter_dropped: "✕ 长周期淘汰 / 短样本 (10)",
         sec3_title: "密码学签名策略档案包 (`Verified Dossiers`)",
         sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
         sec4_title: "三步在本地启动 FreqPilot",
@@ -1798,11 +1873,11 @@ cd freqpilot
         sec_cmp_title: "Переходите с оригинального FreqUI или форка FreqUI Ultimate?",
         sec_cmp_sub: "В стандартном FreqUI нет исследовательской среды, а форк FreqUI Ultimate требует замены официального движка. FreqPilot объединяет лучшее:",
         cmp_cta_btn: "Подробное сравнение архитектуры и 8 стратегий →",
-        sec1_title: "Публичный аудит: 10 автоматически отобранных стратегий (`01a138fe`)",
+        sec1_title: "Публичный аудит: 15 стратегий из 291 запуска сканера",
         sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>1,000 USDT</code>, ставка <code>100 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
-        filter_all: "Все (10)",
-        filter_survived: "✓ Прошли окно 6.7 мес. (4)",
-        filter_dropped: "✕ Отсеяны на длинном окне (6)",
+        filter_all: "Все (15)",
+        filter_survived: "✓ Прошли окно 6.7 мес. (5)",
+        filter_dropped: "✕ Отсеяны / короткое окно (10)",
         sec3_title: "Проверенные архивы стратегий (`Verified Dossiers`)",
         sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
         sec4_title: "Запуск FreqPilot за 3 команды",
@@ -1839,11 +1914,11 @@ cd freqpilot
         sec_cmp_title: "순정 FreqUI 또는 FreqUI Ultimate 포크에서 전환하시나요?",
         sec_cmp_sub: "순정 FreqUI는 연구 도구가 부족하고, FreqUI Ultimate 포크는 공식 엔진 교체를 강제합니다. FreqPilot은 공식 2026.9 엔진 위에서 완벽한 연구 스튜디오를 제공합니다:",
         cmp_cta_btn: "아키텍처 및 8대 전략 비교 보고서 보기 →",
-        sec1_title: "공개 감사 리더보드: 자동 발굴 10개 전략 (`01a138fe`)",
+        sec1_title: "공개 감사 리더보드: 291회 스캔에서 선별된 15개 전략",
         sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
-        filter_all: "전체 (10)",
-        filter_survived: "✓ 6.7개월 장기 구간 통과 (4)",
-        filter_dropped: "✕ 장기 구간 탈락 / 적자 (6)",
+        filter_all: "전체 (15)",
+        filter_survived: "✓ 6.7개월 장기 구간 통과 (5)",
+        filter_dropped: "✕ 장기 구간 탈락 / 단기 (10)",
         sec3_title: "암호화 검증된 전략 번들 (`Verified Dossiers`)",
         sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
         sec4_title: "3단계 명령어로 로컬에서 FreqPilot 시작하기",
