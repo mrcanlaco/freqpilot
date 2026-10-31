@@ -757,7 +757,7 @@
       </p>
       <div class="hero-actions">
         <button type="button" class="btn primary" onclick="quickLaunchStudio()" data-i18n="hero_cta_open">🚀 Mở FreqPilot Studio →</button>
-        <a class="btn" href="#interactive-studio" data-i18n="hero_cta_audit">Xem Biểu Đồ Tương Tác ↓</a>
+        <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.5);color:var(--pos-bright)" data-i18n="hero_cta_demo">✨ Dùng Thử Studio Trên Web (Không cần cài)</a>
         <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">GitHub (GPL-3.0) ↗</a>
       </div>
 
@@ -1455,8 +1455,11 @@ cd freqpilot
         <span id="studio-probe-text">Đang kiểm tra kết nối máy chủ Studio…</span>
       </div>
       <div class="modal-actions">
+        <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.55);background:rgba(16,185,129,0.12);color:var(--pos-bright)" data-i18n="mod_btn_demo">
+          ✨ Chưa cài Docker? Dùng Thử Studio Ngay Trên Web (Read-Only) →
+        </a>
         <button type="button" class="btn primary" onclick="navigateToStudio('/studio')" data-i18n="mod_btn_studio">
-          🚀 Vào Thẳng Workspace Nghiên Cứu (/studio) →
+          🚀 Vào Thẳng Workspace Máy Của Bạn (/studio) →
         </button>
         <button type="button" class="btn" onclick="navigateToStudio('/login?redirect=/studio')" data-i18n="mod_btn_login">
           🔑 Mở Màn Hình Đăng Nhập / Đổi Tài Khoản API (/login)
@@ -1653,12 +1656,13 @@ cd freqpilot
         hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
         hero_cta_open: "🚀 Mở FreqPilot Studio →",
-        hero_cta_audit: "Xem Biểu Đồ Tương Tác ↓",
+        hero_cta_demo: "✨ Dùng Thử Studio Trên Web (Không cần cài)",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Kết Nối & Đăng Nhập FreqPilot Studio",
-        mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc qua Tailscale VPN) để vào không gian nghiên cứu:",
+        mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc dùng ngay bản Web Demo không cần cài đặt):",
         mod_check: "Kiểm tra",
-        mod_btn_studio: "🚀 Vào Thẳng Workspace Nghiên Cứu (/studio) →",
+        mod_btn_demo: "✨ Chưa cài Docker? Dùng Thử Studio Ngay Trên Web (Read-Only) →",
+        mod_btn_studio: "🚀 Vào Thẳng Workspace Máy Của Bạn (/studio) →",
         mod_btn_login: "🔑 Mở Màn Hình Đăng Nhập / Đổi Tài Khoản API (/login)",
         mod_btn_paper: "🛡️ Mở Quản Lý Hồ Sơ Paper 1x (/paper)",
         mod_note: "🔒 <b>Self-Hosted Zero-Custody:</b> Tài khoản (<code>freqtrader</code>) & mật khẩu API nằm trong <code>user_data/ACCESS.txt</code> hoặc <code>config.json</code> trên máy bạn. Chưa cài? <a href='#install' onclick='closeStudioModal()'>Xem 3 lệnh khởi chạy ↓</a>",
@@ -1693,12 +1697,13 @@ cd freqpilot
         hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
         hero_cta_open: "🚀 Launch FreqPilot Studio →",
-        hero_cta_audit: "Explore Interactive Charts ↓",
+        hero_cta_demo: "✨ Try Web Studio Demo (No Install)",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Connect & Sign In to FreqPilot Studio",
-        mod_sub: "Select your running FreqPilot instance (local or Tailscale VPN) to enter the research studio:",
+        mod_sub: "Select your running FreqPilot instance, or try the instant Web Sandbox with zero installation:",
         mod_check: "Verify",
-        mod_btn_studio: "🚀 Enter Research Workspace (/studio) →",
+        mod_btn_demo: "✨ No Local Server Yet? Launch Web Studio Demo (Read-Only) →",
+        mod_btn_studio: "🚀 Enter Local Research Workspace (/studio) →",
         mod_btn_login: "🔑 Open API Sign-In / Switch Bot (/login)",
         mod_btn_paper: "🛡️ Open 1x Paper Profiles (/paper)",
         mod_note: "🔒 <b>Self-Hosted Zero-Custody:</b> Your API username (<code>freqtrader</code>) & password stay in <code>user_data/ACCESS.txt</code> or <code>config.json</code> on your machine. New here? <a href='#install' onclick='closeStudioModal()'>3-Step Quickstart ↓</a>",
@@ -1733,12 +1738,13 @@ cd freqpilot
         hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
         hero_cta_open: "🚀 启动 FreqPilot 工作台 →",
-        hero_cta_audit: "查看交互式图表 ↓",
+        hero_cta_demo: "✨ 网页直接试用（免安装）",
         hero_cta_gh: "GitHub 开源 ↗",
         mod_title: "连接并登录 FreqPilot 工作台",
-        mod_sub: "选择您本地或 Tailscale 内网正在运行的 FreqPilot 服务地址：",
+        mod_sub: "连接本地运行的 FreqPilot 节点，或直接打开免安装网页体验版：",
         mod_check: "检测",
-        mod_btn_studio: "🚀 直接进入研究工作台 (/studio) →",
+        mod_btn_demo: "✨ 尚未安装 Docker？立即打开网页交互体验版 →",
+        mod_btn_studio: "🚀 进入本地研究工作台 (/studio) →",
         mod_btn_login: "🔑 打开 API 登录与节点配置 (/login)",
         mod_btn_paper: "🛡️ 打开 1x 模拟盘管理 (/paper)",
         mod_note: "🔒 <b>本地自托管零托管风险：</b>API 账号（<code>freqtrader</code>）与密码保存在您本机的 <code>user_data/ACCESS.txt</code> 中。尚未安装？<a href='#install' onclick='closeStudioModal()'>查看三步安装 ↓</a>",
@@ -1773,12 +1779,13 @@ cd freqpilot
         hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
         hero_cta_open: "🚀 Открыть FreqPilot Studio →",
-        hero_cta_audit: "Интерактивный отчет ↓",
+        hero_cta_demo: "✨ Веб-демо Studio (Без установки)",
         hero_cta_gh: "GitHub ↗",
         mod_title: "Подключение и вход в FreqPilot Studio",
-        mod_sub: "Выберите адрес вашего локального или Tailscale сервера FreqPilot:",
+        mod_sub: "Подключитесь к локальному серверу или откройте интерактивную веб-версию без установки:",
         mod_check: "Проверить",
-        mod_btn_studio: "🚀 Перейти в студию исследований (/studio) →",
+        mod_btn_demo: "✨ Нет локального сервера? Открыть Веб-демо Studio →",
+        mod_btn_studio: "🚀 Перейти в локальную студию (/studio) →",
         mod_btn_login: "🔑 Открыть страницу входа API (/login)",
         mod_btn_paper: "🛡️ Открыть профили 1x Paper (/paper)",
         mod_note: "🔒 <b>Self-Hosted:</b> Логин (<code>freqtrader</code>) и пароль хранятся локально в <code>user_data/ACCESS.txt</code>. Еще не установили? <a href='#install' onclick='closeStudioModal()'>Запуск за 3 команды ↓</a>",
@@ -1813,12 +1820,13 @@ cd freqpilot
         hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
         hero_cta_open: "🚀 FreqPilot 스튜디오 열기 →",
-        hero_cta_audit: "인터랙티브 차트 ↓",
+        hero_cta_demo: "✨ 웹 스튜디오 체험판 (무설치)",
         hero_cta_gh: "GitHub ↗",
         mod_title: "FreqPilot 스튜디오 연결 및 로그인",
-        mod_sub: "실행 중인 로컬 또는 Tailscale FreqPilot 서버 주소를 선택하세요:",
+        mod_sub: "실행 중인 로컬 서버에 연결하거나 설치 없이 웹 스튜디오 체험판을 바로 열어보세요:",
         mod_check: "확인",
-        mod_btn_studio: "🚀 연구 워크스페이스 바로가기 (/studio) →",
+        mod_btn_demo: "✨ 아직 설치 전인가요? 웹 스튜디오 체험판 바로 열기 →",
+        mod_btn_studio: "🚀 로컬 연구 워크스페이스 바로가기 (/studio) →",
         mod_btn_login: "🔑 API 로그인 / 봇 전환 (/login)",
         mod_btn_paper: "🛡️ 1x 페이퍼 프로필 관리 (/paper)",
         mod_note: "🔒 <b>셀프 호스팅 보안:</b> API 계정(<code>freqtrader</code>)과 비밀번호는 로컬 <code>user_data/ACCESS.txt</code>에 보관됩니다. <a href='#install' onclick='closeStudioModal()'>3단계 설치 보기 ↓</a>",
@@ -1856,6 +1864,7 @@ cd freqpilot
     }
 
     let studioOnline = false;
+    let probeSeq = 0;
 
     function defaultStudioHost() {
       const h = location.hostname;
@@ -1891,28 +1900,42 @@ cd freqpilot
     }
 
     async function probeStudioServer() {
+      const seq = ++probeSeq;
       const url = getStudioUrl();
       const box = document.getElementById("studio-probe-status");
       const txt = document.getElementById("studio-probe-text");
       const mDot = document.getElementById("modal-live-dot");
       const nDot = document.getElementById("nav-live-dot");
       const ctl = new AbortController();
-      const timer = setTimeout(() => ctl.abort(), 2200);
+      const timer = setTimeout(() => ctl.abort(), 2400);
       try {
-        await fetch(url + "/api/v1/ping", { mode: "no-cors", cache: "no-store", signal: ctl.signal });
+        const res = await fetch(url + "/api/v1/studio/probe", { cache: "no-store", signal: ctl.signal });
         clearTimeout(timer);
-        studioOnline = true;
-        box.className = "probe-status online";
-        mDot.className = "live-dot online";
-        nDot.className = "live-dot online";
-        txt.textContent = `Online — Đã tìm thấy máy chủ FreqPilot tại ${url}`;
+        if (seq !== probeSeq) return;
+        if (!res.ok) throw new Error("unexpected_status");
+        const data = await res.json();
+        if (seq !== probeSeq) return;
+        if (data && data.product === "FreqPilot" && data.engine === "2026.9" && data.dry_run === true) {
+          studioOnline = true;
+          box.className = "probe-status online";
+          mDot.className = "live-dot online";
+          nDot.className = "live-dot online";
+          txt.textContent = `✓ Đã xác minh FreqPilot 2026.9 (dry_run=true) tại ${url}`;
+        } else {
+          studioOnline = false;
+          box.className = "probe-status offline";
+          mDot.className = "live-dot";
+          nDot.className = "live-dot";
+          txt.textContent = `Cổng ${url} đang chạy dịch vụ khác (không phải FreqPilot 2026.9)`;
+        }
       } catch {
         clearTimeout(timer);
+        if (seq !== probeSeq) return;
         studioOnline = false;
         box.className = "probe-status offline";
         mDot.className = "live-dot";
         nDot.className = "live-dot";
-        txt.textContent = `Chưa phản hồi tại ${url} — Hãy chạy ./Start.ps1 hoặc kiểm tra cổng`;
+        txt.textContent = `Chưa phát hiện FreqPilot local tại ${url} — Bạn có thể mở bản Web Demo ngay bên dưới`;
       }
     }
 

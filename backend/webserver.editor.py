@@ -297,7 +297,8 @@ class ApiServer(RPCHandler):
             local_strategies, prefix="/api/v1/local-strategies",
             dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)],
         )
-        from freqtrade.rpc.api_server.api_studio import router as studio
+        from freqtrade.rpc.api_server.api_studio import public_router as studio_public, router as studio
+        app.include_router(studio_public, prefix="/api/v1/studio")
         app.include_router(studio, prefix="/api/v1/studio",
             dependencies=[Depends(http_basic_or_jwt_token), Depends(is_webserver_mode)])
         from freqtrade.rpc.api_server.api_runs import router as runs

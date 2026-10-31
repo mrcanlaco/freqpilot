@@ -8,13 +8,28 @@ from pathlib import Path
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi.responses import JSONResponse
 from typing import Literal
 from pydantic import BaseModel, Field, field_validator
 from freqtrade.rpc.api_server.deps import get_config
 from freqtrade.rpc.api_server.api_local_strategies import root, target, read, lock
 
 router = APIRouter()
+public_router = APIRouter()
 
+@public_router.get('/probe')
+def probe(config=Depends(get_config)):
+    runmode = getattr(config.get('runmode'), 'value', config.get('runmode'))
+    return JSONResponse(
+        content={
+            'product': 'FreqPilot',
+            'version': '0.1.0',
+            'engine': '2026.9',
+            'dry_run': bool(config.get('dry_run', False)),
+            'mode': str(runmode or ''),
+        },
+        headers={'Access-Control-Allow-Origin': '*'},
+    )
 def storage(config):
     p=root(config).parent/'freqpilot'
     p.mkdir(exist_ok=True)

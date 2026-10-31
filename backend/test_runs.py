@@ -11,7 +11,7 @@ from zipfile import ZipFile
 
 from fastapi import BackgroundTasks, HTTPException
 from freqtrade.rpc.api_server.api_local_strategies import Create, create
-from freqtrade.rpc.api_server.api_studio import Manifest, write_check
+from freqtrade.rpc.api_server.api_studio import Manifest, probe, write_check
 from freqtrade.rpc.api_server.api_runs import (freeze, finish, start_run, list_runs,
                                                verify_run, run_path, download_artifact,
                                                clear_local_imports, ImportArtifactRequest, import_artifact)
@@ -179,6 +179,20 @@ class FrozenRunChecks(unittest.TestCase):
                 clean_cfg2 = {**self.config, 'user_data_dir': clean_base2, 'datadir': clean_base2 / 'data'}
                 with self.assertRaises(HTTPException):
                     import_artifact(ImportArtifactRequest(archive_base64=tampered_b64), clean_cfg2)
+
+    def test_public_probe_reports_freqpilot_identity_without_exposing_secrets(self):
+        resp = probe({**self.config, 'runmode': 'webserver'})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.headers.get('access-control-allow-origin'), '*')
+        payload = json.loads(resp.body.decode('utf-8'))
+        self.assertEqual(payload, {
+            'product': 'FreqPilot',
+            'version': '0.1.0',
+            'engine': '2026.9',
+            'dry_run': True,
+            'mode': 'webserver',
+        })
+        self.assertNotIn('NEVER_COPY_ME', resp.body.decode('utf-8'))
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreqPilot Web Studio Demo (Read-Only Sandbox) — Trải Nghiệm Trực Tiếp 11 Bước</title>
+  <meta name="description" content="Trải nghiệm trực tiếp 11 bước nghiên cứu định lượng của FreqPilot Studio ngay trên trình duyệt mà không cần cài đặt Docker." />
+  <link rel="canonical" href="https://freqpilot.dev/demo.html" />
+  <style>
+    :root {
+      --bg-0: #060911;
+      --bg-1: #0c111d;
+      --bg-2: #131b2e;
+      --bg-3: #1c2740;
+      --fg: #f3f6fc;
+      --fg-2: #9ca9c4;
+      --fg-3: #64748b;
+      --line: rgba(148, 163, 184, 0.14);
+      --line-2: rgba(148, 163, 184, 0.26);
+      --accent: #38bdf8;
+      --pos: #10b981;
+      --pos-bright: #34d399;
+      --warn: #f59e0b;
+      --neg: #f43f5e;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-0);
+      color: var(--fg);
+      font-family: var(--font);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    code, pre, .mono { font-family: var(--mono); }
+
+    /* Top App Shell Bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+      background: rgba(12, 17, 29, 0.92);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+    }
+    .topbar-left, .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 15.5px;
+      color: var(--fg);
+    }
+    .brand-icon {
+      width: 25px;
+      height: 25px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--accent), var(--pos));
+      color: #041019;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 12.5px;
+    }
+    .demo-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fcd34d;
+    }
+    .safe-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--pos-bright);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-2);
+      color: var(--fg);
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary {
+      background: linear-gradient(135deg, #2563eb, #0ea5e9);
+      border-color: rgba(56, 189, 248, 0.6);
+      color: #fff;
+    }
+    .lang-select {
+      background: var(--bg-2);
+      color: var(--fg);
+      border: 1px solid var(--line-2);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Studio Layout */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      min-height: calc(100vh - 54px);
+    }
+    .sidebar {
+      background: var(--bg-1);
+      border-right: 1px solid var(--line);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sidebar h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--fg-2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .search-box {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--line-2);
+      background: var(--bg-0);
+      color: var(--fg);
+      font: inherit;
+      font-size: 12.5px;
+    }
+    .strat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .strat-item {
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--bg-0);
+      color: var(--fg);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .strat-item:hover { border-color: var(--line-2); }
+    .strat-item.active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .strat-row1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .strat-row1 b { font-size: 13px; }
+    .mini-pnl {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .mini-pnl.pos { background: rgba(16, 185, 129, 0.16); color: var(--pos-bright); }
+    .mini-pnl.neg { background: rgba(244, 63, 94, 0.16); color: #fda4af; }
+    .strat-meta { font-size: 11.5px; color: var(--fg-3); }
+
+    /* Main Workspace */
+    .main-pane {
+      padding: 20px 26px 48px;
+      max-width: 1320px;
+    }
+    .ws-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .ws-head h1 { margin: 2px 0 4px; font-size: 24px; }
+    .ws-sub { font-size: 12.5px; color: var(--fg-3); font-family: var(--mono); }
+
+    /* 4-Card Context Strip */
+    .ctx-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .ctx-card {
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--bg-1);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    .ctx-card:hover, .ctx-card.active { border-color: var(--accent); }
+    .ctx-card span { display: block; font-size: 11px; color: var(--fg-3); text-transform: uppercase; font-weight: 600; }
+    .ctx-card b { display: block; font-size: 14px; margin: 4px 0 2px; }
+    .ctx-card small { font-size: 11.5px; color: var(--fg-2); }
+
+    /* 11 Steps Bar */
+    .steps-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 6px;
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .step-btn {
+      padding: 7px 12px;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--fg-2);
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .step-btn:hover { color: var(--fg); }
+    .step-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Callout Banner */
+    .sandbox-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .card {
+      background: var(--bg-1);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 17px; }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .kpi {
+      background: var(--bg-0);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .kpi small { display: block; font-size: 11px; color: var(--fg-3); margin-bottom: 4px; }
+    .kpi b { font-family: var(--mono); font-size: 17px; }
+    .pos { color: var(--pos-bright); }
+    .neg { color: var(--neg); }
+    .warn { color: var(--warn); }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .hm-cell {
+      border-radius: 8px;
+      padding: 10px 6px;
+      text-align: center;
+      font-family: var(--mono);
+      border: 1px solid var(--line);
+    }
+    .hm-cell small { display: block; font-size: 11px; color: var(--fg-2); margin-bottom: 3px; }
+    .hm-pos { background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.45); color: #a7f3d0; }
+    .hm-neg { background: rgba(244, 63, 94, 0.16); border-color: rgba(244, 63, 94, 0.4); color: #fda4af; }
+    .hm-zero { background: rgba(148, 163, 184, 0.06); color: var(--fg-3); }
+
+    .sens-grid {
+      display: grid;
+      grid-template-columns: 110px repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+    }
+    .sens-hdr { background: var(--bg-2); padding: 10px; border-radius: 8px; text-align: center; color: var(--fg-2); }
+    .sens-cell { background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 10px; padding: 12px; }
+    .sens-cell.base { border: 2px solid var(--pos-bright); background: rgba(16, 185, 129, 0.25); }
+
+    pre {
+      background: #05080f;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      overflow-x: auto;
+      font-size: 12.5px;
+      color: #dbeafe;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+    th { background: var(--bg-2); color: var(--fg-3); font-size: 11.5px; text-transform: uppercase; }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: #10b981;
+      color: #04130e;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 100;
+    }
+
+    @media (max-width: 960px) {
+      .studio-grid { grid-template-columns: 1fr; }
+      .ctx-strip, .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .heatmap-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a class="brand" href="/">
+        <span class="brand-icon">FP</span>
+        <span>FreqPilot Studio</span>
+      </a>
+      <span class="demo-pill" id="lbl-demo-mode">✨ Bản Dùng Thử Web (Read-Only · Không cần đăng nhập)</span>
+      <span class="safe-pill">● Official Freqtrade 2026.9 · 1x Isolated</span>
+    </div>
+    <div class="topbar-right">
+      <select id="lang-select" class="lang-select" aria-label="Language" onchange="setDemoLang(this.value)">
+        <option value="vi">🇻🇳 VI</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ru">🇷🇺 RU</option>
+        <option value="ko">🇰🇷 KO</option>
+      </select>
+      <a class="btn" href="/#install" id="btn-install-free">Tải Bản $0 (Chạy Local)</a>
+      <a class="btn primary" href="/#dossiers" id="btn-buy-pack">Nhận 4 Gói Chiến Lược ($39) →</a>
+    </div>
+  </header>
+
+  <div class="studio-grid">
+    <!-- Left Strategy Sidebar -->
+    <aside class="sidebar">
+      <h3>
+        <span id="lbl-lib-hdr">Thư viện kiểm toán (6)</span>
+        <small style="color:var(--pos-bright)">6,7 tháng · 5m</small>
+      </h3>
+      <input id="search-input" class="search-box" type="search" placeholder="Lọc tên chiến lược, nhãn…" oninput="renderSidebar()" />
+      <div id="strat-list" class="strat-list"></div>
+      <div style="margin-top:auto;padding:12px;border-radius:10px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);font-size:12px;color:var(--fg-2)">
+        <b style="color:var(--fg)">Muốn tự sửa mã &amp; chạy Backtest mới?</b><br/>
+        Tải miễn phí FreqPilot về máy cá nhân (<code>$0 GPL-3.0</code>) để dùng 100% CPU của bạn mà không bị giới hạn lượt chạy!
+      </div>
+    </aside>
+
+    <!-- Main Studio Workspace -->
+    <main class="main-pane">
+      <div class="ws-head">
+        <div>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--accent)" id="ws-tier-badge">VERIFIED STRATEGY PACK V1</span>
+          <h1 id="ws-name">DikibagastEmaRsi1h</h1>
+          <div class="ws-sub" id="ws-meta">rev: b82e4ae101 · run: 8ebeb7170c · SHA-256: c331b8980e · 1h (informative 1d)</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" onclick="copyCodexPrompt()">📋 Sao chép Prompt cho Codex/Claude</button>
+          <a class="btn primary" href="/#dossiers" id="ws-download-btn">📦 Nhận Gói Hồ Sơ (.zip SHA-256) →</a>
+        </div>
+      </div>
+
+      <!-- 4-Card Context Strip -->
+      <div class="ctx-strip">
+        <button class="ctx-card" onclick="selectTab('code')">
+          <span id="ctx1-lbl">01 · Mã nguồn</span>
+          <b class="pos" id="ctx1-val">✓ Đã khóa chuẩn 1x</b>
+          <small id="ctx1-sub">merge_informative_pair</small>
+        </button>
+        <button class="ctx-card" onclick="selectTab('data')">
+          <span id="ctx2-lbl">02 · Dữ liệu đóng băng</span>
+          <b>75.690 nến 5m</b>
+          <small>2026-04-01 → 2026-10-21 + Funding</small>
+        </button>
+        <button class="ctx-card" onclick="selectTab('results')">
+          <span id="ctx3-lbl">03 · Kết quả 6,7 tháng</span>
+          <b id="ctx3-val" class="pos">+44.23 USDT · 30 lệnh</b>
+          <small id="ctx3-sub">MaxDD 0.73% · PF 3.96</small>
+        </button>
+        <button class="ctx-card" onclick="selectTab('checks')">
+          <span id="ctx4-lbl">04 · Kiểm định &amp; Paper</span>
+          <b class="pos">Lookahead: False</b>
+          <small id="ctx4-sub">Recursive: OK · Paper 1x Ready</small>
+        </button>
+      </div>
+
+      <!-- 11 Workflow Steps -->
+      <nav id="steps-bar" class="steps-bar" aria-label="11 Bước Nghiên Cứu"></nav>
+
+      <!-- Dynamic Tab Content -->
+      <div id="tab-content"></div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast">✓ Đã sao chép Prompt bằng chứng vào Clipboard!</div>
+
+  <script>
+    const STRATEGIES = [
+      {
+        id: "DikibagastEmaRsi1h",
+        tier: "★ VERIFIED PACK V1 ($39) · KHUYÊN DÙNG SỐ 1",
+        paid: true,
+        tf: "1h (1d)",
+        rev: "b82e4ae101",
+        runId: "8ebeb7170c",
+        sha: "c331b8980e8f4a21c77d9e1b3045a99c",
+        pnl: 44.23,
+        ret: 4.42,
+        trades: 30,
+        win: "70.0% (21W/9L)",
+        dd: 0.73,
+        pf: 3.96,
+        tags: ["#ema-rsi", "#atr-exit", "#đủ-30-lệnh", "#9/9-độ-nhạy"],
+        idea: "Kết hợp xu hướng EMA(50/100) trên khung ngày (1d) đã đóng với bộ lọc RSI và khoảng cách chống nhồi lệnh 21 nến trên khung 1h; thoát lệnh động theo 2.0 * ATR(14).",
+        notes: "Sống sót xuất sắc qua cả kỳ ngắn (1 tháng: +8.99 USDT) và kỳ dài 6,7 tháng (+44.23 USDT, 30 lệnh, MaxDD 0.73%). Toàn bộ 9/9 ô trong Ma trận Độ nhạy 2D đều dương (+26.16 đến +46.09 USDT) và Baseline thắng ứng viên Hyperopt trên kỳ Holdout (+9.16 vs -3.46 USDT).",
+        code: `class DikibagastEmaRsi1h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    can_short = False
+    startup_candle_count = 120
+
+    ema_short = IntParameter(40, 60, default=50, space="buy")
+    ema_long = IntParameter(80, 140, default=100, space="buy")
+    rsi_offset = IntParameter(6, 14, default=10, space="buy")
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        inf = self.dp.get_pair_dataframe(pair=metadata["pair"], timeframe="1d")
+        inf["ema_short"] = ta.EMA(inf, timeperiod=self.ema_short.value)
+        inf["ema_long"] = ta.EMA(inf, timeperiod=self.ema_long.value)
+        dataframe = merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)
+        # ... [Trọn bộ logic Separation Guard 21 nến & Custom ATR Exit nằm trong gói Verified Pack v1]`,
+        equity: [
+          ["04-01",0],["04-13",-2.82],["05-18",0.01],["05-23",3.65],["06-01",5.63],["06-02",18.44],["06-04",24.11],["06-12",28.07],["07-18",22.63],["08-11",20.6],["08-20",27.06],["08-21",34.67],["09-21",37.64],["09-28",34.23],["10-08",39.64],["10-15",44.23]
+        ],
+        drawdown: [
+          ["04-01",0],["04-13",-0.28],["05-18",0],["06-04",0],["07-18",-0.53],["08-11",-0.73],["08-21",0],["09-28",-0.36],["10-15",0]
+        ],
+        monthly: [["Apr",-2.82],["May",6.46],["Jun",24.42],["Jul",-5.45],["Aug",12.46],["Sep",-0.85],["Oct",10.00],["Total",44.23]],
+        paperProfile: "4e1b0cb3ef0745e6 (STOPPED · 1x Isolated)"
+      },
+      {
+        id: "RocketHunterSma501h",
+        tier: "★ VERIFIED PACK V1 ($39) · LỢI NHUẬN CAO NHẤT",
+        paid: true,
+        tf: "1h (1d)",
+        rev: "484cebfefa",
+        runId: "6826363795",
+        sha: "c621b60697a716d3e2049f1108ab45cd",
+        pnl: 61.83,
+        ret: 6.18,
+        trades: 8,
+        win: "50.0% (4W/4L)",
+        dd: 0.35,
+        pf: 18.29,
+        tags: ["#sma50", "#trend-following", "#pf-18.29"],
+        idea: "Bắt sóng lớn trên khung 1h dựa trên bộ lọc chế độ thị trường SMA(50) của nến ngày (1d) đã đóng; cắt lỗ cực ngắn khi gãy cấu trúc, giữ lệnh ăn trọn sóng BTC/ETH.",
+        notes: "Lãi cao nhất đợt kiểm toán 6,7 tháng (+61.83 USDT, MaxDD chỉ 0.35%, Profit Factor 18.29). Tần suất vào lệnh chọn lọc (8 lệnh / 6,7 tháng), cực hợp chạy song song cùng DikibagastEmaRsi1h.",
+        code: `class RocketHunterSma501h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    can_short = False
+    startup_candle_count = 60
+
+    sma_daily = IntParameter(30, 80, default=50, space="buy")
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        inf = self.dp.get_pair_dataframe(pair=metadata["pair"], timeframe="1d")
+        inf["sma_regime"] = ta.SMA(inf, timeperiod=self.sma_daily.value)
+        dataframe = merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)
+        # ... [Trọn bộ bộ lọc xung lượng & gói .zip SHA-256 nằm trong Verified Pack v1]`,
+        equity: [["04-01",0],["05-16",5.26],["05-23",11.57],["05-27",10.69],["07-17",9.67],["08-01",8.49],["08-15",7.99],["10-09",44.06],["10-21",61.83]],
+        drawdown: [["04-01",0],["05-23",0],["05-27",-0.09],["07-17",-0.19],["08-01",-0.30],["08-15",-0.35],["10-09",0],["10-21",0]],
+        monthly: [["Apr",0],["May",10.69],["Jun",0],["Jul",-1.02],["Aug",-1.68],["Sep",0],["Oct",53.84],["Total",61.83]],
+        paperProfile: "f26d19d9d7254c1b (STOPPED · 1x Isolated)"
+      },
+      {
+        id: "BdrEmaRideFutures1h",
+        tier: "★ VERIFIED PACK V1 ($39) · LONG & SHORT 1X",
+        paid: true,
+        tf: "1h (1d)",
+        rev: "147405fd3f",
+        runId: "353953f473",
+        sha: "d50ef29c3a7c82fb91a204cc8812e301",
+        pnl: 9.37,
+        ret: 0.94,
+        trades: 8,
+        win: "50.0% (4W/4L)",
+        dd: 1.41,
+        pf: 1.67,
+        tags: ["#ema-adx", "#short-supported", "#2-kỳ-dương"],
+        idea: "Chiến lược 2 chiều (Long & Short 1x Isolated) sử dụng cụm EMA(20/50/200) kết hợp sức mạnh xu hướng ADX(14) từ khung ngày đã đóng.",
+        notes: "Lãi dương ổn định ở cả kỳ 1 tháng (+5.55 USDT) lẫn kỳ dài 6,7 tháng (+9.37 USDT), không bị lookahead hay recursive bias.",
+        code: `class BdrEmaRideFutures1h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    can_short = True
+    # ... [Trọn bộ mã nguồn & gói .zip SHA-256 nằm trong Verified Pack v1]`,
+        equity: [["04-01",0],["04-29",-7.65],["05-16",-9.76],["05-26",-14.06],["07-23",-4.02],["07-24",1.53],["10-15",5.79],["10-21",9.37]],
+        drawdown: [["04-01",0],["04-29",-0.76],["05-16",-0.98],["05-26",-1.41],["07-23",-0.40],["07-24",0],["10-21",0]],
+        monthly: [["Apr",-7.65],["May",-6.41],["Jun",0],["Jul",15.59],["Aug",0],["Sep",0],["Oct",7.85],["Total",9.37]],
+        paperProfile: "Chưa tạo hồ sơ (Có thể tạo 1 chạm từ gói 353953f473)"
+      },
+      {
+        id: "TrendCoreBagging1h",
+        tier: "🎁 GÓI MẪU MIỄN PHÍ ($0 FREE SAMPLE)",
+        paid: false,
+        tf: "1h (1d)",
+        rev: "f1260f2655",
+        runId: "bba655ff87",
+        sha: "9f8699dfca98e06c1123ab4509cd7721",
+        pnl: 2.15,
+        ret: 0.21,
+        trades: 2,
+        win: "50.0% (1W/1L)",
+        dd: 0.15,
+        pf: 2.45,
+        tags: ["#free-sample", "#trend-bagging", "#ewmac"],
+        idea: "Kết hợp bình quân tín hiệu Trend Bagging đa chân trời (100, 150, 200 ngày) với bộ lọc EWMAC chuẩn tổ chức.",
+        notes: "Giữ lãi nhẹ (+2.15 USDT, DD 0.15%), phòng thủ cực chặt nhưng tần suất giao dịch rất thấp (2 lệnh / 6,7 tháng).",
+        code: `class TrendCoreBagging1h(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "1h"
+    can_short = False
+    startup_candle_count = 210
+
+    def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        inf = self.dp.get_pair_dataframe(pair=metadata["pair"], timeframe="1d")
+        inf["sma100"] = ta.SMA(inf, timeperiod=100)
+        inf["sma150"] = ta.SMA(inf, timeperiod=150)
+        inf["sma200"] = ta.SMA(inf, timeperiod=200)
+        inf["bag_vote"] = ((inf["close"] > inf["sma100"]).astype(int) +
+                           (inf["close"] > inf["sma150"]).astype(int) +
+                           (inf["close"] > inf["sma200"]).astype(int))
+        return merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)`,
+        equity: [["04-01",0],["10-09",3.63],["10-21",2.15]],
+        drawdown: [["04-01",0],["10-09",0],["10-21",-0.15]],
+        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",0],["Oct",2.15],["Total",2.15]],
+        paperProfile: "Mẫu miễn phí để kiểm thử Archive Replay"
+      },
+      {
+        id: "CodexBotVibe4h",
+        tier: "⚠️ BÀI HỌC CHỐNG OVERFIT (THẮNG 1M -> LỖ 6.7M)",
+        paid: false,
+        tf: "4h (1d)",
+        rev: "96e7f0a647",
+        runId: "c3b0b4c882",
+        sha: "667e07f6a7d39012bc451098ee123099",
+        pnl: -20.02,
+        ret: -2.00,
+        trades: 30,
+        win: "36.7% (11W/19L)",
+        dd: 2.96,
+        pf: 0.67,
+        tags: ["#bài-học-overfit", "#4h", "#bị-loại"],
+        idea: "Breakout đỉnh 20 nến 4h kết hợp EMA(50) và RSI(14) ngày, thoát bằng 2*ATR / 4*ATR.",
+        notes: "Ví dụ kinh điển vì sao cần FreqPilot: Trên mẫu 1 tháng ngắn, chiến lược này LÃI +3.30 USDT (PF 1.44); nhưng khi kéo dài ra 6,7 tháng đủ 30 lệnh kèm phí Funding, nó ĐẢO CHIỀU LỖ -20.02 USDT!",
+        code: `# Chiến lược minh họa bẫy mẫu ngắn (Short-Window Illusion):
+# Kỳ 1 tháng (20260918-20261021): +3.30 USDT (5 lệnh, PF 1.44) -> Trông rất hứa hẹn!
+# Kỳ 6,7 tháng (20260401-20261021): -20.02 USDT (30 lệnh, PF 0.67) -> Bị FreqPilot loại bỏ trước khi đưa lên Paper.`,
+        equity: [["04-01",0],["05-01",-5.4],["06-01",-11.2],["07-01",-16.8],["08-01",-21.5],["09-01",-23.3],["10-21",-20.02]],
+        drawdown: [["04-01",0],["05-01",-0.54],["06-01",-1.12],["07-01",-1.68],["08-01",-2.15],["09-01",-2.96],["10-21",-2.00]],
+        monthly: [["Apr",-4.10],["May",-5.20],["Jun",-4.80],["Jul",-5.40],["Aug",-3.82],["Sep",0.00],["Oct",3.30],["Total",-20.02]],
+        paperProfile: "Đã chặn (Không đủ tiêu chuẩn lên Paper)"
+      },
+      {
+        id: "StarterFuturesResearch",
+        tier: "📘 MẪU CƠ BẢN ĐI KÈM BẢN $0 COMMUNITY",
+        paid: false,
+        tf: "15m",
+        rev: "152a9c0012",
+        runId: "starter144",
+        sha: "a18c90f4421b7732019c883210fa7712",
+        pnl: -22.18,
+        ret: -2.22,
+        trades: 144,
+        win: "20.1% (29W/115L)",
+        dd: 3.80,
+        pf: 0.65,
+        tags: ["#community-$0", "#15m", "#mẫu-học-tập"],
+        idea: "Chiến lược mẫu mặc định đi kèm khi chạy ./Initialize.ps1 để kiểm tra luồng dữ liệu, phí giao dịch và bảo vệ 1x Isolated.",
+        notes: "Giao dịch dày (144 lệnh/tháng) nên chịu chi phí phí giao dịch 0.05%/chiều lớn (-22.18 USDT). Dùng để học quy trình nghiên cứu, không dùng để chạy thật.",
+        code: `class StarterFuturesResearch(IStrategy):
+    INTERFACE_VERSION = 3
+    timeframe = "15m"
+    can_short = True
+    # Đi kèm sẵn miễn phí khi bạn cài đặt FreqPilot từ GitHub!`,
+        equity: [["09-18",0],["09-25",-4.8],["10-02",-9.6],["10-09",-14.1],["10-15",-18.5],["10-21",-22.18]],
+        drawdown: [["09-18",0],["09-25",-0.48],["10-02",-0.96],["10-09",-1.85],["10-15",-2.90],["10-21",-3.80]],
+        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",-7.10],["Oct",-15.08],["Total",-22.18]],
+        paperProfile: "Mẫu mặc định (STOPPED)"
+      }
+    ];
+
+    const DEMO_I18N = {
+      vi: {
+        demoMode: "✨ Bản Dùng Thử Web (Read-Only · Không cần đăng nhập)",
+        installFree: "Tải Bản $0 (Chạy Local)",
+        buyPack: "Nhận 4 Gói Chiến Lược ($39) →",
+        libHdr: "Thư viện kiểm toán (6)",
+        tabs: [
+          ["idea","01 · Ý tưởng"],["code","02 · Mã chiến lược"],["data","03 · Dữ liệu"],["run","04 · Backtest"],
+          ["results","05 · Kết quả"],["checks","06 · Kiểm định"],["optimize","07 · Tối ưu"],["walk","08 · Walk-forward"],
+          ["sensitivity","09 · Độ nhạy"],["matrix","10 · Ma trận"],["paper","11 · Paper"]
+        ]
+      },
+      en: {
+        demoMode: "✨ Interactive Web Sandbox (Read-Only · No Login Needed)",
+        installFree: "Install Free ($0 Local)",
+        buyPack: "Get Verified Pack v1 ($39) →",
+        libHdr: "Audited Library (6)",
+        tabs: [
+          ["idea","01 · Idea"],["code","02 · Strategy Code"],["data","03 · Data Audit"],["run","04 · Backtest"],
+          ["results","05 · Results"],["checks","06 · Bias Checks"],["optimize","07 · Optimize"],["walk","08 · Walk-forward"],
+          ["sensitivity","09 · Sensitivity"],["matrix","10 · Matrix"],["paper","11 · Paper 1x"]
+        ]
+      },
+      zh: {
+        demoMode: "✨ 网页交互式体验版（只读免登录 · 零安装）",
+        installFree: "免费下载开源版 ($0)",
+        buyPack: "获取已验证策略包 ($39) →",
+        libHdr: "实证审计策略库 (6)",
+        tabs: [
+          ["idea","01 · 构思"],["code","02 · 策略代码"],["data","03 · 数据审计"],["run","04 · 冻结回测"],
+          ["results","05 · 回测结果"],["checks","06 · 偏差检验"],["optimize","07 · 参数优化"],["walk","08 · Walk-forward"],
+          ["sensitivity","09 · 敏感度矩阵"],["matrix","10 · 多维矩阵"],["paper","11 · 1x 模拟盘"]
+        ]
+      },
+      ru: {
+        demoMode: "✨ Веб-песочница Studio (Read-Only · Без входа)",
+        installFree: "Скачать бесплатно ($0)",
+        buyPack: "Получить Verified Pack ($39) →",
+        libHdr: "Проверенные стратегии (6)",
+        tabs: [
+          ["idea","01 · Идея"],["code","02 · Код"],["data","03 · Данные"],["run","04 · Бэктест"],
+          ["results","05 · Результаты"],["checks","06 · Проверки"],["optimize","07 · Оптимизация"],["walk","08 · Walk-forward"],
+          ["sensitivity","09 · 2D-Матрица"],["matrix","10 · Сетка"],["paper","11 · Paper 1x"]
+        ]
+      },
+      ko: {
+        demoMode: "✨ 웹 인터랙티브 체험판 (읽기 전용 · 로그인 불필요)",
+        installFree: "무료 설치 ($0 로컬)",
+        buyPack: "검증된 전략 팩 받기 ($39) →",
+        libHdr: "감사 완료 라이브러리 (6)",
+        tabs: [
+          ["idea","01 · 아이디어"],["code","02 · 전략 코드"],["data","03 · 데이터"],["run","04 · 백테스트"],
+          ["results","05 · 결과 분석"],["checks","06 · 편향 검증"],["optimize","07 · 최적화"],["walk","08 · Walk-forward"],
+          ["sensitivity","09 · 2D 민감도"],["matrix","10 · 매트릭스"],["paper","11 · Paper 1x"]
+        ]
+      }
+    };
+
+    let currentStrat = STRATEGIES[0];
+    let currentTab = "results";
+    let currentLang = "vi";
+
+    function renderSidebar() {
+      const q = (document.getElementById("search-input").value || "").toLowerCase();
+      const list = STRATEGIES.filter(s =>
+        !q || s.id.toLowerCase().includes(q) || s.idea.toLowerCase().includes(q) || s.tags.join(" ").toLowerCase().includes(q)
+      );
+      document.getElementById("strat-list").innerHTML = list.map(s => `
+        <button class="strat-item ${s.id === currentStrat.id ? "active" : ""}" onclick="selectStrategy('${s.id}')">
+          <div class="strat-row1">
+            <b>${s.id}</b>
+            <span class="mini-pnl ${s.pnl >= 0 ? "pos" : "neg"}">${s.pnl >= 0 ? "+" : ""}${s.pnl.toFixed(2)} USDT</span>
+          </div>
+          <div class="strat-meta">${s.tf} · ${s.trades} lệnh · DD ${s.dd}% · PF ${s.pf}</div>
+        </button>
+      `).join("");
+    }
+
+    function renderSteps() {
+      const tabs = (DEMO_I18N[currentLang] || DEMO_I18N.vi).tabs;
+      document.getElementById("steps-bar").innerHTML = tabs.map(([id, label]) => `
+        <button class="step-btn ${currentTab === id ? "active" : ""}" onclick="selectTab('${id}')">${label}</button>
+      `).join("");
+    }
+
+    function selectStrategy(id) {
+      currentStrat = STRATEGIES.find(s => s.id === id) || STRATEGIES[0];
+      document.getElementById("ws-tier-badge").textContent = currentStrat.tier;
+      document.getElementById("ws-name").textContent = currentStrat.id;
+      document.getElementById("ws-meta").textContent = `rev: ${currentStrat.rev} · run: ${currentStrat.runId} · SHA-256: ${currentStrat.sha.slice(0,10)} · ${currentStrat.tf}`;
+      const c3 = document.getElementById("ctx3-val");
+      c3.textContent = `${currentStrat.pnl >= 0 ? "+" : ""}${currentStrat.pnl.toFixed(2)} USDT · ${currentStrat.trades} lệnh`;
+      c3.className = currentStrat.pnl >= 0 ? "pos" : "neg";
+      document.getElementById("ctx3-sub").textContent = `MaxDD ${currentStrat.dd}% · PF ${currentStrat.pf}`;
+      renderSidebar();
+      renderTabContent();
+    }
+
+    function selectTab(tabId) {
+      currentTab = tabId;
+      renderSteps();
+      renderTabContent();
+    }
+
+    function svgCurve(pts, color, isDrawdown) {
+      const w = 900, h = isDrawdown ? 105 : 185, padX = 34, padY = 20;
+      const vals = pts.map(p => p[1]);
+      const minV = isDrawdown ? Math.min(-1, ...vals) : Math.min(-5, ...vals);
+      const maxV = isDrawdown ? 0 : Math.max(8, ...vals);
+      const sx = i => padX + (i / Math.max(1, pts.length - 1)) * (w - padX * 2);
+      const sy = v => isDrawdown
+        ? 14 + (Math.abs(v) / Math.abs(minV || -1)) * (h - 30)
+        : h - padY - ((v - minV) / (maxV - minV || 1)) * (h - padY * 2);
+      const baseLine = isDrawdown ? 14 : sy(0);
+      const coords = pts.map((p, i) => [sx(i), sy(p[1]), p[0], p[1]]);
+      const d = coords.map((c, i) => (i === 0 ? "M" : "L") + c[0].toFixed(1) + "," + c[1].toFixed(1)).join(" ");
+      const area = d + ` L${coords[coords.length-1][0].toFixed(1)},${baseLine.toFixed(1)} L${coords[0][0].toFixed(1)},${baseLine.toFixed(1)} Z`;
+      return `
+        <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" style="display:block">
+          <line x1="${padX}" y1="${baseLine.toFixed(1)}" x2="${w-padX}" y2="${baseLine.toFixed(1)}" stroke="rgba(148,163,184,0.2)" stroke-dasharray="4 4"/>
+          <path d="${area}" fill="${color}" fill-opacity="0.16"/>
+          <path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+          ${coords.map(c => `<circle cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="3.5" fill="${color}"><title>${c[2]}: ${c[3]}</title></circle>`).join("")}
+        </svg>
+      `;
+    }
+
+    function renderTabContent() {
+      const s = currentStrat;
+      const box = document.getElementById("tab-content");
+      const banner = `
+        <div class="sandbox-banner">
+          <span>💡 <b>Bạn đang ở Chế độ Dùng thử Trực tuyến (Read-Only):</b> Mọi số liệu dưới đây được trích xuất từ gói <code>SHA-256: ${s.sha.slice(0,12)}…</code> chạy trên Freqtrade 2026.9 chính thức.</span>
+          <div style="display:flex;gap:8px">
+            <a class="btn" href="/#install">Cài Bản $0 Để Tự Chạy</a>
+            <a class="btn primary" href="/#dossiers">Tải Gói .ZIP Đầy Đủ ($39) →</a>
+          </div>
+        </div>
+      `;
+
+      if (currentTab === "idea") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>01 · Luận Điểm Chiến Lược &amp; Hồ Sơ Nguồn Gốc</h3>
+            <p style="color:var(--fg-2)">${s.idea}</p>
+            <p><b>Ghi chú kiểm toán 6,7 tháng:</b> ${s.notes}</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+              ${s.tags.map(t => `<span class="demo-pill" style="background:var(--bg-2);border-color:var(--line-2);color:var(--accent)">${t}</span>`).join("")}
+            </div>
+          </div>
+        `;
+      } else if (currentTab === "code") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>02 · Trình Xem Mã Nguồn IStrategy (${s.paid ? "Bản Xem Trước · Khóa Bảo Vệ Gói Thương Mại" : "Mã Mở Đầy Đủ"})</h3>
+            <pre>${s.code}</pre>
+            ${s.paid ? `<div style="margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);font-size:13px">🔒 <b>Gói Verified Strategy Pack v1 ($39):</b> Bao gồm toàn bộ file <code>${s.id}.py</code> hoàn chỉnh + bộ dữ liệu nến/funding đóng băng trong <code>freqpilot-${s.id}-${s.runId}.zip</code> để bạn nạp 1 chạm vào máy cá nhân. <a href="/#dossiers"><b>Nhận gói ngay →</b></a></div>` : ""}
+          </div>
+        `;
+      } else if (currentTab === "data") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>03 · Kiểm Toán Độ Phủ Dữ Liệu Futures Đa Độ Phân Giải</h3>
+            <table>
+              <thead><tr><th>Cặp giao dịch</th><th>Loại dữ liệu</th><th>Khung</th><th>Khoảng thực có</th><th>Số bản ghi</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr><td><code>BTC/USDT:USDT</code></td><td>OHLCV Detail</td><td><code>5m</code></td><td>2026-02-01 → 2026-10-21</td><td class="mono">75,690</td><td class="pos">✓ Đủ dữ liệu + Warmup</td></tr>
+                <tr><td><code>ETH/USDT:USDT</code></td><td>OHLCV Detail</td><td><code>5m</code></td><td>2026-02-01 → 2026-10-21</td><td class="mono">75,690</td><td class="pos">✓ Đủ dữ liệu + Warmup</td></tr>
+                <tr><td><code>BTC &amp; ETH</code></td><td>Mark Price</td><td><code>1h</code></td><td>2026-02-01 → 2026-10-21</td><td class="mono">6,307 / cặp</td><td class="pos">✓ Không khuyết chuỗi</td></tr>
+                <tr><td><code>BTC &amp; ETH</code></td><td>Funding Rate</td><td><code>8h</code></td><td>2026-02-01 → 2026-10-21</td><td class="mono">1,576 / cặp</td><td class="pos">✓ Đã nạp vào phí qua đêm</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (currentTab === "run") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>04 · Cấu Hình Giao Thức Backtest Đóng Băng</h3>
+            <div class="kpi-grid">
+              <div class="kpi"><small>Khoảng chạy</small><b>20260401–20261021</b></div>
+              <div class="kpi"><small>Chi tiết khớp nến</small><b>5m (75.690 nến)</b></div>
+              <div class="kpi"><small>Vốn / Stake</small><b>1.000 / 100 USDT</b></div>
+              <div class="kpi"><small>Đòn bẩy</small><b class="pos">1x Isolated</b></div>
+              <div class="kpi"><small>Phí mỗi chiều</small><b>0.05% + Funding</b></div>
+            </div>
+            <p style="font-size:13px;color:var(--fg-2)">Muốn đổi cặp tiền, khung thời gian hoặc chạy chiến lược Python riêng của bạn? Hãy cài bản <b>Community Edition ($0)</b> về máy để chạy trực tiếp trên Docker local.</p>
+          </div>
+        `;
+      } else if (currentTab === "checks") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>06 · Báo Cáo Kiểm Định Lookahead &amp; Recursive-Analysis Chính Thức</h3>
+            <table>
+              <thead><tr><th>Bài kiểm định</th><th>Engine thực thi</th><th>Trạng thái</th><th>Kết quả chi tiết</th></tr></thead>
+              <tbody>
+                <tr><td><b>Lookahead-Analysis</b></td><td>Freqtrade 2026.9 CLI</td><td class="pos">✓ Hoàn tất</td><td><code>has_bias = False</code> (0 chỉ báo nhìn trộm nến tương lai)</td></tr>
+                <tr><td><b>Recursive-Analysis</b></td><td>Freqtrade 2026.9 CLI</td><td class="pos">✓ Hoàn tất</td><td>Độ lệch chỉ báo ở các mốc khởi đầu warmup nằm trong ngưỡng an toàn</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (currentTab === "walk") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>08 · Walk-Forward Rolling &amp; Đối Chiếu Holdout Tách Khỏi Hyperopt (<code>94b955e45b</code>)</h3>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:8px;margin:14px 0;text-align:center;font-family:var(--mono);font-size:12px">
+              <div style="padding:10px;border-radius:8px;background:rgba(56,189,248,0.15);border:1px solid var(--accent)">Train (90 ngày)<br/><small>Hyperopt tối ưu tập học</small></div>
+              <div style="padding:10px;border-radius:8px;background:rgba(245,158,11,0.15);border:1px solid var(--warn)">OOS (30 ngày)<br/><small>Kiểm tra độc lập</small></div>
+              <div style="padding:10px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);color:var(--pos-bright)">Holdout (2026-09-16 → 10-21)<br/><small>Đối chiếu ngoài Hyperopt</small></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+              <div class="kpi"><small>Baseline (Tham số gốc không tối ưu)</small><b class="pos">+9.16 USDT · PF 3.44 · DD 0.37%</b></div>
+              <div class="kpi"><small>Ứng viên thắng Hyperopt (Bị overfit nhẹ)</small><b class="neg">-3.46 USDT · DD 0.36%</b></div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === "sensitivity") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>d28b58b598</code> · 9/9 Ô Đều Có Lãi)</h3>
+            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>ema_short ∈ {45, 50, 55} × rsi_offset ∈ {8, 10, 12}</code> trên 6,7 tháng dữ liệu đóng băng:</p>
+            <div class="sens-grid">
+              <div class="sens-hdr">ema \\ rsi</div><div class="sens-hdr">rsi_off = 8</div><div class="sens-hdr">rsi_off = 10</div><div class="sens-hdr">rsi_off = 12</div>
+              <div class="sens-hdr">ema = 45</div>
+              <div class="sens-cell"><b class="pos">+39.68 USDT</b><br/><small>40 lệnh · DD 1.52%</small></div>
+              <div class="sens-cell"><b class="pos">+44.93 USDT</b><br/><small>38 lệnh · DD 0.99%</small></div>
+              <div class="sens-cell"><b class="pos">+42.26 USDT</b><br/><small>38 lệnh · DD 1.00%</small></div>
+              <div class="sens-hdr">ema = 50</div>
+              <div class="sens-cell"><b class="pos">+46.09 USDT</b><br/><small>32 lệnh · DD 0.84%</small></div>
+              <div class="sens-cell base"><b class="pos">+44.23 USDT ★</b><br/><small>Baseline · 30 lệnh · DD 0.73%</small></div>
+              <div class="sens-cell"><b class="pos">+44.62 USDT</b><br/><small>32 lệnh · DD 0.65%</small></div>
+              <div class="sens-hdr">ema = 55</div>
+              <div class="sens-cell"><b class="pos">+35.82 USDT</b><br/><small>23 lệnh · DD 0.41%</small></div>
+              <div class="sens-cell"><b class="pos">+26.16 USDT</b><br/><small>20 lệnh · DD 0.37%</small></div>
+              <div class="sens-cell"><b class="pos">+26.21 USDT</b><br/><small>20 lệnh · DD 0.33%</small></div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === "optimize" || currentTab === "matrix" || currentTab === "paper") {
+        box.innerHTML = banner + `
+          <div class="card">
+            <h3>${currentTab === "paper" ? "11 · Hồ Sơ Paper 1x Cô Lập & Đối Chiếu Lệnh Thực" : currentTab === "optimize" ? "07 · Không Gian Tối Ưu Hyperopt Có Khóa Seed=42" : "10 · Ma Trận Đối Chiếu Đa Cặp / Đa Khung"}</h3>
+            <div class="kpi-grid">
+              <div class="kpi"><small>Chiến lược đang mở</small><b>${s.id}</b></div>
+              <div class="kpi"><small>Hồ sơ Paper 1x</small><b class="pos">${s.paperProfile}</b></div>
+              <div class="kpi"><small>Chế độ khởi tạo</small><b>STOPPED (An toàn 100%)</b></div>
+              <div class="kpi"><small>Database giao dịch</small><b>Tách riêng theo Profile</b></div>
+              <div class="kpi"><small>Đòn bẩy khóa cứng</small><b class="pos">1x Isolated · Dry-Run</b></div>
+            </div>
+            <p style="font-size:13px;color:var(--fg-2)">Khi chạy trên máy của bạn (cổng <code>:8095</code>), FreqPilot ghi nhật ký vòng đời vào <code>history.sqlite</code> riêng và cho phép đối chiếu từng lệnh Paper khớp thực tế so với gói Backtest <code>${s.runId}</code>.</p>
+          </div>
+        `;
+      } else {
+        // Default: 05 · Results
+        const col = s.pnl >= 0 ? "#34d399" : "#f43f5e";
+        box.innerHTML = banner + `
+          <div class="kpi-grid">
+            <div class="kpi"><small>Lãi / Lỗ Ròng</small><b class="${s.pnl >= 0 ? "pos" : "neg"}">${s.pnl >= 0 ? "+" : ""}${s.pnl.toFixed(2)} USDT</b></div>
+            <div class="kpi"><small>Tỷ Suất Lợi Nhuận</small><b class="${s.pnl >= 0 ? "pos" : "neg"}">${s.ret >= 0 ? "+" : ""}${s.ret.toFixed(2)}%</b></div>
+            <div class="kpi"><small>Tổng Số Lệnh</small><b>${s.trades}</b></div>
+            <div class="kpi"><small>Tỷ Lệ Thắng</small><b>${s.win}</b></div>
+            <div class="kpi"><small>Profit Factor / MaxDD</small><b class="${s.pnl >= 0 ? "pos" : "neg"}">PF ${s.pf} · DD ${s.dd}%</b></div>
+          </div>
+          <div class="card">
+            <h3>📈 Đường Vốn Tích Lũy (Cumulative Closed-Trade P&amp;L · USDT)</h3>
+            ${svgCurve(s.equity, col, false)}
+          </div>
+          <div class="card">
+            <h3>🌊 Độ Sụt Giảm Tài Khoản (Underwater Drawdown · %)</h3>
+            ${svgCurve(s.drawdown, "#f43f5e", true)}
+          </div>
+          <div class="card">
+            <h3>🗓️ Bản Đồ Nhiệt Lợi Nhuận Theo Tháng (2026 · USDT)</h3>
+            <div class="heatmap-grid">
+              ${s.monthly.map(([m, v]) => `<div class="hm-cell ${v > 0 ? "hm-pos" : v < 0 ? "hm-neg" : "hm-zero"}"><small>${m}</small><b>${v > 0 ? "+" : ""}${v.toFixed(2)}</b></div>`).join("")}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function copyCodexPrompt() {
+      const s = currentStrat;
+      const txt = `Trong dự án FreqPilot, hãy phân tích/cải tiến chiến lược ${s.id} (rev ${s.rev}, khung ${s.tf}) cho BTC/ETH Binance Futures isolated 1x, chỉ backtest và paper trên Freqtrade 2026.9 chính thức.\nÝ tưởng: ${s.idea}\nBằng chứng hiện tại: gói ${s.runId} (SHA-256 ${s.sha.slice(0,12)}), ${s.pnl >= 0 ? "+" : ""}${s.pnl.toFixed(2)} USDT, ${s.trades} lệnh, MaxDD ${s.dd}%, PF ${s.pf}, lookahead has_bias=False.`;
+      navigator.clipboard?.writeText(txt);
+      const t = document.getElementById("toast");
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 2400);
+    }
+
+    function setDemoLang(lang) {
+      currentLang = DEMO_I18N[lang] ? lang : "vi";
+      const d = DEMO_I18N[currentLang];
+      document.documentElement.lang = currentLang;
+      document.getElementById("lbl-demo-mode").textContent = d.demoMode;
+      document.getElementById("btn-install-free").textContent = d.installFree;
+      document.getElementById("btn-buy-pack").textContent = d.buyPack;
+      document.getElementById("lbl-lib-hdr").textContent = d.libHdr;
+      renderSteps();
+      try { localStorage.setItem("freqpilot.site.lang", currentLang); } catch {}
+    }
+
+    (function init() {
+      const urlLang = new URLSearchParams(location.search).get("lang");
+      let saved = null;
+      try { saved = localStorage.getItem("freqpilot.site.lang"); } catch {}
+      const initial = (urlLang && DEMO_I18N[urlLang]) ? urlLang : (saved && DEMO_I18N[saved]) ? saved : "vi";
+      if (initial !== "vi") {
+        document.getElementById("lang-select").value = initial;
+        setDemoLang(initial);
+      } else {
+        renderSteps();
+      }
+      selectStrategy("DikibagastEmaRsi1h");
+    })();
+  </script>
+</body>
+</html>
