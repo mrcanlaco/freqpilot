@@ -65,8 +65,8 @@
       justify-content: space-between;
       gap: 18px;
       width: auto;
-      min-width: min(680px, 94vw);
-      max-width: 760px;
+      min-width: min(760px, 95vw);
+      max-width: 920px;
       padding: 7px 10px 7px 16px;
       background: rgba(11, 16, 27, 0.85);
       backdrop-filter: blur(18px);
@@ -590,6 +590,120 @@
       font-size: 13px;
       text-align: center;
     }
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--fg-2);
+      padding: 7px 12px;
+    }
+    .btn-ghost:hover {
+      color: var(--fg);
+      border-color: var(--line-2);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--fg-3);
+      display: inline-block;
+    }
+    .live-dot.online {
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(3, 6, 12, 0.78);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .studio-modal-card {
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(180deg, #111827, #0b101b);
+      border: 1px solid var(--line-2);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.8);
+      text-align: left;
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .modal-head h3 { margin: 0; font-size: 19px; }
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--fg-2);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .preset-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0 10px;
+    }
+    .url-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .url-input-row input {
+      flex: 1;
+      background: #060911;
+      border: 1px solid var(--line-2);
+      color: var(--fg);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+    .probe-status {
+      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 9px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid var(--line);
+      color: var(--fg-2);
+    }
+    .probe-status.online {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: var(--pos-bright);
+    }
+    .probe-status.offline {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.35);
+      color: #fcd34d;
+    }
+    .modal-actions {
+      display: grid;
+      gap: 9px;
+    }
+    .modal-actions .btn {
+      justify-content: center;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-size: 13.5px;
+    }
 
     @media (max-width: 960px) {
       .rq-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -612,7 +726,7 @@
         <a href="#compare" data-i18n="nav_compare">So sánh</a>
         <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
         <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
-        <a href="/compare.html" data-i18n="nav_deep">vs FreqUI ↗</a>
+        <a href="/compare.html" data-i18n="nav_deep">vs FreqUI</a>
       </nav>
       <div class="nav-right">
         <select id="lang-select" class="lang-select" aria-label="Language" onchange="setSiteLang(this.value)">
@@ -622,7 +736,11 @@
           <option value="ru">🇷🇺 RU</option>
           <option value="ko">🇰🇷 KO</option>
         </select>
-        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
+        <button type="button" class="btn btn-ghost" onclick="openStudioModal()" data-i18n="nav_login">Đăng nhập</button>
+        <button type="button" class="btn primary" onclick="quickLaunchStudio()">
+          <span id="nav-live-dot" class="live-dot"></span>
+          <span data-i18n="nav_open_studio">Mở Studio →</span>
+        </button>
       </div>
     </header>
   </div>
@@ -638,8 +756,9 @@
         Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn &amp; Drawdown, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.
       </p>
       <div class="hero-actions">
-        <a class="btn primary" href="#interactive-studio" data-i18n="hero_cta_audit">Xem Bảng Kết Quả Tương Tác ↓</a>
-        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">Mã Nguồn Mở GitHub ↗</a>
+        <button type="button" class="btn primary" onclick="quickLaunchStudio()" data-i18n="hero_cta_open">🚀 Mở FreqPilot Studio →</button>
+        <a class="btn" href="#interactive-studio" data-i18n="hero_cta_audit">Xem Biểu Đồ Tương Tác ↓</a>
+        <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">GitHub (GPL-3.0) ↗</a>
       </div>
 
       <!-- Interactive Studio Window (RoboQuant Results Card + Live Studio Tabs) -->
@@ -1312,6 +1431,45 @@ cd freqpilot
     FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 &amp; Official Freqtrade 2026.9 Engine.
   </footer>
 
+  <!-- Studio Connect & Sign-In Modal -->
+  <div id="studio-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeStudioModal()">
+    <div class="studio-modal-card">
+      <div class="modal-head">
+        <h3 id="modal-title" data-i18n="mod_title">Kết Nối &amp; Đăng Nhập FreqPilot Studio</h3>
+        <button type="button" class="modal-close" aria-label="Close" onclick="closeStudioModal()">✕</button>
+      </div>
+      <p style="margin:0;font-size:13px;color:var(--fg-2)" data-i18n="mod_sub">
+        Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc qua Tailscale VPN) để đăng nhập vào không gian nghiên cứu:
+      </p>
+      <div class="preset-pills">
+        <button type="button" class="chip active" onclick="setStudioPreset(8091, this)">Research (:8091)</button>
+        <button type="button" class="chip" onclick="setStudioPreset(8090, this)">Main / Paper (:8090)</button>
+        <button type="button" class="chip" onclick="setCustomHost('http://100.88.76.126:8091', this)">MSI Tailscale (:8091)</button>
+      </div>
+      <div class="url-input-row">
+        <input id="studio-url-input" type="url" value="http://localhost:8091" oninput="onStudioUrlInput()" aria-label="Studio Server URL" />
+        <button type="button" class="btn" onclick="probeStudioServer()" data-i18n="mod_check">Kiểm tra</button>
+      </div>
+      <div id="studio-probe-status" class="probe-status">
+        <span class="live-dot" id="modal-live-dot"></span>
+        <span id="studio-probe-text">Đang kiểm tra kết nối máy chủ Studio…</span>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn primary" onclick="navigateToStudio('/studio')" data-i18n="mod_btn_studio">
+          🚀 Vào Thẳng Workspace Nghiên Cứu (/studio) →
+        </button>
+        <button type="button" class="btn" onclick="navigateToStudio('/login?redirect=/studio')" data-i18n="mod_btn_login">
+          🔑 Mở Màn Hình Đăng Nhập / Đổi Tài Khoản API (/login)
+        </button>
+        <button type="button" class="btn" onclick="navigateToStudio('/paper')" data-i18n="mod_btn_paper">
+          🛡️ Mở Quản Lý Hồ Sơ Paper 1x (/paper)
+        </button>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg-3);line-height:1.5" data-i18n="mod_note">
+        🔒 <b>Self-Hosted Zero-Custody:</b> Tài khoản mặc định (<code>freqtrader</code>) và mật khẩu API nằm trong <code>user_data/ACCESS.txt</code> hoặc <code>user_data/config.json</code> trên máy bạn. Chưa cài đặt? <a href="#install" onclick="closeStudioModal()">Xem 3 lệnh khởi chạy ↓</a>
+      </div>
+    </div>
+  </div>
   <script>
     // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
     const HERO_STRATEGIES = {
@@ -1488,12 +1646,22 @@ cd freqpilot
         nav_compare: "So sánh",
         nav_audit: "Kiểm toán",
         nav_dossiers: "Bảng giá",
-        nav_deep: "vs FreqUI ↗",
+        nav_deep: "vs FreqUI",
+        nav_login: "Đăng nhập",
+        nav_open_studio: "Mở Studio →",
         hero_badge: "● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →",
         hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
-        hero_cta_audit: "Xem Bảng Kết Quả Tương Tác ↓",
-        hero_cta_gh: "Mã Nguồn Mở GitHub ↗",
+        hero_cta_open: "🚀 Mở FreqPilot Studio →",
+        hero_cta_audit: "Xem Biểu Đồ Tương Tác ↓",
+        hero_cta_gh: "GitHub (GPL-3.0) ↗",
+        mod_title: "Kết Nối & Đăng Nhập FreqPilot Studio",
+        mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc qua Tailscale VPN) để vào không gian nghiên cứu:",
+        mod_check: "Kiểm tra",
+        mod_btn_studio: "🚀 Vào Thẳng Workspace Nghiên Cứu (/studio) →",
+        mod_btn_login: "🔑 Mở Màn Hình Đăng Nhập / Đổi Tài Khoản API (/login)",
+        mod_btn_paper: "🛡️ Mở Quản Lý Hồ Sơ Paper 1x (/paper)",
+        mod_note: "🔒 <b>Self-Hosted Zero-Custody:</b> Tài khoản (<code>freqtrader</code>) & mật khẩu API nằm trong <code>user_data/ACCESS.txt</code> hoặc <code>config.json</code> trên máy bạn. Chưa cài? <a href='#install' onclick='closeStudioModal()'>Xem 3 lệnh khởi chạy ↓</a>",
         tab_equity: "📈 Đường Vốn",
         tab_matrix: "🎛️ Độ Nhạy 2D & WFA",
         tab_shots: "🧭 Quy Trình & Paper",
@@ -1518,12 +1686,22 @@ cd freqpilot
         nav_compare: "Compare",
         nav_audit: "Leaderboard",
         nav_dossiers: "Pricing",
-        nav_deep: "vs FreqUI ↗",
+        nav_deep: "vs FreqUI",
+        nav_login: "Log in",
+        nav_open_studio: "Open Studio →",
         hero_badge: "● 18 Strategies Audited on 6.7 Months of Frozen Futures Data →",
         hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
-        hero_cta_audit: "Explore Interactive Results ↓",
-        hero_cta_gh: "Open-Source on GitHub ↗",
+        hero_cta_open: "🚀 Launch FreqPilot Studio →",
+        hero_cta_audit: "Explore Interactive Charts ↓",
+        hero_cta_gh: "GitHub (GPL-3.0) ↗",
+        mod_title: "Connect & Sign In to FreqPilot Studio",
+        mod_sub: "Select your running FreqPilot instance (local or Tailscale VPN) to enter the research studio:",
+        mod_check: "Verify",
+        mod_btn_studio: "🚀 Enter Research Workspace (/studio) →",
+        mod_btn_login: "🔑 Open API Sign-In / Switch Bot (/login)",
+        mod_btn_paper: "🛡️ Open 1x Paper Profiles (/paper)",
+        mod_note: "🔒 <b>Self-Hosted Zero-Custody:</b> Your API username (<code>freqtrader</code>) & password stay in <code>user_data/ACCESS.txt</code> or <code>config.json</code> on your machine. New here? <a href='#install' onclick='closeStudioModal()'>3-Step Quickstart ↓</a>",
         tab_equity: "📈 Equity Curve",
         tab_matrix: "🎛️ 2D Matrix & WFA",
         tab_shots: "🧭 Workflow & Paper",
@@ -1545,15 +1723,25 @@ cd freqpilot
       },
       zh: {
         nav_studio: "演示",
-        nav_compare: "版本对比",
-        nav_audit: "实证榜单",
+        nav_compare: "对比",
+        nav_audit: "榜单",
         nav_dossiers: "方案",
-        nav_deep: "对比原版 ↗",
+        nav_deep: "vs原版",
+        nav_login: "登录",
+        nav_open_studio: "进入工作台 →",
         hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
         hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
-        hero_cta_audit: "查看交互式实证报告 ↓",
-        hero_cta_gh: "GitHub 开源仓库 ↗",
+        hero_cta_open: "🚀 启动 FreqPilot 工作台 →",
+        hero_cta_audit: "查看交互式图表 ↓",
+        hero_cta_gh: "GitHub 开源 ↗",
+        mod_title: "连接并登录 FreqPilot 工作台",
+        mod_sub: "选择您本地或 Tailscale 内网正在运行的 FreqPilot 服务地址：",
+        mod_check: "检测",
+        mod_btn_studio: "🚀 直接进入研究工作台 (/studio) →",
+        mod_btn_login: "🔑 打开 API 登录与节点配置 (/login)",
+        mod_btn_paper: "🛡️ 打开 1x 模拟盘管理 (/paper)",
+        mod_note: "🔒 <b>本地自托管零托管风险：</b>API 账号（<code>freqtrader</code>）与密码保存在您本机的 <code>user_data/ACCESS.txt</code> 中。尚未安装？<a href='#install' onclick='closeStudioModal()'>查看三步安装 ↓</a>",
         tab_equity: "📈 净值曲线",
         tab_matrix: "🎛️ 2D敏感度与WFA",
         tab_shots: "🧭 流程与模拟盘",
@@ -1578,12 +1766,22 @@ cd freqpilot
         nav_compare: "Сравнение",
         nav_audit: "Аудит",
         nav_dossiers: "Тарифы",
-        nav_deep: "vs FreqUI ↗",
+        nav_deep: "vs FreqUI",
+        nav_login: "Войти",
+        nav_open_studio: "Открыть Studio →",
         hero_badge: "● 18 стратегий проверены на 6,7 мес. замороженных данных →",
         hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
-        hero_cta_audit: "Открыть интерактивный отчет ↓",
-        hero_cta_gh: "Открытый код GitHub ↗",
+        hero_cta_open: "🚀 Открыть FreqPilot Studio →",
+        hero_cta_audit: "Интерактивный отчет ↓",
+        hero_cta_gh: "GitHub ↗",
+        mod_title: "Подключение и вход в FreqPilot Studio",
+        mod_sub: "Выберите адрес вашего локального или Tailscale сервера FreqPilot:",
+        mod_check: "Проверить",
+        mod_btn_studio: "🚀 Перейти в студию исследований (/studio) →",
+        mod_btn_login: "🔑 Открыть страницу входа API (/login)",
+        mod_btn_paper: "🛡️ Открыть профили 1x Paper (/paper)",
+        mod_note: "🔒 <b>Self-Hosted:</b> Логин (<code>freqtrader</code>) и пароль хранятся локально в <code>user_data/ACCESS.txt</code>. Еще не установили? <a href='#install' onclick='closeStudioModal()'>Запуск за 3 команды ↓</a>",
         tab_equity: "📈 Кривая капитала",
         tab_matrix: "🎛️ 2D-матрица и WFA",
         tab_shots: "🧭 Процесс и Paper",
@@ -1608,12 +1806,22 @@ cd freqpilot
         nav_compare: "비교",
         nav_audit: "리더보드",
         nav_dossiers: "요금제",
-        nav_deep: "vs FreqUI ↗",
+        nav_deep: "vs FreqUI",
+        nav_login: "로그인",
+        nav_open_studio: "스튜디오 열기 →",
         hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
         hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
-        hero_cta_audit: "인터랙티브 성과 카드 보기 ↓",
-        hero_cta_gh: "GitHub 오픈소스 ↗",
+        hero_cta_open: "🚀 FreqPilot 스튜디오 열기 →",
+        hero_cta_audit: "인터랙티브 차트 ↓",
+        hero_cta_gh: "GitHub ↗",
+        mod_title: "FreqPilot 스튜디오 연결 및 로그인",
+        mod_sub: "실행 중인 로컬 또는 Tailscale FreqPilot 서버 주소를 선택하세요:",
+        mod_check: "확인",
+        mod_btn_studio: "🚀 연구 워크스페이스 바로가기 (/studio) →",
+        mod_btn_login: "🔑 API 로그인 / 봇 전환 (/login)",
+        mod_btn_paper: "🛡️ 1x 페이퍼 프로필 관리 (/paper)",
+        mod_note: "🔒 <b>셀프 호스팅 보안:</b> API 계정(<code>freqtrader</code>)과 비밀번호는 로컬 <code>user_data/ACCESS.txt</code>에 보관됩니다. <a href='#install' onclick='closeStudioModal()'>3단계 설치 보기 ↓</a>",
         tab_equity: "📈 수익 곡선",
         tab_matrix: "🎛️ 2D 민감도 & WFA",
         tab_shots: "🧭 워크플로 & Paper",
@@ -1647,8 +1855,101 @@ cd freqpilot
       try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
     }
 
+    let studioOnline = false;
+
+    function defaultStudioHost() {
+      const h = location.hostname;
+      if (h === "localhost" || h === "127.0.0.1" || h.startsWith("100.") || h.startsWith("192.168.") || h.startsWith("10.")) {
+        return `${location.protocol}//${h}:8091`;
+      }
+      return "http://localhost:8091";
+    }
+
+    function getStudioUrl() {
+      const input = document.getElementById("studio-url-input");
+      return (input && input.value.trim().replace(/\/+$/, "")) || defaultStudioHost();
+    }
+
+    function setStudioPreset(port, btn) {
+      document.querySelectorAll(".preset-pills .chip").forEach(el => el.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      const h = (location.hostname && location.hostname !== "freqpilot.dev") ? location.hostname : "localhost";
+      document.getElementById("studio-url-input").value = `http://${h}:${port}`;
+      onStudioUrlInput();
+    }
+
+    function setCustomHost(url, btn) {
+      document.querySelectorAll(".preset-pills .chip").forEach(el => el.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      document.getElementById("studio-url-input").value = url;
+      onStudioUrlInput();
+    }
+
+    function onStudioUrlInput() {
+      try { localStorage.setItem("freqpilot.studio.url", getStudioUrl()); } catch {}
+      void probeStudioServer();
+    }
+
+    async function probeStudioServer() {
+      const url = getStudioUrl();
+      const box = document.getElementById("studio-probe-status");
+      const txt = document.getElementById("studio-probe-text");
+      const mDot = document.getElementById("modal-live-dot");
+      const nDot = document.getElementById("nav-live-dot");
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 2200);
+      try {
+        await fetch(url + "/api/v1/ping", { mode: "no-cors", cache: "no-store", signal: ctl.signal });
+        clearTimeout(timer);
+        studioOnline = true;
+        box.className = "probe-status online";
+        mDot.className = "live-dot online";
+        nDot.className = "live-dot online";
+        txt.textContent = `Online — Đã tìm thấy máy chủ FreqPilot tại ${url}`;
+      } catch {
+        clearTimeout(timer);
+        studioOnline = false;
+        box.className = "probe-status offline";
+        mDot.className = "live-dot";
+        nDot.className = "live-dot";
+        txt.textContent = `Chưa phản hồi tại ${url} — Hãy chạy ./Start.ps1 hoặc kiểm tra cổng`;
+      }
+    }
+
+    function openStudioModal() {
+      document.getElementById("studio-modal").classList.add("open");
+      void probeStudioServer();
+    }
+
+    function closeStudioModal() {
+      document.getElementById("studio-modal").classList.remove("open");
+    }
+
+    function quickLaunchStudio() {
+      if (studioOnline) {
+        window.location.href = getStudioUrl() + "/studio";
+      } else {
+        openStudioModal();
+      }
+    }
+
+    function navigateToStudio(path) {
+      const url = getStudioUrl();
+      try { localStorage.setItem("freqpilot.studio.url", url); } catch {}
+      window.location.href = url + path;
+    }
+
+    window.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeStudioModal();
+    });
+
     (function init() {
       renderHeroCharts('diki');
+      let savedStudio = null;
+      try { savedStudio = localStorage.getItem("freqpilot.studio.url"); } catch {}
+      document.getElementById("studio-url-input").value = savedStudio || defaultStudioHost();
+      void probeStudioServer();
+
       const urlLang = new URLSearchParams(location.search).get('lang');
       let saved = null;
       try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}

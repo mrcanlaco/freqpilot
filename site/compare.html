@@ -57,8 +57,8 @@
       justify-content: space-between;
       gap: 18px;
       width: auto;
-      min-width: min(680px, 94vw);
-      max-width: 780px;
+      min-width: min(740px, 95vw);
+      max-width: 900px;
       padding: 7px 10px 7px 16px;
       background: rgba(11, 16, 27, 0.85);
       backdrop-filter: blur(18px);
@@ -278,7 +278,8 @@
           <option value="ru">🇷🇺 RU</option>
           <option value="ko">🇰🇷 KO</option>
         </select>
-        <a class="btn primary" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn" id="cmp-login-link" href="http://localhost:8091/login?redirect=/studio" data-i18n="nav_login">Đăng nhập</a>
+        <a class="btn primary" id="cmp-studio-link" href="http://localhost:8091/studio" data-i18n="nav_open_studio">Mở Studio →</a>
       </div>
     </header>
   </div>
@@ -561,6 +562,8 @@
         nav_arch: "3 Kiến trúc",
         nav_matrix: "12 Điểm vượt trội",
         nav_bench: "Thực nghiệm 8 chiến lược",
+        nav_login: "Đăng nhập",
+        nav_open_studio: "Mở Studio →",
         hero_badge: "ĐỐI CHIẾU KIẾN TRÚC & THỰC NGHIỆM",
         hero_title: "FreqPilot Khác Gì So Với Freqtrade Gốc & Bản Fork FreqUI Ultimate?",
         hero_lead: "Giữ nguyên <strong>100% Engine Freqtrade 2026.9 chính thức</strong> để không bao giờ lệch lệnh, đồng thời nâng cấp toàn bộ quy trình từ Viết mã, Kiểm toán Dữ liệu, Lookahead, Walk-Forward, Độ nhạy 2D đến Paper 1x lên một giao diện duy nhất.",
@@ -574,6 +577,8 @@
         nav_arch: "3 Architectures",
         nav_matrix: "12 Key Differences",
         nav_bench: "8-Strategy Benchmark",
+        nav_login: "Log in",
+        nav_open_studio: "Open Studio →",
         hero_badge: "ARCHITECTURE & EMPIRICAL HEAD-TO-HEAD",
         hero_title: "How FreqPilot Outperforms Standard FreqUI & the FreqUI Ultimate Fork",
         hero_lead: "Keep <strong>100% unmodified Official Freqtrade 2026.9</strong> for exact execution parity while upgrading your entire research loop—Monaco Editor, Data Audit, Lookahead Checks, Walk-Forward Holdout, 2D Sensitivity, and 1x Paper Reconciliation—into one unified studio.",
@@ -587,6 +592,8 @@
         nav_arch: "三大架构对比",
         nav_matrix: "12项核心优势",
         nav_bench: "8大策略实测对标",
+        nav_login: "登录",
+        nav_open_studio: "进入工作台 →",
         hero_badge: "架构与实证全方位对比",
         hero_title: "FreqPilot 相比原版 FreqUI 与 FreqUI Ultimate 分支版强在哪里？",
         hero_lead: "100% 保持<strong>官方 Freqtrade 2026.9 引擎零修改</strong>以确保实盘/回测完全一致，同时将代码编辑、数据审计、前视检验、Walk-Forward、2D 敏感度矩阵与 1x 模拟盘整合至统一工作台。",
@@ -600,6 +607,8 @@
         nav_arch: "3 архитектуры",
         nav_matrix: "12 преимуществ",
         nav_bench: "Тест 8 стратегий",
+        nav_login: "Войти",
+        nav_open_studio: "Открыть Studio →",
         hero_badge: "СРАВНЕНИЕ АРХИТЕКТУРЫ И БЭКТЕСТОВ",
         hero_title: "Чем FreqPilot лучше стандартного FreqUI и форка FreqUI Ultimate?",
         hero_lead: "Сохраняйте <strong>100% официальный движок Freqtrade 2026.9</strong> без модификаций, получая единую студию: редактор кода, аудит данных, проверки Lookahead, Walk-Forward Holdout, 2D-матрицу и сверку 1x Paper.",
@@ -613,6 +622,8 @@
         nav_arch: "3대 아키텍처 비교",
         nav_matrix: "12가지 핵심 차별점",
         nav_bench: "8대 전략 실증 비교",
+        nav_login: "로그인",
+        nav_open_studio: "스튜디오 열기 →",
         hero_badge: "아키텍처 및 실증 벤치마크 비교",
         hero_title: "FreqPilot은 순정 FreqUI 및 FreqUI Ultimate 포크와 무엇이 다른가요?",
         hero_lead: "<strong>100% 공식 Freqtrade 2026.9 엔진</strong>을 그대로 유지하여 체결 오차를 원천 차단하면서, 코드 편집·데이터 감사·Lookahead 검증·Walk-Forward·2D 민감도·1x 페이퍼 대사를 하나의 스튜디오로 통합했습니다.",
@@ -636,6 +647,15 @@
     }
 
     (function init() {
+      let base = "http://localhost:8091";
+      try {
+        const savedStudio = localStorage.getItem("freqpilot.studio.url");
+        if (savedStudio) base = savedStudio;
+        else if (location.hostname && location.hostname !== "freqpilot.dev") base = `${location.protocol}//${location.hostname}:8091`;
+      } catch {}
+      document.getElementById("cmp-login-link").href = base + "/login?redirect=/studio";
+      document.getElementById("cmp-studio-link").href = base + "/studio";
+
       const urlLang = new URLSearchParams(location.search).get('lang');
       let saved = null;
       try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}
