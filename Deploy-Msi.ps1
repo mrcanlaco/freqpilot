@@ -10,33 +10,21 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 
-function Invoke-MsiBash {
+function Invoke-SshStdin {
     param(
-        [Parameter(Mandatory)][string]$Script,
-        [byte[]]$StdinPayload = $null
+        [Parameter(Mandatory)][string]$RemoteCommand,
+        [Parameter(Mandatory)][byte[]]$InputBytes
     )
-    $lfScript = $Script.Replace("`r`n", "`n")
     $psi = [Diagnostics.ProcessStartInfo]::new('ssh')
     $psi.UseShellExecute = $false
     $psi.RedirectStandardInput = $true
     $psi.RedirectStandardOutput = $true
     $psi.RedirectStandardError = $true
-    [void]$psi.ArgumentList.Add($SshHost)
-    if ($null -eq $StdinPayload) {
-        [void]$psi.ArgumentList.Add("wsl -d $WslDistro -- bash -s")
-    } else {
-        $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($lfScript))
-        [void]$psi.ArgumentList.Add("wsl -d $WslDistro -- bash -c `"echo $b64 | base64 -d > /tmp/fp_deploy_step.sh && bash /tmp/fp_deploy_step.sh; rc=`$?; rm -f /tmp/fp_deploy_step.sh; exit `$rc`"")
-    }
+    $psi.Arguments = "$SshHost `"$RemoteCommand`""
     $proc = [Diagnostics.Process]::Start($psi)
     $outTask = $proc.StandardOutput.ReadToEndAsync()
     $errTask = $proc.StandardError.ReadToEndAsync()
-    if ($null -eq $StdinPayload) {
-        $bytes = [Text.Encoding]::UTF8.GetBytes($lfScript)
-        $proc.StandardInput.BaseStream.Write($bytes, 0, $bytes.Length)
-    } else {
-        $proc.StandardInput.BaseStream.Write($StdinPayload, 0, $StdinPayload.Length)
-    }
+    $proc.StandardInput.BaseStream.Write($InputBytes, 0, $InputBytes.Length)
     $proc.StandardInput.Close()
     $proc.WaitForExit()
     $stdout = $outTask.GetAwaiter().GetResult()
@@ -45,6 +33,21 @@ function Invoke-MsiBash {
         throw "Remote MSI step failed (exit $($proc.ExitCode)):`n$stderr`n$stdout"
     }
     return $stdout
+}
+
+function Invoke-MsiBash {
+    param(
+        [Parameter(Mandatory)][string]$Script,
+        [byte[]]$StdinPayload = $null
+    )
+    $lfScript = $Script.Replace("`r`n", "`n")
+    if ($null -eq $StdinPayload) {
+        return Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- bash -s" -InputBytes ([Text.Encoding]::UTF8.GetBytes($lfScript))
+    }
+    $remoteTmp = "/tmp/fp_deploy_$([Guid]::NewGuid().ToString('N')).sh"
+    $wrapped = "trap 'rm -f $remoteTmp' EXIT`n" + $lfScript
+    [void](Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- tee $remoteTmp >/dev/null" -InputBytes ([Text.Encoding]::UTF8.GetBytes($wrapped)))
+    return Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- bash $remoteTmp" -InputBytes $StdinPayload
 }
 
 # Resolve local user_data from .env if not explicitly provided
