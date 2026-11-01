@@ -6,6 +6,7 @@ param(
     [string]$LocalUserData = '',
     [switch]$BuildUi,
     [switch]$SkipDataSync,
+    [switch]$RestartActivePaper,
     [switch]$DryRun
 )
 $ErrorActionPreference = 'Stop'
@@ -251,11 +252,30 @@ chown -R 1000:1000 "`$UD"
 # 6. Rebuild & restart isolated Studio services (:8091 & :8095), leaving :8090 live paper bot untouched
 Write-Host "[5/5] Rebuilding & restarting isolated Studio stack on MSI (:8091 & :8095)..."
 if (!$DryRun) {
+    $allowPaperRestart = if ($RestartActivePaper) { '1' } else { '0' }
     $healthOut = Invoke-MsiBash -Script @"
 set -euo pipefail
 cd "$RemoteRoot/repo"
+export BUILDX_NO_DEFAULT_ATTESTATIONS=1
 docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" build backtest
-docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d
+PAPER_STATE=`$(python3 - <<'PY'
+import json, base64, urllib.request
+try:
+    api = json.load(open("$RemoteRoot/studio_user_data/freqpilot/paper/api.json", encoding="utf-8"))
+    auth = base64.b64encode(f"{api['username']}:{api['password']}".encode()).decode()
+    req = urllib.request.Request("http://127.0.0.1:8095/api/v1/show_config", headers={"Authorization": f"Basic {auth}"})
+    with urllib.request.urlopen(req, timeout=3) as r:
+        print(str(json.loads(r.read().decode("utf-8")).get("state") or "").lower())
+except Exception:
+    print("unknown")
+PY
+)
+if [ "`$PAPER_STATE" = "running" ] && [ "$allowPaperRestart" != "1" ]; then
+    echo "      Notice: research-paper (:8095) is currently RUNNING; updating backtest (:8091) only without interrupting :8095 (pass -RestartActivePaper to override)."
+    docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d --no-deps backtest
+else
+    docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d
+fi
 for i in `$(seq 1 25); do
     if curl -fsS http://127.0.0.1:8091/api/v1/studio/probe 2>/dev/null; then
         echo ""
