@@ -46,7 +46,7 @@ function Invoke-MsiBash {
     }
     $remoteTmp = "/tmp/fp_deploy_$([Guid]::NewGuid().ToString('N')).sh"
     $wrapped = "trap 'rm -f $remoteTmp' EXIT`n" + $lfScript
-    [void](Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- tee $remoteTmp >/dev/null" -InputBytes ([Text.Encoding]::UTF8.GetBytes($wrapped)))
+    [void](Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- tee $remoteTmp" -InputBytes ([Text.Encoding]::UTF8.GetBytes($wrapped)))
     return Invoke-SshStdin -RemoteCommand "wsl -d $WslDistro -- bash $remoteTmp" -InputBytes $StdinPayload
 }
 
@@ -69,7 +69,7 @@ $needUiBuild = $BuildUi -or !(Test-Path -LiteralPath $distIndex)
 if (!$needUiBuild) {
     $distTime = (Get-Item -LiteralPath $distIndex).LastWriteTimeUtc
     $newerSrc = Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'ui/src') -Recurse -File |
-        Where-Object { $_.LastWriteTimeUtc -gt $distTime } |
+        Where-Object { $_.Name -notin @('auto-imports.d.ts', 'components.d.ts') -and $_.LastWriteTimeUtc -gt $distTime } |
         Select-Object -First 1
     if ($newerSrc) {
         Write-Host "[1/5] Detected newer UI source ($($newerSrc.Name)); rebuilding ui/dist..."
@@ -145,7 +145,7 @@ set -euo pipefail
 UD="$RemoteRoot/studio_user_data"
 mkdir -p "`$UD"
 cd "`$UD"
-for rel in data/binance/futures/*.feather strategies/*.py freqpilot/research/*.json freqpilot/notes/* freqpilot/presets/* freqpilot/runs/* freqpilot/sensitivity/* freqpilot/walk_forward/* freqpilot/paper/profiles/*; do
+for rel in data/binance/futures/*.feather strategies/*.py freqpilot/research/*.json freqpilot/notes/* freqpilot/presets/* freqpilot/runs/* freqpilot/sensitivity/* freqpilot/walk_forward/*; do
     if [ -e "`$rel" ]; then echo "`$rel"; fi
 done
 "@
@@ -174,7 +174,7 @@ done
         }
     }
 
-    $dirGroups = @('freqpilot/presets', 'freqpilot/runs', 'freqpilot/sensitivity', 'freqpilot/walk_forward', 'freqpilot/paper/profiles')
+    $dirGroups = @('freqpilot/presets', 'freqpilot/runs', 'freqpilot/sensitivity', 'freqpilot/walk_forward')
     foreach ($grp in $dirGroups) {
         $fullGrp = Join-Path $LocalUserData $grp
         if (Test-Path -LiteralPath $fullGrp) {
