@@ -1054,7 +1054,7 @@ export function computeValidDatePreset(input: {
     const s = Date.parse(f.start!);
     const e = Date.parse(f.end!);
     if (Number.isFinite(s)) minStartMs = Math.max(minStartMs, s);
-    if (x.type === 'mark' && Number.isFinite(e)) maxEndMs = Math.min(maxEndMs, e);
+    if (f.type === 'mark' && Number.isFinite(e)) maxEndMs = Math.min(maxEndMs, e);
   }
 
   const dayMs = 86_400_000;
