@@ -257,33 +257,55 @@ if (!$DryRun) {
 set -euo pipefail
 cd "$RemoteRoot/repo"
 export BUILDX_NO_DEFAULT_ATTESTATIONS=1
+EXISTING_IDS=`$(docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" ps --all --quiet backtest research-paper 2>/dev/null || true)
+if [ -n "`$EXISTING_IDS" ]; then
+    python3 - `$EXISTING_IDS <<'PY'
+import json, subprocess, sys
+expected = "$RemoteRoot/studio_user_data"
+for cid in sys.argv[1:]:
+    mounts = json.loads(subprocess.check_output(["docker", "inspect", "--format", "{{json .Mounts}}", cid], text=True))
+    ud = [m["Source"] for m in mounts if m.get("Destination") == "/freqtrade/user_data"]
+    if ud != [expected]:
+        raise SystemExit(f"Refusing deploy: container {cid} user_data mount {ud} != {expected}")
+PY
+fi
 docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" build backtest
 PAPER_STATE=`$(python3 - <<'PY'
-import json, base64, urllib.request
-try:
-    api = json.load(open("$RemoteRoot/studio_user_data/freqpilot/paper/api.json", encoding="utf-8"))
-    auth = base64.b64encode(f"{api['username']}:{api['password']}".encode()).decode()
-    req = urllib.request.Request("http://127.0.0.1:8095/api/v1/show_config", headers={"Authorization": f"Basic {auth}"})
-    with urllib.request.urlopen(req, timeout=3) as r:
-        print(str(json.loads(r.read().decode("utf-8")).get("state") or "").lower())
-except Exception:
-    print("unknown")
+import json, base64, urllib.request, subprocess
+cid = subprocess.check_output(["docker", "ps", "--filter", "name=freqpilot-studio-research-paper", "--quiet"], text=True).strip()
+if not cid:
+    print("absent")
+else:
+    try:
+        api = json.load(open("$RemoteRoot/studio_user_data/freqpilot/paper/api.json", encoding="utf-8"))
+        auth = base64.b64encode(f"{api['username']}:{api['password']}".encode()).decode()
+        req = urllib.request.Request("http://127.0.0.1:8095/api/v1/show_config", headers={"Authorization": f"Basic {auth}"})
+        with urllib.request.urlopen(req, timeout=4) as r:
+            print(str(json.loads(r.read().decode("utf-8")).get("state") or "").lower() or "unknown")
+    except Exception:
+        print("unknown")
 PY
 )
-if [ "`$PAPER_STATE" = "running" ] && [ "$allowPaperRestart" != "1" ]; then
-    echo "      Notice: research-paper (:8095) is currently RUNNING; updating backtest (:8091) only without interrupting :8095 (pass -RestartActivePaper to override)."
-    docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d --no-deps backtest
-else
+if [ "$allowPaperRestart" = "1" ] || [ "`$PAPER_STATE" = "stopped" ] || [ "`$PAPER_STATE" = "paused" ] || [ "`$PAPER_STATE" = "absent" ]; then
     docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d
+else
+    echo "      Notice: research-paper (:8095) state is '`$PAPER_STATE' (not confirmed stopped/paused); updating backtest (:8091) only without interrupting :8095."
+    docker compose --project-directory "$RemoteRoot/repo" --env-file "$RemoteRoot/repo/.env.studio" -f "$RemoteRoot/repo/compose.studio.yaml" up -d --no-deps backtest
 fi
+PROBE_OK=0
 for i in `$(seq 1 25); do
     if curl -fsS http://127.0.0.1:8091/api/v1/studio/probe 2>/dev/null; then
         echo ""
+        PROBE_OK=1
         break
     fi
     sleep 1
 done
-docker ps --format "  {{.Names}} -> {{.Ports}} ({{.Status}})" | grep -E "8088|8090|8091|8095" || true
+if [ "`$PROBE_OK" != "1" ]; then
+    echo "ERROR: :8091 /api/v1/studio/probe did not respond within 25s!" >&2
+    exit 1
+fi
+docker ps --format "  {{.Names}} -> {{.Ports}} ({{.Status}})" | grep -E "freqpilot-studio|freqpilot-landing|freqpilot-msi-paper" || true
 "@
     Write-Host $healthOut.TrimEnd()
 }

@@ -11,7 +11,7 @@ x-studio-common: &studio-common
 services:
   backtest:
     <<: *studio-common
-    image: ${FREQPILOT_IMAGE:-freqpilot-msi:2026.9-v0.1}
+    image: ${FREQPILOT_IMAGE:-freqpilot-studio:2026.9-v0.1}
     build: ./backend
     environment:
       PYTHONPATH: /freqtrade/user_data/freqpilot/deps
@@ -20,10 +20,30 @@ services:
     command: webserver --config user_data/config.json
   research-paper:
     <<: *studio-common
-    image: ${FREQPILOT_IMAGE:-freqpilot-msi:2026.9-v0.1}
+    image: ${FREQPILOT_IMAGE:-freqpilot-studio:2026.9-v0.1}
     ports:
       - "127.0.0.1:8095:8080"
     entrypoint: /bin/sh
     command:
       - -c
       - python -m freqtrade.rpc.api_server.api_paper && exec freqtrade trade --config /freqtrade/user_data/freqpilot/paper/active/config.json --dry-run
+  tunnel:
+    profiles: ["tunnel"]
+    image: cloudflare/cloudflared:2026.10.4@sha256:4c72c1af2984a66a255efd20fc4ec73fe0f7267384b55315ad953b354b3361b4
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+    cpus: 0.5
+    mem_limit: 256m
+    pids_limit: 64
+    command:
+      - tunnel
+      - --no-autoupdate
+      - run
+      - --token
+      - ${FREQPILOT_TUNNEL_TOKEN:?Set FREQPILOT_TUNNEL_TOKEN in .env.studio}
+    depends_on:
+      - backtest
