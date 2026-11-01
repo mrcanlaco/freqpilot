@@ -1,0 +1,29 @@
+name: ${FREQPILOT_PROJECT_NAME:-freqpilot-studio}
+x-studio-common: &studio-common
+  user: "1000:1000"
+  cpus: 2.0
+  mem_limit: 3g
+  pids_limit: 256
+  volumes:
+    - ${FREQPILOT_STUDIO_USER_DATA:?Set FREQPILOT_STUDIO_USER_DATA in .env.studio}:/freqtrade/user_data
+    - ./ui/dist:/freqtrade/freqtrade/rpc/api_server/ui/installed:ro
+  restart: unless-stopped
+services:
+  backtest:
+    <<: *studio-common
+    image: ${FREQPILOT_IMAGE:-freqpilot-msi:2026.9-v0.1}
+    build: ./backend
+    environment:
+      PYTHONPATH: /freqtrade/user_data/freqpilot/deps
+    ports:
+      - "127.0.0.1:8091:8080"
+    command: webserver --config user_data/config.json
+  research-paper:
+    <<: *studio-common
+    image: ${FREQPILOT_IMAGE:-freqpilot-msi:2026.9-v0.1}
+    ports:
+      - "127.0.0.1:8095:8080"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - python -m freqtrade.rpc.api_server.api_paper && exec freqtrade trade --config /freqtrade/user_data/freqpilot/paper/active/config.json --dry-run
