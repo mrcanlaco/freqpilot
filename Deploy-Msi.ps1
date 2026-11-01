@@ -215,18 +215,18 @@ done
             & tar -czf $tmpDataTar -C $LocalUserData -T $tmpList
             if ($LASTEXITCODE -ne 0) { throw 'Failed to create add-only user_data archive.' }
             $hashChecks = ($verifiedRuns.GetEnumerator() | ForEach-Object {
-                "echo '$($_.Value)  `$STAGE/$($_.Key)/artifact.zip' | sha256sum -c - >/dev/null"
+                "echo '$($_.Value)  $($_.Key)/artifact.zip' | sha256sum -c - >/dev/null"
             }) -join "`n"
             $payload = [IO.File]::ReadAllBytes($tmpDataTar)
             [void](Invoke-MsiBash -StdinPayload $payload -Script @"
 set -euo pipefail
 UD="$RemoteRoot/studio_user_data"
+rm -rf "`$UD"/.sync_staging_*
 STAGE="`$UD/.sync_staging_`$`$"
-rm -rf "`$STAGE"
 mkdir -p "`$STAGE"
 tar -xzf - -C "`$STAGE"
-$hashChecks
 cd "`$STAGE"
+$hashChecks
 find . -mindepth 1 | while read -r p; do
     rel="`$(echo "`$p" | sed 's|^\./||')"
     if [ -d "`$STAGE/`$rel" ]; then
