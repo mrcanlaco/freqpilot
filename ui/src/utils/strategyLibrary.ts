@@ -998,87 +998,81 @@ export function availableDetailTimeframes(
 
 export function computeValidDatePreset(input: {
   files: StudioDataFileRow[];
+  pairs?: string[];
   timeframe?: string | null;
   detailTimeframe?: string | null;
   warmupCandles?: number;
   days?: number;
-}): { start: string; end: string } {
+}): { start: string; end: string } | null {
   const futures = input.files.filter((f) => f.type === 'futures' && f.start && f.end);
-  if (!futures.length) {
-    return { start: '2026-09-18', end: '2026-10-21' };
-  }
+  if (!futures.length) return null;
+
   const tf = input.timeframe || '15m';
-  const tfMs = timeframeToMs(tf) || 900_000;
+  const tfMs = timeframeToMs(tf);
+  if (tfMs <= 0) return null;
   const warmup = Math.max(0, input.warmupCandles ?? 200);
 
+  const requiredPairs = input.pairs?.length
+    ? input.pairs
+    : [...new Set(futures.map((f) => f.pair).filter((p): p is string => !!p))];
+
   const primaryFiles = futures.filter((f) => f.timeframe === tf);
-  const activePrimary = primaryFiles.length ? primaryFiles : futures;
+  if (!primaryFiles.length) return null;
+  if (requiredPairs.some((p) => !primaryFiles.some((f) => f.pair === p))) return null;
 
   const detailTf = input.detailTimeframe;
   const detailMs = timeframeToMs(detailTf);
-  const detailFiles =
-    detailTf && detailMs > 0 && detailMs < tfMs
-      ? futures.filter((f) => f.timeframe === detailTf)
-      : [];
+  let detailFiles: StudioDataFileRow[] = [];
+  if (detailTf && detailMs > 0 && detailMs < tfMs) {
+    detailFiles = futures.filter((f) => f.timeframe === detailTf);
+    if (!detailFiles.length) return null;
+    if (requiredPairs.some((p) => !detailFiles.some((f) => f.pair === p))) return null;
+  }
 
   let minStartMs = 0;
   let maxEndMs = Number.POSITIVE_INFINITY;
 
-  for (const f of activePrimary) {
+  for (const f of primaryFiles) {
     const s = Date.parse(f.start!);
     const e = Date.parse(f.end!);
-    if (Number.isFinite(s)) {
-      minStartMs = Math.max(minStartMs, s + (warmup + 2) * tfMs);
-    }
-    if (Number.isFinite(e)) {
-      maxEndMs = Math.min(maxEndMs, e);
-    }
+    if (!Number.isFinite(s) || !Number.isFinite(e)) return null;
+    minStartMs = Math.max(minStartMs, s + (warmup + 2) * tfMs);
+    maxEndMs = Math.min(maxEndMs, e);
   }
 
   for (const f of detailFiles) {
     const s = Date.parse(f.start!);
     const e = Date.parse(f.end!);
-    if (Number.isFinite(s)) {
-      minStartMs = Math.max(minStartMs, s);
-    }
-    if (Number.isFinite(e)) {
-      maxEndMs = Math.min(maxEndMs, e);
-    }
+    if (!Number.isFinite(s) || !Number.isFinite(e)) return null;
+    minStartMs = Math.max(minStartMs, s);
+    maxEndMs = Math.min(maxEndMs, e);
   }
 
   for (const f of input.files.filter(
     (x) => (x.type === 'funding_rate' || x.type === 'mark') && x.start && x.end,
   )) {
     const s = Date.parse(f.start!);
-    if (Number.isFinite(s)) {
-      minStartMs = Math.max(minStartMs, s);
-    }
+    const e = Date.parse(f.end!);
+    if (Number.isFinite(s)) minStartMs = Math.max(minStartMs, s);
+    if (x.type === 'mark' && Number.isFinite(e)) maxEndMs = Math.min(maxEndMs, e);
   }
 
   const dayMs = 86_400_000;
   const ceiledStartMs = Math.ceil(minStartMs / dayMs) * dayMs;
   const flooredEndMs = Math.floor(maxEndMs / dayMs) * dayMs;
 
-  const safeEndMs =
-    Number.isFinite(flooredEndMs) && flooredEndMs > 0
-      ? flooredEndMs
-      : Date.parse('2026-10-21T00:00:00Z');
-  const safeMinStartMs =
-    Number.isFinite(ceiledStartMs) && ceiledStartMs > 0 && ceiledStartMs < safeEndMs
-      ? ceiledStartMs
-      : safeEndMs - dayMs;
+  if (!Number.isFinite(ceiledStartMs) || !Number.isFinite(flooredEndMs) || ceiledStartMs >= flooredEndMs) {
+    return null;
+  }
 
-  let chosenStartMs = safeMinStartMs;
+  let chosenStartMs = ceiledStartMs;
   if (typeof input.days === 'number' && input.days > 0) {
-    const candidateMs = safeEndMs - input.days * dayMs;
-    chosenStartMs = Math.max(safeMinStartMs, candidateMs);
+    chosenStartMs = Math.max(ceiledStartMs, flooredEndMs - input.days * dayMs);
   }
-  if (chosenStartMs >= safeEndMs) {
-    chosenStartMs = safeEndMs - dayMs;
-  }
+  if (chosenStartMs >= flooredEndMs) return null;
 
   return {
     start: new Date(chosenStartMs).toISOString().slice(0, 10),
-    end: new Date(safeEndMs).toISOString().slice(0, 10),
+    end: new Date(flooredEndMs).toISOString().slice(0, 10),
   };
 }

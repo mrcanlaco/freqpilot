@@ -123,11 +123,17 @@ watch(detailOptions,(opts)=>{if(opts.length&&!opts.includes(detail.value))detail
 function applyDatePreset(days?:number){
   const range=computeValidDatePreset({
     files:data.value?.files??[],
+    pairs:data.value?.pairs,
     timeframe:interval.value||selectedItem.value?.timeframe,
     detailTimeframe:detail.value,
     warmupCandles:selectedItem.value?.startup_candle_count??200,
     days,
   });
+  if(!range){
+    tab.value='data';
+    notify('Dữ liệu local chưa phủ đủ khung tín hiệu, khung chi tiết và warmup. Hãy kiểm tra và tải bù tại bước 03 · Dữ liệu.',true);
+    return;
+  }
   start.value=range.start;
   end.value=range.end;
 }

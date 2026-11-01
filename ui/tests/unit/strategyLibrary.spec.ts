@@ -528,25 +528,50 @@ describe('Strategy library evidence', () => {
     }
   });
 
-  it('intersects primary warmup and detail timeframe coverage so date presets never hit missing-detail 422', () => {
+  it('intersects primary warmup, detail, and mark coverage and returns null when coverage is missing or disjoint', () => {
     const files = [
       { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:00:00Z' },
       { pair: 'ETH/USDT:USDT', type: 'futures', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:00:00Z' },
       { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '5m', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:55:00Z' },
+      { pair: 'ETH/USDT:USDT', type: 'futures', timeframe: '5m', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:55:00Z' },
       { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1m', start: '2026-09-15T15:00:00Z', end: '2026-10-21T17:59:00Z' },
+      { pair: 'ETH/USDT:USDT', type: 'futures', timeframe: '1m', start: '2026-09-15T15:00:00Z', end: '2026-10-21T17:59:00Z' },
+      { pair: 'BTC/USDT:USDT', type: 'mark', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-10-20T23:00:00Z' },
       { pair: 'BTC/USDT:USDT', type: 'funding_rate', timeframe: '8h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T16:00:00Z' },
     ];
     expect(availableDetailTimeframes(files, '1h')).toEqual(['1m', '5m']);
     expect(availableDetailTimeframes(files, '5m')).toEqual(['1m']);
 
-    // With 1m detail starting Sept 15 15:00Z, full preset must ceil to 2026-09-16 (not 2026-02-01!)
+    // Constrained by 1m start (Sept 15 15:00Z -> ceiled Sept 16) and mark end (Oct 20 23:00Z -> floored Oct 20)
     expect(
       computeValidDatePreset({ files, timeframe: '1h', detailTimeframe: '1m', warmupCandles: 125 }),
-    ).toEqual({ start: '2026-09-16', end: '2026-10-21' });
+    ).toEqual({ start: '2026-09-16', end: '2026-10-20' });
 
-    // With 5m detail starting Feb 01 00:00Z and 125h warmup (+2h = 127h -> Feb 6 07:00Z), full preset ceils to 2026-02-07!
     expect(
       computeValidDatePreset({ files, timeframe: '1h', detailTimeframe: '5m', warmupCandles: 125 }),
-    ).toEqual({ start: '2026-02-07', end: '2026-10-21' });
+    ).toEqual({ start: '2026-02-07', end: '2026-10-20' });
+
+    // Empty, missing primary timeframe, missing pair on detail, or disjoint ranges return null (never fake dates)
+    expect(computeValidDatePreset({ files: [], timeframe: '1h', detailTimeframe: '1m' })).toBeNull();
+    expect(computeValidDatePreset({ files, timeframe: '4h', detailTimeframe: '1m' })).toBeNull();
+    expect(
+      computeValidDatePreset({
+        files: files.filter((f) => !(f.pair === 'ETH/USDT:USDT' && f.timeframe === '1m')),
+        pairs: ['BTC/USDT:USDT', 'ETH/USDT:USDT'],
+        timeframe: '1h',
+        detailTimeframe: '1m',
+      }),
+    ).toBeNull();
+    expect(
+      computeValidDatePreset({
+        files: [
+          { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-03-01T00:00:00Z' },
+          { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1m', start: '2026-04-01T00:00:00Z', end: '2026-05-01T00:00:00Z' },
+        ],
+        timeframe: '1h',
+        detailTimeframe: '1m',
+        warmupCandles: 10,
+      }),
+    ).toBeNull();
   });
 });
