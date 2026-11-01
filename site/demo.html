@@ -498,7 +498,7 @@
           ["04-01",0],["04-13",-0.37],["05-18",-0.08],["06-04",0],["07-18",-0.56],["08-11",-0.86],["08-21",0],["09-28",-0.40],["10-15",0]
         ],
         monthly: [["Apr",-36.67],["May",72.44],["Jun",275.54],["Jul",-57.79],["Aug",130.69],["Sep",-7.08],["Oct",101.39],["Total",478.54]],
-        paperProfile: "4e1b0cb3ef0745e6 (STOPPED · 1x Isolated)"
+        paperProfile: "4e1b0cb3ef0745e6 (dựng từ gói 1k 8ebeb7170c · STOPPED · chưa dựng lại từ gói 10k)"
       },
       {
         id: "RocketHunterSma501h",
@@ -533,11 +533,11 @@
         equity: [["04-01",0],["05-16",52.97],["05-23",141.22],["05-27",129.86],["07-17",114.50],["08-01",96.76],["08-15",89.33],["10-09",454.62],["10-21",721.18]],
         drawdown: [["04-01",0],["05-23",0],["05-27",-0.11],["07-17",-0.26],["08-01",-0.44],["08-15",-0.51],["10-09",0],["10-21",0]],
         monthly: [["Apr",0],["May",129.87],["Jun",0],["Jul",-15.36],["Aug",-25.17],["Sep",0],["Oct",631.85],["Total",721.18]],
-        paperProfile: "f26d19d9d7254c1b (STOPPED · 1x Isolated)"
+        paperProfile: "f26d19d9d7254c1b (dựng từ gói 1k 6826363795 · STOPPED · chưa dựng lại từ gói 10k)"
       },
       {
         id: "TarsisVolTargetSma501h",
-        tier: "★ VERIFIED PACK V1 ($39) · ĐẠT 9/9 ĐỘ NHẠY & HOLDOUT (ĐỢT 3)",
+        tier: "★ VERIFIED PACK V1 ($39) · ĐẠT 9/9 ĐỘ NHẠY 2D (VỐN 10K · ĐỢT 3)",
         paid: true,
         tf: "1h (1d)",
         rev: "71d5550cb1",
@@ -563,7 +563,7 @@
         equity: [["04-01",0],["05-16",33.59],["05-23",121.85],["05-27",110.49],["07-17",95.13],["08-01",77.39],["08-15",69.96],["10-09",381.47],["10-21",648.03]],
         drawdown: [["04-01",0],["05-23",0],["05-27",-0.11],["07-17",-0.26],["08-01",-0.44],["08-15",-0.51],["10-09",0],["10-21",0]],
         monthly: [["Apr",0],["May",110.49],["Jun",0],["Jul",-15.36],["Aug",-25.17],["Sep",0],["Oct",578.07],["Total",648.03]],
-        paperProfile: "41b999f3f64248a9 (STOPPED · 1x Isolated)"
+        paperProfile: "41b999f3f64248a9 (dựng từ gói 1k a12a2dd1ad · STOPPED · chưa dựng lại từ gói 10k)"
       },
       {
         id: "BdrEmaRideFutures1h",
@@ -773,6 +773,8 @@
       document.getElementById("ws-tier-badge").textContent = currentStrat.tier;
       document.getElementById("ws-name").textContent = currentStrat.id;
       document.getElementById("ws-meta").textContent = `rev: ${currentStrat.rev} · run: ${currentStrat.runId} · SHA-256: ${currentStrat.sha.slice(0,10)} · Vốn 10.000 USDT · ${currentStrat.tf}`;
+      const isShort = currentStrat.id === "StarterFuturesResearch";
+      document.getElementById("ctx3-lbl").textContent = isShort ? "03 · Kết quả 1 tháng (10k)" : "03 · Kết quả 6,7 tháng (10k)";
       const c3 = document.getElementById("ctx3-val");
       c3.textContent = `${currentStrat.pnl >= 0 ? "+" : ""}${currentStrat.pnl.toFixed(2)} USDT · ${currentStrat.trades} lệnh`;
       c3.className = currentStrat.pnl >= 0 ? "pos" : "neg";
@@ -862,8 +864,8 @@
           <div class="card">
             <h3>04 · Cấu Hình Giao Thức Backtest Đóng Băng</h3>
             <div class="kpi-grid">
-              <div class="kpi"><small>Khoảng chạy</small><b>20260401–20261021</b></div>
-              <div class="kpi"><small>Chi tiết khớp nến</small><b>5m (75.690 nến)</b></div>
+              <div class="kpi"><small>Khoảng chạy</small><b>${s.id === "StarterFuturesResearch" ? "20260918–20261021 (1 tháng)" : "20260401–20261021 (6,7 tháng)"}</b></div>
+              <div class="kpi"><small>Chi tiết khớp nến</small><b>${s.id === "StarterFuturesResearch" ? "1m detail" : "5m (75.690 nến)"}</b></div>
               <div class="kpi"><small>Vốn / Stake</small><b>10.000 / 1.000 USDT</b></div>
               <div class="kpi"><small>Đòn bẩy</small><b class="pos">1x Isolated</b></div>
               <div class="kpi"><small>Phí mỗi chiều</small><b>0.05% + Funding</b></div>
@@ -953,7 +955,7 @@
               <div class="kpi"><small>Database giao dịch</small><b>Tách riêng theo Profile</b></div>
               <div class="kpi"><small>Đòn bẩy khóa cứng</small><b class="pos">1x Isolated · Dry-Run</b></div>
             </div>
-            <p style="font-size:13px;color:var(--fg-2)">Khi chạy trên máy của bạn (cổng <code>:8095</code>), FreqPilot ghi nhật ký vòng đời vào <code>history.sqlite</code> riêng và cho phép đối chiếu từng lệnh Paper khớp thực tế so với gói Backtest <code>${s.runId}</code>.</p>
+            <p style="font-size:13px;color:var(--fg-2)">Khi chạy trên máy của bạn (cổng <code>:8095</code>), mỗi hồ sơ Paper được đóng gói trực tiếp từ đúng gói Backtest nguồn (ví dụ các hồ sơ 1k đã chuẩn bị sẵn hoặc hồ sơ dựng mới từ gói 10k <code>${s.runId}</code>), ghi nhật ký vòng đời vào <code>history.sqlite</code> riêng và đối chiếu từng lệnh khớp thực tế.</p>
           </div>
         `;
       } else {
