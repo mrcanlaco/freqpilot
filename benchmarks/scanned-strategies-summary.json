@@ -1452,5 +1452,1202 @@
       }
     },
     "methodology_classification": "Simplified Freqtrade IStrategy 1x Futures adaptations under the common 1000 USDT / 100 USDT stake protocol. Not source-parity reproductions or refutations of upstream multi-sleeve/rebalanced/300d-warmup engines (e.g., TarsisVolTargetSma501h scales entry stake only without 10% drift rebalancing or BNB sleeve; HermesAdxBreakout4h uses 59d local warmup ewm(min_periods=50) and 4h Chandelier check rather than 300d SMA-seeded daily-ratcheted stop)."
+  },
+  "protocol_10k_audit": {
+    "protocol": {
+      "wallet": 10000,
+      "stake": 1000,
+      "max_open_trades": 2,
+      "leverage": "1x isolated",
+      "fee": 0.0005
+    },
+    "runs": {
+      "RocketHunterSma501h": {
+        "id": "fd368e3110",
+        "sha256": "a97bd2aa06dc9820f0abbe9994753e6dda4bb65ac8a4018bf93c78118ee27a83",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 8,
+          "profit_total_abs": 721.1829453100002,
+          "profit_total": 0.07211829453100002,
+          "max_drawdown_account": 0.005116203805841602,
+          "profit_factor": 14.899765368339404,
+          "wins": 4,
+          "losses": 4,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "TarsisVolTargetSma501h": {
+        "id": "f29c4c1d9a",
+        "sha256": "d3a223a86af423d589d9ec11908a4f979e01089eed9ac5da85ee31462dead0ff",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 8,
+          "profit_total_abs": 648.03404161,
+          "profit_total": 0.064803404161,
+          "max_drawdown_account": 0.005125995876214423,
+          "profit_factor": 13.489925320133326,
+          "wins": 4,
+          "losses": 4,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": "61c0ef724732442d9ed862c35c5f35b5",
+        "wfa_10k_id": null
+      },
+      "DikibagastEmaRsi1h": {
+        "id": "b9f8eb39c3",
+        "sha256": "355afab9d5883dd75cb59fa0bf3ff262381e22ad0d1a5e6e347cccaabe428f25",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 30,
+          "profit_total_abs": 478.54132237,
+          "profit_total": 0.047854132237,
+          "max_drawdown_account": 0.008563089048818086,
+          "profit_factor": 3.6871451329929843,
+          "wins": 21,
+          "losses": 9,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": "cc6fd90d38254fd193aec5bdb9d9ba40",
+        "wfa_10k_id": "3215a26798d5424db99191b3e6e14296"
+      },
+      "BdrEmaRideFutures1h": {
+        "id": "92ea977e05",
+        "sha256": "9ab6887c4d2256d11fb17d47135e4912f3dae4074e29fc1670f529530caac13d",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 8,
+          "profit_total_abs": 116.98974281,
+          "profit_total": 0.011698974281,
+          "max_drawdown_account": 0.014997562214999925,
+          "profit_factor": 1.7800583930433123,
+          "wins": 4,
+          "losses": 4,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "TrendCoreBagging1h": {
+        "id": "b0692cd1ca",
+        "sha256": "2c5d5ff39e7212a534a98ba3ff22a26a3a7f2ad00547a6b6680f59fbc8c0eacc",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 2,
+          "profit_total_abs": 28.579983669999997,
+          "profit_total": 0.002857998367,
+          "max_drawdown_account": 0.0014956215441369483,
+          "profit_factor": 2.9026144677143564,
+          "wins": 1,
+          "losses": 1,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "CodexBotVibe4h": {
+        "id": "916aad1ea4",
+        "sha256": "2ae3b88a63f1933cfb714fe86461f225b3fd06a618effab704e1bfc1eaa6dbad",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 30,
+          "profit_total_abs": -190.53058201000007,
+          "profit_total": -0.019053058201000006,
+          "max_drawdown_account": 0.03137285746045929,
+          "profit_factor": 0.7032121540442748,
+          "wins": 9,
+          "losses": 21,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "4h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "ChamaraBosContinuation1h": {
+        "id": "465207444d",
+        "sha256": "955bacb9fcef7f75502131f0e56257a902d6222a71355baf11d629333691d894",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 36,
+          "profit_total_abs": -168.13293876,
+          "profit_total": -0.016813293876,
+          "max_drawdown_account": 0.020562890585326284,
+          "profit_factor": 0.7316563167665924,
+          "wins": 10,
+          "losses": 26,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "HermesAdxBreakout4h": {
+        "id": "18fde67d0d",
+        "sha256": "90dbfbcc0172f426b587cd46f1f362e94b60f1d22c977b2c6db0cbcea453dcaa",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 15,
+          "profit_total_abs": -193.3109032,
+          "profit_total": -0.01933109032,
+          "max_drawdown_account": 0.01933109031999993,
+          "profit_factor": 0.347564611863431,
+          "wins": 3,
+          "losses": 12,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "4h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "C31VolumeDisplacement1h": {
+        "id": "8d3dff1269",
+        "sha256": "3d8d2773a40b23081eed37c00ba28368b558ec1e209193ff189179df8d3bbc18",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 169,
+          "profit_total_abs": -496.1885774399999,
+          "profit_total": -0.04961885774399999,
+          "max_drawdown_account": 0.04961885774399998,
+          "profit_factor": 0.775893148507126,
+          "wins": 50,
+          "losses": 119,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "TsTerminalPauseBreakout15m": {
+        "id": "ae469f9340",
+        "sha256": "04d22374f27ee772e4c1d3806cb1851945f9094d91f6d7f42f76dac9371032c5",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 20,
+          "profit_total_abs": 23.341824410000005,
+          "profit_total": 0.0023341824410000006,
+          "max_drawdown_account": 0.0036366215455228756,
+          "profit_factor": 1.3130713222919457,
+          "wins": 8,
+          "losses": 12,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "15m"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "CodeAlchemyLowPassFisher1h": {
+        "id": "816c23a595",
+        "sha256": "8a01ef47c3d3d0fdbe0a4b864f425e4ecf7c825d3d85e3d567de8b143e485a95",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 2,
+          "profit_total_abs": 6.293026869999991,
+          "profit_total": 0.0006293026869999992,
+          "max_drawdown_account": 0.007179371047041996,
+          "profit_factor": 1.0869702588160928,
+          "wins": 1,
+          "losses": 1,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "MesaTrendFollow1h": {
+        "id": "771d797726",
+        "sha256": "b71ea0446340e5db6db85518258d9bfc7ec5c772f7ca4cd5f5966d800a43a152",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 5,
+          "profit_total_abs": -18.662594130000002,
+          "profit_total": -0.0018662594130000002,
+          "max_drawdown_account": 0.003621882413892372,
+          "profit_factor": 0.48563298693286877,
+          "wins": 2,
+          "losses": 3,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "QuantgenTrendVoting1h": {
+        "id": "fd0c261cec",
+        "sha256": "fc316edadbc10cc62fb7fc5f9429a97932d9f3e7d158b1a7506769a6d7a22e1b",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 2,
+          "profit_total_abs": -44.52250972,
+          "profit_total": -0.004452250972,
+          "max_drawdown_account": 0.005625506083999972,
+          "profit_factor": 0.20855992233960227,
+          "wins": 1,
+          "losses": 1,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "MirazizDonchianAtr4h": {
+        "id": "81c9d91af5",
+        "sha256": "5dec903886fc4ba5d1556662ee4c0357e622d2fb308f670a9d9c40789e2d1289",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 2,
+          "profit_total_abs": -51.83329402,
+          "profit_total": -0.005183329402,
+          "max_drawdown_account": 0.0051833294019999815,
+          "profit_factor": 0.0,
+          "wins": 0,
+          "losses": 2,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "4h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "EnriqueVolAdjusted1h": {
+        "id": "e0033d2e72",
+        "sha256": "e1d551ceb8e796f2e318010c50f1763226e3160b18a1c3d6e4fb69f8876af116",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 3,
+          "profit_total_abs": -95.51972214,
+          "profit_total": -0.009551972214,
+          "max_drawdown_account": 0.014687898607332002,
+          "profit_factor": 0.3530428606722613,
+          "wins": 1,
+          "losses": 2,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "CodeAlchemyLowPassFisher1h_67m": {
+        "id": "d7ef848292",
+        "sha256": "ef55b0a4b4a025b2cc19a6fd0ea2e917a824e33c3b964e67d0f001449942c566",
+        "timerange": "20260401-20261021",
+        "detail": "5m",
+        "summary": {
+          "total_trades": 17,
+          "profit_total_abs": -235.51052486000003,
+          "profit_total": -0.023551052486000004,
+          "max_drawdown_account": 0.045337083676609956,
+          "profit_factor": 0.5159731318965068,
+          "wins": 6,
+          "losses": 11,
+          "backtest_start": "2026-04-01 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "1h"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      },
+      "StarterFuturesResearch": {
+        "id": "813a9807e1",
+        "sha256": "44ac8d16221b0a9dd7b703f00f1bdd96c2d5a92bdd899cac0a58352044ef3fa2",
+        "timerange": "20260918-20261021",
+        "detail": "1m",
+        "summary": {
+          "total_trades": 144,
+          "profit_total_abs": -268.66144461,
+          "profit_total": -0.026866144461,
+          "max_drawdown_account": 0.042157106381702815,
+          "profit_factor": 0.6083754852712894,
+          "wins": 27,
+          "losses": 117,
+          "backtest_start": "2026-09-18 00:00:00",
+          "backtest_end": "2026-10-21 00:00:00",
+          "timeframe": "15m"
+        },
+        "sensitivity_10k_id": null,
+        "wfa_10k_id": null
+      }
+    },
+    "dikibagast_sensitivity_10k": {
+      "id": "cc6fd90d38254fd193aec5bdb9d9ba40",
+      "strategy": "DikibagastEmaRsi1h",
+      "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
+      "engine": "2026.9",
+      "created_at": "2026-11-01T10:25:29.971277+00:00",
+      "settings": {
+        "timerange": "20260401-20261021",
+        "timeframe": "1h",
+        "timeframe_detail": "5m",
+        "dry_run_wallet": 10000,
+        "stake_amount": "1000",
+        "max_open_trades": 2,
+        "enable_protections": false
+      },
+      "input_manifest_sha256": "734497bc0ceb5b7ff73a94c50d06b7e3bee730007edd825524ed6e741ed3f5cf",
+      "input_files": 53,
+      "input_bytes": 7467814,
+      "status": "success",
+      "axes": [
+        {
+          "name": "ema_short",
+          "space": "buy",
+          "base": 50,
+          "values": [
+            45,
+            50,
+            55
+          ],
+          "step": 5.0,
+          "radius": 1
+        },
+        {
+          "name": "rsi_entry_offset",
+          "space": "buy",
+          "base": 10,
+          "values": [
+            8,
+            10,
+            12
+          ],
+          "step": 2.0,
+          "radius": 1
+        }
+      ],
+      "fee_scenarios": [
+        0.0005
+      ],
+      "baseline": {
+        "ema_long": 100,
+        "ema_short": 50,
+        "rsi_entry_offset": 10,
+        "sep_mult": 2.0,
+        "rsi_exit_offset": 30
+      },
+      "schema": {
+        "strategy": "DikibagastEmaRsi1h",
+        "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
+        "parameter_revision": "none",
+        "schema_revision": "7b04896e419482ccc7a30be70c9cb2cc0cb125d1a4011a0245b607dd0c55f023",
+        "fields": [
+          {
+            "name": "ema_long",
+            "space": "buy",
+            "param_type": "IntParameter",
+            "value": 100,
+            "load": true,
+            "optimize": true,
+            "low": 80,
+            "high": 140
+          },
+          {
+            "name": "ema_short",
+            "space": "buy",
+            "param_type": "IntParameter",
+            "value": 50,
+            "load": true,
+            "optimize": true,
+            "low": 20,
+            "high": 60
+          },
+          {
+            "name": "rsi_entry_offset",
+            "space": "buy",
+            "param_type": "IntParameter",
+            "value": 10,
+            "load": true,
+            "optimize": true,
+            "low": 5,
+            "high": 20
+          },
+          {
+            "name": "sep_mult",
+            "space": "buy",
+            "param_type": "DecimalParameter",
+            "value": 2.0,
+            "load": true,
+            "optimize": true,
+            "low": 1.0,
+            "high": 3.0,
+            "decimals": 1
+          },
+          {
+            "name": "rsi_exit_offset",
+            "space": "sell",
+            "param_type": "IntParameter",
+            "value": 30,
+            "load": true,
+            "optimize": true,
+            "low": 20,
+            "high": 35
+          }
+        ],
+        "note": "Giá trị được đọc bằng API strategy chính thức; chưa chạy backtest hay hyperopt."
+      },
+      "cells": [
+        {
+          "index": 0,
+          "parameters": {
+            "ema_short": 45,
+            "rsi_entry_offset": 8
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/0/output/backtest-result-2026-11-01_10-25-39.zip",
+            "artifact_sha256": "04420e7e0ab2fa1978db57131c5dc2580c2e0b79108c91324e2a3a22d2b21de0",
+            "parameter_sha256": "6a3445dfef86cc36051897c844d225cce2e44d540c8c39477a040ce4b516987b",
+            "runtime_sha256": "3051d2829700dbe72c7a0be394f2640303df072aa99b26af3cd883e07dc3c830",
+            "summary": {
+              "total_trades": 40,
+              "profit_total_abs": 404.66477376,
+              "profit_total": 0.040466477376,
+              "max_drawdown_account": 0.01907520106934278,
+              "profit_factor": 2.038455478922099,
+              "wins": 24,
+              "losses": 16,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 77291.866029705,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 1,
+          "parameters": {
+            "ema_short": 45,
+            "rsi_entry_offset": 10
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/1/output/backtest-result-2026-11-01_10-25-51.zip",
+            "artifact_sha256": "5cf1e81177304bb31421b90f71da467b1ec215aca2c34345ca0d3456bd46c9c6",
+            "parameter_sha256": "7b223236bdd91a5a75f31bae60bfa9b4166187ccc9ae23d720597af95fb0a192",
+            "runtime_sha256": "502a7f024f3de6e31f12ace44c598f94d7e6783acf9f7628d4aabac4b1c6755f",
+            "summary": {
+              "total_trades": 38,
+              "profit_total_abs": 460.89039072,
+              "profit_total": 0.046089039072,
+              "max_drawdown_account": 0.013288742142253895,
+              "profit_factor": 2.397902130315527,
+              "wins": 24,
+              "losses": 14,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 73441.92314026499,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 2,
+          "parameters": {
+            "ema_short": 45,
+            "rsi_entry_offset": 12
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/2/output/backtest-result-2026-11-01_10-26-00.zip",
+            "artifact_sha256": "06ed8ba2b366eee9ffe7175a574a76a54b55a79f3b69f1cfd75e0f56269ee285",
+            "parameter_sha256": "8c28eba9d230c259bcf4bdcf98e5369c5374371d0918e214e31cfd6d82737188",
+            "runtime_sha256": "43968bcd19a239510b470beb1b44c53aa2aab034610ad01f87a163f376787a54",
+            "summary": {
+              "total_trades": 38,
+              "profit_total_abs": 428.50297175000003,
+              "profit_total": 0.042850297175,
+              "max_drawdown_account": 0.01346744540287189,
+              "profit_factor": 2.2357395111586125,
+              "wins": 23,
+              "losses": 15,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 73474.190165715,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 3,
+          "parameters": {
+            "ema_short": 50,
+            "rsi_entry_offset": 8
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/3/output/backtest-result-2026-11-01_10-26-09.zip",
+            "artifact_sha256": "5768a5728c9afe0a3dc1eaabc75124a9f3311b41b4cbbd154c963bf05df06859",
+            "parameter_sha256": "023be858a96721259b5e598b976442d312d2c29c6fcd9c028be750597c352990",
+            "runtime_sha256": "7b15d66eb09d1c66249743fe66556f13a07f3626217975decd2b3bb4b567e404",
+            "summary": {
+              "total_trades": 32,
+              "profit_total_abs": 497.65188901,
+              "profit_total": 0.049765188901,
+              "max_drawdown_account": 0.010309725469176318,
+              "profit_factor": 3.637029398776348,
+              "wins": 22,
+              "losses": 10,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 61733.043626265,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 4,
+          "parameters": {
+            "ema_short": 50,
+            "rsi_entry_offset": 10
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/4/output/backtest-result-2026-11-01_10-26-21.zip",
+            "artifact_sha256": "11e29ba885565df037e295f733056f579595bdbbcb4d3e9e04f2e8d1f916c87a",
+            "parameter_sha256": "b2669c952147663548623e5116433f4673988f6c255b1c3d522a055fb7824c80",
+            "runtime_sha256": "901e1fa5a0cf4b145dfae3ea2c3cdd1f2a1aece7c64702cd3811cf98b5e4931c",
+            "summary": {
+              "total_trades": 30,
+              "profit_total_abs": 478.54132237,
+              "profit_total": 0.047854132237,
+              "max_drawdown_account": 0.008563089048818086,
+              "profit_factor": 3.6871451329929843,
+              "wins": 21,
+              "losses": 9,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 57956.821858965,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 5,
+          "parameters": {
+            "ema_short": 50,
+            "rsi_entry_offset": 12
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/5/output/backtest-result-2026-11-01_10-26-32.zip",
+            "artifact_sha256": "0e170d79d2f6c50f2d80d866f8c0e0bdeb47b62a4a45cc224730f058204fad31",
+            "parameter_sha256": "8baf010445b6bae4fa549c09d21668820099df227af11c053d8a87aab11d9e18",
+            "runtime_sha256": "2d53c93259cb88ce7940da91c9ca57f16dc1ee6020ca92b080124429b2eb6bc8",
+            "summary": {
+              "total_trades": 29,
+              "profit_total_abs": 430.32120836,
+              "profit_total": 0.043032120836,
+              "max_drawdown_account": 0.008996460411354348,
+              "profit_factor": 3.361703638272726,
+              "wins": 20,
+              "losses": 9,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 56108.354587215,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 6,
+          "parameters": {
+            "ema_short": 55,
+            "rsi_entry_offset": 8
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/6/output/backtest-result-2026-11-01_10-26-44.zip",
+            "artifact_sha256": "760f7e8ed81227ae093d58a69d59a3b354f57a4660654041405492e81b6b3d36",
+            "parameter_sha256": "ca33b88755e8b12b2ea7fbfe7ef4c43a56cff9f96ee12e3658255e942616021c",
+            "runtime_sha256": "a868b903fc7de4cfaba8673b0bf2c2a137f8340e8577cce776e46841dc675241",
+            "summary": {
+              "total_trades": 23,
+              "profit_total_abs": 380.61777365000006,
+              "profit_total": 0.03806177736500001,
+              "max_drawdown_account": 0.005298805364166074,
+              "profit_factor": 4.0128010357949915,
+              "wins": 17,
+              "losses": 6,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 44615.385194325,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 7,
+          "parameters": {
+            "ema_short": 55,
+            "rsi_entry_offset": 10
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/7/output/backtest-result-2026-11-01_10-26-52.zip",
+            "artifact_sha256": "192f36200d5e474187f5f8c2ac45a53f0dc7e39f6f8a7c415fb2eb8ebcd95103",
+            "parameter_sha256": "8261ee60a6c86e58989d96c2ccae422c83281a67c593f84fdc4d7281b0568339",
+            "runtime_sha256": "0fd36b8cf9891adeb2273bf529206a7c1d0f04ebafa0f4bba767c6f2e1771461",
+            "summary": {
+              "total_trades": 20,
+              "profit_total_abs": 302.2512654,
+              "profit_total": 0.03022512654,
+              "max_drawdown_account": 0.003972674541036401,
+              "profit_factor": 3.64201032928289,
+              "wins": 15,
+              "losses": 5,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 38922.966587414994,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 8,
+          "parameters": {
+            "ema_short": 55,
+            "rsi_entry_offset": 12
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/8/output/backtest-result-2026-11-01_10-27-01.zip",
+            "artifact_sha256": "b1b7a6f4b9137806b5fee65d44fdb443ec4a5129be6b701c3229613b192246f1",
+            "parameter_sha256": "8a8a651c4df71117e05302d5e366a1d2d8d1340140e0496c7654a8a6317159e3",
+            "runtime_sha256": "61385071d81a4a022ade0470b98c79cdca6090ddd1d50beea0b45f1bbedaac10",
+            "summary": {
+              "total_trades": 20,
+              "profit_total_abs": 279.89466441,
+              "profit_total": 0.027989466441,
+              "max_drawdown_account": 0.003981279872424118,
+              "profit_factor": 3.328634812686588,
+              "wins": 14,
+              "losses": 6,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 38935.834598204994,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        }
+      ],
+      "preset": null,
+      "completed_cells": 9,
+      "estimated_backtests": 9,
+      "current_cell": null,
+      "active_process_identity": null,
+      "active_command": null,
+      "cancel_requested_at": null,
+      "error": null,
+      "note": "Mỗi ô là native backtest riêng. Không tính slippage hậu xử lý là fill.",
+      "finished_at": "2026-11-01T10:27:03.273200+00:00"
+    },
+    "dikibagast_wfa_10k": {
+      "id": "3215a26798d5424db99191b3e6e14296",
+      "status": "success",
+      "holdout_timerange": "20260916-20261021",
+      "holdout_status": "success",
+      "windows": [
+        {
+          "index": 0,
+          "train_timerange": "20260401-20260630",
+          "oos_timerange": "20260630-20260804",
+          "baseline_pnl": -70.72001386,
+          "baseline_trades": 4,
+          "candidate_pnl": -6.046134639999998,
+          "candidate_trades": 3
+        },
+        {
+          "index": 1,
+          "train_timerange": "20260506-20260804",
+          "oos_timerange": "20260804-20260908",
+          "baseline_pnl": 141.6116249,
+          "baseline_trades": 11,
+          "candidate_pnl": 105.83095663,
+          "candidate_trades": 10
+        }
+      ],
+      "holdout_baseline": {
+        "total_trades": 5,
+        "profit_total_abs": 94.44092562,
+        "profit_total": 0.009444092562,
+        "max_drawdown_account": 0.004113204278431726,
+        "profit_factor": 3.2881878269168467,
+        "wins": 4,
+        "losses": 1,
+        "backtest_start": "2026-09-16 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h",
+        "total_volume": 9736.469241719999,
+        "fee_total": null
+      },
+      "holdout_candidate": {
+        "total_trades": 3,
+        "profit_total_abs": -50.849532839999995,
+        "profit_total": -0.005084953283999999,
+        "max_drawdown_account": 0.007829086482092764,
+        "profit_factor": 0.3522963133091203,
+        "wins": 1,
+        "losses": 2,
+        "backtest_start": "2026-09-16 00:00:00",
+        "backtest_end": "2026-10-21 00:00:00",
+        "timeframe": "1h",
+        "total_volume": 5806.759028549999,
+        "fee_total": null
+      }
+    },
+    "tarsis_sensitivity_10k": {
+      "id": "61c0ef724732442d9ed862c35c5f35b5",
+      "strategy": "TarsisVolTargetSma501h",
+      "revision": "71d5550cb1bb7719141356ea5c5eb6fdc518f46a66ad4021f6a4528c2bb9d474",
+      "engine": "2026.9",
+      "created_at": "2026-11-01T10:33:22.202071+00:00",
+      "settings": {
+        "timerange": "20260401-20261021",
+        "timeframe": "1h",
+        "timeframe_detail": "5m",
+        "dry_run_wallet": 10000,
+        "stake_amount": "1000",
+        "max_open_trades": 2,
+        "enable_protections": false
+      },
+      "input_manifest_sha256": "ed8f29efd28238c0705cc401cd84366476b2104398d792be0275885fe2fafd45",
+      "input_files": 53,
+      "input_bytes": 7467818,
+      "status": "success",
+      "axes": [
+        {
+          "name": "sma_period",
+          "space": "buy",
+          "base": 50,
+          "values": [
+            45,
+            50,
+            55
+          ],
+          "step": 5.0,
+          "radius": 1
+        },
+        {
+          "name": "vol_target",
+          "space": "buy",
+          "base": 0.4,
+          "values": [
+            0.35,
+            0.4,
+            0.45
+          ],
+          "step": 0.05,
+          "radius": 1
+        }
+      ],
+      "fee_scenarios": [
+        0.0005
+      ],
+      "baseline": {
+        "sma_period": 50,
+        "vol_target": 0.4,
+        "vol_window": 20
+      },
+      "schema": {
+        "strategy": "TarsisVolTargetSma501h",
+        "revision": "71d5550cb1bb7719141356ea5c5eb6fdc518f46a66ad4021f6a4528c2bb9d474",
+        "parameter_revision": "none",
+        "schema_revision": "5d8305c3ef4541837947b4279a99244c0a40417190d09962253c0e24976b69db",
+        "fields": [
+          {
+            "name": "sma_period",
+            "space": "buy",
+            "param_type": "IntParameter",
+            "value": 50,
+            "load": true,
+            "optimize": true,
+            "low": 30,
+            "high": 80
+          },
+          {
+            "name": "vol_target",
+            "space": "buy",
+            "param_type": "DecimalParameter",
+            "value": 0.4,
+            "load": true,
+            "optimize": true,
+            "low": 0.25,
+            "high": 0.6,
+            "decimals": 2
+          },
+          {
+            "name": "vol_window",
+            "space": "buy",
+            "param_type": "IntParameter",
+            "value": 20,
+            "load": true,
+            "optimize": true,
+            "low": 14,
+            "high": 30
+          }
+        ],
+        "note": "Giá trị được đọc bằng API strategy chính thức; chưa chạy backtest hay hyperopt."
+      },
+      "cells": [
+        {
+          "index": 0,
+          "parameters": {
+            "sma_period": 45,
+            "vol_target": 0.35
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/0/output/backtest-result-2026-11-01_10-33-32.zip",
+            "artifact_sha256": "2951179f112de356004d172d3ccb1ba4da34eef3f3b1229e85dd4369872f04f4",
+            "parameter_sha256": "101bb4a3a7c119ad8b5da4f379fffc927baaf09cfb04c4b50c464d32cc6d5258",
+            "runtime_sha256": "c1277a32ed557237d1c10c71ee1d19df44c532c2f4f2b631a06b4797db5c0399",
+            "summary": {
+              "total_trades": 10,
+              "profit_total_abs": 536.3168358099999,
+              "profit_total": 0.05363168358099999,
+              "max_drawdown_account": 0.00792453082652081,
+              "profit_factor": 5.925791081803604,
+              "wins": 6,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 17994.115981709998,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 1,
+          "parameters": {
+            "sma_period": 45,
+            "vol_target": 0.4
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/1/output/backtest-result-2026-11-01_10-33-44.zip",
+            "artifact_sha256": "b630d2c855d5e27a699aa23ecca1a0040bb6b545cf20c27e6e9dc77b74dde5b1",
+            "parameter_sha256": "bcc8f4bf2ab0a41022c43ac8f579f73224fba4329b87853f7a8a98d6f3f8ee07",
+            "runtime_sha256": "63f388afe09da319ff450121cb04e1c182181408eca35a4be9c2746b7a49c307",
+            "summary": {
+              "total_trades": 10,
+              "profit_total_abs": 589.75480893,
+              "profit_total": 0.058975480893,
+              "max_drawdown_account": 0.008253414238292301,
+              "profit_factor": 6.249406754893566,
+              "wins": 6,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 18909.067408799998,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 2,
+          "parameters": {
+            "sma_period": 45,
+            "vol_target": 0.45
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/2/output/backtest-result-2026-11-01_10-33-56.zip",
+            "artifact_sha256": "d22bcf55096d3f1a76ae582d62ac1cccafd6aea98f6be76335e2f895dd0de739",
+            "parameter_sha256": "4af3c2cb102497ee671df74851090482c02329a48f2bca9238535ca85d5d1191",
+            "runtime_sha256": "3e511d8a1ac1f98a61f22b645e0abec4e1aff5461f4cf7a20f6e590abf0b6d1d",
+            "summary": {
+              "total_trades": 10,
+              "profit_total_abs": 631.4504496999999,
+              "profit_total": 0.06314504497,
+              "max_drawdown_account": 0.008585969788032303,
+              "profit_factor": 6.454976662566907,
+              "wins": 6,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 19540.233183975,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 3,
+          "parameters": {
+            "sma_period": 50,
+            "vol_target": 0.35
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/3/output/backtest-result-2026-11-01_10-34-09.zip",
+            "artifact_sha256": "8b5e0a4145689577e53f3e978bebcefdf9d1d6413cbb01e818886b983f784728",
+            "parameter_sha256": "7951a2fd7e37d61f9262f2907eb9c4287d04e735e85290eb80b3eb7f4dc668e6",
+            "runtime_sha256": "75454e08b99aba665a310a152b3d8e0bd6617f37bbee90241c08fc74a9a89d59",
+            "summary": {
+              "total_trades": 8,
+              "profit_total_abs": 592.5905961200001,
+              "profit_total": 0.05925905961200001,
+              "max_drawdown_account": 0.005134492973079507,
+              "profit_factor": 12.421332546919514,
+              "wins": 4,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 14580.940276725,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 4,
+          "parameters": {
+            "sma_period": 50,
+            "vol_target": 0.4
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/4/output/backtest-result-2026-11-01_10-34-21.zip",
+            "artifact_sha256": "1378009fa96a8426b3f8aa6f921ff5a3eafa1dd1e219d907dc491bc80e88915a",
+            "parameter_sha256": "9312d0aa5a78e9ddd303bb9bf91bd4355db631246104c7cfbfa1dbec58aba4e7",
+            "runtime_sha256": "e42bc59a12d389ddc325031246557908f7106c1afea8661352723409df00d830",
+            "summary": {
+              "total_trades": 8,
+              "profit_total_abs": 648.03404161,
+              "profit_total": 0.064803404161,
+              "max_drawdown_account": 0.005125995876214423,
+              "profit_factor": 13.489925320133326,
+              "wins": 4,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 15282.532697624998,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 5,
+          "parameters": {
+            "sma_period": 50,
+            "vol_target": 0.45
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/5/output/backtest-result-2026-11-01_10-34-32.zip",
+            "artifact_sha256": "bf114d878595acf9983afe0a7a7a388d4930728a24c5a5cecb5a9d0630409044",
+            "parameter_sha256": "78cf93900bc98e9663b78c2250a8a3a0b2936bdc496fa86c30de280f95d6346e",
+            "runtime_sha256": "4e3c7eb179c99291ab224d955f10ec5f8b34434f062078ab3568e10016c35f5b",
+            "summary": {
+              "total_trades": 8,
+              "profit_total_abs": 691.6378438500001,
+              "profit_total": 0.06916378438500001,
+              "max_drawdown_account": 0.005123841805802068,
+              "profit_factor": 14.330325976090247,
+              "wins": 4,
+              "losses": 4,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 15703.832142074998,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 6,
+          "parameters": {
+            "sma_period": 55,
+            "vol_target": 0.35
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/6/output/backtest-result-2026-11-01_10-34-43.zip",
+            "artifact_sha256": "089f2c2668068700d5995ff4171bd459b0d9ea57d137753ddc4ddd0aeb074c56",
+            "parameter_sha256": "905a900fce42245ce05f12fb349332c272c4c2a57de0ff80604e802567028425",
+            "runtime_sha256": "a1efd3bc4e26bc929310e7b151809f67b32f27a4ab76d7c5f2703a681ebe8cec",
+            "summary": {
+              "total_trades": 9,
+              "profit_total_abs": 471.26912383,
+              "profit_total": 0.047126912383,
+              "max_drawdown_account": 0.006641191352450076,
+              "profit_factor": 5.031934712466722,
+              "wins": 4,
+              "losses": 5,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 15997.604654924999,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 7,
+          "parameters": {
+            "sma_period": 55,
+            "vol_target": 0.4
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/7/output/backtest-result-2026-11-01_10-34-54.zip",
+            "artifact_sha256": "dd49b35b0cc4d3f72ea0552e5ee73c001a9e887e7bc7e069bb89c58ba2333586",
+            "parameter_sha256": "20993b7e3f2e18815604bbcef83ac551ec00396042458517406f9ca84c26f11f",
+            "runtime_sha256": "432d78cdeee02345297ece03f2ad2473fa124bc0717f2818cb22d2f97fbd29d3",
+            "summary": {
+              "total_trades": 9,
+              "profit_total_abs": 516.73960808,
+              "profit_total": 0.051673960808000005,
+              "max_drawdown_account": 0.006880425791581535,
+              "profit_factor": 5.3271915865109305,
+              "wins": 4,
+              "losses": 5,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 16903.7190357,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        },
+        {
+          "index": 8,
+          "parameters": {
+            "sma_period": 55,
+            "vol_target": 0.45
+          },
+          "fee": 0.0005,
+          "status": "success",
+          "result": {
+            "artifact": "cells/8/output/backtest-result-2026-11-01_10-35-06.zip",
+            "artifact_sha256": "47989226ef775e2ad27210afb351e194d67a8592c73fc66e2cfd7b5761e8ac68",
+            "parameter_sha256": "da306959afc53191ef99c2b9a1ee26fd3159a910307ba0ac52a7762b3164673b",
+            "runtime_sha256": "351c144128d5934e1a48de7d50619ecd46da19fd47a27c0c1985d3244ec34c49",
+            "summary": {
+              "total_trades": 9,
+              "profit_total_abs": 549.18862414,
+              "profit_total": 0.054918862414,
+              "max_drawdown_account": 0.007123485630226884,
+              "profit_factor": 5.504966148321621,
+              "wins": 4,
+              "losses": 5,
+              "backtest_start": "2026-04-01 00:00:00",
+              "backtest_end": "2026-10-21 00:00:00",
+              "timeframe": "1h",
+              "total_volume": 17517.29645109,
+              "fee_total": null
+            },
+            "note": "Backtest native riêng cho ô; mức phí trong runtime, không ước lượng slippage."
+          },
+          "error": null
+        }
+      ],
+      "preset": null,
+      "completed_cells": 9,
+      "estimated_backtests": 9,
+      "current_cell": null,
+      "active_process_identity": null,
+      "active_command": null,
+      "cancel_requested_at": null,
+      "error": null,
+      "note": "Mỗi ô là native backtest riêng. Không tính slippage hậu xử lý là fill.",
+      "finished_at": "2026-11-01T10:35:08.426572+00:00"
+    }
   }
 }

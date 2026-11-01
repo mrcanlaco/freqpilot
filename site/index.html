@@ -766,7 +766,7 @@
         <div class="win-bar">
           <div class="win-dots">
             <span class="r"></span><span class="y"></span><span class="g"></span>
-            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · 1h · SHA-256: c331b8980e</span>
+            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5</span>
           </div>
           <div class="win-tabs">
             <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn</button>
@@ -783,35 +783,39 @@
               <div class="strat-btns">
                 <button class="strat-btn active" onclick="selectHeroStrategy('diki', this)">
                   <span><b>DikibagastEmaRsi1h</b> (30 lệnh)</span>
-                  <span class="badge-pos">+44.23 USDT · DD 0.73%</span>
+                  <span class="badge-pos">+478.54 USDT · DD 0.86%</span>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('rocket', this)">
                   <span><b>RocketHunterSma501h</b> (8 lệnh)</span>
-                  <span class="badge-pos">+61.83 USDT · PF 18.29</span>
+                  <span class="badge-pos">+721.18 USDT · PF 14.90</span>
+                </button>
+                <button class="strat-btn" onclick="selectHeroStrategy('tarsis', this)">
+                  <span><b>TarsisVolTargetSma501h</b> (8 lệnh)</span>
+                  <span class="badge-pos">+648.03 USDT · PF 13.49</span>
                 </button>
               </div>
-              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">8ebeb7170c · lookahead: false</span>
+              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false</span>
             </div>
 
             <!-- 10 KPI Cards -->
             <div class="rq-metrics">
-              <div class="rq-metric"><small>Net P&amp;L (USDT)</small><b class="pos" id="m-pnl">+44.23 USDT</b></div>
-              <div class="rq-metric"><small>Return (%)</small><b class="pos" id="m-ret">+4.42%</b></div>
+              <div class="rq-metric"><small>Net P&amp;L (10k Capital)</small><b class="pos" id="m-pnl">+478.54 USDT</b></div>
+              <div class="rq-metric"><small>Return (%)</small><b class="pos" id="m-ret">+4.79%</b></div>
               <div class="rq-metric"><small>Total Trades</small><b id="m-trades">30</b></div>
               <div class="rq-metric"><small>Win Rate</small><b class="pos" id="m-win">70.0% (21W/9L)</b></div>
-              <div class="rq-metric"><small>Profit Factor</small><b class="pos" id="m-pf">3.96</b></div>
-              <div class="rq-metric"><small>Max Drawdown</small><b class="pos" id="m-dd">-0.73%</b></div>
-              <div class="rq-metric"><small>Expectancy / Trade</small><b class="pos" id="m-exp">+1.47 USDT</b></div>
+              <div class="rq-metric"><small>Profit Factor</small><b class="pos" id="m-pf">3.69</b></div>
+              <div class="rq-metric"><small>Max Drawdown</small><b class="pos" id="m-dd">-0.86%</b></div>
+              <div class="rq-metric"><small>Expectancy / Trade</small><b class="pos" id="m-exp">+15.95 USDT</b></div>
               <div class="rq-metric"><small>Lookahead Bias</small><b class="pos">0 (Verified)</b></div>
               <div class="rq-metric"><small>Recursive Bias</small><b class="pos">0 (Verified)</b></div>
-              <div class="rq-metric"><small>Execution Mode</small><b>1x Isolated · 5m</b></div>
+              <div class="rq-metric"><small>Protocol</small><b>10k / 1k · 1x · 5m</b></div>
             </div>
 
             <!-- Cumulative PnL SVG Chart -->
             <div class="chart-card">
               <div class="chart-head">
-                <span>📈 Cumulative Closed-Trade P&amp;L (USDT · 2026-04-01 → 2026-10-21)</span>
-                <span class="pos mono" id="chart-pnl-badge">+44.23 USDT</span>
+                <span>📈 Cumulative Closed-Trade P&amp;L (10,000 USDT Wallet · 2026-04-01 → 2026-10-21)</span>
+                <span class="pos mono" id="chart-pnl-badge">+478.54 USDT</span>
               </div>
               <svg id="svg-equity" viewBox="0 0 960 200" width="100%" height="200" style="display:block;overflow:visible"></svg>
             </div>
@@ -820,7 +824,7 @@
             <div class="chart-card">
               <div class="chart-head">
                 <span>🌊 Underwater Drawdown (% of Account Equity)</span>
-                <span class="neg mono" id="chart-dd-badge">Max DD: -0.73%</span>
+                <span class="neg mono" id="chart-dd-badge">Max DD: -0.86%</span>
               </div>
               <svg id="svg-drawdown" viewBox="0 0 960 110" width="100%" height="110" style="display:block;overflow:visible"></svg>
             </div>
@@ -839,9 +843,9 @@
           <div id="pane-matrix" class="win-pane">
             <div class="bento-grid">
               <div>
-                <h3 style="margin:0 0 6px">🎛️ Ma Trận Độ Nhạy 2D (`d28b58b598` — 9/9 Ô Đều Dương)</h3>
+                <h3 style="margin:0 0 6px">🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)</h3>
                 <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
-                  9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`): vùng lân cận `ema_short × rsi_offset` đều sinh lời dương từ `+26.21` đến `+46.09 USDT` với MaxDD `≤ 1.52%`.
+                  9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`, vốn `10.000 USDT`, stake `1.000 USDT`): vùng lân cận `ema_short × rsi_offset` đều sinh lời từ `+279.89` đến `+497.65 USDT` với MaxDD `≤ 1.91%`.
                 </p>
                 <div class="sens-grid">
                   <div class="sens-hdr">ema \ rsi</div>
@@ -850,57 +854,57 @@
                   <div class="sens-hdr">rsi_off = 12</div>
 
                   <div class="sens-hdr">ema = 45</div>
-                  <div class="sens-cell"><b>+39.68 USDT</b><small>40 lệnh · DD 1.52%</small></div>
-                  <div class="sens-cell"><b>+44.93 USDT</b><small>38 lệnh · DD 0.99%</small></div>
-                  <div class="sens-cell"><b>+42.26 USDT</b><small>38 lệnh · DD 1.00%</small></div>
+                  <div class="sens-cell"><b>+404.66 USDT</b><small>40 lệnh · DD 1.91%</small></div>
+                  <div class="sens-cell"><b>+460.89 USDT</b><small>38 lệnh · DD 1.33%</small></div>
+                  <div class="sens-cell"><b>+428.50 USDT</b><small>38 lệnh · DD 1.35%</small></div>
 
                   <div class="sens-hdr">ema = 50</div>
-                  <div class="sens-cell"><b>+46.09 USDT</b><small>32 lệnh · DD 0.84%</small></div>
-                  <div class="sens-cell base"><b>+44.23 USDT ★</b><small>Baseline · 30 lệnh · DD 0.73%</small></div>
-                  <div class="sens-cell"><b>+44.62 USDT</b><small>32 lệnh · DD 0.65%</small></div>
+                  <div class="sens-cell"><b>+497.65 USDT</b><small>32 lệnh · DD 1.03%</small></div>
+                  <div class="sens-cell base"><b>+478.54 USDT ★</b><small>Baseline · 30 lệnh · DD 0.86%</small></div>
+                  <div class="sens-cell"><b>+430.32 USDT</b><small>29 lệnh · DD 0.90%</small></div>
 
                   <div class="sens-hdr">ema = 55</div>
-                  <div class="sens-cell"><b>+35.82 USDT</b><small>23 lệnh · DD 0.41%</small></div>
-                  <div class="sens-cell"><b>+26.16 USDT</b><small>20 lệnh · DD 0.37%</small></div>
-                  <div class="sens-cell"><b>+26.21 USDT</b><small>20 lệnh · DD 0.33%</small></div>
+                  <div class="sens-cell"><b>+380.62 USDT</b><small>23 lệnh · DD 0.53%</small></div>
+                  <div class="sens-cell"><b>+302.25 USDT</b><small>20 lệnh · DD 0.40%</small></div>
+                  <div class="sens-cell"><b>+279.89 USDT</b><small>20 lệnh · DD 0.40%</small></div>
                 </div>
               </div>
 
               <div>
-                <h3 style="margin:0 0 6px">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`94b955e45b`)</h3>
+                <h3 style="margin:0 0 6px">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)</h3>
                 <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
-                  Kiểm chứng chống Overfit: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):
+                  Kiểm chứng chống Overfit ở quy mô vốn `10.000 USDT`: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):
                 </p>
                 <div class="bento-visual">
                   <div style="font-size:12px;color:var(--fg-2);margin-bottom:10px;font-weight:600">Timeline Chia Cửa Sổ Walk-Forward:</div>
                   <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:6px;margin-bottom:18px;font-family:var(--mono);font-size:11.5px;text-align:center">
-                    <div style="background:rgba(56,189,248,0.16);border:1px solid var(--accent);padding:8px;border-radius:8px;color:var(--fg)">Train (90d)<br/><small>Hyperopt 12 epochs</small></div>
-                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (30d)<br/><small>Test độc lập</small></div>
+                    <div style="background:rgba(56,189,248,0.16);border:1px solid var(--accent);padding:8px;border-radius:8px;color:var(--fg)">Train (90d)<br/><small>Hyperopt seed=42</small></div>
+                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (35d)<br/><small>Test độc lập</small></div>
                     <div style="background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);padding:8px;border-radius:8px;color:var(--pos-bright)">Holdout (35d)<br/><small>2026-09-16→10-21</small></div>
                   </div>
 
                   <div style="font-size:12px;color:var(--fg-2);margin-bottom:6px;font-weight:600">Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):</div>
                   <div class="bar-row">
                     <span><b>Baseline (Untuned)</b></span>
-                    <div class="bar-track"><div class="bar-fill" style="width:82%;background:var(--pos-bright)"></div></div>
-                    <b class="pos mono">+9.16 USDT</b>
+                    <div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--pos-bright)"></div></div>
+                    <b class="pos mono">+94.44 USDT</b>
                   </div>
                   <div class="bar-row">
                     <span>Hyperopt Candidate</span>
-                    <div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--neg)"></div></div>
-                    <b class="neg mono">-3.46 USDT</b>
+                    <div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--neg)"></div></div>
+                    <b class="neg mono">-50.85 USDT</b>
                   </div>
 
-                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-06-30 → 2026-07-30`):</div>
+                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):</div>
                   <div class="bar-row">
                     <span><b>Baseline (Untuned)</b></span>
-                    <div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--pos-bright)"></div></div>
-                    <b class="pos mono">+13.18 USDT</b>
+                    <div class="bar-track"><div class="bar-fill" style="width:94%;background:var(--pos-bright)"></div></div>
+                    <b class="pos mono">+141.61 USDT</b>
                   </div>
                   <div class="bar-row">
                     <span>Hyperopt Candidate</span>
-                    <div class="bar-track"><div class="bar-fill" style="width:48%;background:var(--accent)"></div></div>
-                    <b class="pos mono">+6.78 USDT</b>
+                    <div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--accent)"></div></div>
+                    <b class="pos mono">+105.83 USDT</b>
                   </div>
                 </div>
               </div>
@@ -927,8 +931,8 @@
                     <small style="color:var(--fg-2)">2026-04-01 → 2026-10-21</small>
                   </div>
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--pos-bright)">
-                    <small style="color:var(--fg-3)">03 · GÓI BACKTEST GẦN NHẤT</small><br/>
-                    <b class="pos">+44.23 USDT · 30 lệnh</b><br/>
+                    <small style="color:var(--fg-3)">03 · GÓI BACKTEST 10K GẦN NHẤT</small><br/>
+                    <b class="pos">+478.54 USDT · 30 lệnh</b><br/>
                     <small class="pos">✓ Khớp mã đang mở (SHA-256)</small>
                   </div>
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
@@ -948,14 +952,14 @@
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--pos-bright);border-radius:8px">
                     <div>
                       <b>DikibagastEmaRsi1h - 6.7m Verified 1x</b><br/>
-                      <small style="color:var(--fg-3)">profile: 4e1b0cb3ef · run: 8ebeb7170c</small>
+                      <small style="color:var(--fg-3)">profile: 4e1b0cb3ef · 10k run: b9f8eb39c3</small>
                     </div>
                     <span class="pill pass">1x Isolated · Ready</span>
                   </div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px">
                     <div>
                       <b>RocketHunterSma501h - 6.7m Verified 1x</b><br/>
-                      <small style="color:var(--fg-3)">profile: f26d19d9d7 · run: 6826363795</small>
+                      <small style="color:var(--fg-3)">profile: f26d19d9d7 · 10k run: fd368e3110</small>
                     </div>
                     <span class="pill pass">1x Isolated · Ready</span>
                   </div>
@@ -995,8 +999,8 @@
 chỉ backtest và paper. Giữ engine Freqtrade 2026.9 chính thức.
 
 Bằng chứng hiện tại trên máy:
-- Gói backtest gần nhất: 8ebeb7170c · khoảng 20260401-20261021
-  · +44.23 USDT · 30 lệnh (khớp mã hiện tại)
+- Gói backtest gần nhất: b9f8eb39c3 · khoảng 20260401-20261021 (vốn 10.000 USDT)
+  · +478.54 USDT · 30 lệnh (khớp mã hiện tại)
 - Kiểm định gần nhất: lookahead · success (has_bias=False)
 - Kiểm định đệ quy: recursive · success (has_bias=False)</pre>
               </div>
@@ -1067,18 +1071,23 @@ Bằng chứng hiện tại trên máy:
           <div class="bento-visual">
             <div class="bar-row">
               <span><b>RocketHunterSma501h</b></span>
-              <div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--pos-bright)"></div></div>
-              <b class="pos mono">+61.83 USDT</b>
+              <div class="bar-track"><div class="bar-fill" style="width:96%;background:var(--pos-bright)"></div></div>
+              <b class="pos mono">+721.18 USDT</b>
+            </div>
+            <div class="bar-row">
+              <span><b>TarsisVolTargetSma501h</b></span>
+              <div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--pos-bright)"></div></div>
+              <b class="pos mono">+648.03 USDT</b>
             </div>
             <div class="bar-row">
               <span><b>DikibagastEmaRsi1h</b></span>
-              <div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--pos-bright)"></div></div>
-              <b class="pos mono">+44.23 USDT</b>
+              <div class="bar-track"><div class="bar-fill" style="width:66%;background:var(--pos-bright)"></div></div>
+              <b class="pos mono">+478.54 USDT</b>
             </div>
             <div class="bar-row">
               <span>CodexBotVibe4h (Overfit)</span>
-              <div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--neg)"></div></div>
-              <b class="neg mono">-20.02 USDT</b>
+              <div class="bar-track"><div class="bar-fill" style="width:34%;background:var(--neg)"></div></div>
+              <b class="neg mono">-190.53 USDT</b>
             </div>
           </div>
         </div>
@@ -1090,7 +1099,7 @@ Bằng chứng hiện tại trên máy:
             <p>Hồ sơ Paper chỉ được tạo từ gói Backtest đã xác minh `SHA-256`, khởi động ở trạng thái `STOPPED` và đối chiếu từng lệnh khớp:</p>
           </div>
           <div class="bento-visual" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-family:var(--mono);font-size:11.5px">
-            <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">1. Verified ZIP<br/><b class="pos">8ebeb7170c</b></div>
+            <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">1. Verified ZIP<br/><b class="pos">b9f8eb39c3</b></div>
             <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">2. Paper Profile<br/><b style="color:var(--accent)">4e1b0cb3ef</b></div>
             <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">3. Reconcile<br/><b class="pos">Match / Diff</b></div>
           </div>
@@ -1182,7 +1191,7 @@ Bằng chứng hiện tại trên máy:
       <span class="sec-eyebrow">EMPIRICAL BENCHMARK</span>
       <h2 data-i18n="sec1_title">Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)</h2>
       <p class="sec-sub" data-i18n="sec1_sub">
-        Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
+        Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>10.000 USDT</code>, stake <code>1.000 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
       </p>
       <div class="filter-bar">
         <button class="chip active" onclick="filterAudit('all', this)" data-i18n="filter_all">Tất cả (15)</button>
@@ -1205,227 +1214,227 @@ Bằng chứng hiện tại trên máy:
           </thead>
           <tbody>
             <tr data-group="survived">
-              <td><strong>RocketHunterSma501h</strong><br/><small style="color:var(--fg-3)">rocket-hunter · <code>6826363795</code></small></td>
+              <td><strong>RocketHunterSma501h</strong><br/><small style="color:var(--fg-3)">rocket-hunter · <code>fd368e3110</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
                   <div class="pnl-bar-wrap"><div style="width:100%;height:100%;background:var(--pos-bright)"></div></div>
-                  <b class="pos mono">+61.83 USDT (+6.18%)</b>
+                  <b class="pos mono">+721.18 USDT (+7.21%)</b>
                 </div>
               </td>
               <td class="mono">8</td>
-              <td class="mono">0.35%</td>
-              <td class="mono"><b>18.29</b></td>
+              <td class="mono">0.51%</td>
+              <td class="mono"><b>14.90</b></td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">★ Top 1 Profit</span></td>
             </tr>
             <tr data-group="survived">
-              <td><strong>TarsisVolTargetSma501h</strong><br/><small style="color:var(--fg-3)">Entry Vol-Target 1x adaptation · <code>a12a2dd1ad</code></small></td>
+              <td><strong>TarsisVolTargetSma501h</strong><br/><small style="color:var(--fg-3)">Entry Vol-Target 1x adaptation · <code>f29c4c1d9a</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:88%;height:100%;background:var(--pos-bright)"></div></div>
-                  <b class="pos mono">+54.68 USDT (+5.47%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:90%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+648.03 USDT (+6.48%)</b>
                 </div>
               </td>
               <td class="mono">8</td>
-              <td class="mono">0.35%</td>
-              <td class="mono"><b>16.29</b></td>
+              <td class="mono">0.51%</td>
+              <td class="mono"><b>13.49</b></td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">★ Đạt 9/9 Độ nhạy &amp; Holdout</span></td>
             </tr>
             <tr data-group="survived">
-              <td><strong>DikibagastEmaRsi1h</strong><br/><small style="color:var(--fg-3)">EMA 50/100 + ATR · <code>8ebeb7170c</code></small></td>
+              <td><strong>DikibagastEmaRsi1h</strong><br/><small style="color:var(--fg-3)">EMA 50/100 + ATR · <code>b9f8eb39c3</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:72%;height:100%;background:var(--pos-bright)"></div></div>
-                  <b class="pos mono">+44.23 USDT (+4.42%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:67%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+478.54 USDT (+4.79%)</b>
                 </div>
               </td>
               <td class="mono"><b>30</b></td>
-              <td class="mono">0.73%</td>
-              <td class="mono"><b>3.96</b></td>
+              <td class="mono">0.86%</td>
+              <td class="mono"><b>3.69</b></td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">✓ Đạt 9/9 Độ nhạy &amp; Holdout</span></td>
             </tr>
             <tr data-group="survived">
-              <td><strong>BdrEmaRideFutures1h</strong><br/><small style="color:var(--fg-3)">BDR-Pro · <code>353953f473</code></small></td>
+              <td><strong>BdrEmaRideFutures1h</strong><br/><small style="color:var(--fg-3)">BDR-Pro · <code>92ea977e05</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:18%;height:100%;background:var(--pos-bright)"></div></div>
-                  <b class="pos mono">+9.37 USDT (+0.94%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:20%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+116.99 USDT (+1.17%)</b>
                 </div>
               </td>
               <td class="mono">8</td>
-              <td class="mono">1.41%</td>
-              <td class="mono">1.67</td>
+              <td class="mono">1.50%</td>
+              <td class="mono">1.78</td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">✓ Lãi dương cả 2 kỳ</span></td>
             </tr>
             <tr data-group="survived">
-              <td><strong>TrendCoreBagging1h</strong><br/><small style="color:var(--fg-3)">quant_crypto · <code>bba655ff87</code></small></td>
+              <td><strong>TrendCoreBagging1h</strong><br/><small style="color:var(--fg-3)">quant_crypto · <code>b0692cd1ca</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:6%;height:100%;background:var(--pos-bright)"></div></div>
-                  <b class="pos mono">+2.15 USDT (+0.21%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:7%;height:100%;background:var(--pos-bright)"></div></div>
+                  <b class="pos mono">+28.58 USDT (+0.29%)</b>
                 </div>
               </td>
               <td class="mono">2</td>
               <td class="mono">0.15%</td>
-              <td class="mono">2.45</td>
+              <td class="mono">2.90</td>
               <td><code>false / ok</code></td>
               <td><span class="pill pass">✓ Giữ lãi dương</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>TsTerminalPauseBreakout15m</strong><br/><small style="color:var(--fg-3)">TS_Terminal cross-test · <code>e7c0b6acef</code></small></td>
+              <td><strong>TsTerminalPauseBreakout15m</strong><br/><small style="color:var(--fg-3)">TS_Terminal cross-test · <code>ae469f9340</code></small></td>
               <td><code>15m</code> (4h)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:8%;height:100%;background:var(--accent)"></div></div>
-                  <b class="pos mono">+2.19 USDT (Kỳ 1m)</b>
+                  <div class="pnl-bar-wrap"><div style="width:7%;height:100%;background:var(--accent)"></div></div>
+                  <b class="pos mono">+23.34 USDT (Kỳ 1m)</b>
                 </div>
               </td>
               <td class="mono">20</td>
-              <td class="mono">0.34%</td>
+              <td class="mono">0.36%</td>
               <td class="mono">1.31</td>
               <td><code>false / ok</code></td>
               <td><span class="pill">⏳ Mới có nến 15m kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>CodexBotVibe4h</strong><br/><small style="color:var(--fg-3)">erfankh · <code>c3b0b4c882</code></small></td>
-              <td><code>4h</code> (1d)</td>
+              <td><strong>CodeAlchemyLowPassFisher1h</strong><br/><small style="color:var(--fg-3)">6.7m stress · <code>d7ef848292</code></small></td>
+              <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:45%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-20.02 USDT (-2.00%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:48%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-235.51 USDT (-2.36%)</b>
                 </div>
               </td>
-              <td class="mono">30</td>
-              <td class="mono">2.96%</td>
-              <td class="mono">0.67</td>
+              <td class="mono">17</td>
+              <td class="mono">4.53%</td>
+              <td class="mono">0.52</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Đảo chiều âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>CodeAlchemyLowPassFisher1h</strong></td>
-              <td><code>1h</code> (1d)</td>
-              <td>
-                <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:8%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-1.19 USDT (1m)</b>
-                </div>
-              </td>
-              <td class="mono">2</td>
-              <td class="mono">0.19%</td>
-              <td class="mono">0.84</td>
-              <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
-            </tr>
-            <tr data-group="dropped">
-              <td><strong>MesaTrendFollow1h</strong></td>
+              <td><strong>MesaTrendFollow1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>771d797726</code></small></td>
               <td><code>1h</code> (4h)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:12%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-1.75 USDT (1m)</b>
+                  <div class="pnl-bar-wrap"><div style="width:10%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-18.66 USDT (1m)</b>
                 </div>
               </td>
               <td class="mono">5</td>
-              <td class="mono">0.35%</td>
-              <td class="mono">0.50</td>
+              <td class="mono">0.36%</td>
+              <td class="mono">0.49</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>QuantgenTrendVoting1h</strong></td>
+              <td><strong>QuantgenTrendVoting1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>fd0c261cec</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:28%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-4.32 USDT (1m)</b>
+                  <div class="pnl-bar-wrap"><div style="width:20%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-44.52 USDT (1m)</b>
                 </div>
               </td>
               <td class="mono">2</td>
-              <td class="mono">0.49%</td>
-              <td class="mono">0.00</td>
+              <td class="mono">0.56%</td>
+              <td class="mono">0.21</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>MirazizDonchianAtr4h</strong></td>
+              <td><strong>MirazizDonchianAtr4h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>81c9d91af5</code></small></td>
               <td><code>4h</code></td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:32%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-4.92 USDT (1m)</b>
+                  <div class="pnl-bar-wrap"><div style="width:24%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-51.83 USDT (1m)</b>
                 </div>
               </td>
               <td class="mono">2</td>
-              <td class="mono">0.49%</td>
+              <td class="mono">0.52%</td>
               <td class="mono">0.00</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>EnriqueVolAdjusted1h</strong></td>
+              <td><strong>EnriqueVolAdjusted1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>e0033d2e72</code></small></td>
               <td><code>1h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:55%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-9.86 USDT (1m)</b>
+                  <div class="pnl-bar-wrap"><div style="width:36%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-95.52 USDT (1m)</b>
                 </div>
               </td>
               <td class="mono">3</td>
-              <td class="mono">1.41%</td>
-              <td class="mono">0.31</td>
+              <td class="mono">1.47%</td>
+              <td class="mono">0.35</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Âm ở kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>ChamaraBosContinuation1h</strong><br/><small style="color:var(--fg-3)">Simplified 4h/1d BOS 1x · <code>a798e00c78</code></small></td>
+              <td><strong>ChamaraBosContinuation1h</strong><br/><small style="color:var(--fg-3)">Simplified 4h/1d BOS 1x · <code>465207444d</code></small></td>
               <td><code>1h</code> (4h/1d)</td>
               <td>
                 <div class="pnl-visual">
                   <div class="pnl-bar-wrap"><div style="width:40%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-17.55 USDT (-1.76%)</b>
+                  <b class="neg mono">-168.13 USDT (-1.68%)</b>
                 </div>
               </td>
               <td class="mono">36</td>
-              <td class="mono">1.93%</td>
-              <td class="mono">0.69</td>
+              <td class="mono">2.06%</td>
+              <td class="mono">0.73</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Biến thể 1x âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>HermesAdxBreakout4h</strong><br/><small style="color:var(--fg-3)">Simplified 59d-warmup 4h · <code>1bb4de2153</code></small></td>
+              <td><strong>CodexBotVibe4h</strong><br/><small style="color:var(--fg-3)">erfankh · <code>916aad1ea4</code></small></td>
               <td><code>4h</code> (1d)</td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:43%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-19.18 USDT (-1.92%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:44%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-190.53 USDT (-1.91%)</b>
+                </div>
+              </td>
+              <td class="mono">30</td>
+              <td class="mono">3.14%</td>
+              <td class="mono">0.70</td>
+              <td><code>false / ok</code></td>
+              <td><span class="pill drop">✕ Đảo chiều âm ở mẫu 6,7m</span></td>
+            </tr>
+            <tr data-group="dropped">
+              <td><strong>HermesAdxBreakout4h</strong><br/><small style="color:var(--fg-3)">Simplified 59d-warmup 4h · <code>18fde67d0d</code></small></td>
+              <td><code>4h</code> (1d)</td>
+              <td>
+                <div class="pnl-visual">
+                  <div class="pnl-bar-wrap"><div style="width:45%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-193.31 USDT (-1.93%)</b>
                 </div>
               </td>
               <td class="mono">15</td>
-              <td class="mono">1.92%</td>
-              <td class="mono">0.30</td>
+              <td class="mono">1.93%</td>
+              <td class="mono">0.35</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Biến thể rút gọn âm 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
-              <td><strong>C31VolumeDisplacement1h</strong><br/><small style="color:var(--fg-3)">Single-pos 1x 5m adaptation · <code>566dba5139</code></small></td>
+              <td><strong>C31VolumeDisplacement1h</strong><br/><small style="color:var(--fg-3)">Single-pos 1x 5m adaptation · <code>8d3dff1269</code></small></td>
               <td><code>1h</code></td>
               <td>
                 <div class="pnl-visual">
-                  <div class="pnl-bar-wrap"><div style="width:85%;height:100%;background:var(--neg)"></div></div>
-                  <b class="neg mono">-47.72 USDT (-4.77%)</b>
+                  <div class="pnl-bar-wrap"><div style="width:88%;height:100%;background:var(--neg)"></div></div>
+                  <b class="neg mono">-496.19 USDT (-4.96%)</b>
                 </div>
               </td>
               <td class="mono">169</td>
-              <td class="mono">4.77%</td>
-              <td class="mono">0.76</td>
+              <td class="mono">4.96%</td>
+              <td class="mono">0.78</td>
               <td><code>false / ok</code></td>
               <td><span class="pill drop">✕ Biến thể đơn lệnh 1x âm 6,7m</span></td>
             </tr>
@@ -1460,10 +1469,10 @@ Bằng chứng hiện tại trên máy:
           <div>
             <span class="pill pass">Khuyên Dùng · Mua 1 Lần</span>
             <h3 style="margin:10px 0 4px">Verified Strategy Pack v1</h3>
-            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ 4 gói ZIP đóng băng</small></div>
+            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ 5 gói ZIP đóng băng</small></div>
             <ul class="price-list">
-              <li><strong>4 gói <code>freqpilot-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng) của <code>DikibagastEmaRsi1h</code>, <code>RocketHunterSma501h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
-              <li><strong>4 tài liệu <code>Dossier (.md)</code></strong> đầy đủ công thức, tham số, mã <code>SHA-256</code> và hướng dẫn chạy <code>Archive Replay</code>.</li>
+              <li><strong>5 gói <code>freqpilot-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>) của <code>RocketHunterSma501h</code>, <code>TarsisVolTargetSma501h</code>, <code>DikibagastEmaRsi1h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
+              <li><strong>5 tài liệu <code>Dossier (.md)</code></strong> đầy đủ công thức, tham số, mã <code>SHA-256</code> và hướng dẫn chạy <code>Archive Replay</code>.</li>
               <li>Nạp trực tiếp vào FreqPilot trong 5 giây.</li>
             </ul>
           </div>
@@ -1552,59 +1561,82 @@ cd freqpilot
     // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
     const HERO_STRATEGIES = {
       diki: {
-        title: "DikibagastEmaRsi1h · 1h · 2026-04-01 → 2026-10-21 · SHA-256: c331b8980e",
-        shaLabel: "8ebeb7170c · lookahead: false · recursive: ok",
-        pnl: "+44.23 USDT",
-        ret: "+4.42%",
+        title: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
+        shaLabel: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        pnl: "+478.54 USDT",
+        ret: "+4.79%",
         trades: "30",
         win: "70.0% (21W/9L)",
-        pf: "3.96",
-        dd: "-0.73%",
-        exp: "+1.47 USDT",
+        pf: "3.69",
+        dd: "-0.86%",
+        exp: "+15.95 USDT",
         equity: [
-          ["04-01", 0], ["04-13", -2.82], ["05-18", 0.01], ["05-23", 3.65], ["06-01", 5.63],
-          ["06-02", 6.56], ["06-02", 18.44], ["06-02", 19.57], ["06-04", 24.11], ["06-11", 23.79],
-          ["06-12", 28.07], ["07-09", 27.42], ["07-09", 26.89], ["07-18", 22.63], ["08-04", 21.83],
-          ["08-11", 20.6], ["08-20", 22.67], ["08-20", 23.9], ["08-20", 24.15], ["08-20", 24.83],
-          ["08-20", 27.06], ["08-21", 28.27], ["08-21", 29.22], ["08-21", 34.67], ["08-29", 34.09],
-          ["08-29", 35.08], ["09-21", 37.64], ["09-28", 37.98], ["09-28", 34.23], ["10-08", 39.64],
-          ["10-15", 44.23]
+          ["04-01", 0], ["04-13", -36.67], ["05-18", -7.83], ["05-23", 35.78], ["06-01", 61.58],
+          ["06-02", 74.56], ["06-02", 193.84], ["06-02", 209.73], ["06-04", 273.32], ["06-11", 268.47],
+          ["06-12", 311.32], ["07-09", 301.43], ["07-09", 296.12], ["07-18", 253.53], ["08-04", 241.59],
+          ["08-11", 223.02], ["08-20", 252.07], ["08-20", 264.47], ["08-20", 266.99], ["08-20", 275.92],
+          ["08-20", 298.51], ["08-21", 314.20], ["08-21", 326.52], ["08-21", 381.20], ["08-29", 374.20],
+          ["08-29", 384.24], ["09-21", 414.93], ["09-28", 418.43], ["09-28", 377.15], ["10-08", 432.28],
+          ["10-15", 478.54]
         ],
         drawdown: [
-          ["04-01", 0], ["04-13", -0.28], ["05-18", 0], ["05-23", 0], ["06-01", 0],
-          ["06-02", 0], ["06-02", 0], ["06-02", 0], ["06-04", 0], ["06-11", -0.03],
-          ["06-12", 0], ["07-09", -0.06], ["07-09", -0.12], ["07-18", -0.53], ["08-04", -0.61],
-          ["08-11", -0.73], ["08-20", -0.53], ["08-20", -0.41], ["08-20", -0.38], ["08-20", -0.32],
-          ["08-20", -0.1], ["08-21", 0], ["08-21", 0], ["08-21", 0], ["08-29", -0.06],
-          ["08-29", 0], ["09-21", 0], ["09-28", 0], ["09-28", -0.36], ["10-08", 0],
+          ["04-01", 0], ["04-13", -0.37], ["05-18", -0.08], ["05-23", 0], ["06-01", 0],
+          ["06-02", 0], ["06-02", 0], ["06-02", 0], ["06-04", 0], ["06-11", -0.05],
+          ["06-12", 0], ["07-09", -0.10], ["07-09", -0.15], ["07-18", -0.56], ["08-04", -0.68],
+          ["08-11", -0.86], ["08-20", -0.57], ["08-20", -0.45], ["08-20", -0.43], ["08-20", -0.34],
+          ["08-20", -0.12], ["08-21", 0], ["08-21", 0], ["08-21", 0], ["08-29", -0.07],
+          ["08-29", 0], ["09-21", 0], ["09-28", 0], ["09-28", -0.40], ["10-08", 0],
           ["10-15", 0]
         ],
         monthly: [
-          ["Apr 2026", -2.82], ["May 2026", 6.46], ["Jun 2026", 24.42], ["Jul 2026", -5.45],
-          ["Aug 2026", 12.46], ["Sep 2026", -0.85], ["Oct 2026", 10.00], ["Total (6.7m)", 44.23]
+          ["Apr 2026", -36.67], ["May 2026", 72.44], ["Jun 2026", 275.54], ["Jul 2026", -57.79],
+          ["Aug 2026", 130.69], ["Sep 2026", -7.08], ["Oct 2026", 101.39], ["Total (6.7m)", 478.54]
         ]
       },
       rocket: {
-        title: "RocketHunterSma501h · 1h · 2026-04-01 → 2026-10-21 · SHA-256: c621b60697",
-        shaLabel: "6826363795 · lookahead: false · recursive: ok",
-        pnl: "+61.83 USDT",
-        ret: "+6.18%",
+        title: "RocketHunterSma501h · 1h · Vốn 10.000 USDT · SHA-256: a97bd2aa06",
+        shaLabel: "fd368e3110 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        pnl: "+721.18 USDT",
+        ret: "+7.21%",
         trades: "8",
         win: "50.0% (4W/4L)",
-        pf: "18.29",
-        dd: "-0.35%",
-        exp: "+7.73 USDT",
+        pf: "14.90",
+        dd: "-0.51%",
+        exp: "+90.15 USDT",
         equity: [
-          ["04-01", 0], ["05-16", 5.26], ["05-23", 11.57], ["05-27", 10.69], ["07-17", 9.67],
-          ["08-01", 8.49], ["08-15", 7.99], ["10-09", 44.06], ["10-21", 61.83]
+          ["04-01", 0], ["05-16", 52.97], ["05-23", 141.22], ["05-27", 129.86], ["07-17", 114.50],
+          ["08-01", 96.76], ["08-15", 89.33], ["10-09", 454.62], ["10-21", 721.18]
         ],
         drawdown: [
-          ["04-01", 0], ["05-16", 0], ["05-23", 0], ["05-27", -0.09], ["07-17", -0.19],
-          ["08-01", -0.30], ["08-15", -0.35], ["10-09", 0], ["10-21", 0]
+          ["04-01", 0], ["05-16", 0], ["05-23", 0], ["05-27", -0.11], ["07-17", -0.26],
+          ["08-01", -0.44], ["08-15", -0.51], ["10-09", 0], ["10-21", 0]
         ],
         monthly: [
-          ["Apr 2026", 0.00], ["May 2026", 10.69], ["Jun 2026", 0.00], ["Jul 2026", -1.02],
-          ["Aug 2026", -1.68], ["Sep 2026", 0.00], ["Oct 2026", 53.84], ["Total (6.7m)", 61.83]
+          ["Apr 2026", 0.00], ["May 2026", 129.87], ["Jun 2026", 0.00], ["Jul 2026", -15.36],
+          ["Aug 2026", -25.17], ["Sep 2026", 0.00], ["Oct 2026", 631.85], ["Total (6.7m)", 721.18]
+        ]
+      },
+      tarsis: {
+        title: "TarsisVolTargetSma501h · 1h · Vốn 10.000 USDT · SHA-256: d3a223a86a",
+        shaLabel: "f29c4c1d9a · Vốn 10.000 USDT (Stake cơ sở 1.000) · lookahead: false · recursive: ok",
+        pnl: "+648.03 USDT",
+        ret: "+6.48%",
+        trades: "8",
+        win: "50.0% (4W/4L)",
+        pf: "13.49",
+        dd: "-0.51%",
+        exp: "+81.00 USDT",
+        equity: [
+          ["04-01", 0], ["05-16", 33.59], ["05-23", 121.85], ["05-27", 110.49], ["07-17", 95.13],
+          ["08-01", 77.39], ["08-15", 69.96], ["10-09", 381.47], ["10-21", 648.03]
+        ],
+        drawdown: [
+          ["04-01", 0], ["05-16", 0], ["05-23", 0], ["05-27", -0.11], ["07-17", -0.26],
+          ["08-01", -0.44], ["08-15", -0.51], ["10-09", 0], ["10-21", 0]
+        ],
+        monthly: [
+          ["Apr 2026", 0.00], ["May 2026", 110.49], ["Jun 2026", 0.00], ["Jul 2026", -15.36],
+          ["Aug 2026", -25.17], ["Sep 2026", 0.00], ["Oct 2026", 578.07], ["Total (6.7m)", 648.03]
         ]
       }
     };
@@ -1685,7 +1717,7 @@ cd freqpilot
 
       // Render Monthly Heatmap
       document.getElementById("monthly-heatmap").innerHTML = s.monthly.map(([m, val]) => {
-        const cls = val > 15 ? "hm-pos-2" : val > 0 ? "hm-pos-1" : val < 0 ? "hm-neg" : "hm-neutral";
+        const cls = val > 150 ? "hm-pos-2" : val > 0 ? "hm-pos-1" : val < 0 ? "hm-neg" : "hm-neutral";
         const sign = val > 0 ? "+" : "";
         return `<div class="hm-cell ${cls}"><small>${m}</small><b>${sign}${val.toFixed(2)}</b></div>`;
       }).join("");
@@ -1751,7 +1783,7 @@ cd freqpilot
         sec_cmp_sub: "FreqUI gốc thiếu công cụ kiểm định nghiên cứu khép kín; trong khi bản fork FreqUI Ultimate buộc thay thế engine chính thức và báo lỗi <code>404 Endpoint Not Found</code> khi nối vào Freqtrade gốc. FreqPilot giải quyết triệt để cả hai:",
         cmp_cta_btn: "Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →",
         sec1_title: "Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)",
-        sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>1.000 USDT</code>, stake <code>100 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
+        sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>10.000 USDT</code>, stake <code>1.000 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
         filter_all: "Tất cả (15)",
         filter_survived: "✓ Sống sót qua 6,7 tháng (5)",
         filter_dropped: "✕ Bị loại / mẫu ngắn (10)",
@@ -1792,7 +1824,7 @@ cd freqpilot
         sec_cmp_sub: "Standard FreqUI is a bot monitor, not a research studio; meanwhile, the FreqUI Ultimate fork forces you off the official Freqtrade engine (returning <code>404</code> on official backends). FreqPilot gives you the best of both:",
         cmp_cta_btn: "Read Full Architecture & 8-Strategy Benchmark →",
         sec1_title: "Public Audit Leaderboard: 15 Automated Discovery Strategies (291 Scanner Runs)",
-        sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>1,000 USDT</code> wallet, <code>100 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
+        sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>10,000 USDT</code> wallet, <code>1,000 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
         filter_all: "All Audited (15)",
         filter_survived: "✓ Survived 6.7-Month Window (5)",
         filter_dropped: "✕ Eliminated / Short-Only (10)",
@@ -1833,7 +1865,7 @@ cd freqpilot
         sec_cmp_sub: "原版 FreqUI 缺乏策略研发闭环工具；而 FreqUI Ultimate 强迫替换官方引擎（连接官方后端会报 <code>404</code>）。FreqPilot 完美兼具两者优势：",
         cmp_cta_btn: "查看完整架构与 8 策略对标报告 →",
         sec1_title: "公开实证审计榜单：15 个自动发掘策略（源自 291 次扫描）",
-        sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>1,000 USDT</code> 本金，<code>100 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
+        sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>10,000 USDT</code> 本金，<code>1,000 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
         filter_all: "全部策略 (15)",
         filter_survived: "✓ 通过 6.7 个月长周期检验 (5)",
         filter_dropped: "✕ 长周期淘汰 / 短样本 (10)",
@@ -1874,7 +1906,7 @@ cd freqpilot
         sec_cmp_sub: "В стандартном FreqUI нет исследовательской среды, а форк FreqUI Ultimate требует замены официального движка. FreqPilot объединяет лучшее:",
         cmp_cta_btn: "Подробное сравнение архитектуры и 8 стратегий →",
         sec1_title: "Публичный аудит: 15 стратегий из 291 запуска сканера",
-        sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>1,000 USDT</code>, ставка <code>100 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
+        sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>10,000 USDT</code>, ставка <code>1,000 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
         filter_all: "Все (15)",
         filter_survived: "✓ Прошли окно 6.7 мес. (5)",
         filter_dropped: "✕ Отсеяны / короткое окно (10)",
@@ -1915,7 +1947,7 @@ cd freqpilot
         sec_cmp_sub: "순정 FreqUI는 연구 도구가 부족하고, FreqUI Ultimate 포크는 공식 엔진 교체를 강제합니다. FreqPilot은 공식 2026.9 엔진 위에서 완벽한 연구 스튜디오를 제공합니다:",
         cmp_cta_btn: "아키텍처 및 8대 전략 비교 보고서 보기 →",
         sec1_title: "공개 감사 리더보드: 291회 스캔에서 선별된 15개 전략",
-        sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>1,000 USDT</code> 시드, <code>100 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
+        sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>10,000 USDT</code> 시드, <code>1,000 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
         filter_all: "전체 (15)",
         filter_survived: "✓ 6.7개월 장기 구간 통과 (5)",
         filter_dropped: "✕ 장기 구간 탈락 / 단기 (10)",

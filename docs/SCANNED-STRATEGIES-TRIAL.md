@@ -109,3 +109,34 @@ Từ ba gói backtest 6,7 tháng xuất sắc nhất đã xác minh `SHA256`, ba
   - Cửa sổ #0 OOS (`20260630-20260804`): **Baseline `+0,79 USDT` (`4` lệnh)** vs Ứng viên Hyperopt `-5,26 USDT`.
   - Cửa sổ #1 OOS (`20260804-20260908`): **Baseline `+47,46 USDT` (`3` lệnh)** vs Ứng viên Hyperopt `+44,63 USDT` (`5` lệnh).
   - Kỳ Holdout tách khỏi Hyperopt (`20260916-20261021`): **Baseline `+9,50 USDT` (`2` lệnh)** vs Ứng viên Hyperopt `+3,62 USDT` (`4` lệnh, PF `2,14`).
+
+## 7. Bảng Kiểm Toán Quy Mô Vốn Chuẩn `10.000 USDT` (`stake = 1.000 USDT`, `1x Isolated`, 01/11/2026)
+
+Để loại bỏ hoàn toàn sai số làm tròn bước khối lượng tối thiểu (`0,001 BTC` trên Binance Futures) khi stake nhỏ và đồng bộ với trang chủ `site/index.html` + `site/demo.html`, toàn bộ **15 chiến lược** đã được chạy lại bằng engine **Freqtrade `2026.9` chính thức** với `dry_run_wallet = 10000`, `stake_amount = 1000`, `max_open_trades = 2`, `1x Isolated`, phí `0,05%/chiều` kèm dữ liệu `mark` + `funding` thực tế:
+
+| Chiến lược | Gói đóng băng (`run_id` / `SHA-256`) | Khoảng kiểm định | Số lệnh | Lãi / Lỗ Ròng (`10k`) | Tỷ suất (`%`) | MaxDD | Profit Factor | Kết luận |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **`RocketHunterSma501h`** | `fd368e3110` (`a97bd2aa06`) | `20260401–20261021` (`5m`) | `8` | **`+721,18 USDT`** | **`+7,21%`** | `0,51%` | **`14,90`** | **★ Top 1 Lợi nhuận 6,7 tháng** |
+| **`TarsisVolTargetSma501h`** | `f29c4c1d9a` (`d3a223a86a`) | `20260401–20261021` (`5m`) | `8` | **`+648,03 USDT`** | **`+6,48%`** | `0,51%` | **`13,49`** | **★ Đạt `9/9` Độ nhạy 10k (`61c0ef7247`: `+471,27 -> +691,64 USDT`)** |
+| **`DikibagastEmaRsi1h`** | `b9f8eb39c3` (`355afab9d5`) | `20260401–20261021` (`5m`) | **`30`** | **`+478,54 USDT`** | **`+4,79%`** | `0,86%` | **`3,69`** | **★ Đạt `9/9` Độ nhạy 10k (`cc6fd90d38`) + Thắng Holdout (`3215a26798`)** |
+| **`BdrEmaRideFutures1h`** | `92ea977e05` (`9ab6887c4d`) | `20260401–20261021` (`5m`) | `8` | **`+116,99 USDT`** | **`+1,17%`** | `1,50%` | `1,78` | ✓ Sống sót lãi dương 6,7 tháng |
+| **`TrendCoreBagging1h`** | `b0692cd1ca` (`2c5d5ff39e`) | `20260401–20261021` (`5m`) | `2` | **`+28,58 USDT`** | **`+0,29%`** | `0,15%` | `2,90` | ✓ Giữ lãi dương phòng thủ |
+| `TsTerminalPauseBreakout15m` | `ae469f9340` (`04d22374f2`) | `20260918–20261021` (`1m`) | `20` | `+23,34 USDT` | `+0,23%` | `0,36%` | `1,31` | ⏳ Mới có kho nến `15m` kỳ 1 tháng |
+| `MesaTrendFollow1h` | `771d797726` (`b71ea04463`) | `20260918–20261021` (`1m`) | `5` | `-18,66 USDT` | `-0,19%` | `0,36%` | `0,49` | ✕ Loại ở kỳ 1 tháng |
+| `QuantgenTrendVoting1h` | `fd0c261cec` (`fc316edadb`) | `20260918–20261021` (`1m`) | `2` | `-44,52 USDT` | `-0,45%` | `0,56%` | `0,21` | ✕ Loại ở kỳ 1 tháng |
+| `MirazizDonchianAtr4h` | `81c9d91af5` (`5dec903886`) | `20260918–20261021` (`1m`) | `2` | `-51,83 USDT` | `-0,52%` | `0,52%` | `0,00` | ✕ Loại ở kỳ 1 tháng |
+| `EnriqueVolAdjusted1h` | `e0033d2e72` (`e1d551ceb8`) | `20260918–20261021` (`1m`) | `3` | `-95,52 USDT` | `-0,96%` | `1,47%` | `0,35` | ✕ Loại ở kỳ 1 tháng |
+| `ChamaraBosContinuation1h` | `465207444d` (`955bacb9fc`) | `20260401–20261021` (`5m`) | `36` | `-168,13 USDT` | `-1,68%` | `2,06%` | `0,73` | ✕ Biến thể 1x âm ở mẫu 6,7 tháng |
+| `CodexBotVibe4h` | `916aad1ea4` (`2ae3b88a63`) | `20260401–20261021` (`5m`) | `30` | `-190,53 USDT` | `-1,91%` | `3,14%` | `0,70` | ✕ Đảo chiều âm ở mẫu 6,7 tháng |
+| `HermesAdxBreakout4h` | `18fde67d0d` (`90dbfbcc01`) | `20260401–20261021` (`5m`) | `15` | `-193,31 USDT` | `-1,93%` | `1,93%` | `0,35` | ✕ Biến thể rút gọn âm 6,7 tháng |
+| `CodeAlchemyLowPassFisher1h` | `d7ef848292` (`ef55b0a4b4`) | `20260401–20261021` (`5m`) | `17` | `-235,51 USDT` | `-2,36%` | `4,53%` | `0,52` | ✕ Kỳ 1m lãi nhẹ (`+6,29 USDT`), mở rộng 6,7m lộ rõ overfit |
+| `C31VolumeDisplacement1h` | `8d3dff1269` (`3d8d2773a4`) | `20260401–20261021` (`5m`) | `169` | `-496,19 USDT` | `-4,96%` | `4,96%` | `0,78` | ✕ Biến thể đơn lệnh 1x âm 6,7 tháng |
+
+- **Ma trận Độ nhạy 2D Vốn `10.000 USDT` của `DikibagastEmaRsi1h` (`cc6fd90d38` — `9/9` ô dương)**:
+  - `ema_short = 45`: `+404,66` (`rsi=8`, DD `1,91%`) · `+460,89` (`rsi=10`, DD `1,33%`) · `+428,50 USDT` (`rsi=12`, DD `1,35%`).
+  - `ema_short = 50` *(Gốc)*: `+497,65` (`rsi=8`, DD `1,03%`) · **`+478,54 USDT` (`rsi=10` — Mặc định, `30` lệnh, DD `0,86%`, PF `3,69`)** · `+430,32 USDT` (`rsi=12`, DD `0,90%`).
+  - `ema_short = 55`: `+380,62` (`rsi=8`, DD `0,53%`) · `+302,25` (`rsi=10`, DD `0,40%`) · `+279,89 USDT` (`rsi=12`, DD `0,40%`).
+- **Walk-Forward & Sealed Holdout Vốn `10.000 USDT` của `DikibagastEmaRsi1h` (`3215a26798`)**:
+  - Cửa sổ #0 OOS (`20260630–20260804`): Baseline `-70,72 USDT` (`4` lệnh) vs Ứng viên Hyperopt `-6,05 USDT` (`3` lệnh).
+  - Cửa sổ #1 OOS (`20260804–20260908`): **Baseline `+141,61 USDT` (`11` lệnh)** vs Ứng viên Hyperopt `+105,83 USDT` (`10` lệnh).
+  - Kỳ Holdout niêm phong (`20260916–20261021`): **Baseline `+94,44 USDT` (`5` lệnh, MaxDD `0,41%`, PF `3,29`)** thắng áp đảo Ứng viên Hyperopt **`-50,85 USDT` (`3` lệnh, MaxDD `0,78%`, PF `0,35`)**.

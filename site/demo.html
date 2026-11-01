@@ -378,7 +378,7 @@
         <span>FreqPilot Studio</span>
       </a>
       <span class="demo-pill" id="lbl-demo-mode">✨ Bản Dùng Thử Web (Read-Only · Không cần đăng nhập)</span>
-      <span class="safe-pill">● Official Freqtrade 2026.9 · 1x Isolated</span>
+      <span class="safe-pill">● Official Freqtrade 2026.9 · 1x Isolated · Vốn 10.000 USDT</span>
     </div>
     <div class="topbar-right">
       <select id="lang-select" class="lang-select" aria-label="Language" onchange="setDemoLang(this.value)">
@@ -389,7 +389,7 @@
         <option value="ko">🇰🇷 KO</option>
       </select>
       <a class="btn" href="/#install" id="btn-install-free">Tải Bản $0 (Chạy Local)</a>
-      <a class="btn primary" href="/#dossiers" id="btn-buy-pack">Nhận 4 Gói Chiến Lược ($39) →</a>
+      <a class="btn primary" href="/#dossiers" id="btn-buy-pack">Nhận 5 Gói Chiến Lược ($39) →</a>
     </div>
   </header>
 
@@ -397,7 +397,7 @@
     <!-- Left Strategy Sidebar -->
     <aside class="sidebar">
       <h3>
-        <span id="lbl-lib-hdr">Thư viện kiểm toán (6)</span>
+        <span id="lbl-lib-hdr">Thư viện kiểm toán 10k (7)</span>
         <small style="color:var(--pos-bright)">6,7 tháng · 5m</small>
       </h3>
       <input id="search-input" class="search-box" type="search" placeholder="Lọc tên chiến lược, nhãn…" oninput="renderSidebar()" />
@@ -414,7 +414,7 @@
         <div>
           <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--accent)" id="ws-tier-badge">VERIFIED STRATEGY PACK V1</span>
           <h1 id="ws-name">DikibagastEmaRsi1h</h1>
-          <div class="ws-sub" id="ws-meta">rev: b82e4ae101 · run: 8ebeb7170c · SHA-256: c331b8980e · 1h (informative 1d)</div>
+          <div class="ws-sub" id="ws-meta">rev: b82e4ae101 · run: b9f8eb39c3 · SHA-256: 355afab9d5 · Vốn 10.000 USDT · 1h (1d)</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" onclick="copyCodexPrompt()">📋 Sao chép Prompt cho Codex/Claude</button>
@@ -435,9 +435,9 @@
           <small>2026-04-01 → 2026-10-21 + Funding</small>
         </button>
         <button class="ctx-card" onclick="selectTab('results')">
-          <span id="ctx3-lbl">03 · Kết quả 6,7 tháng</span>
-          <b id="ctx3-val" class="pos">+44.23 USDT · 30 lệnh</b>
-          <small id="ctx3-sub">MaxDD 0.73% · PF 3.96</small>
+          <span id="ctx3-lbl">03 · Kết quả 6,7 tháng (10k)</span>
+          <b id="ctx3-val" class="pos">+478.54 USDT · 30 lệnh</b>
+          <small id="ctx3-sub">MaxDD 0.86% · PF 3.69</small>
         </button>
         <button class="ctx-card" onclick="selectTab('checks')">
           <span id="ctx4-lbl">04 · Kiểm định &amp; Paper</span>
@@ -464,17 +464,17 @@
         paid: true,
         tf: "1h (1d)",
         rev: "b82e4ae101",
-        runId: "8ebeb7170c",
-        sha: "c331b8980e8f4a21c77d9e1b3045a99c",
-        pnl: 44.23,
-        ret: 4.42,
+        runId: "b9f8eb39c3",
+        sha: "355afab9d5883dd75cb59fa0bf3ff262381e22ad0d1a5e6e347cccaabe428f25",
+        pnl: 478.54,
+        ret: 4.79,
         trades: 30,
         win: "70.0% (21W/9L)",
-        dd: 0.73,
-        pf: 3.96,
-        tags: ["#ema-rsi", "#atr-exit", "#đủ-30-lệnh", "#9/9-độ-nhạy"],
+        dd: 0.86,
+        pf: 3.69,
+        tags: ["#ema-rsi", "#atr-exit", "#đủ-30-lệnh", "#9/9-độ-nhạy", "#vốn-10k"],
         idea: "Kết hợp xu hướng EMA(50/100) trên khung ngày (1d) đã đóng với bộ lọc RSI và khoảng cách chống nhồi lệnh 21 nến trên khung 1h; thoát lệnh động theo 2.0 * ATR(14).",
-        notes: "Sống sót xuất sắc qua cả kỳ ngắn (1 tháng: +8.99 USDT) và kỳ dài 6,7 tháng (+44.23 USDT, 30 lệnh, MaxDD 0.73%). Toàn bộ 9/9 ô trong Ma trận Độ nhạy 2D đều dương (+26.16 đến +46.09 USDT) và Baseline thắng ứng viên Hyperopt trên kỳ Holdout (+9.16 vs -3.46 USDT).",
+        notes: "Trên quy mô vốn chuẩn 10.000 USDT (stake 1.000 USDT, 1x Isolated), chiến lược đạt +478.54 USDT (+4.79%, 30 lệnh, MaxDD 0.86%, PF 3.69). Toàn bộ 9/9 ô trong Ma trận Độ nhạy 2D đều dương (+279.89 đến +497.65 USDT) và Baseline thắng ứng viên Hyperopt trên kỳ Holdout (+94.44 vs -50.85 USDT).",
         code: `class DikibagastEmaRsi1h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
@@ -492,12 +492,12 @@
         dataframe = merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)
         # ... [Trọn bộ logic Separation Guard 21 nến & Custom ATR Exit nằm trong gói Verified Pack v1]`,
         equity: [
-          ["04-01",0],["04-13",-2.82],["05-18",0.01],["05-23",3.65],["06-01",5.63],["06-02",18.44],["06-04",24.11],["06-12",28.07],["07-18",22.63],["08-11",20.6],["08-20",27.06],["08-21",34.67],["09-21",37.64],["09-28",34.23],["10-08",39.64],["10-15",44.23]
+          ["04-01",0],["04-13",-36.67],["05-18",-7.83],["05-23",35.78],["06-01",61.58],["06-02",193.84],["06-04",273.32],["06-12",311.32],["07-18",253.53],["08-11",223.02],["08-20",298.51],["08-21",381.20],["09-21",414.93],["09-28",377.15],["10-08",432.28],["10-15",478.54]
         ],
         drawdown: [
-          ["04-01",0],["04-13",-0.28],["05-18",0],["06-04",0],["07-18",-0.53],["08-11",-0.73],["08-21",0],["09-28",-0.36],["10-15",0]
+          ["04-01",0],["04-13",-0.37],["05-18",-0.08],["06-04",0],["07-18",-0.56],["08-11",-0.86],["08-21",0],["09-28",-0.40],["10-15",0]
         ],
-        monthly: [["Apr",-2.82],["May",6.46],["Jun",24.42],["Jul",-5.45],["Aug",12.46],["Sep",-0.85],["Oct",10.00],["Total",44.23]],
+        monthly: [["Apr",-36.67],["May",72.44],["Jun",275.54],["Jul",-57.79],["Aug",130.69],["Sep",-7.08],["Oct",101.39],["Total",478.54]],
         paperProfile: "4e1b0cb3ef0745e6 (STOPPED · 1x Isolated)"
       },
       {
@@ -506,17 +506,17 @@
         paid: true,
         tf: "1h (1d)",
         rev: "484cebfefa",
-        runId: "6826363795",
-        sha: "c621b60697a716d3e2049f1108ab45cd",
-        pnl: 61.83,
-        ret: 6.18,
+        runId: "fd368e3110",
+        sha: "a97bd2aa06dc9820f0abbe9994753e6dda4bb65ac8a4018bf93c78118ee27a83",
+        pnl: 721.18,
+        ret: 7.21,
         trades: 8,
         win: "50.0% (4W/4L)",
-        dd: 0.35,
-        pf: 18.29,
-        tags: ["#sma50", "#trend-following", "#pf-18.29"],
+        dd: 0.51,
+        pf: 14.90,
+        tags: ["#sma50", "#trend-following", "#pf-14.90", "#top-1-profit", "#vốn-10k"],
         idea: "Bắt sóng lớn trên khung 1h dựa trên bộ lọc chế độ thị trường SMA(50) của nến ngày (1d) đã đóng; cắt lỗ cực ngắn khi gãy cấu trúc, giữ lệnh ăn trọn sóng BTC/ETH.",
-        notes: "Lãi cao nhất đợt kiểm toán 6,7 tháng (+61.83 USDT, MaxDD chỉ 0.35%, Profit Factor 18.29). Tần suất vào lệnh chọn lọc (8 lệnh / 6,7 tháng), cực hợp chạy song song cùng DikibagastEmaRsi1h.",
+        notes: "Lãi cao nhất đợt kiểm toán 6,7 tháng ở quy mô vốn 10.000 USDT (+721.18 USDT / +7.21%, MaxDD chỉ 0.51%, Profit Factor 14.90). Tần suất vào lệnh chọn lọc (8 lệnh / 6,7 tháng), cực hợp chạy song song cùng DikibagastEmaRsi1h.",
         code: `class RocketHunterSma501h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
@@ -530,9 +530,9 @@
         inf["sma_regime"] = ta.SMA(inf, timeperiod=self.sma_daily.value)
         dataframe = merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)
         # ... [Trọn bộ bộ lọc xung lượng & gói .zip SHA-256 nằm trong Verified Pack v1]`,
-        equity: [["04-01",0],["05-16",5.26],["05-23",11.57],["05-27",10.69],["07-17",9.67],["08-01",8.49],["08-15",7.99],["10-09",44.06],["10-21",61.83]],
-        drawdown: [["04-01",0],["05-23",0],["05-27",-0.09],["07-17",-0.19],["08-01",-0.30],["08-15",-0.35],["10-09",0],["10-21",0]],
-        monthly: [["Apr",0],["May",10.69],["Jun",0],["Jul",-1.02],["Aug",-1.68],["Sep",0],["Oct",53.84],["Total",61.83]],
+        equity: [["04-01",0],["05-16",52.97],["05-23",141.22],["05-27",129.86],["07-17",114.50],["08-01",96.76],["08-15",89.33],["10-09",454.62],["10-21",721.18]],
+        drawdown: [["04-01",0],["05-23",0],["05-27",-0.11],["07-17",-0.26],["08-01",-0.44],["08-15",-0.51],["10-09",0],["10-21",0]],
+        monthly: [["Apr",0],["May",129.87],["Jun",0],["Jul",-15.36],["Aug",-25.17],["Sep",0],["Oct",631.85],["Total",721.18]],
         paperProfile: "f26d19d9d7254c1b (STOPPED · 1x Isolated)"
       },
       {
@@ -541,17 +541,17 @@
         paid: true,
         tf: "1h (1d)",
         rev: "71d5550cb1",
-        runId: "a12a2dd1ad",
-        sha: "2ceeabff5c29fa77210ffdbe9f63ac30793f813e",
-        pnl: 54.68,
-        ret: 5.47,
+        runId: "f29c4c1d9a",
+        sha: "d3a223a86af423d589d9ec11908a4f979e01089eed9ac5da85ee31462dead0ff",
+        pnl: 648.03,
+        ret: 6.48,
         trades: 8,
         win: "50.0% (4W/4L)",
-        dd: 0.35,
-        pf: 16.29,
-        tags: ["#tarsis7", "#vol-targeting", "#9/9-độ-nhạy", "#pf-16.29"],
+        dd: 0.51,
+        pf: 13.49,
+        tags: ["#tarsis7", "#vol-targeting", "#9/9-độ-nhạy", "#pf-13.49", "#vốn-10k"],
         idea: "Biến thể IStrategy 1x lấy cảm hứng từ Tarsis7/crypto-portfolio-walkforward (@ b4394885): giữ lệnh Long khi close_1d > SMA(50) kết hợp định cỡ vốn lúc vào lệnh (entry stake scaling) theo biến động thực tế 20 ngày (40%/năm).",
-        notes: "Khác với danh mục Spot 3 coin có tái cân bằng >10% của Tarsis7 gốc, biến thể FreqPilot này định cỡ lúc mở lệnh trên BTC/ETH Futures 1x (stake cơ sở 100 USDT). Đạt +54.68 USDT (MaxDD 0.35%, PF 16.29), 9/9 ô Độ nhạy dương và thắng kỳ Holdout (+9.50 USDT).",
+        notes: "Ở quy mô vốn 10.000 USDT (stake cơ sở 1.000 USDT trên BTC/ETH Futures 1x), phép định cỡ Volatility Targeting vận hành cực mượt không còn hao hụt làm tròn lot: đạt +648.03 USDT (+6.48%, MaxDD 0.51%, PF 13.49) và 9/9 ô Độ nhạy 2D đều dương (+471.27 đến +691.64 USDT).",
         code: `class TarsisVolTargetSma501h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
@@ -560,9 +560,9 @@
     vol_window = IntParameter(14, 30, default=20, space="buy")
     vol_target = DecimalParameter(0.25, 0.60, default=0.40, decimals=2, space="buy")
     # ... [Trọn bộ hàm custom_stake_amount điều tiết biến động & gói .zip SHA-256 nằm trong Verified Pack v1]`,
-        equity: [["04-01",0],["05-16",3.36],["05-23",9.66],["05-27",8.79],["07-17",7.77],["08-01",6.58],["08-15",6.09],["10-09",36.91],["10-21",54.68]],
-        drawdown: [["04-01",0],["05-23",0],["05-27",-0.09],["07-17",-0.19],["08-01",-0.31],["08-15",-0.35],["10-09",0],["10-21",0]],
-        monthly: [["Apr",0],["May",8.79],["Jun",0],["Jul",-1.02],["Aug",-1.68],["Sep",0],["Oct",48.59],["Total",54.68]],
+        equity: [["04-01",0],["05-16",33.59],["05-23",121.85],["05-27",110.49],["07-17",95.13],["08-01",77.39],["08-15",69.96],["10-09",381.47],["10-21",648.03]],
+        drawdown: [["04-01",0],["05-23",0],["05-27",-0.11],["07-17",-0.26],["08-01",-0.44],["08-15",-0.51],["10-09",0],["10-21",0]],
+        monthly: [["Apr",0],["May",110.49],["Jun",0],["Jul",-15.36],["Aug",-25.17],["Sep",0],["Oct",578.07],["Total",648.03]],
         paperProfile: "41b999f3f64248a9 (STOPPED · 1x Isolated)"
       },
       {
@@ -570,27 +570,27 @@
         tier: "★ VERIFIED PACK V1 ($39) · LONG & SHORT 1X",
         paid: true,
         tf: "1h (1d)",
-        rev: "147405fd3f",
-        runId: "353953f473",
-        sha: "d50ef29c3a7c82fb91a204cc8812e301",
-        pnl: 9.37,
-        ret: 0.94,
+        rev: "1474053fd7",
+        runId: "92ea977e05",
+        sha: "9ab6887c4d2256d11fb17d47135e4912f3dae4074e29fc1670f529530caac13d",
+        pnl: 116.99,
+        ret: 1.17,
         trades: 8,
         win: "50.0% (4W/4L)",
-        dd: 1.41,
-        pf: 1.67,
-        tags: ["#ema-adx", "#short-supported", "#2-kỳ-dương"],
+        dd: 1.50,
+        pf: 1.78,
+        tags: ["#ema-adx", "#short-supported", "#2-kỳ-dương", "#vốn-10k"],
         idea: "Chiến lược 2 chiều (Long & Short 1x Isolated) sử dụng cụm EMA(20/50/200) kết hợp sức mạnh xu hướng ADX(14) từ khung ngày đã đóng.",
-        notes: "Lãi dương ổn định ở cả kỳ 1 tháng (+5.55 USDT) lẫn kỳ dài 6,7 tháng (+9.37 USDT), không bị lookahead hay recursive bias.",
+        notes: "Trên vốn chuẩn 10.000 USDT (stake 1.000 USDT), chiến lược đạt +116.99 USDT (+1.17%, MaxDD 1.50%, PF 1.78), không bị lookahead hay recursive bias.",
         code: `class BdrEmaRideFutures1h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
     can_short = True
     # ... [Trọn bộ mã nguồn & gói .zip SHA-256 nằm trong Verified Pack v1]`,
-        equity: [["04-01",0],["04-29",-7.65],["05-16",-9.76],["05-26",-14.06],["07-23",-4.02],["07-24",1.53],["10-15",5.79],["10-21",9.37]],
-        drawdown: [["04-01",0],["04-29",-0.76],["05-16",-0.98],["05-26",-1.41],["07-23",-0.40],["07-24",0],["10-21",0]],
-        monthly: [["Apr",-7.65],["May",-6.41],["Jun",0],["Jul",15.59],["Aug",0],["Sep",0],["Oct",7.85],["Total",9.37]],
-        paperProfile: "Chưa tạo hồ sơ (Có thể tạo 1 chạm từ gói 353953f473)"
+        equity: [["04-01",0],["04-29",-77.01],["05-16",-98.11],["05-23",-147.84],["05-26",-149.98],["07-23",-48.18],["07-23",29.39],["10-21",80.51],["10-21",116.99]],
+        drawdown: [["04-01",0],["04-29",-0.77],["05-16",-0.98],["05-26",-1.50],["07-23",-0.48],["10-21",0]],
+        monthly: [["Apr",-77.01],["May",-72.96],["Jun",0],["Jul",179.36],["Aug",0],["Sep",0],["Oct",87.60],["Total",116.99]],
+        paperProfile: "Chưa tạo hồ sơ (Có thể tạo 1 chạm từ gói 92ea977e05)"
       },
       {
         id: "TrendCoreBagging1h",
@@ -598,17 +598,17 @@
         paid: false,
         tf: "1h (1d)",
         rev: "f1260f2655",
-        runId: "bba655ff87",
-        sha: "9f8699dfca98e06c1123ab4509cd7721",
-        pnl: 2.15,
-        ret: 0.21,
+        runId: "b0692cd1ca",
+        sha: "2c5d5ff39e7212a534a98ba3ff22a26a3a7f2ad00547a6b6680f59fbc8c0eacc",
+        pnl: 28.58,
+        ret: 0.29,
         trades: 2,
         win: "50.0% (1W/1L)",
         dd: 0.15,
-        pf: 2.45,
-        tags: ["#free-sample", "#trend-bagging", "#ewmac"],
+        pf: 2.90,
+        tags: ["#free-sample", "#trend-bagging", "#ewmac", "#vốn-10k"],
         idea: "Kết hợp bình quân tín hiệu Trend Bagging đa chân trời (100, 150, 200 ngày) với bộ lọc EWMAC chuẩn tổ chức.",
-        notes: "Giữ lãi nhẹ (+2.15 USDT, DD 0.15%), phòng thủ cực chặt nhưng tần suất giao dịch rất thấp (2 lệnh / 6,7 tháng).",
+        notes: "Trên vốn chuẩn 10.000 USDT (stake 1.000 USDT), giữ lãi dương an toàn (+28.58 USDT, DD 0.15%, PF 2.90), phòng thủ cực chặt với tần suất vào lệnh chọn lọc (2 lệnh / 6,7 tháng).",
         code: `class TrendCoreBagging1h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
@@ -624,9 +624,9 @@
                            (inf["close"] > inf["sma150"]).astype(int) +
                            (inf["close"] > inf["sma200"]).astype(int))
         return merge_informative_pair(dataframe, inf, self.timeframe, "1d", ffill=True)`,
-        equity: [["04-01",0],["10-09",3.63],["10-21",2.15]],
-        drawdown: [["04-01",0],["10-09",0],["10-21",-0.15]],
-        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",0],["Oct",2.15],["Total",2.15]],
+        equity: [["04-01",0],["10-21",43.60],["10-21",28.58]],
+        drawdown: [["04-01",0],["10-21",0],["10-21",-0.15]],
+        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",0],["Oct",28.58],["Total",28.58]],
         paperProfile: "Mẫu miễn phí để kiểm thử Archive Replay"
       },
       {
@@ -634,24 +634,24 @@
         tier: "⚠️ BÀI HỌC CHỐNG OVERFIT (THẮNG 1M -> LỖ 6.7M)",
         paid: false,
         tf: "4h (1d)",
-        rev: "96e7f0a647",
-        runId: "c3b0b4c882",
-        sha: "667e07f6a7d39012bc451098ee123099",
-        pnl: -20.02,
-        ret: -2.00,
+        rev: "c1e250bee2",
+        runId: "916aad1ea4",
+        sha: "2ae3b88a63c4850d99f11a084e1b7201",
+        pnl: -190.53,
+        ret: -1.91,
         trades: 30,
-        win: "36.7% (11W/19L)",
-        dd: 2.96,
-        pf: 0.67,
-        tags: ["#bài-học-overfit", "#4h", "#bị-loại"],
+        win: "30.0% (9W/21L)",
+        dd: 3.14,
+        pf: 0.70,
+        tags: ["#bài-học-overfit", "#4h", "#bị-loại", "#vốn-10k"],
         idea: "Breakout đỉnh 20 nến 4h kết hợp EMA(50) và RSI(14) ngày, thoát bằng 2*ATR / 4*ATR.",
-        notes: "Ví dụ kinh điển vì sao cần FreqPilot: Trên mẫu 1 tháng ngắn, chiến lược này LÃI +3.30 USDT (PF 1.44); nhưng khi kéo dài ra 6,7 tháng đủ 30 lệnh kèm phí Funding, nó ĐẢO CHIỀU LỖ -20.02 USDT!",
-        code: `# Chiến lược minh họa bẫy mẫu ngắn (Short-Window Illusion):
-# Kỳ 1 tháng (20260918-20261021): +3.30 USDT (5 lệnh, PF 1.44) -> Trông rất hứa hẹn!
-# Kỳ 6,7 tháng (20260401-20261021): -20.02 USDT (30 lệnh, PF 0.67) -> Bị FreqPilot loại bỏ trước khi đưa lên Paper.`,
-        equity: [["04-01",0],["05-01",-5.4],["06-01",-11.2],["07-01",-16.8],["08-01",-21.5],["09-01",-23.3],["10-21",-20.02]],
-        drawdown: [["04-01",0],["05-01",-0.54],["06-01",-1.12],["07-01",-1.68],["08-01",-2.15],["09-01",-2.96],["10-21",-2.00]],
-        monthly: [["Apr",-4.10],["May",-5.20],["Jun",-4.80],["Jul",-5.40],["Aug",-3.82],["Sep",0.00],["Oct",3.30],["Total",-20.02]],
+        notes: "Ví dụ kinh điển vì sao cần FreqPilot: Trên mẫu 1 tháng ngắn thì có lãi, nhưng khi kéo dài ra 6,7 tháng đủ 30 lệnh kèm phí Funding ở quy mô vốn 10.000 USDT, chiến lược ĐẢO CHIỀU LỖ -190.53 USDT (PF 0.70)!",
+        code: `# Chiến lược minh họa bẫy mẫu ngắn (Short-Window Illusion - Vốn 10.000 USDT):
+# Kỳ 1 tháng ngắn: Có lãi dương giả tạo do trúng đúng 1 nhịp sóng ngắn.
+# Kỳ 6,7 tháng (20260401-20261021): -190.53 USDT (30 lệnh, MaxDD 3.14%, PF 0.70) -> Bị FreqPilot loại bỏ trước khi đưa lên Paper.`,
+        equity: [["04-01",0],["04-17",33.79],["04-29",-122.58],["05-07",-166.06],["07-23",-219.65],["08-11",-281.00],["08-20",-117.74],["09-15",-230.38],["09-21",-111.54],["10-02",-190.53]],
+        drawdown: [["04-01",0],["04-17",0],["04-29",-1.56],["05-07",-1.99],["07-23",-2.53],["08-11",-3.14],["08-20",-1.51],["09-15",-2.63],["09-21",-1.45],["10-02",-2.24]],
+        monthly: [["Apr",-122.59],["May",-43.48],["Jun",0],["Jul",-53.60],["Aug",101.92],["Sep",-18.54],["Oct",-54.25],["Total",-190.53]],
         paperProfile: "Đã chặn (Không đủ tiêu chuẩn lên Paper)"
       },
       {
@@ -659,26 +659,26 @@
         tier: "📘 MẪU CƠ BẢN ĐI KÈM BẢN $0 COMMUNITY",
         paid: false,
         tf: "15m",
-        rev: "152a9c0012",
-        runId: "starter144",
-        sha: "a18c90f4421b7732019c883210fa7712",
-        pnl: -22.18,
-        ret: -2.22,
+        rev: "b336e80227",
+        runId: "813a9807e1",
+        sha: "44ac8d16221b0a9dd7b703f00f1bdd96",
+        pnl: -268.66,
+        ret: -2.69,
         trades: 144,
-        win: "20.1% (29W/115L)",
-        dd: 3.80,
-        pf: 0.65,
-        tags: ["#community-$0", "#15m", "#mẫu-học-tập"],
+        win: "18.8% (27W/117L)",
+        dd: 4.22,
+        pf: 0.61,
+        tags: ["#community-$0", "#15m", "#mẫu-học-tập", "#vốn-10k"],
         idea: "Chiến lược mẫu mặc định đi kèm khi chạy ./Initialize.ps1 để kiểm tra luồng dữ liệu, phí giao dịch và bảo vệ 1x Isolated.",
-        notes: "Giao dịch dày (144 lệnh/tháng) nên chịu chi phí phí giao dịch 0.05%/chiều lớn (-22.18 USDT). Dùng để học quy trình nghiên cứu, không dùng để chạy thật.",
+        notes: "Giao dịch dày (144 lệnh/tháng) ở quy mô stake 1.000 USDT nên chịu chi phí phí giao dịch 0.05%/chiều lớn (-268.66 USDT trên vốn 10.000 USDT). Dùng để học quy trình nghiên cứu, không dùng để chạy thật.",
         code: `class StarterFuturesResearch(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "15m"
     can_short = True
     # Đi kèm sẵn miễn phí khi bạn cài đặt FreqPilot từ GitHub!`,
-        equity: [["09-18",0],["09-25",-4.8],["10-02",-9.6],["10-09",-14.1],["10-15",-18.5],["10-21",-22.18]],
-        drawdown: [["09-18",0],["09-25",-0.48],["10-02",-0.96],["10-09",-1.85],["10-15",-2.90],["10-21",-3.80]],
-        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",-7.10],["Oct",-15.08],["Total",-22.18]],
+        equity: [["09-18",0],["09-22",141.84],["09-25",134.59],["09-28",63.95],["09-30",-10.48],["10-02",-96.93],["10-06",-123.24],["10-12",-94.75],["10-14",-142.78],["10-18",-191.06],["10-21",-268.66]],
+        drawdown: [["09-18",0],["09-22",-0.18],["09-25",-0.25],["09-28",-0.94],["09-30",-1.67],["10-02",-2.53],["10-06",-2.78],["10-12",-2.50],["10-14",-2.98],["10-18",-3.45],["10-21",-4.22]],
+        monthly: [["Apr",0],["May",0],["Jun",0],["Jul",0],["Aug",0],["Sep",-32.08],["Oct",-236.57],["Total",-268.66]],
         paperProfile: "Mẫu mặc định (STOPPED)"
       }
     ];
@@ -687,8 +687,8 @@
       vi: {
         demoMode: "✨ Bản Dùng Thử Web (Read-Only · Không cần đăng nhập)",
         installFree: "Tải Bản $0 (Chạy Local)",
-        buyPack: "Nhận 4 Gói Chiến Lược ($39) →",
-        libHdr: "Thư viện kiểm toán (6)",
+        buyPack: "Nhận 5 Gói Chiến Lược ($39) →",
+        libHdr: "Thư viện kiểm toán 10k (7)",
         tabs: [
           ["idea","01 · Ý tưởng"],["code","02 · Mã chiến lược"],["data","03 · Dữ liệu"],["run","04 · Backtest"],
           ["results","05 · Kết quả"],["checks","06 · Kiểm định"],["optimize","07 · Tối ưu"],["walk","08 · Walk-forward"],
@@ -699,7 +699,7 @@
         demoMode: "✨ Interactive Web Sandbox (Read-Only · No Login Needed)",
         installFree: "Install Free ($0 Local)",
         buyPack: "Get Verified Pack v1 ($39) →",
-        libHdr: "Audited Library (6)",
+        libHdr: "10k Audited Library (7)",
         tabs: [
           ["idea","01 · Idea"],["code","02 · Strategy Code"],["data","03 · Data Audit"],["run","04 · Backtest"],
           ["results","05 · Results"],["checks","06 · Bias Checks"],["optimize","07 · Optimize"],["walk","08 · Walk-forward"],
@@ -710,7 +710,7 @@
         demoMode: "✨ 网页交互式体验版（只读免登录 · 零安装）",
         installFree: "免费下载开源版 ($0)",
         buyPack: "获取已验证策略包 ($39) →",
-        libHdr: "实证审计策略库 (6)",
+        libHdr: "10k 实证审计策略库 (7)",
         tabs: [
           ["idea","01 · 构思"],["code","02 · 策略代码"],["data","03 · 数据审计"],["run","04 · 冻结回测"],
           ["results","05 · 回测结果"],["checks","06 · 偏差检验"],["optimize","07 · 参数优化"],["walk","08 · Walk-forward"],
@@ -721,7 +721,7 @@
         demoMode: "✨ Веб-песочница Studio (Read-Only · Без входа)",
         installFree: "Скачать бесплатно ($0)",
         buyPack: "Получить Verified Pack ($39) →",
-        libHdr: "Проверенные стратегии (6)",
+        libHdr: "Аудит 10k USDT (7)",
         tabs: [
           ["idea","01 · Идея"],["code","02 · Код"],["data","03 · Данные"],["run","04 · Бэктест"],
           ["results","05 · Результаты"],["checks","06 · Проверки"],["optimize","07 · Оптимизация"],["walk","08 · Walk-forward"],
@@ -732,7 +732,7 @@
         demoMode: "✨ 웹 인터랙티브 체험판 (읽기 전용 · 로그인 불필요)",
         installFree: "무료 설치 ($0 로컬)",
         buyPack: "검증된 전략 팩 받기 ($39) →",
-        libHdr: "감사 완료 라이브러리 (6)",
+        libHdr: "10k 감사 완료 라이브러리 (7)",
         tabs: [
           ["idea","01 · 아이디어"],["code","02 · 전략 코드"],["data","03 · 데이터"],["run","04 · 백테스트"],
           ["results","05 · 결과 분석"],["checks","06 · 편향 검증"],["optimize","07 · 최적화"],["walk","08 · Walk-forward"],
@@ -772,7 +772,7 @@
       currentStrat = STRATEGIES.find(s => s.id === id) || STRATEGIES[0];
       document.getElementById("ws-tier-badge").textContent = currentStrat.tier;
       document.getElementById("ws-name").textContent = currentStrat.id;
-      document.getElementById("ws-meta").textContent = `rev: ${currentStrat.rev} · run: ${currentStrat.runId} · SHA-256: ${currentStrat.sha.slice(0,10)} · ${currentStrat.tf}`;
+      document.getElementById("ws-meta").textContent = `rev: ${currentStrat.rev} · run: ${currentStrat.runId} · SHA-256: ${currentStrat.sha.slice(0,10)} · Vốn 10.000 USDT · ${currentStrat.tf}`;
       const c3 = document.getElementById("ctx3-val");
       c3.textContent = `${currentStrat.pnl >= 0 ? "+" : ""}${currentStrat.pnl.toFixed(2)} USDT · ${currentStrat.trades} lệnh`;
       c3.className = currentStrat.pnl >= 0 ? "pos" : "neg";
@@ -864,7 +864,7 @@
             <div class="kpi-grid">
               <div class="kpi"><small>Khoảng chạy</small><b>20260401–20261021</b></div>
               <div class="kpi"><small>Chi tiết khớp nến</small><b>5m (75.690 nến)</b></div>
-              <div class="kpi"><small>Vốn / Stake</small><b>1.000 / 100 USDT</b></div>
+              <div class="kpi"><small>Vốn / Stake</small><b>10.000 / 1.000 USDT</b></div>
               <div class="kpi"><small>Đòn bẩy</small><b class="pos">1x Isolated</b></div>
               <div class="kpi"><small>Phí mỗi chiều</small><b>0.05% + Funding</b></div>
             </div>
@@ -887,40 +887,61 @@
       } else if (currentTab === "walk") {
         box.innerHTML = banner + `
           <div class="card">
-            <h3>08 · Walk-Forward Rolling &amp; Đối Chiếu Holdout Tách Khỏi Hyperopt (<code>94b955e45b</code>)</h3>
+            <h3>08 · Walk-Forward Rolling &amp; Đối Chiếu Holdout Tách Khỏi Hyperopt (<code>3215a26798</code> · Vốn 10.000 USDT)</h3>
             <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:8px;margin:14px 0;text-align:center;font-family:var(--mono);font-size:12px">
-              <div style="padding:10px;border-radius:8px;background:rgba(56,189,248,0.15);border:1px solid var(--accent)">Train (90 ngày)<br/><small>Hyperopt tối ưu tập học</small></div>
-              <div style="padding:10px;border-radius:8px;background:rgba(245,158,11,0.15);border:1px solid var(--warn)">OOS (30 ngày)<br/><small>Kiểm tra độc lập</small></div>
+              <div style="padding:10px;border-radius:8px;background:rgba(56,189,248,0.15);border:1px solid var(--accent)">Train (90 ngày)<br/><small>Hyperopt seed=42</small></div>
+              <div style="padding:10px;border-radius:8px;background:rgba(245,158,11,0.15);border:1px solid var(--warn)">OOS (35 ngày)<br/><small>Kiểm tra độc lập</small></div>
               <div style="padding:10px;border-radius:8px;background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);color:var(--pos-bright)">Holdout (2026-09-16 → 10-21)<br/><small>Đối chiếu ngoài Hyperopt</small></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
-              <div class="kpi"><small>Baseline (Tham số gốc không tối ưu)</small><b class="pos">+9.16 USDT · PF 3.44 · DD 0.37%</b></div>
-              <div class="kpi"><small>Ứng viên thắng Hyperopt (Bị overfit nhẹ)</small><b class="neg">-3.46 USDT · DD 0.36%</b></div>
+              <div class="kpi"><small>Baseline (Tham số gốc không tối ưu)</small><b class="pos">+94.44 USDT · 5 lệnh · PF 3.29 · DD 0.41%</b></div>
+              <div class="kpi"><small>Ứng viên thắng Hyperopt (Bị overfit)</small><b class="neg">-50.85 USDT · 3 lệnh · PF 0.35 · DD 0.78%</b></div>
             </div>
           </div>
         `;
       } else if (currentTab === "sensitivity") {
-        box.innerHTML = banner + `
+        const isTarsis = s.id === "TarsisVolTargetSma501h";
+        box.innerHTML = banner + (isTarsis ? `
           <div class="card">
-            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>d28b58b598</code> · 9/9 Ô Đều Có Lãi)</h3>
-            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>ema_short ∈ {45, 50, 55} × rsi_offset ∈ {8, 10, 12}</code> trên 6,7 tháng dữ liệu đóng băng:</p>
+            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>61c0ef7247</code> · TarsisVolTargetSma501h · Vốn 10k · 9/9 Ô Dương)</h3>
+            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>sma_period ∈ {45, 50, 55} × vol_target ∈ {0.35, 0.40, 0.45}</code> trên 6,7 tháng dữ liệu đóng băng (Vốn <code>10.000 USDT</code>):</p>
+            <div class="sens-grid">
+              <div class="sens-hdr">sma \\ vol</div><div class="sens-hdr">vol = 0.35</div><div class="sens-hdr">vol = 0.40</div><div class="sens-hdr">vol = 0.45</div>
+              <div class="sens-hdr">sma = 45</div>
+              <div class="sens-cell"><b class="pos">+536.32 USDT</b><br/><small>10 lệnh · DD 0.79%</small></div>
+              <div class="sens-cell"><b class="pos">+589.75 USDT</b><br/><small>10 lệnh · DD 0.83%</small></div>
+              <div class="sens-cell"><b class="pos">+631.45 USDT</b><br/><small>10 lệnh · DD 0.86%</small></div>
+              <div class="sens-hdr">sma = 50</div>
+              <div class="sens-cell"><b class="pos">+592.59 USDT</b><br/><small>8 lệnh · DD 0.51%</small></div>
+              <div class="sens-cell base"><b class="pos">+648.03 USDT ★</b><br/><small>Baseline · 8 lệnh · DD 0.51%</small></div>
+              <div class="sens-cell"><b class="pos">+691.64 USDT</b><br/><small>8 lệnh · DD 0.51%</small></div>
+              <div class="sens-hdr">sma = 55</div>
+              <div class="sens-cell"><b class="pos">+471.27 USDT</b><br/><small>9 lệnh · DD 0.66%</small></div>
+              <div class="sens-cell"><b class="pos">+516.74 USDT</b><br/><small>9 lệnh · DD 0.69%</small></div>
+              <div class="sens-cell"><b class="pos">+549.19 USDT</b><br/><small>9 lệnh · DD 0.71%</small></div>
+            </div>
+          </div>
+        ` : `
+          <div class="card">
+            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>cc6fd90d38</code> · DikibagastEmaRsi1h · Vốn 10k · 9/9 Ô Dương)</h3>
+            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>ema_short ∈ {45, 50, 55} × rsi_offset ∈ {8, 10, 12}</code> trên 6,7 tháng dữ liệu đóng băng (Vốn <code>10.000 USDT</code>):</p>
             <div class="sens-grid">
               <div class="sens-hdr">ema \\ rsi</div><div class="sens-hdr">rsi_off = 8</div><div class="sens-hdr">rsi_off = 10</div><div class="sens-hdr">rsi_off = 12</div>
               <div class="sens-hdr">ema = 45</div>
-              <div class="sens-cell"><b class="pos">+39.68 USDT</b><br/><small>40 lệnh · DD 1.52%</small></div>
-              <div class="sens-cell"><b class="pos">+44.93 USDT</b><br/><small>38 lệnh · DD 0.99%</small></div>
-              <div class="sens-cell"><b class="pos">+42.26 USDT</b><br/><small>38 lệnh · DD 1.00%</small></div>
+              <div class="sens-cell"><b class="pos">+404.66 USDT</b><br/><small>40 lệnh · DD 1.91%</small></div>
+              <div class="sens-cell"><b class="pos">+460.89 USDT</b><br/><small>38 lệnh · DD 1.33%</small></div>
+              <div class="sens-cell"><b class="pos">+428.50 USDT</b><br/><small>38 lệnh · DD 1.35%</small></div>
               <div class="sens-hdr">ema = 50</div>
-              <div class="sens-cell"><b class="pos">+46.09 USDT</b><br/><small>32 lệnh · DD 0.84%</small></div>
-              <div class="sens-cell base"><b class="pos">+44.23 USDT ★</b><br/><small>Baseline · 30 lệnh · DD 0.73%</small></div>
-              <div class="sens-cell"><b class="pos">+44.62 USDT</b><br/><small>32 lệnh · DD 0.65%</small></div>
+              <div class="sens-cell"><b class="pos">+497.65 USDT</b><br/><small>32 lệnh · DD 1.03%</small></div>
+              <div class="sens-cell base"><b class="pos">+478.54 USDT ★</b><br/><small>Baseline · 30 lệnh · DD 0.86%</small></div>
+              <div class="sens-cell"><b class="pos">+430.32 USDT</b><br/><small>29 lệnh · DD 0.90%</small></div>
               <div class="sens-hdr">ema = 55</div>
-              <div class="sens-cell"><b class="pos">+35.82 USDT</b><br/><small>23 lệnh · DD 0.41%</small></div>
-              <div class="sens-cell"><b class="pos">+26.16 USDT</b><br/><small>20 lệnh · DD 0.37%</small></div>
-              <div class="sens-cell"><b class="pos">+26.21 USDT</b><br/><small>20 lệnh · DD 0.33%</small></div>
+              <div class="sens-cell"><b class="pos">+380.62 USDT</b><br/><small>23 lệnh · DD 0.53%</small></div>
+              <div class="sens-cell"><b class="pos">+302.25 USDT</b><br/><small>20 lệnh · DD 0.40%</small></div>
+              <div class="sens-cell"><b class="pos">+279.89 USDT</b><br/><small>20 lệnh · DD 0.40%</small></div>
             </div>
           </div>
-        `;
+        `);
       } else if (currentTab === "optimize" || currentTab === "matrix" || currentTab === "paper") {
         box.innerHTML = banner + `
           <div class="card">
