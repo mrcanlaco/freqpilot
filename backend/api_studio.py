@@ -111,10 +111,10 @@ class CheckStart(BaseModel):
     revision: str
     timeframe: str
     timerange: str
+    timeframe_detail: str=Field(default='1m',max_length=10)
     minimum_trade_amount: int=Field(default=10,ge=1,le=500)
     targeted_trade_amount: int=Field(default=20,ge=1,le=200)
     preset_id: str | None=None
-
 def check_dir(name,config):
     read(target(name,config))
     p=storage(config)/'checks'/name;p.mkdir(parents=True,exist_ok=True)
@@ -143,7 +143,7 @@ def start_check(name:str,req:CheckStart,background_tasks:BackgroundTasks,config=
     try:TimeRange.parse_timerange(req.timerange)
     except ValueError as e:raise HTTPException(422,str(e))
     preflight=manifest(Manifest(strategy=name,revision=req.revision,settings={
-        'timerange':req.timerange,'timeframe':req.timeframe,'timeframe_detail':'1m',
+        'timerange':req.timerange,'timeframe':req.timeframe,'timeframe_detail':req.timeframe_detail or '1m',
         'dry_run_wallet':config.get('dry_run_wallet',1000),'stake_amount':str(config.get('stake_amount',100)),
         'max_open_trades':config.get('max_open_trades',2),'enable_protections':False}),config)
     # Native analyses must use the selected code and parameter copy, not a file

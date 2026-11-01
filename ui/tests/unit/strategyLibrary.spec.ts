@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import {
+  availableDetailTimeframes,
   buildEvidenceCodexPrompt,
   buildResearchDossierMarkdown,
   buildSensitivityPivot,
   buildTradeAnalytics,
+  computeValidDatePreset,
   filterAndSortStrategies,
   formatLibraryRunSummary,
   latestLibraryRuns,
@@ -524,5 +526,27 @@ describe('Strategy library evidence', () => {
         'paper',
       ]);
     }
+  });
+
+  it('intersects primary warmup and detail timeframe coverage so date presets never hit missing-detail 422', () => {
+    const files = [
+      { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:00:00Z' },
+      { pair: 'ETH/USDT:USDT', type: 'futures', timeframe: '1h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:00:00Z' },
+      { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '5m', start: '2026-02-01T00:00:00Z', end: '2026-10-21T17:55:00Z' },
+      { pair: 'BTC/USDT:USDT', type: 'futures', timeframe: '1m', start: '2026-09-15T15:00:00Z', end: '2026-10-21T17:59:00Z' },
+      { pair: 'BTC/USDT:USDT', type: 'funding_rate', timeframe: '8h', start: '2026-02-01T00:00:00Z', end: '2026-10-21T16:00:00Z' },
+    ];
+    expect(availableDetailTimeframes(files, '1h')).toEqual(['1m', '5m']);
+    expect(availableDetailTimeframes(files, '5m')).toEqual(['1m']);
+
+    // With 1m detail starting Sept 15 15:00Z, full preset must ceil to 2026-09-16 (not 2026-02-01!)
+    expect(
+      computeValidDatePreset({ files, timeframe: '1h', detailTimeframe: '1m', warmupCandles: 125 }),
+    ).toEqual({ start: '2026-09-16', end: '2026-10-21' });
+
+    // With 5m detail starting Feb 01 00:00Z and 125h warmup (+2h = 127h -> Feb 6 07:00Z), full preset ceils to 2026-02-07!
+    expect(
+      computeValidDatePreset({ files, timeframe: '1h', detailTimeframe: '5m', warmupCandles: 125 }),
+    ).toEqual({ start: '2026-02-07', end: '2026-10-21' });
   });
 });

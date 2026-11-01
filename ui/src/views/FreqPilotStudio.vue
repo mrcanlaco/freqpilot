@@ -23,7 +23,7 @@ import { useResearchBootstrap } from '@/composables/useResearchBootstrap';
 import type { ResearchCheck } from '@/utils/researchChecks';
 import StrategyLibrary from '@/components/strategyDev/StrategyLibrary.vue';
 import DiffViewer from '@/components/strategyDev/DiffViewer.vue';
-import { buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, filterAndSortStrategies, formatLibraryRunSummary, latestLibraryRuns, STUDIO_UI_TEXT, type LibraryStrategy, type LibraryRun, type StrategyPreset, type StrategySortKey, type StudioLocale } from '@/utils/strategyLibrary';
+import { availableDetailTimeframes, buildEvidenceCodexPrompt, buildResearchDossierMarkdown, buildTradeAnalytics, computeValidDatePreset, filterAndSortStrategies, formatLibraryRunSummary, latestLibraryRuns, STUDIO_UI_TEXT, type LibraryStrategy, type LibraryRun, type StrategyPreset, type StrategySortKey, type StudioLocale } from '@/utils/strategyLibrary';
 import EquityCurveChart from '@/components/strategyDev/EquityCurveChart.vue';
 import UnderwaterChart from '@/components/strategyDev/UnderwaterChart.vue';
 import MonthlyReturnsHeatmap from '@/components/strategyDev/MonthlyReturnsHeatmap.vue';
@@ -85,7 +85,17 @@ async function readOptimizationActivity(){
 }
 const versions=ref<Version[]>([]), versionId=ref(''), newOpen=ref(false), newName=ref(''), sourceName=ref('');
 const data=ref<{files: DataRow[]; fee?: number; wallet?: number; stake?:number; max_open_trades?:number; pairs:string[]}>();
-const start=ref('2026-09-18'), end=ref(''), wallet=ref(1000), stake=ref(100), maxTrades=ref(2), detail=ref('1m');
+function readSavedDates():{start?:string;end?:string;detail?:string}{
+  try{
+    const raw=JSON.parse(sessionStorage.getItem('freqpilot.studio.dates')??'null') as {start?:string;end?:string;detail?:string}|null;
+    if(!raw||typeof raw!=='object')return {};
+    const okDate=(v?:string)=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)?v:undefined;
+    return {start:okDate(raw.start),end:okDate(raw.end),detail:typeof raw.detail==='string'&&/^\d+[mhd]$/.test(raw.detail)?raw.detail:undefined};
+  }catch{return {};}
+}
+const savedDates=readSavedDates();
+const start=ref(savedDates.start??'2026-09-18'), end=ref(savedDates.end??''), wallet=ref(1000), stake=ref(100), maxTrades=ref(2), detail=ref(savedDates.detail??'1m');
+watch([start,end,detail],([s,e,d])=>{try{sessionStorage.setItem('freqpilot.studio.dates',JSON.stringify({start:s,end:e,detail:d}));}catch{/* ignore storage errors */}});
 const timerange=computed(()=>start.value.replaceAll('-','')+'-'+end.value.replaceAll('-',''));
 const interval=ref<string>(), manifestId=ref(''), resultMode=ref('summary');
 const runs=ref<FrozenRun[]>([]), sourcePreview=ref(''), artifactValid=ref<boolean|null>(null);
@@ -93,6 +103,7 @@ const latestRunsMap=computed(()=>latestLibraryRuns(runs.value));
 const frozenRun=computed(()=>runs.value.find(r=>r.filename===active.value?.selectedBacktestMetadata?.filename));
 const pendingArtifact=computed(()=>runs.value.some(r=>r.status==='running'));
 const recentRuns=computed(()=>runs.value.filter(r=>r.strategy===selected.value).slice(0,5));
+const completedManifestRun=computed(()=>manifestId.value?runs.value.find(r=>r.id===manifestId.value&&r.strategy===selected.value&&r.status==='success'):undefined);
 const runStatus:Record<string,string>={prepared:'Đã chuẩn bị',running:'Đang xử lý',success:'Đã lưu đầy đủ',failed:'Không hoàn tất',interrupted:'Bị gián đoạn'};
 const comparisonIds=ref<string[]>([]);
 const comparison=computed(()=>Object.fromEntries(Object.entries(active.value?.backtestHistory??{}).filter(([,r])=>comparisonIds.value.includes(String(r.metadata.run_id??'')))));
@@ -107,25 +118,18 @@ const filtered=computed(()=>filterAndSortStrategies(items.value,latestRunsMap.va
   sort:sidebarSort.value,
 }));
 const selectedLatestRun=computed(()=>latestRunsMap.value.get(selected.value));
-const dataBounds=computed(()=>{
-  const tf=interval.value||selectedItem.value?.timeframe;
-  const candidates=(data.value?.files??[]).filter(f=>f.type==='futures'&&f.start&&f.end&&(!tf||f.timeframe===tf));
-  const list=candidates.length?candidates:(data.value?.files??[]).filter(f=>f.type==='futures'&&f.start&&f.end);
-  if(!list.length)return null;
-  const starts=list.map(f=>f.start!.slice(0,10)).sort();
-  const ends=list.map(f=>f.end!.slice(0,10)).sort();
-  return {start:starts[starts.length-1]!,end:ends[0]!};
-});
+const detailOptions=computed(()=>availableDetailTimeframes(data.value?.files??[],interval.value||selectedItem.value?.timeframe));
+watch(detailOptions,(opts)=>{if(opts.length&&!opts.includes(detail.value))detail.value=opts[0]!;});
 function applyDatePreset(days?:number){
-  const bounds=dataBounds.value;
-  const maxEnd=bounds?.end||'2026-10-22';
-  const minStart=bounds?.start||'2026-09-18';
-  end.value=maxEnd;
-  if(!days){start.value=minStart;return;}
-  const endMs=Date.parse(maxEnd+'T00:00:00Z');
-  if(!Number.isFinite(endMs)){start.value=minStart;return;}
-  const candidate=new Date(endMs-days*86_400_000).toISOString().slice(0,10);
-  start.value=candidate<minStart?minStart:candidate;
+  const range=computeValidDatePreset({
+    files:data.value?.files??[],
+    timeframe:interval.value||selectedItem.value?.timeframe,
+    detailTimeframe:detail.value,
+    warmupCandles:selectedItem.value?.startup_candle_count??200,
+    days,
+  });
+  start.value=range.start;
+  end.value=range.end;
 }
 function runForHistory(entry:BacktestHistoryEntry){
   return runs.value.find(r=>r.filename===entry.filename&&r.strategy===entry.strategy);
@@ -233,7 +237,7 @@ async function optimizationBacktestStarted(id:string){manifestId.value=id;if(res
 async function loadChecks(){if(api.value&&selected.value)checks.value=(await api.value.get('/studio/checks/'+selected.value)).data.checks;}
 async function startCheck(kind:'lookahead'|'recursive'){if(dirty.value||running.value||checking.value||parameterBusy.value||optimizationRunning.value||optimizationBusy.value)return;await guard(async()=>{
   if(preset.value&&(preset.value.revision!==revision.value||preset.value.valid===false))throw Error('Bộ tham số không khớp mã hiện tại. Chọn lại trước khi kiểm định.');
-  await api.value!.post('/studio/checks/'+selected.value+'/start',{kind,preset_id:preset.value?.id,revision:revision.value,timeframe:interval.value||selectedItem.value?.timeframe,timerange:start.value.replaceAll('-','')+'-'+end.value.replaceAll('-',''),minimum_trade_amount:minSignals.value,targeted_trade_amount:targetSignals.value});
+  await api.value!.post('/studio/checks/'+selected.value+'/start',{kind,preset_id:preset.value?.id,revision:revision.value,timeframe:interval.value||selectedItem.value?.timeframe,timeframe_detail:detail.value,timerange:start.value.replaceAll('-','')+'-'+end.value.replaceAll('-',''),minimum_trade_amount:minSignals.value,targeted_trade_amount:targetSignals.value});
   await loadChecks();notify('Đã gửi kiểm định cho API Freqtrade chính thức. Kết quả được lưu khi job kết thúc.');
 });}
 function onImportFileChange(event:Event){
@@ -523,7 +527,7 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
                 <label>Từ ngày<input v-model="start" type="date"></label>
                 <label>Đến ngày (không gồm ngày này)<input v-model="end" type="date"></label>
                 <label>Khung tín hiệu<select v-model="interval"><option v-for="tf in [...new Set(data?.files.filter(x=>x.type==='futures').map(x=>x.timeframe))]" :key="tf">{{tf}}</option></select></label>
-                <label>Khung chi tiết<select v-model="detail"><option>1m</option></select></label>
+                <label>Khung chi tiết<select v-model="detail"><option v-for="dtf in detailOptions" :key="dtf" :value="dtf">{{dtf}}</option></select></label>
                 <label>Vốn mô phỏng (USDT)<input v-model.number="wallet" type="number" min="1"></label>
                 <label>Số tiền mỗi lệnh<input v-model.number="stake" type="number" min="1"></label>
                 <label>Lệnh mở tối đa<input v-model.number="maxTrades" type="number" min="1" max="10"></label>
@@ -535,6 +539,16 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
                 <span v-if="manifestId">Hồ sơ chạy: {{manifestId.slice(0,10)}}</span>
                 <span class="spacer"/>
                 <button v-if="results.length" @click="tab='results'">Xem kết quả đã có ({{results.length}}) →</button>
+              </div>
+              <div v-if="completedManifestRun&&!running" class="next-step-banner tone-ok" role="status">
+                <div class="next-step-copy">
+                  <span class="next-step-badge">✓ Đã chạy xong</span>
+                  <b>Gói {{completedManifestRun.id.slice(0,10)}} · {{formatLibraryRunSummary(completedManifestRun).contextText}}</b>
+                </div>
+                <div class="row">
+                  <button type="button" class="primary" @click="openFrozenRun(completedManifestRun)">Xem biểu đồ &amp; kết quả vừa chạy (05) →</button>
+                  <button type="button" @click="tab='checks'">Kiểm định Bias (06) →</button>
+                </div>
               </div>
             </div>
             <div v-if="runSplitEditor" class="run-editor-col">
@@ -638,7 +652,7 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
             <BacktestSummaryCards :summary="result as unknown as Record<string,unknown>"/>
             <div v-if="result.total_trades<30" class="hint">Chỉ có {{result.total_trades}} lệnh: mẫu nhỏ, chưa đủ để kết luận chất lượng.</div>
             <div class="row modes">
-              <button v-for="[mode,label] in [['summary','Tổng quan'],['analysis','Chỉ số & giao dịch'],['chart','Biểu đồ lệnh'],['graphs','Phân phối'],['compare','So sánh đã mở']]" :key="mode" :class="{active:resultMode===mode}" @click="resultMode=mode!">{{label}}</button>
+              <button v-for="[mode,label] in [['summary','Tóm tắt & Đường vốn'],['analysis','Chỉ số & giao dịch'],['chart','Biểu đồ lệnh'],['graphs','Phân phối'],['compare','So sánh đã mở']]" :key="mode" :class="{active:resultMode===mode}" @click="resultMode=mode!">{{label}}</button>
             </div>
             <div v-if="resultMode==='summary'" class="equity-summary">
               <h3>Vốn theo các lệnh đã đóng</h3>
@@ -714,7 +728,17 @@ onMounted(()=>{window.addEventListener('beforeunload',warnBeforeUnload);window.a
             <span class="spacer"/>
             <button @click="tab='optimize'">Tiếp: Tối ưu tham số →</button>
           </div>
-          <details><summary>Tham số chẩn đoán</summary><div class="form-grid"><label>Số tín hiệu tối thiểu<input v-model.number="minSignals" type="number" min="1" max="500"></label><label>Số tín hiệu muốn kiểm tra<input v-model.number="targetSignals" type="number" min="1" max="200"></label></div></details>
+          <details :open="(selectedLatestRun?.summary?.total_trades ?? 10) < minSignals">
+            <summary>Tham số chẩn đoán (Tối thiểu {{minSignals}} tín hiệu)</summary>
+            <div class="form-grid">
+              <label>Số tín hiệu tối thiểu<input v-model.number="minSignals" type="number" min="1" max="500"></label>
+              <label>Số tín hiệu muốn kiểm tra<input v-model.number="targetSignals" type="number" min="1" max="200"></label>
+            </div>
+            <div v-if="(selectedLatestRun?.summary?.total_trades ?? 0) > 0 && (selectedLatestRun?.summary?.total_trades ?? 10) < minSignals" class="row" style="margin-top:8px">
+              <small class="warn-text">Gói backtest gần nhất chỉ có {{selectedLatestRun?.summary?.total_trades}} lệnh (&lt; {{minSignals}}).</small>
+              <button type="button" @click="minSignals = Math.max(1, selectedLatestRun?.summary?.total_trades ?? 1)">Đặt theo số lệnh thực tế ({{selectedLatestRun?.summary?.total_trades}})</button>
+            </div>
+          </details>
           <div class="hint">Không phát hiện bias trên một mẫu nhỏ không chứng minh chiến lược an toàn hay có lợi nhuận. Recursive chỉ kiểm tra cặp đầu tiên theo cơ chế gốc của Freqtrade.</div>
           <div v-if="!checks.length" class="empty">Chưa có kiểm định cho chiến lược này.</div>
           <ResearchCheckReport

@@ -26,7 +26,8 @@ function message(e: unknown) { const x = e as { response?: { data?: { detail?: u
 async function refresh() {
   try {
     jobs.value = (await props.api.get('/studio/walk-forward', { params: { strategy: props.strategy } })).data.jobs ?? [];
-    if (selected.value) selected.value = (await props.api.get('/studio/walk-forward/' + selected.value.id)).data;
+    const targetId = selected.value?.id ?? jobs.value[0]?.id;
+    if (targetId) selected.value = (await props.api.get('/studio/walk-forward/' + targetId)).data;
   } catch (e) { error.value = message(e); }
 }
 async function act(fn: () => Promise<void>) { working.value = true; error.value = ''; notice.value = ''; try { await fn(); } catch (e) { error.value = message(e); } finally { working.value = false; } }
@@ -106,6 +107,9 @@ onUnmounted(() => { if (poll) clearInterval(poll); });
         <h4>Holdout {{selected.holdout_timerange || '—'}}</h4>
         <p>Trạng thái: {{selected.holdout_status || 'sealed'}}. Chỉ mở sau khi toàn bộ OOS hoàn tất; mỗi lần mở được lưu lại.</p>
         <button :disabled="working || selected.status!=='success' || selected.holdout_status!=='sealed'" @click="holdout">Đánh giá holdout một lần</button>
+        <p v-if="selected.holdout_status==='running' || selected.status==='holdout_running'" class="hint" role="status">
+          ⏳ Đang đánh giá Holdout trên cả 2 nhánh (Baseline &amp; Ứng viên)… Khóa engine vẫn đang giữ, vui lòng chờ hoàn tất 2/2 nhánh.
+        </p>
         <template v-if="selected.holdout">
           <div class="holdout-grid">
             <div class="holdout-card">

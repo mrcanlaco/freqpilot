@@ -952,3 +952,133 @@ export const STUDIO_UI_TEXT: Record<
     ],
   },
 };
+
+export type StudioDataFileRow = {
+  pair?: string;
+  timeframe?: string;
+  type: string;
+  start?: string | null;
+  end?: string | null;
+};
+
+export function timeframeToMs(tf?: string | null): number {
+  if (!tf) return 0;
+  const m = /^(\d+)([mhdw])$/i.exec(tf.trim());
+  if (!m) return 0;
+  const count = Number(m[1]);
+  const unit = m[2]!.toLowerCase();
+  const mult =
+    unit === 'm'
+      ? 60_000
+      : unit === 'h'
+        ? 3_600_000
+        : unit === 'd'
+          ? 86_400_000
+          : 604_800_000;
+  return count * mult;
+}
+
+export function availableDetailTimeframes(
+  files: StudioDataFileRow[],
+  primaryTimeframe?: string | null,
+): string[] {
+  const primaryMs = timeframeToMs(primaryTimeframe) || 3_600_000;
+  const set = new Set<string>();
+  for (const f of files) {
+    if (f.type === 'futures' && f.timeframe) {
+      const ms = timeframeToMs(f.timeframe);
+      if (ms > 0 && ms < primaryMs) {
+        set.add(f.timeframe);
+      }
+    }
+  }
+  const sorted = [...set].sort((a, b) => timeframeToMs(a) - timeframeToMs(b));
+  return sorted.length ? sorted : ['1m'];
+}
+
+export function computeValidDatePreset(input: {
+  files: StudioDataFileRow[];
+  timeframe?: string | null;
+  detailTimeframe?: string | null;
+  warmupCandles?: number;
+  days?: number;
+}): { start: string; end: string } {
+  const futures = input.files.filter((f) => f.type === 'futures' && f.start && f.end);
+  if (!futures.length) {
+    return { start: '2026-09-18', end: '2026-10-21' };
+  }
+  const tf = input.timeframe || '15m';
+  const tfMs = timeframeToMs(tf) || 900_000;
+  const warmup = Math.max(0, input.warmupCandles ?? 200);
+
+  const primaryFiles = futures.filter((f) => f.timeframe === tf);
+  const activePrimary = primaryFiles.length ? primaryFiles : futures;
+
+  const detailTf = input.detailTimeframe;
+  const detailMs = timeframeToMs(detailTf);
+  const detailFiles =
+    detailTf && detailMs > 0 && detailMs < tfMs
+      ? futures.filter((f) => f.timeframe === detailTf)
+      : [];
+
+  let minStartMs = 0;
+  let maxEndMs = Number.POSITIVE_INFINITY;
+
+  for (const f of activePrimary) {
+    const s = Date.parse(f.start!);
+    const e = Date.parse(f.end!);
+    if (Number.isFinite(s)) {
+      minStartMs = Math.max(minStartMs, s + (warmup + 2) * tfMs);
+    }
+    if (Number.isFinite(e)) {
+      maxEndMs = Math.min(maxEndMs, e);
+    }
+  }
+
+  for (const f of detailFiles) {
+    const s = Date.parse(f.start!);
+    const e = Date.parse(f.end!);
+    if (Number.isFinite(s)) {
+      minStartMs = Math.max(minStartMs, s);
+    }
+    if (Number.isFinite(e)) {
+      maxEndMs = Math.min(maxEndMs, e);
+    }
+  }
+
+  for (const f of input.files.filter(
+    (x) => (x.type === 'funding_rate' || x.type === 'mark') && x.start && x.end,
+  )) {
+    const s = Date.parse(f.start!);
+    if (Number.isFinite(s)) {
+      minStartMs = Math.max(minStartMs, s);
+    }
+  }
+
+  const dayMs = 86_400_000;
+  const ceiledStartMs = Math.ceil(minStartMs / dayMs) * dayMs;
+  const flooredEndMs = Math.floor(maxEndMs / dayMs) * dayMs;
+
+  const safeEndMs =
+    Number.isFinite(flooredEndMs) && flooredEndMs > 0
+      ? flooredEndMs
+      : Date.parse('2026-10-21T00:00:00Z');
+  const safeMinStartMs =
+    Number.isFinite(ceiledStartMs) && ceiledStartMs > 0 && ceiledStartMs < safeEndMs
+      ? ceiledStartMs
+      : safeEndMs - dayMs;
+
+  let chosenStartMs = safeMinStartMs;
+  if (typeof input.days === 'number' && input.days > 0) {
+    const candidateMs = safeEndMs - input.days * dayMs;
+    chosenStartMs = Math.max(safeMinStartMs, candidateMs);
+  }
+  if (chosenStartMs >= safeEndMs) {
+    chosenStartMs = safeEndMs - dayMs;
+  }
+
+  return {
+    start: new Date(chosenStartMs).toISOString().slice(0, 10),
+    end: new Date(safeEndMs).toISOString().slice(0, 10),
+  };
+}
