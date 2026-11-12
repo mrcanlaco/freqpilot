@@ -111,7 +111,7 @@ set -euo pipefail
 cd "$RemoteRoot/repo"
 git fetch origin main
 git merge --ff-only origin/main
-cp -f site/index.html site/compare.html site/demo.html "$RemoteRoot/site/"
+cp -f site/index.html site/compare.html site/demo.html site/robots.txt site/sitemap.xml "$RemoteRoot/site/"
 git log -n 1 --oneline
 "@
     Write-Host "      MSI repo at: $($gitOut.Trim())"

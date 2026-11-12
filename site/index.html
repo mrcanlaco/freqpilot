@@ -6,10 +6,47 @@
   <title>FreqPilot (freqpilot.dev) — Visual Quantitative Strategy Studio on Official Freqtrade 2026.9</title>
   <meta name="description" content="From Strategy Idea to SHA-256 Frozen Evidence on Official Freqtrade 2026.9: Lookahead/Recursive Audit, 2D Sensitivity Matrix, Walk-Forward Holdout & 1x Paper Reconciliation." />
   <link rel="canonical" href="https://freqpilot.dev/" />
+  <meta name="robots" content="index, follow" />
   <meta property="og:title" content="FreqPilot — Visual Quantitative Research Studio for Official Freqtrade 2026.9" />
   <meta property="og:description" content="Don't trust backtest screenshots. Inspect SHA-256 frozen bundles, 2D sensitivity heatmaps, WFA holdout checks, and 1x paper reconciliation." />
   <meta property="og:url" content="https://freqpilot.dev/" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="FreqPilot Quant Lab" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FreqPilot — SHA-256 Reproducible Quant Studio on Official Freqtrade 2026.9" />
+  <meta name="twitter:description" content="15 public crypto strategies audited on 6.7 months of frozen 5m + funding data. Open-source GPL-3.0 Studio + SHA-256 Verified Strategy Bundles." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "FreqPilot Studio",
+    "url": "https://freqpilot.dev/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Windows, Linux, macOS (Docker)",
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "description": "Visual quantitative strategy validation workspace built on official Freqtrade 2026.9 with Lookahead/Recursive audits, 2D Sensitivity Matrices, Walk-Forward Holdout, and SHA-256 frozen bundles.",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Community Edition & Free Starter Bundle",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "Verified Strategy Pack v1 (5 Frozen 10k SHA-256 Bundles)",
+        "price": "39",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "name": "FreqPilot Quant Lab Membership",
+        "price": "29",
+        "priceCurrency": "USD"
+      }
+    ]
+  }
+  </script>
   <style>
     :root {
       --bg-0: #05080f;
@@ -723,10 +760,11 @@
       </div>
       <nav class="nav-links">
         <a href="#interactive-studio" data-i18n="nav_studio">Demo</a>
-        <a href="#compare" data-i18n="nav_compare">So sánh</a>
         <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
         <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
         <a href="/compare.html" data-i18n="nav_deep">vs FreqUI</a>
+        <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_registry">Kho 900+ Chiến Lược ↗</a>
+        <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_pulse">Radar Phái Sinh ↗</a>
       </nav>
       <div class="nav-right">
         <select id="lang-select" class="lang-select" aria-label="Language" onchange="setSiteLang(this.value)">
@@ -758,6 +796,7 @@
       <div class="hero-actions">
         <button type="button" class="btn primary" onclick="quickLaunchStudio()" data-i18n="hero_cta_open">🚀 Mở FreqPilot Studio →</button>
         <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.5);color:var(--pos-bright)" data-i18n="hero_cta_demo">✨ Dùng Thử Studio Trên Web (Không cần cài)</a>
+        <button type="button" class="btn" onclick="openWhopCheckout('free_starter')" style="border-color:rgba(56,189,248,0.45);color:var(--accent)" data-i18n="hero_cta_starter">🎁 Tải Gói Mẫu SHA-256 ($0)</button>
         <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">GitHub (GPL-3.0) ↗</a>
       </div>
 
@@ -1463,44 +1502,53 @@ Bằng chứng hiện tại trên máy:
       <div class="grid-3">
         <div class="price-card">
           <div>
-            <span class="pill">Open-Source Tool</span>
-            <h3 style="margin:10px 0 4px">Community Edition</h3>
-            <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ forever</small></div>
-            <ul class="price-list">
+            <span class="pill" data-i18n="p1_badge">Open-Source + Free Lead Magnet</span>
+            <h3 style="margin:10px 0 4px" data-i18n="p1_title">Starter Bundle &amp; Studio</h3>
+            <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)" data-i18n="p1_unit">/ miễn phí trọn đời</small></div>
+            <ul class="price-list" data-i18n="p1_list">
+              <li><strong>01 Gói mẫu đóng băng <code>SHA-256</code></strong> (<code>TrendCoreBagging1h</code> · chuẩn vốn <code>10.000 USDT</code>) + hồ sơ song ngữ EN/VI để kiểm chứng <code>Archive Replay</code> ngay.</li>
               <li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li>
-              <li>8 chiến lược mẫu chính thức + công cụ Kiểm toán Dữ liệu, Lookahead, Walk-Forward &amp; Độ nhạy 2D.</li>
-              <li>Báo cáo kiểm toán công khai hàng tuần.</li>
+              <li>Truy cập kho 900+ chiến lược công khai tại <code>strategies.freqpilot.dev</code>.</li>
             </ul>
           </div>
-          <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener">Cài Đặt Từ GitHub ↗</a>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button type="button" class="btn" style="border-color:rgba(56,189,248,0.45);color:var(--accent);justify-content:center" onclick="openWhopCheckout('free_starter')" data-i18n="p1_cta">🎁 Nhận Gói Mẫu SHA-256 ($0) →</button>
+            <a class="btn btn-ghost" style="justify-content:center;font-size:12.5px" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="p1_gh">Mã Nguồn GitHub (GPL-3.0) ↗</a>
+          </div>
         </div>
 
         <div class="price-card featured">
           <div>
-            <span class="pill pass">Khuyên Dùng · Mua 1 Lần</span>
-            <h3 style="margin:10px 0 4px">Verified Strategy Pack v1</h3>
-            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ 5 gói ZIP đóng băng</small></div>
-            <ul class="price-list">
-              <li><strong>5 gói <code>freqpilot-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>) của <code>RocketHunterSma501h</code>, <code>TarsisVolTargetSma501h</code>, <code>DikibagastEmaRsi1h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
-              <li><strong>5 tài liệu <code>Dossier (.md)</code></strong> đầy đủ công thức, tham số, mã <code>SHA-256</code> và hướng dẫn chạy <code>Archive Replay</code>.</li>
-              <li>Nạp trực tiếp vào FreqPilot trong 5 giây.</li>
+            <span class="pill pass" data-i18n="p2_badge">Khuyên Dùng · Mua 1 Lần</span>
+            <h3 style="margin:10px 0 4px" data-i18n="p2_title">Verified Strategy Pack v1</h3>
+            <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)" data-i18n="p2_unit">/ trọn bộ 5 gói 10k</small></div>
+            <ul class="price-list" data-i18n="p2_list">
+              <li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
+              <li><strong>5 tài liệu <code>Dossier (.md)</code> song ngữ EN/VI</strong> + <code>RELEASE-MANIFEST-10K.json</code> + script kiểm tra <code>SHA-256</code> tự động.</li>
+              <li>Tải tức thì qua <strong>Whop</strong> · Nạp vào FreqPilot trong 5 giây.</li>
             </ul>
           </div>
-          <a class="btn primary" href="#install">Nhận Gói Verified Pack v1 →</a>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button type="button" class="btn primary" style="justify-content:center" onclick="openWhopCheckout('pack_v1')" data-i18n="p2_cta">⚡ Tải Trọn Bộ Qua Whop ($39) →</button>
+            <small style="text-align:center;color:var(--fg-3);font-size:11px" data-i18n="p_pay_methods">Visa/Mastercard · Apple Pay · PayPal · USDT/USDC</small>
+          </div>
         </div>
 
         <div class="price-card">
           <div>
-            <span class="pill">Hội Viên Định Kỳ</span>
-            <h3 style="margin:10px 0 4px">Quant Lab Membership</h3>
-            <div class="price-tag">$29 <small style="font-size:13px;font-weight:400;color:var(--fg-3)">/ tháng</small></div>
-            <ul class="price-list">
-              <li>Bao gồm toàn bộ <strong>Verified Strategy Pack v1</strong>.</li>
-              <li><strong>2–4 Hồ sơ Chiến lược mới mỗi tháng</strong> được sàng lọc từ nhà máy quét 920+ nguồn nghiên cứu.</li>
-              <li><strong>Báo cáo Đối chiếu Paper 1x hàng tuần</strong> (lệnh khớp thực tế vs backtest từ cụm server 24/7).</li>
+            <span class="pill" data-i18n="p3_badge">Hội Viên Định Kỳ · VIP Lab</span>
+            <h3 style="margin:10px 0 4px" data-i18n="p3_title">Quant Lab Membership</h3>
+            <div class="price-tag">$29 <small style="font-size:13px;font-weight:400;color:var(--fg-3)" data-i18n="p3_unit">/ tháng</small></div>
+            <ul class="price-list" data-i18n="p3_list">
+              <li>Mở khóa ngay toàn bộ <strong>Verified Strategy Pack v1</strong> (5 gói 10k).</li>
+              <li><strong>2–4 Hồ sơ Chiến lược đóng băng mới mỗi tháng</strong> chọn lọc từ dây chuyền quét 920+ nguồn nghiên cứu.</li>
+              <li><strong>Báo cáo Đối chiếu Paper 1x vs. Backtest hàng tuần</strong> &amp; quyền truy cập kênh <strong>Telegram VIP</strong> tự động qua Whop.</li>
             </ul>
           </div>
-          <a class="btn" href="#install">Tham Gia Quant Lab →</a>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button type="button" class="btn" style="border-color:rgba(16,185,129,0.5);color:var(--pos-bright);justify-content:center" onclick="openWhopCheckout('membership')" data-i18n="p3_cta">🔒 Tham Gia Quant Lab ($29/th) →</button>
+            <small style="text-align:center;color:var(--fg-3);font-size:11px" data-i18n="p3_cancel">Tự động cấp quyền Telegram · Hủy bất kỳ lúc nào trên Whop</small>
+          </div>
         </div>
       </div>
     </section>
@@ -1521,9 +1569,45 @@ cd freqpilot
     </section>
   </main>
 
-  <footer class="wrap">
-    FreqPilot · Phát hành theo giấy phép GNU GPL-3.0 · Kế thừa FreqUI Ultimate v2.1.0 &amp; Official Freqtrade 2026.9 Engine.
+  <footer class="wrap" style="display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;font-size:13px">
+      <a href="https://freqpilot.dev/" style="color:var(--fg);text-decoration:none;font-weight:600">📈 FreqPilot Studio</a>
+      <span style="color:var(--fg-3)">·</span>
+      <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">📚 Strategy Library (900+ Audited) ↗</a>
+      <span style="color:var(--fg-3)">·</span>
+      <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--pos-bright);text-decoration:none">⚡ PeakPulse AI Anomaly Radar ↗</a>
+      <span style="color:var(--fg-3)">·</span>
+      <a href="https://intel.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--fg-2);text-decoration:none">🔎 FreqPilot Intel ↗</a>
+      <span style="color:var(--fg-3)">·</span>
+      <a href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" style="color:var(--fg-2);text-decoration:none">GitHub (GPL-3.0) ↗</a>
+    </div>
+    <div>
+      FreqPilot · Open-Source GNU GPL-3.0 · Built on Official Freqtrade 2026.9 Engine.
+    </div>
   </footer>
+
+  <!-- Whop Checkout & SHA-256 Bundle Manifest Modal -->
+  <div id="whop-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="whop-modal-title" onclick="if(event.target===this)closeWhopModal()">
+    <div class="studio-modal-card">
+      <div class="modal-head">
+        <h3 id="whop-modal-title">FreqPilot Verified Bundle — Whop Checkout</h3>
+        <button type="button" class="modal-close" aria-label="Close" onclick="closeWhopModal()">✕</button>
+      </div>
+      <p id="whop-modal-desc" style="margin:0 0 12px;font-size:13.5px;color:var(--fg-2);line-height:1.55"></p>
+      <div id="whop-modal-manifest" style="background:var(--bg-0);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:var(--mono);font-size:11.5px;color:var(--fg-2);max-height:190px;overflow:auto;margin-bottom:14px;line-height:1.6"></div>
+      <div class="modal-actions">
+        <a id="whop-modal-primary-link" class="btn primary" href="https://whop.com/" target="_blank" rel="noopener" style="justify-content:center">
+          ⚡ Proceed to Whop Instant Checkout →
+        </a>
+        <a class="btn" href="/demo.html" style="justify-content:center;border-color:rgba(16,185,129,0.5);color:var(--pos-bright)">
+          ✨ Preview Interactive Bundles in Web Demo First →
+        </a>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg-3);line-height:1.5">
+        🔐 Instant automated delivery via <b>Whop</b> (Card, Apple Pay, PayPal, USDC/USDT). Every archive includes 64-char <code>SHA-256</code> verification &amp; runs 100% locally on official Freqtrade 2026.9 (<code>dry_run=true</code>).
+      </div>
+    </div>
+  </div>
 
   <!-- Studio Connect & Sign-In Modal -->
   <div id="studio-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeStudioModal()">
@@ -1569,6 +1653,88 @@ cd freqpilot
     </div>
   </div>
   <script>
+    // =========================================================================
+    // WHOP CHECKOUT CONFIGURATION (Paste your 3 Whop Plan / Checkout URLs here)
+    // =========================================================================
+    const WHOP_CHECKOUT_CONFIG = {
+      free_starter: "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/",
+      pack_v1: "https://whop.com/freqpilot/freqpilot-verified-strategy-pack-v1-10k-benchmark/",
+      membership: "https://whop.com/freqpilot/freqpilot-quant-lab-membership/",
+      store_url: "https://whop.com/freqpilot/"
+    };
+
+    const WHOP_BUNDLE_SPECS = {
+      free_starter: {
+        title: "🎁 Free Reproducible Starter Bundle ($0)",
+        desc: "Includes 1 full SHA-256 frozen 10,000 USDT bundle + bilingual EN/VI Dossier so you can test 1-click Archive Replay locally before upgrading:",
+        manifest: [
+          "• freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip (+28.58 USDT · DD 0.15% · PF 2.90)",
+          "  SHA-256: 2c5d5ff39e7212a534a98ba3ff22a26a3a7f2ad00547a6b6680f59fbc8c0eacc",
+          "• dossier-10k-TrendCoreBagging1h-b0692cd1ca.md (EN + VI)"
+        ].join("\n"),
+        btnText: "🎁 Claim Free Starter Bundle on Whop ($0) →"
+      },
+      pack_v1: {
+        title: "⚡ Verified Strategy Pack v1 — $39 (One-Time)",
+        desc: "All 5 survivors from 291 automated discovery runs on official Freqtrade 2026.9 (6.7m 5m+funding frozen protocol, 10,000 USDT wallet, 1x Isolated):",
+        manifest: [
+          "1. RocketHunterSma501h  (+721.18 USDT · PF 14.90) | sha256: a97bd2aa06dc9820...",
+          "2. TarsisVolTargetSma501h (+648.03 USDT · PF 13.49) | sha256: d3a223a86af423d5...",
+          "3. DikibagastEmaRsi1h   (+478.54 USDT · 30 trades)  | sha256: 355afab9d5883dd7...",
+          "4. BdrEmaRideFutures1h  (+116.99 USDT · PF 1.78)   | sha256: 9ab6887c4d2256d1...",
+          "5. TrendCoreBagging1h   (+28.58 USDT  · DD 0.15%)  | sha256: 2c5d5ff39e7212a5...",
+          "+ 5 Bilingual Dossiers (.md) + RELEASE-MANIFEST-10K.json + Verify-Bundles.ps1"
+        ].join("\n"),
+        btnText: "⚡ Instant Checkout via Whop ($39) →"
+      },
+      membership: {
+        title: "🔒 FreqPilot Quant Lab Membership — $29 / month",
+        desc: "Includes instant access to Verified Strategy Pack v1 (all 5 bundles above), 2–4 newly audited SHA-256 bundles every month, weekly 1x Paper vs. Backtest digests, and automated VIP Telegram role gating via Whop:",
+        manifest: [
+          "✓ Immediate unlock: Verified Strategy Pack v1 (5x 10k SHA-256 ZIPs + Dossiers)",
+          "✓ Monthly drops: 2–4 new survivors from the 920+ strategy screening pipeline",
+          "✓ Weekly digest: Live 1x Isolated Paper trade-by-trade reconciliation report",
+          "✓ Automated VIP Telegram channel access managed by Whop"
+        ].join("\n"),
+        btnText: "🔒 Join Quant Lab on Whop ($29/mo) →"
+      }
+    };
+
+    function buildTrackedWhopUrl(rawUrl, tier) {
+      try {
+        const u = new URL(rawUrl);
+        const cur = new URLSearchParams(location.search);
+        ["utm_source", "utm_medium", "utm_campaign", "utm_content"].forEach(k => {
+          if (cur.get(k) && !u.searchParams.has(k)) u.searchParams.set(k, cur.get(k));
+        });
+        if (!u.searchParams.has("utm_source")) u.searchParams.set("utm_source", "freqpilot_dev");
+        if (!u.searchParams.has("utm_content")) u.searchParams.set("utm_content", tier);
+        return u.toString();
+      } catch {
+        return rawUrl;
+      }
+    }
+
+    function openWhopCheckout(tier) {
+      const direct = (WHOP_CHECKOUT_CONFIG[tier] || "").trim();
+      if (direct) {
+        window.open(buildTrackedWhopUrl(direct, tier), "_blank", "noopener");
+        return;
+      }
+      const spec = WHOP_BUNDLE_SPECS[tier] || WHOP_BUNDLE_SPECS.pack_v1;
+      document.getElementById("whop-modal-title").textContent = spec.title;
+      document.getElementById("whop-modal-desc").textContent = spec.desc;
+      document.getElementById("whop-modal-manifest").textContent = spec.manifest;
+      const btn = document.getElementById("whop-modal-primary-link");
+      btn.textContent = spec.btnText;
+      btn.href = buildTrackedWhopUrl(WHOP_CHECKOUT_CONFIG.store_url || "https://whop.com/", tier);
+      document.getElementById("whop-modal").classList.add("open");
+    }
+
+    function closeWhopModal() {
+      document.getElementById("whop-modal").classList.remove("open");
+    }
+
     // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
     const HERO_STRATEGIES = {
       diki: {
@@ -1773,6 +1939,8 @@ cd freqpilot
         nav_audit: "Kiểm toán",
         nav_dossiers: "Bảng giá",
         nav_deep: "vs FreqUI",
+        nav_registry: "Kho 900+ Chiến Lược ↗",
+        nav_pulse: "Radar Phái Sinh ↗",
         nav_login: "Đăng nhập",
         nav_open_studio: "Mở Studio →",
         hero_badge: "● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →",
@@ -1780,6 +1948,7 @@ cd freqpilot
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
         hero_cta_open: "🚀 Mở FreqPilot Studio →",
         hero_cta_demo: "✨ Dùng Thử Studio Trên Web (Không cần cài)",
+        hero_cta_starter: "🎁 Tải Gói Mẫu SHA-256 ($0)",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Kết Nối & Đăng Nhập FreqPilot Studio",
         mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc dùng ngay bản Web Demo không cần cài đặt):",
@@ -1804,7 +1973,25 @@ cd freqpilot
         filter_survived: "✓ Sống sót qua 6,7 tháng (5)",
         filter_dropped: "✕ Bị loại / mẫu ngắn (10)",
         sec3_title: "Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
-        sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
+        sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-10k-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
+        p1_badge: "Open-Source + Gói Mẫu Miễn Phí",
+        p1_title: "Starter Bundle & Studio",
+        p1_unit: "/ miễn phí trọn đời",
+        p1_list: "<li><strong>01 Gói mẫu đóng băng <code>SHA-256</code></strong> (<code>TrendCoreBagging1h</code> · vốn <code>10.000 USDT</code>) + hồ sơ song ngữ EN/VI để kiểm chứng <code>Archive Replay</code> ngay.</li><li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li><li>Tra cứu kho 900+ chiến lược công khai tại <code>strategies.freqpilot.dev</code>.</li>",
+        p1_cta: "🎁 Nhận Gói Mẫu SHA-256 ($0) →",
+        p1_gh: "Mã Nguồn GitHub (GPL-3.0) ↗",
+        p2_badge: "Khuyên Dùng · Mua 1 Lần",
+        p2_title: "Verified Strategy Pack v1",
+        p2_unit: "/ trọn bộ 5 gói 10k",
+        p2_list: "<li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5 tài liệu <code>Dossier (.md)</code> song ngữ EN/VI</strong> + <code>RELEASE-MANIFEST-10K.json</code> + script kiểm tra <code>SHA-256</code> tự động.</li><li>Giao tự động tức thì qua <strong>Whop</strong> · Nạp vào FreqPilot trong 5 giây.</li>",
+        p2_cta: "⚡ Tải Trọn Bộ Qua Whop ($39) →",
+        p_pay_methods: "Visa/Mastercard · Apple Pay · PayPal · USDT/USDC",
+        p3_badge: "Hội Viên Định Kỳ · VIP Lab",
+        p3_title: "Quant Lab Membership",
+        p3_unit: "/ tháng",
+        p3_list: "<li>Mở khóa ngay toàn bộ <strong>Verified Strategy Pack v1</strong> (5 gói 10k).</li><li><strong>2–4 Hồ sơ Chiến lược đóng băng mới mỗi tháng</strong> chọn lọc từ dây chuyền quét 920+ nguồn nghiên cứu.</li><li><strong>Báo cáo Đối chiếu Paper 1x vs. Backtest hàng tuần</strong> &amp; vào kênh <strong>Telegram VIP</strong> tự động qua Whop.</li>",
+        p3_cta: "🔒 Tham Gia Quant Lab ($29/th) →",
+        p3_cancel: "Tự động cấp quyền Telegram · Hủy bất kỳ lúc nào trên Whop",
         sec4_title: "Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Lệnh",
         sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop."
       },
@@ -1814,6 +2001,8 @@ cd freqpilot
         nav_audit: "Leaderboard",
         nav_dossiers: "Pricing",
         nav_deep: "vs FreqUI",
+        nav_registry: "900+ Strategy Hub ↗",
+        nav_pulse: "Anomaly Radar ↗",
         nav_login: "Log in",
         nav_open_studio: "Open Studio →",
         hero_badge: "● 18 Strategies Audited on 6.7 Months of Frozen Futures Data →",
@@ -1821,6 +2010,7 @@ cd freqpilot
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
         hero_cta_open: "🚀 Launch FreqPilot Studio →",
         hero_cta_demo: "✨ Try Web Studio Demo (No Install)",
+        hero_cta_starter: "🎁 Free Starter Bundle ($0)",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Connect & Sign In to FreqPilot Studio",
         mod_sub: "Select your running FreqPilot instance, or try the instant Web Sandbox with zero installation:",
@@ -1845,7 +2035,25 @@ cd freqpilot
         filter_survived: "✓ Survived 6.7-Month Window (5)",
         filter_dropped: "✕ Eliminated / Short-Only (10)",
         sec3_title: "Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-&lt;id&gt;.zip</code> bundles directly into your workspace.",
+        sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-10k-&lt;id&gt;.zip</code> bundles directly into your workspace.",
+        p1_badge: "Open-Source + Free Starter",
+        p1_title: "Starter Bundle & Studio",
+        p1_unit: "/ free forever",
+        p1_list: "<li><strong>01 Frozen <code>SHA-256</code> Starter Bundle</strong> (<code>TrendCoreBagging1h</code> · <code>10,000 USDT</code> protocol) + bilingual Dossier to test <code>Archive Replay</code> instantly.</li><li>Full FreqPilot Studio source code on GitHub (GPL-3.0).</li><li>Access to 900+ screened strategies on <code>strategies.freqpilot.dev</code>.</li>",
+        p1_cta: "🎁 Get Free Starter Bundle ($0) →",
+        p1_gh: "GitHub Repository (GPL-3.0) ↗",
+        p2_badge: "Best Value · One-Time Purchase",
+        p2_title: "Verified Strategy Pack v1",
+        p2_unit: "/ 5 frozen 10k bundles",
+        p2_list: "<li><strong>5x <code>freqpilot-10k-&lt;id&gt;.zip</code> archives</strong> (6.7m <code>5m</code> + actual funding frozen, <code>10,000 USDT</code> wallet): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5x Bilingual <code>Dossier (.md)</code> specs</strong> + <code>RELEASE-MANIFEST-10K.json</code> + 1-click <code>SHA-256</code> verifier script.</li><li>Instant automated delivery via <strong>Whop</strong> · Import in 5 seconds.</li>",
+        p2_cta: "⚡ Instant Access via Whop ($39) →",
+        p_pay_methods: "Card · Apple Pay · PayPal · USDC/USDT",
+        p3_badge: "Recurring · VIP Research Lab",
+        p3_title: "Quant Lab Membership",
+        p3_unit: "/ month",
+        p3_list: "<li>Immediate access to the entire <strong>Verified Strategy Pack v1</strong> (all 5 bundles).</li><li><strong>2–4 newly audited Strategy Bundles every month</strong> curated from our 920+ research scanner.</li><li><strong>Weekly 1x Isolated Paper vs. Backtest Digest</strong> &amp; automated <strong>VIP Telegram</strong> access via Whop.</li>",
+        p3_cta: "🔒 Join Quant Lab ($29/mo) →",
+        p3_cancel: "Automated Telegram role gating · Cancel anytime on Whop",
         sec4_title: "Launch FreqPilot Locally in 3 Commands",
         sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop."
       },
@@ -1855,6 +2063,8 @@ cd freqpilot
         nav_audit: "榜单",
         nav_dossiers: "方案",
         nav_deep: "vs原版",
+        nav_registry: "900+策略库 ↗",
+        nav_pulse: "衍生品雷达 ↗",
         nav_login: "登录",
         nav_open_studio: "进入工作台 →",
         hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
@@ -1862,6 +2072,7 @@ cd freqpilot
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
         hero_cta_open: "🚀 启动 FreqPilot 工作台 →",
         hero_cta_demo: "✨ 网页直接试用（免安装）",
+        hero_cta_starter: "🎁 免费领取体验包 ($0)",
         hero_cta_gh: "GitHub 开源 ↗",
         mod_title: "连接并登录 FreqPilot 工作台",
         mod_sub: "连接本地运行的 FreqPilot 节点，或直接打开免安装网页体验版：",
@@ -1886,7 +2097,10 @@ cd freqpilot
         filter_survived: "✓ 通过 6.7 个月长周期检验 (5)",
         filter_dropped: "✕ 长周期淘汰 / 短样本 (10)",
         sec3_title: "密码学签名策略档案包 (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
+        sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-10k-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
+        p1_cta: "🎁 免费领取 SHA-256 体验包 ($0) →",
+        p2_cta: "⚡ 通过 Whop 立即获取全套 5 策略包 ($39) →",
+        p3_cta: "🔒 加入 Quant Lab 会员 ($29/月) →",
         sec4_title: "三步在本地启动 FreqPilot",
         sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
       },
@@ -1896,6 +2110,8 @@ cd freqpilot
         nav_audit: "Аудит",
         nav_dossiers: "Тарифы",
         nav_deep: "vs FreqUI",
+        nav_registry: "База 900+ ↗",
+        nav_pulse: "Радар ↗",
         nav_login: "Войти",
         nav_open_studio: "Открыть Studio →",
         hero_badge: "● 18 стратегий проверены на 6,7 мес. замороженных данных →",
@@ -1903,6 +2119,7 @@ cd freqpilot
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
         hero_cta_open: "🚀 Открыть FreqPilot Studio →",
         hero_cta_demo: "✨ Веб-демо Studio (Без установки)",
+        hero_cta_starter: "🎁 Бесплатный пакет ($0)",
         hero_cta_gh: "GitHub ↗",
         mod_title: "Подключение и вход в FreqPilot Studio",
         mod_sub: "Подключитесь к локальному серверу или откройте интерактивную веб-версию без установки:",
@@ -1927,7 +2144,10 @@ cd freqpilot
         filter_survived: "✓ Прошли окно 6.7 мес. (5)",
         filter_dropped: "✕ Отсеяны / короткое окно (10)",
         sec3_title: "Проверенные архивы стратегий (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
+        sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-10k-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
+        p1_cta: "🎁 Бесплатный стартовый пакет ($0) →",
+        p2_cta: "⚡ Купить 5 проверенных пакетов на Whop ($39) →",
+        p3_cta: "🔒 Подписка Quant Lab ($29/мес) →",
         sec4_title: "Запуск FreqPilot за 3 команды",
         sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
       },
@@ -1937,6 +2157,8 @@ cd freqpilot
         nav_audit: "리더보드",
         nav_dossiers: "요금제",
         nav_deep: "vs FreqUI",
+        nav_registry: "900+ 전략 허브 ↗",
+        nav_pulse: "이상 징후 레이더 ↗",
         nav_login: "로그인",
         nav_open_studio: "스튜디오 열기 →",
         hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
@@ -1944,6 +2166,7 @@ cd freqpilot
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
         hero_cta_open: "🚀 FreqPilot 스튜디오 열기 →",
         hero_cta_demo: "✨ 웹 스튜디오 체험판 (무설치)",
+        hero_cta_starter: "🎁 무료 스타터 번들 ($0)",
         hero_cta_gh: "GitHub ↗",
         mod_title: "FreqPilot 스튜디오 연결 및 로그인",
         mod_sub: "실행 중인 로컬 서버에 연결하거나 설치 없이 웹 스튜디오 체험판을 바로 열어보세요:",
@@ -1968,20 +2191,24 @@ cd freqpilot
         filter_survived: "✓ 6.7개월 장기 구간 통과 (5)",
         filter_dropped: "✕ 장기 구간 탈락 / 단기 (10)",
         sec3_title: "암호화 검증된 전략 번들 (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
+        sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-10k-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
+        p1_cta: "🎁 무료 스타터 번들 받기 ($0) →",
+        p2_cta: "⚡ Whop에서 5종 검증 번들 즉시 다운로드 ($39) →",
+        p3_cta: "🔒 Quant Lab 멤버십 가입 ($29/월) →",
         sec4_title: "3단계 명령어로 로컬에서 FreqPilot 시작하기",
         sec4_sub: "Windows PowerShell 5.1, PowerShell 7 및 Linux/WSL2 + Docker Desktop 완벽 지원."
       }
     };
 
     function setSiteLang(lang) {
-      const dict = SITE_I18N[lang] || SITE_I18N.vi;
+      const dict = SITE_I18N[lang] || SITE_I18N.en;
       document.documentElement.lang = lang;
       const sel = document.getElementById('lang-select');
       if (sel && sel.value !== lang) sel.value = lang;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.innerHTML = dict[key];
+        const val = dict[key] || (lang !== 'vi' ? SITE_I18N.en[key] : null);
+        if (val) el.innerHTML = val;
       });
       try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
     }
@@ -2086,8 +2313,25 @@ cd freqpilot
     }
 
     window.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeStudioModal();
+      if (e.key === "Escape") {
+        closeStudioModal();
+        closeWhopModal();
+      }
     });
+
+    function detectInitialLang() {
+      const urlLang = new URLSearchParams(location.search).get('lang');
+      if (urlLang && SITE_I18N[urlLang]) return urlLang;
+      let saved = null;
+      try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}
+      if (saved && SITE_I18N[saved]) return saved;
+      const nav = ((navigator.language || navigator.userLanguage || 'en') + '').toLowerCase();
+      if (nav.startsWith('vi')) return 'vi';
+      if (nav.startsWith('zh')) return 'zh';
+      if (nav.startsWith('ru')) return 'ru';
+      if (nav.startsWith('ko')) return 'ko';
+      return 'en';
+    }
 
     (function init() {
       renderHeroCharts('diki');
@@ -2096,10 +2340,7 @@ cd freqpilot
       document.getElementById("studio-url-input").value = savedStudio || defaultStudioHost();
       void probeStudioServer();
 
-      const urlLang = new URLSearchParams(location.search).get('lang');
-      let saved = null;
-      try { saved = localStorage.getItem('freqpilot.site.lang'); } catch {}
-      const initial = (urlLang && SITE_I18N[urlLang]) ? urlLang : (saved && SITE_I18N[saved]) ? saved : 'vi';
+      const initial = detectInitialLang();
       if (initial !== 'vi') setSiteLang(initial);
     })();
   </script>
