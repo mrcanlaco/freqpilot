@@ -805,7 +805,7 @@
         <div class="win-bar">
           <div class="win-dots">
             <span class="r"></span><span class="y"></span><span class="g"></span>
-            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5</span>
+            <span class="win-title" id="win-header-title" data-i18n="hero_win_title_init">DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5</span>
           </div>
           <div class="win-tabs">
             <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn</button>
@@ -821,19 +821,19 @@
             <div class="strat-switcher">
               <div class="strat-btns">
                 <button class="strat-btn active" onclick="selectHeroStrategy('diki', this)">
-                  <span><b>DikibagastEmaRsi1h</b> (30 lệnh)</span>
+                  <span data-i18n="sb_diki"><b>DikibagastEmaRsi1h</b> (30 lệnh)</span>
                   <span class="badge-pos">+478.54 USDT · DD 0.86%</span>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('rocket', this)">
-                  <span><b>RocketHunterSma501h</b> (8 lệnh)</span>
+                  <span data-i18n="sb_rocket"><b>RocketHunterSma501h</b> (8 lệnh)</span>
                   <span class="badge-pos">+721.18 USDT · PF 14.90</span>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('tarsis', this)">
-                  <span><b>TarsisVolTargetSma501h</b> (8 lệnh)</span>
+                  <span data-i18n="sb_tarsis"><b>TarsisVolTargetSma501h</b> (8 lệnh)</span>
                   <span class="badge-pos">+648.03 USDT · PF 13.49</span>
                 </button>
               </div>
-              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false</span>
+              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label" data-i18n="hero_sha_init">b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false</span>
             </div>
 
             <!-- 10 KPI Cards -->
@@ -882,8 +882,8 @@
           <div id="pane-matrix" class="win-pane">
             <div class="bento-grid">
               <div>
-                <h3 style="margin:0 0 6px">🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)</h3>
-                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
+                <h3 style="margin:0 0 6px" data-i18n="p2_sens_t">🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)</h3>
+                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px" data-i18n="p2_sens_p">
                   9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`, vốn `10.000 USDT`, stake `1.000 USDT`): vùng lân cận `ema_short × rsi_offset` đều sinh lời từ `+279.89` đến `+497.65 USDT` với MaxDD `≤ 1.91%`.
                 </p>
                 <div class="sens-grid">
@@ -893,36 +893,36 @@
                   <div class="sens-hdr">rsi_off = 12</div>
 
                   <div class="sens-hdr">ema = 45</div>
-                  <div class="sens-cell"><b>+404.66 USDT</b><small>40 lệnh · DD 1.91%</small></div>
-                  <div class="sens-cell"><b>+460.89 USDT</b><small>38 lệnh · DD 1.33%</small></div>
-                  <div class="sens-cell"><b>+428.50 USDT</b><small>38 lệnh · DD 1.35%</small></div>
+                  <div class="sens-cell"><b>+404.66 USDT</b><small>40 <span data-i18n="u_trades">lệnh</span> · DD 1.91%</small></div>
+                  <div class="sens-cell"><b>+460.89 USDT</b><small>38 <span data-i18n="u_trades">lệnh</span> · DD 1.33%</small></div>
+                  <div class="sens-cell"><b>+428.50 USDT</b><small>38 <span data-i18n="u_trades">lệnh</span> · DD 1.35%</small></div>
 
                   <div class="sens-hdr">ema = 50</div>
-                  <div class="sens-cell"><b>+497.65 USDT</b><small>32 lệnh · DD 1.03%</small></div>
-                  <div class="sens-cell base"><b>+478.54 USDT ★</b><small>Baseline · 30 lệnh · DD 0.86%</small></div>
-                  <div class="sens-cell"><b>+430.32 USDT</b><small>29 lệnh · DD 0.90%</small></div>
+                  <div class="sens-cell"><b>+497.65 USDT</b><small>32 <span data-i18n="u_trades">lệnh</span> · DD 1.03%</small></div>
+                  <div class="sens-cell base"><b>+478.54 USDT ★</b><small>Baseline · 30 <span data-i18n="u_trades">lệnh</span> · DD 0.86%</small></div>
+                  <div class="sens-cell"><b>+430.32 USDT</b><small>29 <span data-i18n="u_trades">lệnh</span> · DD 0.90%</small></div>
 
                   <div class="sens-hdr">ema = 55</div>
-                  <div class="sens-cell"><b>+380.62 USDT</b><small>23 lệnh · DD 0.53%</small></div>
-                  <div class="sens-cell"><b>+302.25 USDT</b><small>20 lệnh · DD 0.40%</small></div>
-                  <div class="sens-cell"><b>+279.89 USDT</b><small>20 lệnh · DD 0.40%</small></div>
+                  <div class="sens-cell"><b>+380.62 USDT</b><small>23 <span data-i18n="u_trades">lệnh</span> · DD 0.53%</small></div>
+                  <div class="sens-cell"><b>+302.25 USDT</b><small>20 <span data-i18n="u_trades">lệnh</span> · DD 0.40%</small></div>
+                  <div class="sens-cell"><b>+279.89 USDT</b><small>20 <span data-i18n="u_trades">lệnh</span> · DD 0.40%</small></div>
                 </div>
               </div>
 
               <div>
-                <h3 style="margin:0 0 6px">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)</h3>
-                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px">
+                <h3 style="margin:0 0 6px" data-i18n="p2_wfa_t">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)</h3>
+                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px" data-i18n="p2_wfa_p">
                   Kiểm chứng chống Overfit ở quy mô vốn `10.000 USDT`: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):
                 </p>
                 <div class="bento-visual">
-                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:10px;font-weight:600">Timeline Chia Cửa Sổ Walk-Forward:</div>
+                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:10px;font-weight:600" data-i18n="p2_wfa_tl">Timeline Chia Cửa Sổ Walk-Forward:</div>
                   <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:6px;margin-bottom:18px;font-family:var(--mono);font-size:11.5px;text-align:center">
                     <div style="background:rgba(56,189,248,0.16);border:1px solid var(--accent);padding:8px;border-radius:8px;color:var(--fg)">Train (90d)<br/><small>Hyperopt seed=42</small></div>
-                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (35d)<br/><small>Test độc lập</small></div>
+                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (35d)<br/><small data-i18n="p2_wfa_oos_sub">Test độc lập</small></div>
                     <div style="background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);padding:8px;border-radius:8px;color:var(--pos-bright)">Holdout (35d)<br/><small>2026-09-16→10-21</small></div>
                   </div>
 
-                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:6px;font-weight:600">Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):</div>
+                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:6px;font-weight:600" data-i18n="p2_wfa_hold">Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):</div>
                   <div class="bar-row">
                     <span><b>Baseline (Untuned)</b></span>
                     <div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--pos-bright)"></div></div>
@@ -934,7 +934,7 @@
                     <b class="neg mono">-50.85 USDT</b>
                   </div>
 
-                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):</div>
+                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600" data-i18n="p2_wfa_w1">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):</div>
                   <div class="bar-row">
                     <span><b>Baseline (Untuned)</b></span>
                     <div class="bar-track"><div class="bar-fill" style="width:94%;background:var(--pos-bright)"></div></div>
@@ -954,51 +954,51 @@
           <div id="pane-screenshots" class="win-pane">
             <div class="bento-grid">
               <div class="bento-visual">
-                <h3 style="margin:0 0 8px">🧭 Quy Trình 11 Bước Dẫn Đường Theo Trạng Thái Thực</h3>
-                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px">
+                <h3 style="margin:0 0 8px" data-i18n="p3_flow_t">🧭 Quy Trình 11 Bước Dẫn Đường Theo Trạng Thái Thực</h3>
+                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px" data-i18n="p3_flow_p">
                   Thanh Context Strip 4 thẻ &amp; Banner gợi ý tự động kiểm tra trạng thái mã, dữ liệu, gói ZIP và kiểm định trước khi mở khóa bước tiếp theo:
                 </p>
                 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:12px">
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
-                    <small style="color:var(--fg-3)">01 · MÃ NGUỒN</small><br/>
-                    <b class="pos">✓ Đã lưu · b82e4ae1</b><br/>
-                    <small style="color:var(--fg-2)">2 bản sao dự phòng</small>
+                    <small style="color:var(--fg-3)" data-i18n="c1_h">01 · MÃ NGUỒN</small><br/>
+                    <b class="pos" data-i18n="c1_b">✓ Đã lưu · b82e4ae1</b><br/>
+                    <small style="color:var(--fg-2)" data-i18n="c1_s">2 bản sao dự phòng</small>
                   </div>
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
-                    <small style="color:var(--fg-3)">02 · CẤU HÌNH &amp; DỮ LIỆU</small><br/>
-                    <b>75.690 nến 5m + Funding 8h</b><br/>
+                    <small style="color:var(--fg-3)" data-i18n="c2_h">02 · CẤU HÌNH &amp; DỮ LIỆU</small><br/>
+                    <b data-i18n="c2_b">75.690 nến 5m + Funding 8h</b><br/>
                     <small style="color:var(--fg-2)">2026-04-01 → 2026-10-21</small>
                   </div>
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--pos-bright)">
-                    <small style="color:var(--fg-3)">03 · GÓI BACKTEST 10K GẦN NHẤT</small><br/>
-                    <b class="pos">+478.54 USDT · 30 lệnh</b><br/>
-                    <small class="pos">✓ Khớp mã đang mở (SHA-256)</small>
+                    <small style="color:var(--fg-3)" data-i18n="c3_h">03 · GÓI BACKTEST 10K GẦN NHẤT</small><br/>
+                    <b class="pos" data-i18n="c3_b">+478.54 USDT · 30 lệnh</b><br/>
+                    <small class="pos" data-i18n="c3_s">✓ Khớp mã đang mở (SHA-256)</small>
                   </div>
                   <div style="padding:10px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line)">
-                    <small style="color:var(--fg-3)">04 · KIỂM ĐỊNH &amp; PAPER</small><br/>
+                    <small style="color:var(--fg-3)" data-i18n="c4_h">04 · KIỂM ĐỊNH &amp; PAPER</small><br/>
                     <b class="pos">Lookahead: False · Recursive: OK</b><br/>
-                    <small style="color:var(--fg-2)">Isolated 1x · Sẵn sàng Paper</small>
+                    <small style="color:var(--fg-2)" data-i18n="c4_s">Isolated 1x · Sẵn sàng Paper</small>
                   </div>
                 </div>
               </div>
 
               <div class="bento-visual">
-                <h3 style="margin:0 0 8px">🛡️ Hồ Sơ Paper 1x Độc Lập (`localhost:8095`) &amp; Đối Chiếu Lệnh</h3>
-                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px">
+                <h3 style="margin:0 0 8px" data-i18n="p3_pap_t">🛡️ Hồ Sơ Paper 1x Độc Lập (`localhost:8095`) &amp; Đối Chiếu Lệnh</h3>
+                <p style="color:var(--fg-2);font-size:12.5px;margin:0 0 12px" data-i18n="p3_pap_p">
                   Không dùng chung DB với bot chính. Hồ sơ Paper được đóng gói kèm wrapper `1x Isolated` và giữ ở trạng thái `STOPPED` cho tới khi bạn bấm chạy:
                 </p>
                 <div style="display:grid;gap:8px;font-family:var(--mono);font-size:12px">
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--pos-bright);border-radius:8px">
                     <div>
                       <b>DikibagastEmaRsi1h - 6.7m Verified 1x</b><br/>
-                      <small style="color:var(--fg-3)">profile: 4e1b0cb3ef · dựng từ gói 1k 8ebeb7170c (chưa dựng lại từ gói 10k)</small>
+                      <small style="color:var(--fg-3)" data-i18n="p3_prof1">profile: 4e1b0cb3ef · dựng từ gói 1k 8ebeb7170c (chưa dựng lại từ gói 10k)</small>
                     </div>
                     <span class="pill pass">1x Isolated · Ready</span>
                   </div>
                   <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px">
                     <div>
                       <b>RocketHunterSma501h - 6.7m Verified 1x</b><br/>
-                      <small style="color:var(--fg-3)">profile: f26d19d9d7 · dựng từ gói 1k 6826363795 (chưa dựng lại từ gói 10k)</small>
+                      <small style="color:var(--fg-3)" data-i18n="p3_prof2">profile: f26d19d9d7 · dựng từ gói 1k 6826363795 (chưa dựng lại từ gói 10k)</small>
                     </div>
                     <span class="pill pass">1x Isolated · Ready</span>
                   </div>
@@ -1011,7 +1011,7 @@
           <div id="pane-code" class="win-pane">
             <div class="bento-grid">
               <div>
-                <h3 style="margin:0 0 8px">🐍 Mã Nguồn Chuẩn `IStrategy` Không Lookahead</h3>
+                <h3 style="margin:0 0 8px" data-i18n="p4_code_t">🐍 Mã Nguồn Chuẩn `IStrategy` Không Lookahead</h3>
                 <pre style="margin:0">class DikibagastEmaRsi1h(IStrategy):
     INTERFACE_VERSION = 3
     timeframe = "1h"
@@ -1019,7 +1019,7 @@
     can_short = False
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        # Nối khung 1d an toàn qua merge_informative_pair (chống lookahead bias)
+        # Merge 1d informative frame safely via merge_informative_pair (zero lookahead bias)
         inf = self.dp.get_pair_dataframe(pair=metadata["pair"], timeframe="1d")
         inf["ema_short"] = ta.EMA(inf, timeperiod=self.ema_short.value)
         inf["ema_long"] = ta.EMA(inf, timeperiod=self.ema_long.value)
@@ -1027,13 +1027,13 @@
         return dataframe
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime, ...):
-        # Thoát lệnh động theo 2.0 * ATR(14) + Separation Guard 21 nến
+        # Dynamic ATR(14) * 2.0 exit + 21-candle Separation Guard
         if current_profit > atr_threshold:
             return "atr_trailing_exit"</pre>
               </div>
               <div>
-                <h3 style="margin:0 0 8px">🤖 Prompt Bằng Chứng 1 Chạm Cho Codex / Claude</h3>
-                <pre style="margin:0">Trong dự án FreqPilot, hãy triển khai/chỉnh sửa chiến lược DikibagastEmaRsi1h
+                <h3 style="margin:0 0 8px" data-i18n="p4_pr_t">🤖 Prompt Bằng Chứng 1 Chạm Cho Codex / Claude</h3>
+                <pre style="margin:0" data-i18n="p4_pr_body">Trong dự án FreqPilot, hãy triển khai/chỉnh sửa chiến lược DikibagastEmaRsi1h
 (mã b82e4ae101, khung 1h) cho BTC/ETH Binance Futures isolated 1x,
 chỉ backtest và paper. Giữ engine Freqtrade 2026.9 chính thức.
 
@@ -1060,9 +1060,9 @@ Bằng chứng hiện tại trên máy:
       <div class="bento-grid">
         <div class="bento-card">
           <div>
-            <span class="pill pass">Cổng 01 · Data Integrity</span>
-            <h3 style="margin-top:8px">Dữ Liệu Futures Đa Độ Phân Giải (5m + Mark + Funding)</h3>
-            <p>Không chạy backtest thiếu phí qua đêm. Mọi lần chạy đều khóa cứng bộ dữ liệu Feather local kèm kiểm toán độ phủ:</p>
+            <span class="pill pass" data-i18n="fw1_pill">Cổng 01 · Data Integrity</span>
+            <h3 style="margin-top:8px" data-i18n="fw1_h">Dữ Liệu Futures Đa Độ Phân Giải (5m + Mark + Funding)</h3>
+            <p data-i18n="fw1_p">Không chạy backtest thiếu phí qua đêm. Mọi lần chạy đều khóa cứng bộ dữ liệu Feather local kèm kiểm toán độ phủ:</p>
           </div>
           <div class="bento-visual">
             <div class="bar-row">
@@ -1085,9 +1085,9 @@ Bằng chứng hiện tại trên máy:
 
         <div class="bento-card">
           <div>
-            <span class="pill pass">Cổng 02 · Bias Verification</span>
-            <h3 style="margin-top:8px">Chặn Đứng Lookahead &amp; Recursive Indicator Bias</h3>
-            <p>Tự động cắt nến tương lai và so sánh chỉ báo ở nhiều mốc khởi đầu để phát hiện các hàm nhìn trộm đỉnh/đáy ngày hiện tại:</p>
+            <span class="pill pass" data-i18n="fw2_pill">Cổng 02 · Bias Verification</span>
+            <h3 style="margin-top:8px" data-i18n="fw2_h">Chặn Đứng Lookahead &amp; Recursive Indicator Bias</h3>
+            <p data-i18n="fw2_p">Tự động cắt nến tương lai và so sánh chỉ báo ở nhiều mốc khởi đầu để phát hiện các hàm nhìn trộm đỉnh/đáy ngày hiện tại:</p>
           </div>
           <div class="bento-visual" style="font-family:var(--mono);font-size:12px">
             <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.35);border-radius:8px;margin-bottom:8px;color:#fda4af">
@@ -1103,9 +1103,9 @@ Bằng chứng hiện tại trên máy:
 
         <div class="bento-card">
           <div>
-            <span class="pill pass">Cổng 03 · Regime Stress Test</span>
-            <h3 style="margin-top:8px">Phơi Bày Chiến Lược "Chỉ Thắng 1 Tháng Ngắn"</h3>
-            <p>Khi mở rộng từ mẫu 1 tháng sang 6,7 tháng (`2026-04-01 → 2026-10-21`), các chiến lược overfit lập tức lộ diện:</p>
+            <span class="pill pass" data-i18n="fw3_pill">Cổng 03 · Regime Stress Test</span>
+            <h3 style="margin-top:8px" data-i18n="fw3_h">Phơi Bày Chiến Lược "Chỉ Thắng 1 Tháng Ngắn"</h3>
+            <p data-i18n="fw3_p">Khi mở rộng từ mẫu 1 tháng sang 6,7 tháng (`2026-04-01 → 2026-10-21`), các chiến lược overfit lập tức lộ diện:</p>
           </div>
           <div class="bento-visual">
             <div class="bar-row">
@@ -1133,9 +1133,9 @@ Bằng chứng hiện tại trên máy:
 
         <div class="bento-card">
           <div>
-            <span class="pill pass">Cổng 04 · 1x Paper Reconciliation</span>
-            <h3 style="margin-top:8px">Chuyển Tiếp Sang Paper 1x &amp; Đối Chiếu Lệnh Thực</h3>
-            <p>Hồ sơ Paper chỉ được tạo từ gói Backtest đã xác minh `SHA-256`, khởi động ở trạng thái `STOPPED` và đối chiếu từng lệnh khớp:</p>
+            <span class="pill pass" data-i18n="fw4_pill">Cổng 04 · 1x Paper Reconciliation</span>
+            <h3 style="margin-top:8px" data-i18n="fw4_h">Chuyển Tiếp Sang Paper 1x &amp; Đối Chiếu Lệnh Thực</h3>
+            <p data-i18n="fw4_p">Hồ sơ Paper chỉ được tạo từ gói Backtest đã xác minh `SHA-256`, khởi động ở trạng thái `STOPPED` và đối chiếu từng lệnh khớp:</p>
           </div>
           <div class="bento-visual" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-family:var(--mono);font-size:11.5px">
             <div style="background:var(--bg-2);padding:10px;border-radius:8px;border:1px solid var(--line)">1. Verified ZIP (1k)<br/><b class="pos">8ebeb7170c</b></div>
@@ -1158,67 +1158,67 @@ Bằng chứng hiện tại trên máy:
         <table>
           <thead>
             <tr>
-              <th style="width:28%">Tiêu chí kỹ thuật &amp; Nghiên cứu</th>
+              <th style="width:28%" data-i18n="cmp_th1">Tiêu chí kỹ thuật &amp; Nghiên cứu</th>
               <th style="width:26%;background:rgba(16,185,129,0.14);color:var(--pos-bright)">★ FreqPilot Studio (2026.9)</th>
-              <th style="width:23%">Freqtrade + FreqUI Gốc</th>
-              <th style="width:23%">Bản Fork FreqUI Ultimate</th>
+              <th style="width:23%" data-i18n="cmp_th3">Freqtrade + FreqUI Gốc</th>
+              <th style="width:23%" data-i18n="cmp_th4">Bản Fork FreqUI Ultimate</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Engine thực thi bên dưới</strong></td>
-              <td><span class="pill pass">✓ 100% Freqtrade 2026.9 chính thức</span></td>
-              <td><span class="pill pass">✓ Freqtrade 2026.9 chính thức</span></td>
-              <td><span class="pill drop">✕ Bắt cài bản fork riêng (2026.6)</span></td>
+              <td><strong data-i18n="cmp_r1_k">Engine thực thi bên dưới</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r1_a">✓ 100% Freqtrade 2026.9 chính thức</span></td>
+              <td><span class="pill pass" data-i18n="cmp_r1_b">✓ Freqtrade 2026.9 chính thức</span></td>
+              <td><span class="pill drop" data-i18n="cmp_r1_c">✕ Bắt cài bản fork riêng (2026.6)</span></td>
             </tr>
             <tr>
-              <td><strong>Trình sửa mã Monaco + Kho phiên bản</strong></td>
-              <td><span class="pill pass">✓ Tích hợp sẵn + Diff + Khôi phục nháp</span></td>
-              <td><span class="pill">✕ Phải sửa file .py ngoài IDE</span></td>
-              <td><span class="pill drop">⚠️ Lỗi 404 nếu chạy trên Freqtrade gốc</span></td>
+              <td><strong data-i18n="cmp_r2_k">Trình sửa mã Monaco + Kho phiên bản</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r2_a">✓ Tích hợp sẵn + Diff + Khôi phục nháp</span></td>
+              <td><span class="pill" data-i18n="cmp_r2_b">✕ Phải sửa file .py ngoài IDE</span></td>
+              <td><span class="pill drop" data-i18n="cmp_r2_c">⚠️ Lỗi 404 nếu chạy trên Freqtrade gốc</span></td>
             </tr>
             <tr>
-              <td><strong>Kiểm định Lookahead &amp; Recursive trên UI</strong></td>
-              <td><span class="pill pass">✓ 1 chạm ngay trong Bước 06</span></td>
-              <td><span class="pill">✕ Chỉ có lệnh CLI rời rạc</span></td>
-              <td><span class="pill drop">✕ Không hỗ trợ trên Freqtrade gốc</span></td>
+              <td><strong data-i18n="cmp_r3_k">Kiểm định Lookahead &amp; Recursive trên UI</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r3_a">✓ 1 chạm ngay trong Bước 06</span></td>
+              <td><span class="pill" data-i18n="cmp_r3_b">✕ Chỉ có lệnh CLI rời rạc</span></td>
+              <td><span class="pill drop" data-i18n="cmp_r3_c">✕ Không hỗ trợ trên Freqtrade gốc</span></td>
             </tr>
             <tr>
-              <td><strong>Walk-Forward + Holdout tách khỏi Hyperopt</strong></td>
-              <td><span class="pill pass">✓ Rolling Train/OOS + Holdout riêng</span></td>
-              <td><span class="pill">✕ Phải tự cắt ngày thủ công</span></td>
-              <td><span class="pill">⚠️ Không tách Holdout độc lập</span></td>
+              <td><strong data-i18n="cmp_r4_k">Walk-Forward + Holdout tách khỏi Hyperopt</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r4_a">✓ Rolling Train/OOS + Holdout riêng</span></td>
+              <td><span class="pill" data-i18n="cmp_r4_b">✕ Phải tự cắt ngày thủ công</span></td>
+              <td><span class="pill" data-i18n="cmp_r4_c">⚠️ Không tách Holdout độc lập</span></td>
             </tr>
             <tr>
-              <td><strong>Ma trận Độ nhạy Tham số &amp; Phí 2 chiều</strong></td>
-              <td><span class="pill pass">✓ Bảng Pivot 2D trực quan (9–25 ô)</span></td>
-              <td><span class="pill">✕ Không có</span></td>
-              <td><span class="pill">✕ Không có trên engine chính thức</span></td>
+              <td><strong data-i18n="cmp_r5_k">Ma trận Độ nhạy Tham số &amp; Phí 2 chiều</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r5_a">✓ Bảng Pivot 2D trực quan (9–25 ô)</span></td>
+              <td><span class="pill" data-i18n="cmp_r5_b">✕ Không có</span></td>
+              <td><span class="pill" data-i18n="cmp_r5_c">✕ Không có trên engine chính thức</span></td>
             </tr>
             <tr>
-              <td><strong>Gói Hồ sơ Đóng băng <code>SHA-256</code> (.zip)</strong></td>
-              <td><span class="pill pass">✓ Xuất/Nhập 1 chạm + Archive Replay</span></td>
-              <td><span class="pill">✕ Chỉ lưu JSON kết quả rời rạc</span></td>
-              <td><span class="pill">✕ Không có gói kiểm chứng SHA-256</span></td>
+              <td><strong data-i18n="cmp_r6_k">Gói Hồ sơ Đóng băng <code>SHA-256</code> (.zip)</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r6_a">✓ Xuất/Nhập 1 chạm + Archive Replay</span></td>
+              <td><span class="pill" data-i18n="cmp_r6_b">✕ Chỉ lưu JSON kết quả rời rạc</span></td>
+              <td><span class="pill" data-i18n="cmp_r6_c">✕ Không có gói kiểm chứng SHA-256</span></td>
             </tr>
             <tr>
-              <td><strong>Paper 1x Cô lập &amp; Đối chiếu Lệnh Thực</strong></td>
-              <td><span class="pill pass">✓ Worker riêng (8095) + So khớp lệnh</span></td>
-              <td><span class="pill">⚠️ Dùng chung DB, dễ lệch cấu hình</span></td>
-              <td><span class="pill">⚠️ Không có sổ nhật ký đối chiếu riêng</span></td>
+              <td><strong data-i18n="cmp_r7_k">Paper 1x Cô lập &amp; Đối chiếu Lệnh Thực</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r7_a">✓ Worker riêng (8095) + So khớp lệnh</span></td>
+              <td><span class="pill" data-i18n="cmp_r7_b">⚠️ Dùng chung DB, dễ lệch cấu hình</span></td>
+              <td><span class="pill" data-i18n="cmp_r7_c">⚠️ Không có sổ nhật ký đối chiếu riêng</span></td>
             </tr>
             <tr>
-              <td><strong>Kiểm thử Tự động &amp; Bảo vệ An toàn</strong></td>
-              <td><span class="pill pass">✓ 1.879 Tests Pass · Khóa cứng 1x Dry-Run</span></td>
-              <td><span class="pill">✓ Engine test gốc</span></td>
-              <td><span class="pill">⚠️ Thiếu cổng chặn kích hoạt nhầm</span></td>
+              <td><strong data-i18n="cmp_r8_k">Kiểm thử Tự động &amp; Bảo vệ An toàn</strong></td>
+              <td><span class="pill pass" data-i18n="cmp_r8_a">✓ 1.879 Tests Pass · Khóa cứng 1x Dry-Run</span></td>
+              <td><span class="pill" data-i18n="cmp_r8_b">✓ Engine test gốc</span></td>
+              <td><span class="pill" data-i18n="cmp_r8_c">⚠️ Thiếu cổng chặn kích hoạt nhầm</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:12px">
-        <div style="font-size:13.5px;color:var(--fg-2)">
+        <div style="font-size:13.5px;color:var(--fg-2)" data-i18n="cmp_ev_box">
           <strong style="color:var(--fg)">Bằng chứng thực nghiệm trên 8 chiến lược:</strong> Xem báo cáo chạy đối chiếu trực tiếp cùng bộ chiến lược giữa FreqPilot (`2026.9` chính thức) và bản fork `freqtrade-ultimate`.
         </div>
         <a class="btn primary" href="/compare.html" data-i18n="cmp_cta_btn">Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →</a>
@@ -1241,19 +1241,19 @@ Bằng chứng hiện tại trên máy:
         <table id="audit-table">
           <thead>
             <tr>
-              <th>Chiến lược</th>
-              <th>Khung</th>
-              <th>Lãi / Lỗ Ròng (Vốn 10.000 USDT)</th>
-              <th>Số lệnh</th>
+              <th data-i18n="th_strat">Chiến lược</th>
+              <th data-i18n="th_tf">Khung</th>
+              <th data-i18n="th_pnl">Lãi / Lỗ Ròng (Vốn 10.000 USDT)</th>
+              <th data-i18n="th_trades">Số lệnh</th>
               <th>Max DD</th>
               <th>PF</th>
               <th>Lookahead / Recursive</th>
-              <th>Phân loại</th>
+              <th data-i18n="th_class">Phân loại</th>
             </tr>
           </thead>
           <tbody>
             <tr data-group-hdr="all,survived,dropped" style="background:rgba(16,185,129,0.08)">
-              <td colspan="8" style="font-size:12px;font-weight:700;color:var(--pos-bright);letter-spacing:0.04em">
+              <td colspan="8" style="font-size:12px;font-weight:700;color:var(--pos-bright);letter-spacing:0.04em" data-i18n="grp_a_hdr">
                 NHÓM A · GIAO THỨC CHUẨN 6,7 THÁNG (<code>20260401–20261021</code> · Chi tiết <code>5m</code> · Vốn <code>10.000 USDT</code> · Stake <code>1.000 USDT</code> · 10 Chiến lược)
               </td>
             </tr>
@@ -1285,7 +1285,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.51%</td>
               <td class="mono"><b>13.49</b></td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass">★ Đạt 9/9 Độ nhạy 2D (10k)</span></td>
+              <td><span class="pill pass" data-i18n="cl_2d">★ Đạt 9/9 Độ nhạy 2D (10k)</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>DikibagastEmaRsi1h</strong><br/><small style="color:var(--fg-3)">EMA 50/100 + ATR · <code>b9f8eb39c3</code></small></td>
@@ -1300,7 +1300,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.86%</td>
               <td class="mono"><b>3.69</b></td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass">✓ Đạt 9/9 Độ nhạy &amp; Holdout (10k)</span></td>
+              <td><span class="pill pass" data-i18n="cl_wfa">✓ Đạt 9/9 Độ nhạy &amp; Holdout (10k)</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>BdrEmaRideFutures1h</strong><br/><small style="color:var(--fg-3)">BDR-Pro · <code>92ea977e05</code></small></td>
@@ -1315,7 +1315,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">1.50%</td>
               <td class="mono">1.78</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass">✓ Sống sót lãi dương 6,7m</span></td>
+              <td><span class="pill pass" data-i18n="cl_pos">✓ Sống sót lãi dương 6,7m</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>TrendCoreBagging1h</strong><br/><small style="color:var(--fg-3)">quant_crypto · <code>b0692cd1ca</code></small></td>
@@ -1330,7 +1330,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.15%</td>
               <td class="mono">2.90</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass">✓ Giữ lãi dương 6,7m</span></td>
+              <td><span class="pill pass" data-i18n="cl_keep">✓ Giữ lãi dương 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>ChamaraBosContinuation1h</strong><br/><small style="color:var(--fg-3)">Simplified 4h/1d BOS 1x · <code>465207444d</code></small></td>
@@ -1345,7 +1345,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">2.06%</td>
               <td class="mono">0.73</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Biến thể 1x âm ở mẫu 6,7m</span></td>
+              <td><span class="pill drop" data-i18n="cl_neg1x">✕ Biến thể 1x âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>CodexBotVibe4h</strong><br/><small style="color:var(--fg-3)">erfankh · <code>916aad1ea4</code></small></td>
@@ -1360,7 +1360,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">3.14%</td>
               <td class="mono">0.70</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Đảo chiều âm ở mẫu 6,7m</span></td>
+              <td><span class="pill drop" data-i18n="cl_flip">✕ Đảo chiều âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>HermesAdxBreakout4h</strong><br/><small style="color:var(--fg-3)">Simplified 59d-warmup 4h · <code>18fde67d0d</code></small></td>
@@ -1375,7 +1375,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">1.93%</td>
               <td class="mono">0.35</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Biến thể rút gọn âm 6,7m</span></td>
+              <td><span class="pill drop" data-i18n="cl_simp">✕ Biến thể rút gọn âm 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>CodeAlchemyLowPassFisher1h</strong><br/><small style="color:var(--fg-3)">6.7m stress · <code>d7ef848292</code> (1m: +6.29)</small></td>
@@ -1390,7 +1390,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">4.53%</td>
               <td class="mono">0.52</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Kỳ 1m dương → âm ở mẫu 6,7m</span></td>
+              <td><span class="pill drop" data-i18n="cl_1m_neg">✕ Kỳ 1m dương → âm ở mẫu 6,7m</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>C31VolumeDisplacement1h</strong><br/><small style="color:var(--fg-3)">Single-pos 1x 5m adaptation · <code>8d3dff1269</code></small></td>
@@ -1405,10 +1405,10 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">4.96%</td>
               <td class="mono">0.78</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Biến thể đơn lệnh 1x âm 6,7m</span></td>
+              <td><span class="pill drop" data-i18n="cl_single">✕ Biến thể đơn lệnh 1x âm 6,7m</span></td>
             </tr>
             <tr data-group-hdr="all,dropped" style="background:rgba(148,163,184,0.08)">
-              <td colspan="8" style="font-size:12px;font-weight:700;color:var(--fg-2);letter-spacing:0.04em">
+              <td colspan="8" style="font-size:12px;font-weight:700;color:var(--fg-2);letter-spacing:0.04em" data-i18n="grp_b_hdr">
                 NHÓM B · SÀNG LỌC RIÊNG KỲ 1 THÁNG (<code>20260918–20261021</code> · Chi tiết <code>1m</code> · Không xếp hạng chung với kỳ 6,7 tháng · 5 Chiến lược)
               </td>
             </tr>
@@ -1425,7 +1425,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.36%</td>
               <td class="mono">1.31</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill">⏳ Mới có kho nến 15m kỳ 1 tháng</span></td>
+              <td><span class="pill" data-i18n="cl_15m">⏳ Mới có kho nến 15m kỳ 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>MesaTrendFollow1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>771d797726</code></small></td>
@@ -1440,7 +1440,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.36%</td>
               <td class="mono">0.49</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
+              <td><span class="pill drop" data-i18n="cl_1m_drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>QuantgenTrendVoting1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>fd0c261cec</code></small></td>
@@ -1455,7 +1455,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.56%</td>
               <td class="mono">0.21</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
+              <td><span class="pill drop" data-i18n="cl_1m_drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>MirazizDonchianAtr4h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>81c9d91af5</code></small></td>
@@ -1470,7 +1470,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.52%</td>
               <td class="mono">0.00</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
+              <td><span class="pill drop" data-i18n="cl_1m_drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
             </tr>
             <tr data-group="dropped">
               <td><strong>EnriqueVolAdjusted1h</strong><br/><small style="color:var(--fg-3)">1m screen · <code>e0033d2e72</code></small></td>
@@ -1485,7 +1485,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">1.47%</td>
               <td class="mono">0.35</td>
               <td><code>false / ok</code></td>
-              <td><span class="pill drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
+              <td><span class="pill drop" data-i18n="cl_1m_drop">✕ Âm ở kỳ sàng lọc 1 tháng</span></td>
             </tr>
           </tbody>
         </table>
@@ -1562,8 +1562,8 @@ Bằng chứng hiện tại trên máy:
 cd freqpilot
 ./Initialize.ps1
 ./Start.ps1 -CheckOnly
-./Start.ps1 -Build   # Mở ngay http://localhost:8090/studio</pre>
-      <div class="notice">
+./Start.ps1 -Build   # Open http://localhost:8090/studio</pre>
+      <div class="notice" data-i18n="sec4_notice">
         <b>Tuyên bố miễn trừ &amp; Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.
       </div>
     </section>
@@ -1631,7 +1631,7 @@ cd freqpilot
       </div>
       <div id="studio-probe-status" class="probe-status">
         <span class="live-dot" id="modal-live-dot"></span>
-        <span id="studio-probe-text">Đang kiểm tra kết nối máy chủ Studio…</span>
+        <span id="studio-probe-text" data-i18n="probe_checking">Đang kiểm tra kết nối máy chủ Studio…</span>
       </div>
       <div class="modal-actions">
         <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.55);background:rgba(16,185,129,0.12);color:var(--pos-bright)" data-i18n="mod_btn_demo">
@@ -1736,10 +1736,13 @@ cd freqpilot
     }
 
     // Real verified trade-by-trade curves extracted from SHA-256 frozen bundles
+    let activeHeroKey = "diki";
     const HERO_STRATEGIES = {
       diki: {
-        title: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
-        shaLabel: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        title_vi: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
+        title_en: "DikibagastEmaRsi1h · 1h · 10,000 USDT Wallet · SHA-256: 355afab9d5",
+        shaLabel_vi: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        shaLabel_en: "b9f8eb39c3 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false · recursive: ok",
         pnl: "+478.54 USDT",
         ret: "+4.79%",
         trades: "30",
@@ -1771,8 +1774,10 @@ cd freqpilot
         ]
       },
       rocket: {
-        title: "RocketHunterSma501h · 1h · Vốn 10.000 USDT · SHA-256: a97bd2aa06",
-        shaLabel: "fd368e3110 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        title_vi: "RocketHunterSma501h · 1h · Vốn 10.000 USDT · SHA-256: a97bd2aa06",
+        title_en: "RocketHunterSma501h · 1h · 10,000 USDT Wallet · SHA-256: a97bd2aa06",
+        shaLabel_vi: "fd368e3110 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
+        shaLabel_en: "fd368e3110 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false · recursive: ok",
         pnl: "+721.18 USDT",
         ret: "+7.21%",
         trades: "8",
@@ -1794,8 +1799,10 @@ cd freqpilot
         ]
       },
       tarsis: {
-        title: "TarsisVolTargetSma501h · 1h · Vốn 10.000 USDT · SHA-256: d3a223a86a",
-        shaLabel: "f29c4c1d9a · Vốn 10.000 USDT (Stake cơ sở 1.000) · lookahead: false · recursive: ok",
+        title_vi: "TarsisVolTargetSma501h · 1h · Vốn 10.000 USDT · SHA-256: d3a223a86a",
+        title_en: "TarsisVolTargetSma501h · 1h · 10,000 USDT Wallet · SHA-256: d3a223a86a",
+        shaLabel_vi: "f29c4c1d9a · Vốn 10.000 USDT (Stake cơ sở 1.000) · lookahead: false · recursive: ok",
+        shaLabel_en: "f29c4c1d9a · 10,000 USDT Wallet (Base Stake 1,000) · lookahead: false · recursive: ok",
         pnl: "+648.03 USDT",
         ret: "+6.48%",
         trades: "8",
@@ -1819,9 +1826,11 @@ cd freqpilot
     };
 
     function renderHeroCharts(key) {
-      const s = HERO_STRATEGIES[key] || HERO_STRATEGIES.diki;
-      document.getElementById("win-header-title").textContent = s.title;
-      document.getElementById("strat-sha-label").textContent = s.shaLabel;
+      activeHeroKey = key || activeHeroKey || "diki";
+      const s = HERO_STRATEGIES[activeHeroKey] || HERO_STRATEGIES.diki;
+      const isVi = (document.documentElement.lang || "vi") === "vi";
+      document.getElementById("win-header-title").textContent = isVi ? s.title_vi : s.title_en;
+      document.getElementById("strat-sha-label").textContent = isVi ? s.shaLabel_vi : s.shaLabel_en;
       document.getElementById("m-pnl").textContent = s.pnl;
       document.getElementById("m-ret").textContent = s.ret;
       document.getElementById("m-trades").textContent = s.trades;
@@ -1993,7 +2002,108 @@ cd freqpilot
         p3_cta: "🔒 Tham Gia Quant Lab ($29/th) →",
         p3_cancel: "Tự động cấp quyền Telegram · Hủy bất kỳ lúc nào trên Whop",
         sec4_title: "Khởi Chạy FreqPilot Trên Máy Của Bạn Trong 3 Lệnh",
-        sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop."
+        sec4_sub: "Tương thích cả Windows PowerShell 5.1, PowerShell 7 và Linux/WSL2 với Docker Desktop.",
+        u_trades: "lệnh",
+        sb_diki: "<b>DikibagastEmaRsi1h</b> (30 lệnh)",
+        sb_rocket: "<b>RocketHunterSma501h</b> (8 lệnh)",
+        sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 lệnh)",
+        p2_sens_t: "🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)",
+        p2_sens_p: "9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`, vốn `10.000 USDT`, stake `1.000 USDT`): vùng lân cận `ema_short × rsi_offset` đều sinh lời từ `+279.89` đến `+497.65 USDT` với MaxDD `≤ 1.91%`.",
+        p2_wfa_t: "🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)",
+        p2_wfa_p: "Kiểm chứng chống Overfit ở quy mô vốn `10.000 USDT`: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):",
+        p2_wfa_tl: "Timeline Chia Cửa Sổ Walk-Forward:",
+        p2_wfa_oos_sub: "Test độc lập",
+        p2_wfa_hold: "Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):",
+        p2_wfa_w1: "Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):",
+        p3_flow_t: "🧭 Quy Trình 11 Bước Dẫn Đường Theo Trạng Thái Thực",
+        p3_flow_p: "Thanh Context Strip 4 thẻ &amp; Banner gợi ý tự động kiểm tra trạng thái mã, dữ liệu, gói ZIP và kiểm định trước khi mở khóa bước tiếp theo:",
+        c1_h: "01 · MÃ NGUỒN",
+        c1_b: "✓ Đã lưu · b82e4ae1",
+        c1_s: "2 bản sao dự phòng",
+        c2_h: "02 · CẤU HÌNH &amp; DỮ LIỆU",
+        c2_b: "75.690 nến 5m + Funding 8h",
+        c3_h: "03 · GÓI BACKTEST 10K GẦN NHẤT",
+        c3_b: "+478.54 USDT · 30 lệnh",
+        c3_s: "✓ Khớp mã đang mở (SHA-256)",
+        c4_h: "04 · KIỂM ĐỊNH &amp; PAPER",
+        c4_s: "Isolated 1x · Sẵn sàng Paper",
+        p3_pap_t: "🛡️ Hồ Sơ Paper 1x Độc Lập (`localhost:8095`) &amp; Đối Chiếu Lệnh",
+        p3_pap_p: "Không dùng chung DB với bot chính. Hồ sơ Paper được đóng gói kèm wrapper `1x Isolated` và giữ ở trạng thái `STOPPED` cho tới khi bạn bấm chạy:",
+        p3_prof1: "profile: 4e1b0cb3ef · dựng từ gói 1k 8ebeb7170c (chưa dựng lại từ gói 10k)",
+        p3_prof2: "profile: f26d19d9d7 · dựng từ gói 1k 6826363795 (chưa dựng lại từ gói 10k)",
+        p4_code_t: "🐍 Mã Nguồn Chuẩn `IStrategy` Không Lookahead",
+        p4_pr_t: "🤖 Prompt Bằng Chứng 1 Chạm Cho Codex / Claude",
+        p4_pr_body: "Trong dự án FreqPilot, hãy triển khai/chỉnh sửa chiến lược DikibagastEmaRsi1h\n(mã b82e4ae101, khung 1h) cho BTC/ETH Binance Futures isolated 1x,\nchỉ backtest và paper. Giữ engine Freqtrade 2026.9 chính thức.\n\nBằng chứng hiện tại trên máy:\n- Gói backtest gần nhất: b9f8eb39c3 · khoảng 20260401-20261021 (vốn 10.000 USDT)\n  · +478.54 USDT · 30 lệnh (khớp mã hiện tại)\n- Kiểm định gần nhất: lookahead · success (has_bias=False)\n- Kiểm định đệ quy: recursive · success (has_bias=False)",
+        cmp_ev_box: "<strong style=\"color:var(--fg)\">Bằng chứng thực nghiệm trên 8 chiến lược:</strong> Xem báo cáo chạy đối chiếu trực tiếp cùng bộ chiến lược giữa FreqPilot (`2026.9` chính thức) và bản fork `freqtrade-ultimate`.",
+        th_strat: "Chiến lược",
+        th_tf: "Khung",
+        th_pnl: "Lãi / Lỗ Ròng (Vốn 10.000 USDT)",
+        th_trades: "Số lệnh",
+        th_class: "Phân loại",
+        grp_a_hdr: "NHÓM A · GIAO THỨC CHUẨN 6,7 THÁNG (<code>20260401–20261021</code> · Chi tiết <code>5m</code> · Vốn <code>10.000 USDT</code> · Stake <code>1.000 USDT</code> · 10 Chiến lược)",
+        grp_b_hdr: "NHÓM B · SÀNG LỌC RIÊNG KỲ 1 THÁNG (<code>20260918–20261021</code> · Chi tiết <code>1m</code> · Không xếp hạng chung với kỳ 6,7 tháng · 5 Chiến lược)",
+        cl_2d: "★ Đạt 9/9 Độ nhạy 2D (10k)",
+        cl_wfa: "✓ Đạt 9/9 Độ nhạy &amp; Holdout (10k)",
+        cl_pos: "✓ Sống sót lãi dương 6,7m",
+        cl_keep: "✓ Giữ lãi dương 6,7m",
+        cl_neg1x: "✕ Biến thể 1x âm ở mẫu 6,7m",
+        cl_flip: "✕ Đảo chiều âm ở mẫu 6,7m",
+        cl_simp: "✕ Biến thể rút gọn âm 6,7m",
+        cl_1m_neg: "✕ Kỳ 1m dương → âm ở mẫu 6,7m",
+        cl_single: "✕ Biến thể đơn lệnh 1x âm 6,7m",
+        cl_15m: "⏳ Mới có kho nến 15m kỳ 1 tháng",
+        cl_1m_drop: "✕ Âm ở kỳ sàng lọc 1 tháng",
+        sec4_notice: "<b>Tuyên bố miễn trừ &amp; Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.",
+        probe_checking: "Đang kiểm tra kết nối máy chủ Studio…",
+        hero_win_title_init: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
+        hero_sha_init: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false",
+        fw1_pill: "Cổng 01 · Data Integrity",
+        fw1_h: "Dữ Liệu Futures Đa Độ Phân Giải (5m + Mark + Funding)",
+        fw1_p: "Không chạy backtest thiếu phí qua đêm. Mọi lần chạy đều khóa cứng bộ dữ liệu Feather local kèm kiểm toán độ phủ:",
+        fw2_pill: "Cổng 02 · Bias Verification",
+        fw2_h: "Chặn Đứng Lookahead &amp; Recursive Indicator Bias",
+        fw2_p: "Tự động cắt nến tương lai và so sánh chỉ báo ở nhiều mốc khởi đầu để phát hiện các hàm nhìn trộm đỉnh/đáy ngày hiện tại:",
+        fw3_pill: "Cổng 03 · Regime Stress Test",
+        fw3_h: "Phơi Bày Chiến Lược \"Chỉ Thắng 1 Tháng Ngắn\"",
+        fw3_p: "Khi mở rộng từ mẫu 1 tháng sang 6,7 tháng (`2026-04-01 → 2026-10-21`), các chiến lược overfit lập tức lộ diện:",
+        fw4_pill: "Cổng 04 · 1x Paper Reconciliation",
+        fw4_h: "Chuyển Tiếp Sang Paper 1x &amp; Đối Chiếu Lệnh Thực",
+        fw4_p: "Hồ sơ Paper chỉ được tạo từ gói Backtest đã xác minh `SHA-256`, khởi động ở trạng thái `STOPPED` và đối chiếu từng lệnh khớp:",
+        cmp_th1: "Tiêu chí kỹ thuật &amp; Nghiên cứu",
+        cmp_th3: "Freqtrade + FreqUI Gốc",
+        cmp_th4: "Bản Fork FreqUI Ultimate",
+        cmp_r1_k: "Engine thực thi bên dưới",
+        cmp_r1_a: "✓ 100% Freqtrade 2026.9 chính thức",
+        cmp_r1_b: "✓ Freqtrade 2026.9 chính thức",
+        cmp_r1_c: "✕ Bắt cài bản fork riêng (2026.6)",
+        cmp_r2_k: "Trình sửa mã Monaco + Kho phiên bản",
+        cmp_r2_a: "✓ Tích hợp sẵn + Diff + Khôi phục nháp",
+        cmp_r2_b: "✕ Phải sửa file .py ngoài IDE",
+        cmp_r2_c: "⚠️ Lỗi 404 nếu chạy trên Freqtrade gốc",
+        cmp_r3_k: "Kiểm định Lookahead &amp; Recursive trên UI",
+        cmp_r3_a: "✓ 1 chạm ngay trong Bước 06",
+        cmp_r3_b: "✕ Chỉ có lệnh CLI rời rạc",
+        cmp_r3_c: "✕ Không hỗ trợ trên Freqtrade gốc",
+        cmp_r4_k: "Walk-Forward + Holdout tách khỏi Hyperopt",
+        cmp_r4_a: "✓ Rolling Train/OOS + Holdout riêng",
+        cmp_r4_b: "✕ Phải tự cắt ngày thủ công",
+        cmp_r4_c: "⚠️ Không tách Holdout độc lập",
+        cmp_r5_k: "Ma trận Độ nhạy Tham số &amp; Phí 2 chiều",
+        cmp_r5_a: "✓ Bảng Pivot 2D trực quan (9–25 ô)",
+        cmp_r5_b: "✕ Không có",
+        cmp_r5_c: "✕ Không có trên engine chính thức",
+        cmp_r6_k: "Gói Hồ sơ Đóng băng <code>SHA-256</code> (.zip)",
+        cmp_r6_a: "✓ Xuất/Nhập 1 chạm + Archive Replay",
+        cmp_r6_b: "✕ Chỉ lưu JSON kết quả rời rạc",
+        cmp_r6_c: "✕ Không có gói kiểm chứng SHA-256",
+        cmp_r7_k: "Paper 1x Cô lập &amp; Đối chiếu Lệnh Thực",
+        cmp_r7_a: "✓ Worker riêng (8095) + So khớp lệnh",
+        cmp_r7_b: "⚠️ Dùng chung DB, dễ lệch cấu hình",
+        cmp_r7_c: "⚠️ Không có sổ nhật ký đối chiếu riêng",
+        cmp_r8_k: "Kiểm thử Tự động &amp; Bảo vệ An toàn",
+        cmp_r8_a: "✓ 1.879 Tests Pass · Khóa cứng 1x Dry-Run",
+        cmp_r8_b: "✓ Engine test gốc",
+        cmp_r8_c: "⚠️ Thiếu cổng chặn kích hoạt nhầm",
       },
       en: {
         nav_studio: "Demo",
@@ -2055,7 +2165,108 @@ cd freqpilot
         p3_cta: "🔒 Join Quant Lab ($29/mo) →",
         p3_cancel: "Automated Telegram role gating · Cancel anytime on Whop",
         sec4_title: "Launch FreqPilot Locally in 3 Commands",
-        sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop."
+        sec4_sub: "Supports Windows PowerShell 5.1, PowerShell 7, and Linux/WSL2 with Docker Desktop.",
+        u_trades: "trades",
+        sb_diki: "<b>DikibagastEmaRsi1h</b> (30 trades)",
+        sb_rocket: "<b>RocketHunterSma501h</b> (8 trades)",
+        sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 trades)",
+        p2_sens_t: "🎛️ 2D Sensitivity Matrix (`cc6fd90d38` — 9/9 Positive Cells, 10k Capital)",
+        p2_sens_p: "9 independent 6.7-month backtests (`DikibagastEmaRsi1h`, `10,000 USDT` wallet, `1,000 USDT` stake): the entire `ema_short × rsi_offset` neighborhood stayed profitable from `+279.89` to `+497.65 USDT` with MaxDD `≤ 1.91%`.",
+        p2_wfa_t: "🛡️ Walk-Forward &amp; Sealed Holdout vs. Hyperopt (`3215a26798`)",
+        p2_wfa_p: "Anti-overfitting verification at `10,000 USDT` scale: the untuned Baseline beat the Hyperopt-tuned candidate on both Window #1 OOS and the sealed Holdout (`2026-09-16 → 2026-10-21`):",
+        p2_wfa_tl: "Walk-Forward Window Split Timeline:",
+        p2_wfa_oos_sub: "Independent OOS",
+        p2_wfa_hold: "Sealed Holdout Comparison (`2026-09-16 → 2026-10-21`):",
+        p2_wfa_w1: "Window #1 OOS Comparison (`2026-08-04 → 2026-09-08`):",
+        p3_flow_t: "🧭 State-Aware 11-Step Guided Research Flow",
+        p3_flow_p: "The 4-card Context Strip &amp; Recommendation Banner verify source revision, candle/funding data, frozen ZIP integrity, and bias audits before unlocking the next step:",
+        c1_h: "01 · SOURCE CODE",
+        c1_b: "✓ Saved · b82e4ae1",
+        c1_s: "2 local backup snapshots",
+        c2_h: "02 · CONFIG &amp; DATA",
+        c2_b: "75,690 5m candles + 8h Funding",
+        c3_h: "03 · LATEST 10K BACKTEST",
+        c3_b: "+478.54 USDT · 30 trades",
+        c3_s: "✓ Matches open code (SHA-256)",
+        c4_h: "04 · AUDIT &amp; PAPER",
+        c4_s: "Isolated 1x · Ready for Paper",
+        p3_pap_t: "🛡️ Isolated 1x Paper Profile (`localhost:8095`) &amp; Trade Reconciliation",
+        p3_pap_p: "Never shares a database with live/main bots. Paper profiles are wrapped in strict `1x Isolated` guards and remain `STOPPED` until explicitly started:",
+        p3_prof1: "profile: 4e1b0cb3ef · built from 1k bundle 8ebeb7170c (10k profile pending)",
+        p3_prof2: "profile: f26d19d9d7 · built from 1k bundle 6826363795 (10k profile pending)",
+        p4_code_t: "🐍 Clean `IStrategy` Source (Zero Lookahead)",
+        p4_pr_t: "🤖 1-Click Evidence Prompt for Codex / Claude",
+        p4_pr_body: "In FreqPilot, inspect/refine strategy DikibagastEmaRsi1h\n(rev b82e4ae101, 1h) for BTC/ETH Binance Futures isolated 1x,\nbacktest and paper only. Keep official Freqtrade 2026.9 engine untouched.\n\nVerified local evidence:\n- Latest backtest bundle: b9f8eb39c3 · 20260401-20261021 (10,000 USDT wallet)\n  · +478.54 USDT · 30 trades (matches current revision)\n- Latest lookahead audit: success (has_bias=False)\n- Latest recursive audit: success (has_bias=False)",
+        cmp_ev_box: "<strong style=\"color:var(--fg)\">Empirical benchmark across 8 strategies:</strong> Inspect the side-by-side head-to-head execution report between FreqPilot (official `2026.9`) and the `freqtrade-ultimate` fork.",
+        th_strat: "Strategy",
+        th_tf: "Timeframe",
+        th_pnl: "Net P&amp;L (10,000 USDT Wallet)",
+        th_trades: "Trades",
+        th_class: "Classification",
+        grp_a_hdr: "GROUP A · STANDARD 6.7-MONTH PROTOCOL (<code>20260401–20261021</code> · <code>5m</code> Detail · <code>10,000 USDT</code> Wallet · <code>1,000 USDT</code> Stake · 10 Strategies)",
+        grp_b_hdr: "GROUP B · 1-MONTH SCREENING ONLY (<code>20260918–20261021</code> · <code>1m</code> Detail · Not ranked with 6.7m survivors · 5 Strategies)",
+        cl_2d: "★ Passed 9/9 2D Grid (10k)",
+        cl_wfa: "✓ Passed 9/9 2D &amp; Holdout (10k)",
+        cl_pos: "✓ Survived Positive 6.7m",
+        cl_keep: "✓ Stayed Positive 6.7m",
+        cl_neg1x: "✕ 1x Variant Negative (6.7m)",
+        cl_flip: "✕ Flipped Negative (6.7m)",
+        cl_simp: "✕ Simplified Variant Negative (6.7m)",
+        cl_1m_neg: "✕ 1m Positive → Negative (6.7m)",
+        cl_single: "✕ Single-Pos 1x Negative (6.7m)",
+        cl_15m: "⏳ 1-Month 15m Data Only",
+        cl_1m_drop: "✕ Negative in 1m Screen",
+        sec4_notice: "<b>Disclaimer &amp; Scope of Evidence:</b> FreqPilot is an open-source quantitative software &amp; technical auditing tool (hard-locked <code>dry_run=true</code>, <code>1x Isolated</code>), not financial advice or a guarantee of future returns. Frozen bundles seal Python source, parameters, and local feather candle/mark/8h funding data.",
+        probe_checking: "Checking Studio server connection…",
+        hero_win_title_init: "DikibagastEmaRsi1h · 1h · 10,000 USDT Wallet · SHA-256: 355afab9d5",
+        hero_sha_init: "b9f8eb39c3 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false",
+        fw1_pill: "Gate 01 · Data Integrity",
+        fw1_h: "Multi-Resolution Futures Data (5m + Mark + Funding)",
+        fw1_p: "Never backtest without overnight funding fees. Every run locks the local Feather dataset with full coverage auditing:",
+        fw2_pill: "Gate 02 · Bias Verification",
+        fw2_h: "Block Lookahead &amp; Recursive Indicator Bias",
+        fw2_p: "Automatically truncates future candles and compares indicators across multiple start dates to catch peeking functions:",
+        fw3_pill: "Gate 03 · Regime Stress Test",
+        fw3_h: "Expose \"1-Month Wonder\" Overfit Strategies",
+        fw3_p: "When expanding from a 1-month sample to 6.7 months (`2026-04-01 → 2026-10-21`), overfit strategies immediately break down:",
+        fw4_pill: "Gate 04 · 1x Paper Reconciliation",
+        fw4_h: "Promote to 1x Paper &amp; Reconcile Live Fills",
+        fw4_p: "Paper profiles can only be created from a `SHA-256` verified Backtest bundle, starting `STOPPED` with trade-by-trade fill diffing:",
+        cmp_th1: "Engineering &amp; Research Capability",
+        cmp_th3: "Official Freqtrade + FreqUI",
+        cmp_th4: "FreqUI Ultimate Fork",
+        cmp_r1_k: "Underlying Execution Engine",
+        cmp_r1_a: "✓ 100% Official Freqtrade 2026.9",
+        cmp_r1_b: "✓ Official Freqtrade 2026.9",
+        cmp_r1_c: "✕ Forces custom fork (2026.6)",
+        cmp_r2_k: "Monaco Code Editor + Version Vault",
+        cmp_r2_a: "✓ Built-in + Diff + Draft Restore",
+        cmp_r2_b: "✕ Must edit .py files externally",
+        cmp_r2_c: "⚠️ 404 errors on official Freqtrade",
+        cmp_r3_k: "UI Lookahead &amp; Recursive Audits",
+        cmp_r3_a: "✓ 1-click inside Step 06",
+        cmp_r3_b: "✕ Separate CLI commands only",
+        cmp_r3_c: "✕ Unsupported on official engine",
+        cmp_r4_k: "Walk-Forward + Out-of-Sample Holdout",
+        cmp_r4_a: "✓ Rolling Train/OOS + Separate Holdout",
+        cmp_r4_b: "✕ Manual date slicing only",
+        cmp_r4_c: "⚠️ No independent Holdout split",
+        cmp_r5_k: "2D Parameter &amp; Fee Sensitivity Matrix",
+        cmp_r5_a: "✓ Visual 2D Pivot Grid (9–25 cells)",
+        cmp_r5_b: "✕ Not available",
+        cmp_r5_c: "✕ Unavailable on official engine",
+        cmp_r6_k: "Frozen <code>SHA-256</code> Profile Bundles (.zip)",
+        cmp_r6_a: "✓ 1-click Export/Import + Replay",
+        cmp_r6_b: "✕ Loose result JSON files only",
+        cmp_r6_c: "✕ No SHA-256 verification bundle",
+        cmp_r7_k: "Isolated 1x Paper &amp; Fill Reconciliation",
+        cmp_r7_a: "✓ Dedicated Worker (8095) + Fill Diff",
+        cmp_r7_b: "⚠️ Shared DB, config drift risk",
+        cmp_r7_c: "⚠️ No reconciliation ledger",
+        cmp_r8_k: "Automated Test Suite &amp; Safety Gates",
+        cmp_r8_a: "✓ 1,879 Tests Pass · Hard 1x Dry-Run Lock",
+        cmp_r8_b: "✓ Core engine tests",
+        cmp_r8_c: "⚠️ Lacks live-activation guardrails",
       },
       zh: {
         nav_studio: "演示",
@@ -2211,6 +2422,7 @@ cd freqpilot
         if (val) el.innerHTML = val;
       });
       try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
+      if (typeof renderHeroCharts === 'function') renderHeroCharts(activeHeroKey);
     }
 
     let studioOnline = false;
@@ -2270,13 +2482,13 @@ cd freqpilot
           box.className = "probe-status online";
           mDot.className = "live-dot online";
           nDot.className = "live-dot online";
-          txt.textContent = `✓ Đã xác minh FreqPilot 2026.9 (dry_run=true) tại ${url}`;
+          txt.textContent = (document.documentElement.lang === "vi") ? `✓ Đã xác minh FreqPilot 2026.9 (dry_run=true) tại ${url}` : `✓ Verified FreqPilot 2026.9 (dry_run=true) at ${url}`;
         } else {
           studioOnline = false;
           box.className = "probe-status offline";
           mDot.className = "live-dot";
           nDot.className = "live-dot";
-          txt.textContent = `Cổng ${url} đang chạy dịch vụ khác (không phải FreqPilot 2026.9)`;
+          txt.textContent = (document.documentElement.lang === "vi") ? `Cổng ${url} đang chạy dịch vụ khác (không phải FreqPilot 2026.9)` : `Port ${url} is running another service (not FreqPilot 2026.9)`;
         }
       } catch {
         clearTimeout(timer);
@@ -2285,7 +2497,7 @@ cd freqpilot
         box.className = "probe-status offline";
         mDot.className = "live-dot";
         nDot.className = "live-dot";
-        txt.textContent = `Chưa phát hiện FreqPilot local tại ${url} — Bạn có thể mở bản Web Demo ngay bên dưới`;
+        txt.textContent = (document.documentElement.lang === "vi") ? `Chưa phát hiện FreqPilot local tại ${url} — Bạn có thể mở bản Web Demo ngay bên dưới` : `No local FreqPilot detected at ${url} — Open the Read-Only Web Demo below`;
       }
     }
 
