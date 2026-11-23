@@ -402,7 +402,7 @@
         <option value="ko">🇰🇷 KO</option>
       </select>
       <a class="btn" href="/#install" id="btn-install-free">Tải Bản $0 (Chạy Local)</a>
-      <a class="btn primary" href="/#verified-pack" id="btn-buy-pack">Nhận 5 Gói Chiến Lược ($39) →</a>
+      <a class="btn primary" href="/#verified-pack" id="btn-buy-pack">Xem gói Verified ($39) →</a>
     </div>
   </header>
 
@@ -431,7 +431,7 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button id="copy-prompt" class="btn" onclick="copyCodexPrompt()">📋 Sao chép Prompt cho Codex/Claude</button>
-          <a class="btn primary" href="/#dossiers" id="ws-download-btn">📦 Nhận Gói Hồ Sơ (.zip SHA-256) →</a>
+          <a class="btn primary" href="/#verified-pack" id="ws-download-btn">Xem gói Verified ($39) →</a>
         </div>
       </div>
 
@@ -678,6 +678,7 @@
 
     const DEMO_I18N = {
       vi: {
+        excerpt: "Trích đoạn công khai của chiến lược.",
         filter: "Lọc theo tên chiến lược…",
         noMatches: "Không tìm thấy chiến lược",
         wallet: "Vốn",
@@ -722,6 +723,7 @@
         ]
       },
       en: {
+        excerpt: "Public strategy excerpt.",
         filter: "Filter strategies by name…",
         noMatches: "No matching strategies",
         wallet: "Wallet",
@@ -766,6 +768,7 @@
         ]
       },
       zh: {
+        excerpt: "公开策略摘录。",
         filter: "按名称筛选策略…",
         noMatches: "未找到策略",
         wallet: "本金",
@@ -810,6 +813,7 @@
         ]
       },
       ru: {
+        excerpt: "Открытый фрагмент стратегии.",
         filter: "Поиск стратегии по названию…",
         noMatches: "Стратегии не найдены",
         wallet: "Капитал",
@@ -854,6 +858,7 @@
         ]
       },
       ko: {
+        excerpt: "공개 전략 발췌문입니다.",
         filter: "전략 이름으로 검색…",
         noMatches: "검색 결과가 없습니다",
         wallet: "자본",
@@ -1018,7 +1023,7 @@
         <div class="sandbox-banner">
           <span>${t.publicRun} · ${t.bundle} <code title="${s.sha}">${s.sha.slice(0,12)}…</code></span>
           <div class="banner-actions">
-            <a class="btn" href="/?lang=${currentLang}#install">${t.installFree}</a>
+            ${offer.path === "/#install" ? "" : `<a class="btn" href="/?lang=${currentLang}#install">${t.installFree}</a>`}
             <a class="btn primary" href="/?lang=${currentLang}${offer.path.slice(1)}">${offer.label} →</a>
           </div>
         </div>`;
@@ -1037,11 +1042,11 @@
       } else if (currentTab === "code") {
         box.innerHTML = banner + `
           <div class="card">
-            <h3>02 · Trình Xem Mã Nguồn IStrategy (${s.paid ? "Bản Xem Trước · Khóa Bảo Vệ Gói Thương Mại" : "Mã Mở Đầy Đủ"})</h3>
-            <pre>${s.code}</pre>
-            ${s.paid ? `<div style="margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);font-size:13px">🔒 <b>Gói Verified Strategy Pack v1 ($39):</b> Bao gồm toàn bộ file <code>${s.id}.py</code> hoàn chỉnh + bộ dữ liệu nến/funding đóng băng trong <code>freqpilot-${s.id}-${s.runId}.zip</code> để bạn nạp 1 chạm vào máy cá nhân. <a href="/#dossiers"><b>Nhận gói ngay →</b></a></div>` : ""}
-          </div>
-        `;
+            <h3>${t.tabs[1][1]} · ${s.id}</h3>
+            <p>${t.excerpt}</p>
+            <pre></pre>
+          </div>`;
+        box.querySelector("pre").textContent = s.code;
       } else if (currentTab === "data") {
         box.innerHTML = banner + `
           <div class="card">
@@ -1094,42 +1099,42 @@
         const isTarsis = s.id === "TarsisVolTargetSma501h";
         box.innerHTML = banner + (isTarsis ? `
           <div class="card">
-            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>61c0ef7247</code> · TarsisVolTargetSma501h · Vốn 10k · 9/9 Ô Dương)</h3>
-            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>sma_period ∈ {45, 50, 55} × vol_target ∈ {0.35, 0.40, 0.45}</code> trên 6,7 tháng dữ liệu đóng băng (Vốn <code>10.000 USDT</code>):</p>
+            <h3>${t.tabs[8][1]} · ${s.id} · <code>61c0ef7247</code></h3>
+            <p style="font-size:13px;color:var(--fg-2)"><code>sma_period ∈ {45, 50, 55} × vol_target ∈ {0.35, 0.40, 0.45}</code> · ${formatRange(s.period)} · ${t.wallet} ${(10000).toLocaleString(currentLang)} USDT</p>
             <div class="sens-grid">
               <div class="sens-hdr">sma \\ vol</div><div class="sens-hdr">vol = 0.35</div><div class="sens-hdr">vol = 0.40</div><div class="sens-hdr">vol = 0.45</div>
               <div class="sens-hdr">sma = 45</div>
-              <div class="sens-cell"><b class="pos">+536.32 USDT</b><br/><small>10 lệnh · DD 0.79%</small></div>
-              <div class="sens-cell"><b class="pos">+589.75 USDT</b><br/><small>10 lệnh · DD 0.83%</small></div>
-              <div class="sens-cell"><b class="pos">+631.45 USDT</b><br/><small>10 lệnh · DD 0.86%</small></div>
+              <div class="sens-cell"><b class="pos">+536.32 USDT</b><br/><small>${tradeCount(10)} · DD 0.79%</small></div>
+              <div class="sens-cell"><b class="pos">+589.75 USDT</b><br/><small>${tradeCount(10)} · DD 0.83%</small></div>
+              <div class="sens-cell"><b class="pos">+631.45 USDT</b><br/><small>${tradeCount(10)} · DD 0.86%</small></div>
               <div class="sens-hdr">sma = 50</div>
-              <div class="sens-cell"><b class="pos">+592.59 USDT</b><br/><small>8 lệnh · DD 0.51%</small></div>
-              <div class="sens-cell base"><b class="pos">+648.03 USDT ★</b><br/><small>Baseline · 8 lệnh · DD 0.51%</small></div>
-              <div class="sens-cell"><b class="pos">+691.64 USDT</b><br/><small>8 lệnh · DD 0.51%</small></div>
+              <div class="sens-cell"><b class="pos">+592.59 USDT</b><br/><small>${tradeCount(8)} · DD 0.51%</small></div>
+              <div class="sens-cell base"><b class="pos">+648.03 USDT ★</b><br/><small>Baseline · ${tradeCount(8)} · DD 0.51%</small></div>
+              <div class="sens-cell"><b class="pos">+691.64 USDT</b><br/><small>${tradeCount(8)} · DD 0.51%</small></div>
               <div class="sens-hdr">sma = 55</div>
-              <div class="sens-cell"><b class="pos">+471.27 USDT</b><br/><small>9 lệnh · DD 0.66%</small></div>
-              <div class="sens-cell"><b class="pos">+516.74 USDT</b><br/><small>9 lệnh · DD 0.69%</small></div>
-              <div class="sens-cell"><b class="pos">+549.19 USDT</b><br/><small>9 lệnh · DD 0.71%</small></div>
+              <div class="sens-cell"><b class="pos">+471.27 USDT</b><br/><small>${tradeCount(9)} · DD 0.66%</small></div>
+              <div class="sens-cell"><b class="pos">+516.74 USDT</b><br/><small>${tradeCount(9)} · DD 0.69%</small></div>
+              <div class="sens-cell"><b class="pos">+549.19 USDT</b><br/><small>${tradeCount(9)} · DD 0.71%</small></div>
             </div>
           </div>
         ` : `
           <div class="card">
-            <h3>09 · Ma Trận Độ Nhạy Tham Số 2 Chiều (<code>cc6fd90d38</code> · DikibagastEmaRsi1h · Vốn 10k · 9/9 Ô Dương)</h3>
-            <p style="font-size:13px;color:var(--fg-2)">Khảo sát vùng lân cận <code>ema_short ∈ {45, 50, 55} × rsi_offset ∈ {8, 10, 12}</code> trên 6,7 tháng dữ liệu đóng băng (Vốn <code>10.000 USDT</code>):</p>
+            <h3>${t.tabs[8][1]} · ${s.id} · <code>cc6fd90d38</code></h3>
+            <p style="font-size:13px;color:var(--fg-2)"><code>ema_short ∈ {45, 50, 55} × rsi_offset ∈ {8, 10, 12}</code> · ${formatRange(s.period)} · ${t.wallet} ${(10000).toLocaleString(currentLang)} USDT</p>
             <div class="sens-grid">
               <div class="sens-hdr">ema \\ rsi</div><div class="sens-hdr">rsi_off = 8</div><div class="sens-hdr">rsi_off = 10</div><div class="sens-hdr">rsi_off = 12</div>
               <div class="sens-hdr">ema = 45</div>
-              <div class="sens-cell"><b class="pos">+404.66 USDT</b><br/><small>40 lệnh · DD 1.91%</small></div>
-              <div class="sens-cell"><b class="pos">+460.89 USDT</b><br/><small>38 lệnh · DD 1.33%</small></div>
-              <div class="sens-cell"><b class="pos">+428.50 USDT</b><br/><small>38 lệnh · DD 1.35%</small></div>
+              <div class="sens-cell"><b class="pos">+404.66 USDT</b><br/><small>${tradeCount(40)} · DD 1.91%</small></div>
+              <div class="sens-cell"><b class="pos">+460.89 USDT</b><br/><small>${tradeCount(38)} · DD 1.33%</small></div>
+              <div class="sens-cell"><b class="pos">+428.50 USDT</b><br/><small>${tradeCount(38)} · DD 1.35%</small></div>
               <div class="sens-hdr">ema = 50</div>
-              <div class="sens-cell"><b class="pos">+497.65 USDT</b><br/><small>32 lệnh · DD 1.03%</small></div>
-              <div class="sens-cell base"><b class="pos">+478.54 USDT ★</b><br/><small>Baseline · 30 lệnh · DD 0.86%</small></div>
-              <div class="sens-cell"><b class="pos">+430.32 USDT</b><br/><small>29 lệnh · DD 0.90%</small></div>
+              <div class="sens-cell"><b class="pos">+497.65 USDT</b><br/><small>${tradeCount(32)} · DD 1.03%</small></div>
+              <div class="sens-cell base"><b class="pos">+478.54 USDT ★</b><br/><small>Baseline · ${tradeCount(30)} · DD 0.86%</small></div>
+              <div class="sens-cell"><b class="pos">+430.32 USDT</b><br/><small>${tradeCount(29)} · DD 0.90%</small></div>
               <div class="sens-hdr">ema = 55</div>
-              <div class="sens-cell"><b class="pos">+380.62 USDT</b><br/><small>23 lệnh · DD 0.53%</small></div>
-              <div class="sens-cell"><b class="pos">+302.25 USDT</b><br/><small>20 lệnh · DD 0.40%</small></div>
-              <div class="sens-cell"><b class="pos">+279.89 USDT</b><br/><small>20 lệnh · DD 0.40%</small></div>
+              <div class="sens-cell"><b class="pos">+380.62 USDT</b><br/><small>${tradeCount(23)} · DD 0.53%</small></div>
+              <div class="sens-cell"><b class="pos">+302.25 USDT</b><br/><small>${tradeCount(20)} · DD 0.40%</small></div>
+              <div class="sens-cell"><b class="pos">+279.89 USDT</b><br/><small>${tradeCount(20)} · DD 0.40%</small></div>
             </div>
           </div>
         `);

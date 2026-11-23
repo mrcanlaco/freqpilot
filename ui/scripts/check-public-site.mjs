@@ -167,6 +167,18 @@ for (const lang of ['en', 'vi']) {
       await page.locator('#starter-bundle [data-i18n="p1_cta"]').click();
       const whop = await popup;
       await whop.waitForURL(/^https:\/\/whop\.com\/freqpilot\/freqpilot-free-starter-bundle-sha-256-verified\//);
+      await whop.close();
+      await page.locator('#starter-bundle [data-i18n="hero_cta_starter"]').click();
+      await page.locator('.strat-item').filter({ hasText: proof.strategy }).click();
+      await page.locator('.step-btn').nth(7).click();
+      assert.match(await page.locator('[data-walk]').innerText(), /\+94[.,]44/);
+      await fits();
+      await page.locator('.step-btn').nth(1).click();
+      assert.match(await page.locator('#tab-content').innerText(), lang === 'vi' ? /Trích đoạn công khai/ : /Public strategy excerpt/);
+      await page.locator('.sandbox-banner .primary').click();
+      assert.equal(new URL(page.url()).hash, '#verified-pack');
+      assert.equal(await page.locator('html').getAttribute('lang'), lang);
+      await fits();
     });
   }
 }
