@@ -14,7 +14,7 @@
   <meta property="og:site_name" content="FreqPilot Quant Lab" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="FreqPilot — SHA-256 Reproducible Quant Studio on Official Freqtrade 2026.9" />
-  <meta name="twitter:description" content="15 public crypto strategies audited on 6.7 months of frozen 5m + funding data. Open-source GPL-3.0 Studio + SHA-256 Verified Strategy Bundles." />
+  <meta name="twitter:description" content="Explore the published long-window backtests and one-month screens. Open-source GPL-3.0 Studio + SHA-256 Verified Strategy Bundles." />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -748,6 +748,24 @@
       .bento-grid, .grid-3 { grid-template-columns: 1fr; }
       .nav-links { display: none; }
     }
+    @media (max-width: 600px) {
+      .nav-shell { top: 0; padding: 4px 8px; }
+      .nav-pill { min-width: 0; width: 100%; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-radius: 16px; }
+      .nav-right { flex-wrap: wrap; gap: 5px; margin-left: auto; }
+      .nav-right .btn { padding: 8px 10px; }
+      .studio-modal-card { min-width: 0; max-height: 90dvh; overflow: auto; }
+      .preset-pills, .url-input-row, .modal-actions { min-width: 0; }
+      .url-input-row input { min-width: 0; }
+      .modal-actions .btn { white-space: normal; }
+      .hero-actions .btn, .eyebrow-pill { white-space: normal; }
+      .bento-grid > *, .win-dots { min-width: 0; }
+      .strat-btns { width: 100%; }
+      .strat-btn { width: 100%; flex-wrap: wrap; text-align: left; }
+      .strat-btn small { flex-basis: 100%; }
+      .win-title { white-space: normal; overflow-wrap: anywhere; }
+      .bento-visual, .bar-row { overflow-wrap: anywhere; }
+      section, .price-card { scroll-margin-top: 110px; }
+    }
   </style>
 </head>
 <body>
@@ -763,7 +781,7 @@
         <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
         <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
         <a href="/compare.html" data-i18n="nav_deep">vs FreqUI</a>
-        <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_registry">Kho 900+ Chiến Lược ↗</a>
+        <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_registry">Thư viện riêng ↗</a>
         <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_pulse">Radar Phái Sinh ↗</a>
       </nav>
       <div class="nav-right">
@@ -786,9 +804,7 @@
   <main class="wrap">
     <!-- Hero -->
     <div class="hero">
-      <div class="eyebrow-pill" data-i18n="hero_badge">
-        ● 23 Chiến Lược (Từ 291 Lượt Quét) Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →
-      </div>
+      <a class="eyebrow-pill" href="#audit" data-i18n="hero_badge">Xem bảng kiểm định công khai →</a>
       <h1 data-i18n="hero_title">Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.</h1>
       <p class="hero-sub" data-i18n="hero_lead">
         Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn &amp; Drawdown, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.
@@ -796,7 +812,7 @@
       <div class="hero-actions">
         <button type="button" class="btn primary" onclick="quickLaunchStudio()" data-i18n="hero_cta_open">🚀 Mở FreqPilot Studio →</button>
         <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.5);color:var(--pos-bright)" data-i18n="hero_cta_demo">✨ Dùng Thử Studio Trên Web (Không cần cài)</a>
-        <button type="button" class="btn" onclick="openWhopCheckout('free_starter')" style="border-color:rgba(56,189,248,0.45);color:var(--accent)" data-i18n="hero_cta_starter">🎁 Tải Gói Mẫu SHA-256 ($0)</button>
+        <a class="btn" href="/demo.html?strategy=TrendCoreBagging1h#workspace" style="border-color:rgba(56,189,248,0.45);color:var(--accent)" data-i18n="hero_cta_starter">Xem kết quả mẫu miễn phí →</a>
         <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">GitHub (GPL-3.0) ↗</a>
       </div>
 
@@ -805,7 +821,7 @@
         <div class="win-bar">
           <div class="win-dots">
             <span class="r"></span><span class="y"></span><span class="g"></span>
-            <span class="win-title" id="win-header-title" data-i18n="hero_win_title_init">DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5</span>
+            <span class="win-title" id="win-header-title">DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5</span>
           </div>
           <div class="win-tabs">
             <button class="win-tab active" onclick="switchStudioTab('equity', this)" data-i18n="tab_equity">📈 Đường Vốn</button>
@@ -823,37 +839,40 @@
                 <button class="strat-btn active" onclick="selectHeroStrategy('diki', this)">
                   <span data-i18n="sb_diki"><b>DikibagastEmaRsi1h</b> (30 lệnh)</span>
                   <span class="badge-pos">+478.54 USDT · DD 0.86%</span>
+                  <small><span data-i18n="highlight_status">Backtest · Lãi dương</span> · 2026-04-01 → 2026-10-21</small>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('rocket', this)">
                   <span data-i18n="sb_rocket"><b>RocketHunterSma501h</b> (8 lệnh)</span>
                   <span class="badge-pos">+721.18 USDT · PF 14.90</span>
+                  <small><span data-i18n="highlight_status">Backtest · Lãi dương</span> · 2026-04-01 → 2026-10-21</small>
                 </button>
                 <button class="strat-btn" onclick="selectHeroStrategy('tarsis', this)">
                   <span data-i18n="sb_tarsis"><b>TarsisVolTargetSma501h</b> (8 lệnh)</span>
                   <span class="badge-pos">+648.03 USDT · PF 13.49</span>
+                  <small><span data-i18n="highlight_status">Backtest · Lãi dương</span> · 2026-04-01 → 2026-10-21</small>
                 </button>
               </div>
-              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label" data-i18n="hero_sha_init">b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false</span>
+              <span class="mono" style="font-size:12px;color:var(--fg-3)" id="strat-sha-label">Backtest b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false</span>
             </div>
 
             <!-- 10 KPI Cards -->
             <div class="rq-metrics">
-              <div class="rq-metric"><small>Net P&amp;L (10k Capital)</small><b class="pos" id="m-pnl">+478.54 USDT</b></div>
-              <div class="rq-metric"><small>Return (%)</small><b class="pos" id="m-ret">+4.79%</b></div>
-              <div class="rq-metric"><small>Total Trades</small><b id="m-trades">30</b></div>
-              <div class="rq-metric"><small>Win Rate</small><b class="pos" id="m-win">70.0% (21W/9L)</b></div>
+              <div class="rq-metric"><small data-i18n="th_pnl">Lãi/lỗ ròng (vốn 10.000 USDT)</small><b class="pos" id="m-pnl">+478.54 USDT</b></div>
+              <div class="rq-metric"><small data-i18n="metric_return">Tỷ suất (%)</small><b class="pos" id="m-ret">+4.79%</b></div>
+              <div class="rq-metric"><small data-i18n="th_trades">Số lệnh</small><b id="m-trades">30</b></div>
+              <div class="rq-metric"><small data-i18n="metric_win_rate">Tỷ lệ thắng</small><b class="pos" id="m-win">70.0% (21W/9L)</b></div>
               <div class="rq-metric"><small>Profit Factor</small><b class="pos" id="m-pf">3.69</b></div>
-              <div class="rq-metric"><small>Max Drawdown</small><b class="pos" id="m-dd">-0.86%</b></div>
-              <div class="rq-metric"><small>Expectancy / Trade</small><b class="pos" id="m-exp">+15.95 USDT</b></div>
+              <div class="rq-metric"><small data-i18n="metric_max_drawdown">Sụt giảm tối đa</small><b class="pos" id="m-dd">-0.86%</b></div>
+              <div class="rq-metric"><small data-i18n="metric_expectancy_trade">Lãi kỳ vọng / lệnh</small><b class="pos" id="m-exp">+15.95 USDT</b></div>
               <div class="rq-metric"><small>Lookahead Bias</small><b class="pos">0 (Verified)</b></div>
               <div class="rq-metric"><small>Recursive Bias</small><b class="pos">0 (Verified)</b></div>
-              <div class="rq-metric"><small>Protocol</small><b>10k / 1k · 1x · 5m</b></div>
+              <div class="rq-metric"><small data-i18n="metric_protocol">Giao thức</small><b>10k / 1k · 1x · 5m</b></div>
             </div>
 
             <!-- Cumulative PnL SVG Chart -->
             <div class="chart-card">
               <div class="chart-head">
-                <span>📈 Cumulative Closed-Trade P&amp;L (10,000 USDT Wallet · 2026-04-01 → 2026-10-21)</span>
+                <span data-i18n="metric_cumulative_closed_trade_p_l_usdt">Lãi / lỗ tích lũy từ lệnh đã đóng · USDT · 2026-04-01 → 2026-10-21</span>
                 <span class="pos mono" id="chart-pnl-badge">+478.54 USDT</span>
               </div>
               <svg id="svg-equity" viewBox="0 0 960 200" width="100%" height="200" style="display:block;overflow:visible"></svg>
@@ -862,7 +881,7 @@
             <!-- Underwater Drawdown SVG Chart -->
             <div class="chart-card">
               <div class="chart-head">
-                <span>🌊 Underwater Drawdown (% of Account Equity)</span>
+                <span data-i18n="metric_drawdown_of_account_equity">Sụt giảm vốn tài khoản (%)</span>
                 <span class="neg mono" id="chart-dd-badge">Max DD: -0.86%</span>
               </div>
               <svg id="svg-drawdown" viewBox="0 0 960 110" width="100%" height="110" style="display:block;overflow:visible"></svg>
@@ -871,7 +890,7 @@
             <!-- Monthly Returns Heatmap -->
             <div class="chart-card" style="margin-bottom:0">
               <div class="chart-head">
-                <span>🗓️ Monthly Closed-Trade P&amp;L Heatmap (2026 · USDT)</span>
+                <span data-i18n="metric_monthly_closed_trade_p_l_usdt">Lãi / lỗ theo tháng (2026 · USDT)</span>
                 <span class="mono" style="color:var(--fg-3)">75,690 5m bars + 8h funding</span>
               </div>
               <div id="monthly-heatmap" class="heatmap-grid"></div>
@@ -881,7 +900,7 @@
           <!-- PANE 2: 2D Sensitivity Heatmap & WFA Holdout Visual -->
           <div id="pane-matrix" class="win-pane">
             <div class="bento-grid">
-              <div>
+              <div id="diki-sensitivity">
                 <h3 style="margin:0 0 6px" data-i18n="p2_sens_t">🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)</h3>
                 <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px" data-i18n="p2_sens_p">
                   9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`, vốn `10.000 USDT`, stake `1.000 USDT`): vùng lân cận `ema_short × rsi_offset` đều sinh lời từ `+279.89` đến `+497.65 USDT` với MaxDD `≤ 1.91%`.
@@ -909,44 +928,8 @@
                 </div>
               </div>
 
-              <div>
-                <h3 style="margin:0 0 6px" data-i18n="p2_wfa_t">🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)</h3>
-                <p style="color:var(--fg-2);font-size:13px;margin:0 0 14px" data-i18n="p2_wfa_p">
-                  Kiểm chứng chống Overfit ở quy mô vốn `10.000 USDT`: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):
-                </p>
-                <div class="bento-visual">
-                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:10px;font-weight:600" data-i18n="p2_wfa_tl">Timeline Chia Cửa Sổ Walk-Forward:</div>
-                  <div style="display:grid;grid-template-columns:2fr 1fr 1.2fr;gap:6px;margin-bottom:18px;font-family:var(--mono);font-size:11.5px;text-align:center">
-                    <div style="background:rgba(56,189,248,0.16);border:1px solid var(--accent);padding:8px;border-radius:8px;color:var(--fg)">Train (90d)<br/><small>Hyperopt seed=42</small></div>
-                    <div style="background:rgba(245,158,11,0.16);border:1px solid var(--warn);padding:8px;border-radius:8px;color:var(--fg)">OOS (35d)<br/><small data-i18n="p2_wfa_oos_sub">Test độc lập</small></div>
-                    <div style="background:rgba(16,185,129,0.18);border:1px solid var(--pos-bright);padding:8px;border-radius:8px;color:var(--pos-bright)">Holdout (35d)<br/><small>2026-09-16→10-21</small></div>
-                  </div>
-
-                  <div style="font-size:12px;color:var(--fg-2);margin-bottom:6px;font-weight:600" data-i18n="p2_wfa_hold">Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):</div>
-                  <div class="bar-row">
-                    <span><b>Baseline (Untuned)</b></span>
-                    <div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--pos-bright)"></div></div>
-                    <b class="pos mono">+94.44 USDT</b>
-                  </div>
-                  <div class="bar-row">
-                    <span>Hyperopt Candidate</span>
-                    <div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--neg)"></div></div>
-                    <b class="neg mono">-50.85 USDT</b>
-                  </div>
-
-                  <div style="font-size:12px;color:var(--fg-2);margin:14px 0 6px;font-weight:600" data-i18n="p2_wfa_w1">Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):</div>
-                  <div class="bar-row">
-                    <span><b>Baseline (Untuned)</b></span>
-                    <div class="bar-track"><div class="bar-fill" style="width:94%;background:var(--pos-bright)"></div></div>
-                    <b class="pos mono">+141.61 USDT</b>
-                  </div>
-                  <div class="bar-row">
-                    <span>Hyperopt Candidate</span>
-                    <div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--accent)"></div></div>
-                    <b class="pos mono">+105.83 USDT</b>
-                  </div>
-                </div>
-              </div>
+              <div id="other-sensitivity" hidden><h3 data-i18n="sensitivity_label">Độ nhạy 2D</h3><a id="hero-sensitivity-link" data-i18n="view_evidence">Xem trong demo →</a></div>
+              <div id="hero-walk" class="bento-visual"></div>
             </div>
           </div>
 
@@ -1109,22 +1092,22 @@ Bằng chứng hiện tại trên máy:
           </div>
           <div class="bento-visual">
             <div class="bar-row">
-              <span><b>RocketHunterSma501h</b></span>
+              <span><b>RocketHunterSma501h</b><br>8 <span data-i18n="u_trades">lệnh</span></span>
               <div class="bar-track"><div class="bar-fill" style="width:96%;background:var(--pos-bright)"></div></div>
               <b class="pos mono">+721.18 USDT</b>
             </div>
             <div class="bar-row">
-              <span><b>TarsisVolTargetSma501h</b></span>
+              <span><b>TarsisVolTargetSma501h</b><br>8 <span data-i18n="u_trades">lệnh</span></span>
               <div class="bar-track"><div class="bar-fill" style="width:86%;background:var(--pos-bright)"></div></div>
               <b class="pos mono">+648.03 USDT</b>
             </div>
             <div class="bar-row">
-              <span><b>DikibagastEmaRsi1h</b></span>
+              <span><b>DikibagastEmaRsi1h</b><br>30 <span data-i18n="u_trades">lệnh</span></span>
               <div class="bar-track"><div class="bar-fill" style="width:66%;background:var(--pos-bright)"></div></div>
               <b class="pos mono">+478.54 USDT</b>
             </div>
             <div class="bar-row">
-              <span>CodexBotVibe4h (Overfit)</span>
+              <span>CodexBotVibe4h<br>30 <span data-i18n="u_trades">lệnh</span></span>
               <div class="bar-track"><div class="bar-fill" style="width:34%;background:var(--neg)"></div></div>
               <b class="neg mono">-190.53 USDT</b>
             </div>
@@ -1228,7 +1211,7 @@ Bằng chứng hiện tại trên máy:
     <!-- Section 2: Visual 10-Strategy Audit Leaderboard -->
     <section id="audit">
       <span class="sec-eyebrow">EMPIRICAL BENCHMARK</span>
-      <h2 data-i18n="sec1_title">Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)</h2>
+      <h2 data-i18n="sec1_title">Bảng kiểm định công khai</h2>
       <p class="sec-sub" data-i18n="sec1_sub">
         Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>10.000 USDT</code>, stake <code>1.000 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):
       </p>
@@ -1251,7 +1234,7 @@ Bằng chứng hiện tại trên máy:
               <th data-i18n="th_class">Phân loại</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody data-period="long">
             <tr data-group-hdr="all,survived,dropped" style="background:rgba(16,185,129,0.08)">
               <td colspan="8" style="font-size:12px;font-weight:700;color:var(--pos-bright);letter-spacing:0.04em" data-i18n="grp_a_hdr">
                 NHÓM A · GIAO THỨC CHUẨN 6,7 THÁNG (<code>20260401–20261021</code> · Chi tiết <code>5m</code> · Vốn <code>10.000 USDT</code> · Stake <code>1.000 USDT</code> · 10 Chiến lược)
@@ -1270,7 +1253,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.51%</td>
               <td class="mono"><b>14.90</b></td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass">★ Top 1 Profit (6,7m)</span></td>
+              <td><span class="pill pass" data-i18n="cl_top">Lãi cao nhất kỳ dài</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>TarsisVolTargetSma501h</strong><br/><small style="color:var(--fg-3)">Entry Vol-Target 1x adaptation · <code>f29c4c1d9a</code></small></td>
@@ -1300,7 +1283,7 @@ Bằng chứng hiện tại trên máy:
               <td class="mono">0.86%</td>
               <td class="mono"><b>3.69</b></td>
               <td><code>false / ok</code></td>
-              <td><span class="pill pass" data-i18n="cl_wfa">✓ Đạt 9/9 Độ nhạy &amp; Holdout (10k)</span></td>
+              <td><span class="pill pass" data-i18n="cl_wfa">9/9 ô độ nhạy dương · Tham số gốc thắng ứng viên ở kỳ giữ lại</span></td>
             </tr>
             <tr data-group="survived">
               <td><strong>BdrEmaRideFutures1h</strong><br/><small style="color:var(--fg-3)">BDR-Pro · <code>92ea977e05</code></small></td>
@@ -1407,6 +1390,8 @@ Bằng chứng hiện tại trên máy:
               <td><code>false / ok</code></td>
               <td><span class="pill drop" data-i18n="cl_single">✕ Biến thể đơn lệnh 1x âm 6,7m</span></td>
             </tr>
+          </tbody>
+          <tbody data-period="short">
             <tr data-group-hdr="all,dropped" style="background:rgba(148,163,184,0.08)">
               <td colspan="8" style="font-size:12px;font-weight:700;color:var(--fg-2);letter-spacing:0.04em" data-i18n="grp_b_hdr">
                 NHÓM B · SÀNG LỌC RIÊNG KỲ 1 THÁNG (<code>20260918–20261021</code> · Chi tiết <code>1m</code> · Không xếp hạng chung với kỳ 6,7 tháng · 5 Chiến lược)
@@ -1497,10 +1482,10 @@ Bằng chứng hiện tại trên máy:
       <span class="sec-eyebrow">VERIFIED RESEARCH BUNDLES</span>
       <h2 data-i18n="sec3_title">Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)</h2>
       <p class="sec-sub" data-i18n="sec3_sub">
-        Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.
+        Xem thử kết quả công khai ngay tại đây. Các gói ZIP được cung cấp qua Whop.
       </p>
       <div class="grid-3">
-        <div class="price-card">
+        <div class="price-card" id="starter-bundle">
           <div>
             <span class="pill" data-i18n="p1_badge">Open-Source + Free Lead Magnet</span>
             <h3 style="margin:10px 0 4px" data-i18n="p1_title">Starter Bundle &amp; Studio</h3>
@@ -1508,22 +1493,25 @@ Bằng chứng hiện tại trên máy:
             <ul class="price-list" data-i18n="p1_list">
               <li><strong>01 Gói mẫu đóng băng <code>SHA-256</code></strong> (<code>TrendCoreBagging1h</code> · chuẩn vốn <code>10.000 USDT</code>) + hồ sơ song ngữ EN/VI để kiểm chứng <code>Archive Replay</code> ngay.</li>
               <li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li>
-              <li>Truy cập kho 900+ chiến lược công khai tại <code>strategies.freqpilot.dev</code>.</li>
+              <li>Thư viện riêng yêu cầu mật khẩu riêng.</li>
             </ul>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <button type="button" class="btn" style="border-color:rgba(56,189,248,0.45);color:var(--accent);justify-content:center" onclick="openWhopCheckout('free_starter')" data-i18n="p1_cta">🎁 Nhận Gói Mẫu SHA-256 ($0) →</button>
+            <a class="btn primary" href="/demo.html?strategy=TrendCoreBagging1h#workspace" data-i18n="hero_cta_starter">Xem kết quả mẫu miễn phí →</a>
+            <button type="button" class="btn" style="border-color:rgba(56,189,248,0.45);color:var(--accent);justify-content:center" onclick="openWhopCheckout('free_starter')" data-i18n="p1_cta">Mở gói Starter ZIP trên Whop ($0) ↗</button>
+            <a href="https://strategies.freqpilot.dev/" data-i18n="nav_registry">Thư viện riêng · mật khẩu ↗</a>
+            <a href="https://github.com/mrcanlaco/freqpilot/issues" data-i18n="access_contact">Hỏi chủ dự án về quyền thư viện trên GitHub ↗</a>
             <a class="btn btn-ghost" style="justify-content:center;font-size:12.5px" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="p1_gh">Mã Nguồn GitHub (GPL-3.0) ↗</a>
           </div>
         </div>
 
-        <div class="price-card featured">
+        <div class="price-card featured" id="verified-pack">
           <div>
             <span class="pill pass" data-i18n="p2_badge">Khuyên Dùng · Mua 1 Lần</span>
             <h3 style="margin:10px 0 4px" data-i18n="p2_title">Verified Strategy Pack v1</h3>
             <div class="price-tag">$39 <small style="font-size:13px;font-weight:400;color:var(--fg-3)" data-i18n="p2_unit">/ trọn bộ 5 gói 10k</small></div>
             <ul class="price-list" data-i18n="p2_list">
-              <li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
+              <li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code>, <code>TarsisVolTargetSma501h</code>, <code>DikibagastEmaRsi1h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li>
               <li><strong>5 tài liệu <code>Dossier (.md)</code> song ngữ EN/VI</strong> + <code>RELEASE-MANIFEST-10K.json</code> + script kiểm tra <code>SHA-256</code> tự động.</li>
               <li>Tải tức thì qua <strong>Whop</strong> · Nạp vào FreqPilot trong 5 giây.</li>
             </ul>
@@ -1573,7 +1561,7 @@ cd freqpilot
     <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;font-size:13px">
       <a href="https://freqpilot.dev/" style="color:var(--fg);text-decoration:none;font-weight:600">📈 FreqPilot Studio</a>
       <span style="color:var(--fg-3)">·</span>
-      <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">📚 Strategy Library (900+ Audited) ↗</a>
+      <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none" data-i18n="nav_registry">Thư viện riêng ↗</a>
       <span style="color:var(--fg-3)">·</span>
       <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--pos-bright);text-decoration:none">⚡ PeakPulse AI Anomaly Radar ↗</a>
       <span style="color:var(--fg-3)">·</span>
@@ -1652,6 +1640,7 @@ cd freqpilot
       </div>
     </div>
   </div>
+  <script src="/public-evidence.js"></script>
   <script>
     // =========================================================================
     // WHOP CHECKOUT CONFIGURATION (Paste your 3 Whop Plan / Checkout URLs here)
@@ -1739,10 +1728,8 @@ cd freqpilot
     let activeHeroKey = "diki";
     const HERO_STRATEGIES = {
       diki: {
-        title_vi: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
-        title_en: "DikibagastEmaRsi1h · 1h · 10,000 USDT Wallet · SHA-256: 355afab9d5",
-        shaLabel_vi: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
-        shaLabel_en: "b9f8eb39c3 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false · recursive: ok",
+        id: "DikibagastEmaRsi1h",
+        ...PUBLIC_RUNS.DikibagastEmaRsi1h,
         pnl: "+478.54 USDT",
         ret: "+4.79%",
         trades: "30",
@@ -1774,10 +1761,8 @@ cd freqpilot
         ]
       },
       rocket: {
-        title_vi: "RocketHunterSma501h · 1h · Vốn 10.000 USDT · SHA-256: a97bd2aa06",
-        title_en: "RocketHunterSma501h · 1h · 10,000 USDT Wallet · SHA-256: a97bd2aa06",
-        shaLabel_vi: "fd368e3110 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false · recursive: ok",
-        shaLabel_en: "fd368e3110 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false · recursive: ok",
+        id: "RocketHunterSma501h",
+        ...PUBLIC_RUNS.RocketHunterSma501h,
         pnl: "+721.18 USDT",
         ret: "+7.21%",
         trades: "8",
@@ -1799,10 +1784,8 @@ cd freqpilot
         ]
       },
       tarsis: {
-        title_vi: "TarsisVolTargetSma501h · 1h · Vốn 10.000 USDT · SHA-256: d3a223a86a",
-        title_en: "TarsisVolTargetSma501h · 1h · 10,000 USDT Wallet · SHA-256: d3a223a86a",
-        shaLabel_vi: "f29c4c1d9a · Vốn 10.000 USDT (Stake cơ sở 1.000) · lookahead: false · recursive: ok",
-        shaLabel_en: "f29c4c1d9a · 10,000 USDT Wallet (Base Stake 1,000) · lookahead: false · recursive: ok",
+        id: "TarsisVolTargetSma501h",
+        ...PUBLIC_RUNS.TarsisVolTargetSma501h,
         pnl: "+648.03 USDT",
         ret: "+6.48%",
         trades: "8",
@@ -1829,8 +1812,12 @@ cd freqpilot
       activeHeroKey = key || activeHeroKey || "diki";
       const s = HERO_STRATEGIES[activeHeroKey] || HERO_STRATEGIES.diki;
       const isVi = (document.documentElement.lang || "vi") === "vi";
-      document.getElementById("win-header-title").textContent = isVi ? s.title_vi : s.title_en;
-      document.getElementById("strat-sha-label").textContent = isVi ? s.shaLabel_vi : s.shaLabel_en;
+      document.getElementById("win-header-title").textContent = `${s.id} · 1h · ${isVi ? "Vốn 10.000 USDT" : "10,000 USDT wallet"} · SHA-256: ${s.sha.slice(0, 10)}`;
+      document.getElementById("strat-sha-label").textContent = `Backtest ${s.runId} · ${formatRange(s.period)} · ${s.trades} ${WALK_COPY[document.documentElement.lang].trades} · lookahead: false · recursive: ok`;
+      document.getElementById("diki-sensitivity").hidden = activeHeroKey !== "diki";
+      document.getElementById("other-sensitivity").hidden = activeHeroKey === "diki";
+      document.getElementById("hero-sensitivity-link").href = `/demo.html?strategy=${s.id}&tab=sensitivity&lang=${document.documentElement.lang}#workspace`;
+      document.getElementById("hero-walk").innerHTML = walkForwardPanel(s, document.documentElement.lang);
       document.getElementById("m-pnl").textContent = s.pnl;
       document.getElementById("m-ret").textContent = s.ret;
       document.getElementById("m-trades").textContent = s.trades;
@@ -1943,21 +1930,34 @@ cd freqpilot
 
     const SITE_I18N = {
       vi: {
+        access_contact: "Hỏi chủ dự án về quyền thư viện trên GitHub ↗",
+        cl_top: "Lãi cao nhất kỳ dài",
+        sensitivity_label: "Độ nhạy 2D",
+        view_evidence: "Xem trong demo →",
+        highlight_status: "Backtest · Lãi dương",
+        metric_return: "Tỷ suất (%)",
+        metric_win_rate: "Tỷ lệ thắng",
+        metric_max_drawdown: "Sụt giảm tối đa",
+        metric_expectancy_trade: "Lãi kỳ vọng / lệnh",
+        metric_protocol: "Giao thức",
+        metric_cumulative_closed_trade_p_l_usdt: "Lãi / lỗ tích lũy từ lệnh đã đóng · USDT · 2026-04-01 → 2026-10-21",
+        metric_drawdown_of_account_equity: "Sụt giảm vốn tài khoản (%)",
+        metric_monthly_closed_trade_p_l_usdt: "Lãi / lỗ theo tháng (2026 · USDT)",
         nav_studio: "Demo",
         nav_compare: "So sánh",
         nav_audit: "Kiểm toán",
         nav_dossiers: "Bảng giá",
         nav_deep: "vs FreqUI",
-        nav_registry: "Kho 900+ Chiến Lược ↗",
+        nav_registry: "Thư viện riêng · mật khẩu ↗",
         nav_pulse: "Radar Phái Sinh ↗",
         nav_login: "Đăng nhập",
         nav_open_studio: "Mở Studio →",
-        hero_badge: "● 18 Chiến Lược Đã Kiểm Toán Trên 6,7 Tháng Dữ Liệu Đóng Băng →",
+        hero_badge: "{total} chiến lược · {long} kiểm định 6,7 tháng · {short} chỉ sàng lọc 1 tháng →",
         hero_title: "Đừng Tin Ảnh Chụp Backtest.<br/>Hãy Kiểm Chứng Gói <code>SHA-256</code>.",
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
         hero_cta_open: "🚀 Mở FreqPilot Studio →",
         hero_cta_demo: "✨ Dùng Thử Studio Trên Web (Không cần cài)",
-        hero_cta_starter: "🎁 Tải Gói Mẫu SHA-256 ($0)",
+        hero_cta_starter: "Xem kết quả mẫu miễn phí →",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Kết Nối & Đăng Nhập FreqPilot Studio",
         mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc dùng ngay bản Web Demo không cần cài đặt):",
@@ -1976,23 +1976,23 @@ cd freqpilot
         sec_cmp_title: "Đang Dùng Freqtrade Gốc Hoặc Bản Fork FreqUI Ultimate?",
         sec_cmp_sub: "FreqUI gốc thiếu công cụ kiểm định nghiên cứu khép kín; trong khi bản fork FreqUI Ultimate buộc thay thế engine chính thức và báo lỗi <code>404 Endpoint Not Found</code> khi nối vào Freqtrade gốc. FreqPilot giải quyết triệt để cả hai:",
         cmp_cta_btn: "Xem Trang Đối Chiếu Chuyên Sâu (vs FreqUI) →",
-        sec1_title: "Bảng Kiểm Toán Trực Quan: 15 Chiến Lược Quét Tự Động (Từ 291 Lượt Quét)",
+        sec1_title: "Bảng kiểm định công khai · {total} chiến lược",
         sec1_sub: "Chạy trên cùng giao thức đóng băng của <strong>Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, vốn <code>10.000 USDT</code>, stake <code>1.000 USDT</code>, phí <code>0,05%</code> mỗi chiều, không tinh chỉnh tham số):",
-        filter_all: "Tất cả (15)",
-        filter_survived: "✓ Sống sót qua 6,7 tháng (5)",
-        filter_dropped: "✕ Bị loại / mẫu ngắn (10)",
+        filter_all: "Tất cả ({total})",
+        filter_survived: "✓ Sống sót qua 6,7 tháng ({survived})",
+        filter_dropped: "✕ Bị loại / mẫu ngắn ({dropped})",
         sec3_title: "Gói Hồ Sơ Chiến Lược Đóng Băng (`Verified Dossiers`)",
-        sec3_sub: "Công cụ FreqPilot mở miễn phí 100% theo giấy phép GPL-3.0. Để tiết kiệm hàng trăm giờ tự quét, lọc nhiễu và kiểm định dữ liệu, bạn có thể nhận trực tiếp các gói <code>freqpilot-10k-&lt;id&gt;.zip</code> đã xác minh <code>SHA-256</code> để nạp 1 chạm vào máy của bạn.",
+        sec3_sub: "Xem kết quả mẫu công khai ngay trong trình duyệt. Whop cung cấp các gói ZIP để dùng trong Studio.",
         p1_badge: "Open-Source + Gói Mẫu Miễn Phí",
         p1_title: "Starter Bundle & Studio",
         p1_unit: "/ miễn phí trọn đời",
-        p1_list: "<li><strong>01 Gói mẫu đóng băng <code>SHA-256</code></strong> (<code>TrendCoreBagging1h</code> · vốn <code>10.000 USDT</code>) + hồ sơ song ngữ EN/VI để kiểm chứng <code>Archive Replay</code> ngay.</li><li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li><li>Tra cứu kho 900+ chiến lược công khai tại <code>strategies.freqpilot.dev</code>.</li>",
-        p1_cta: "🎁 Nhận Gói Mẫu SHA-256 ($0) →",
+        p1_list: "<li>Xem kết quả công khai của TrendCoreBagging1h ngay trong demo.</li><li>Whop cung cấp gói Starter ZIP miễn phí. Thư viện riêng yêu cầu mật khẩu riêng.</li>",
+        p1_cta: "Mở gói Starter ZIP trên Whop ($0) ↗",
         p1_gh: "Mã Nguồn GitHub (GPL-3.0) ↗",
         p2_badge: "Khuyên Dùng · Mua 1 Lần",
         p2_title: "Verified Strategy Pack v1",
         p2_unit: "/ trọn bộ 5 gói 10k",
-        p2_list: "<li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5 tài liệu <code>Dossier (.md)</code> song ngữ EN/VI</strong> + <code>RELEASE-MANIFEST-10K.json</code> + script kiểm tra <code>SHA-256</code> tự động.</li><li>Giao tự động tức thì qua <strong>Whop</strong> · Nạp vào FreqPilot trong 5 giây.</li>",
+        p2_list: "<li><strong>5 gói <code>freqpilot-10k-&lt;id&gt;.zip</code></strong> (6,7 tháng <code>5m</code> + funding đóng băng, vốn chuẩn <code>10.000 USDT</code>): <code>RocketHunterSma501h</code>, <code>TarsisVolTargetSma501h</code>, <code>DikibagastEmaRsi1h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5 tài liệu <code>Dossier (.md)</code> song ngữ EN/VI</strong> + <code>RELEASE-MANIFEST-10K.json</code> + script kiểm tra <code>SHA-256</code> tự động.</li><li>Giao tự động tức thì qua <strong>Whop</strong> · Nạp vào FreqPilot trong 5 giây.</li>",
         p2_cta: "⚡ Tải Trọn Bộ Qua Whop ($39) →",
         p_pay_methods: "Visa/Mastercard · Apple Pay · PayPal · USDT/USDC",
         p3_badge: "Hội Viên Định Kỳ · VIP Lab",
@@ -2009,12 +2009,6 @@ cd freqpilot
         sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 lệnh)",
         p2_sens_t: "🎛️ Ma Trận Độ Nhạy 2D (`cc6fd90d38` — 9/9 Ô Đều Dương, Vốn 10k)",
         p2_sens_p: "9 lần chạy Backtest độc lập trên kỳ 6,7 tháng (`DikibagastEmaRsi1h`, vốn `10.000 USDT`, stake `1.000 USDT`): vùng lân cận `ema_short × rsi_offset` đều sinh lời từ `+279.89` đến `+497.65 USDT` với MaxDD `≤ 1.91%`.",
-        p2_wfa_t: "🛡️ Walk-Forward &amp; Holdout Tách Khỏi Hyperopt (`3215a26798`)",
-        p2_wfa_p: "Kiểm chứng chống Overfit ở quy mô vốn `10.000 USDT`: Bộ tham số gốc (Baseline) đánh bại ứng viên do Hyperopt tối ưu trên cả OOS #1 lẫn kỳ Holdout hồi cứu (`2026-09-16 → 2026-10-21`):",
-        p2_wfa_tl: "Timeline Chia Cửa Sổ Walk-Forward:",
-        p2_wfa_oos_sub: "Test độc lập",
-        p2_wfa_hold: "Đối Chiếu Trên Kỳ Holdout (`2026-09-16 → 2026-10-21`):",
-        p2_wfa_w1: "Đối Chiếu Trên Cửa Sổ #1 OOS (`2026-08-04 → 2026-09-08`):",
         p3_flow_t: "🧭 Quy Trình 11 Bước Dẫn Đường Theo Trạng Thái Thực",
         p3_flow_p: "Thanh Context Strip 4 thẻ &amp; Banner gợi ý tự động kiểm tra trạng thái mã, dữ liệu, gói ZIP và kiểm định trước khi mở khóa bước tiếp theo:",
         c1_h: "01 · MÃ NGUỒN",
@@ -2040,10 +2034,10 @@ cd freqpilot
         th_pnl: "Lãi / Lỗ Ròng (Vốn 10.000 USDT)",
         th_trades: "Số lệnh",
         th_class: "Phân loại",
-        grp_a_hdr: "NHÓM A · GIAO THỨC CHUẨN 6,7 THÁNG (<code>20260401–20261021</code> · Chi tiết <code>5m</code> · Vốn <code>10.000 USDT</code> · Stake <code>1.000 USDT</code> · 10 Chiến lược)",
-        grp_b_hdr: "NHÓM B · SÀNG LỌC RIÊNG KỲ 1 THÁNG (<code>20260918–20261021</code> · Chi tiết <code>1m</code> · Không xếp hạng chung với kỳ 6,7 tháng · 5 Chiến lược)",
+        grp_a_hdr: "{long} chiến lược · Kiểm định 6,7 tháng · 2026-04-01 → 2026-10-21 · 5m",
+        grp_b_hdr: "{short} chiến lược · Chỉ sàng lọc 1 tháng · 2026-09-18 → 2026-10-21 · 1m",
         cl_2d: "★ Đạt 9/9 Độ nhạy 2D (10k)",
-        cl_wfa: "✓ Đạt 9/9 Độ nhạy &amp; Holdout (10k)",
+        cl_wfa: "9/9 ô độ nhạy dương · Tham số gốc thắng ứng viên ở kỳ giữ lại",
         cl_pos: "✓ Sống sót lãi dương 6,7m",
         cl_keep: "✓ Giữ lãi dương 6,7m",
         cl_neg1x: "✕ Biến thể 1x âm ở mẫu 6,7m",
@@ -2055,8 +2049,6 @@ cd freqpilot
         cl_1m_drop: "✕ Âm ở kỳ sàng lọc 1 tháng",
         sec4_notice: "<b>Tuyên bố miễn trừ &amp; Giới hạn bằng chứng:</b> FreqPilot là công cụ phần mềm nghiên cứu và kiểm định kỹ thuật (khóa cứng <code>dry_run=true</code>, <code>1x Isolated</code>), không phải dịch vụ tư vấn đầu tư tài chính hay cam kết lợi nhuận tương lai. Gói lưu đóng băng mã Python, tham số và dữ liệu nến/mark/funding local nhưng không đóng băng metadata thị trường trực tuyến của Binance ở các gói cũ.",
         probe_checking: "Đang kiểm tra kết nối máy chủ Studio…",
-        hero_win_title_init: "DikibagastEmaRsi1h · 1h · Vốn 10.000 USDT · SHA-256: 355afab9d5",
-        hero_sha_init: "b9f8eb39c3 · Vốn 10.000 USDT (Stake 1.000) · lookahead: false",
         fw1_pill: "Cổng 01 · Data Integrity",
         fw1_h: "Dữ Liệu Futures Đa Độ Phân Giải (5m + Mark + Funding)",
         fw1_p: "Không chạy backtest thiếu phí qua đêm. Mọi lần chạy đều khóa cứng bộ dữ liệu Feather local kèm kiểm toán độ phủ:",
@@ -2106,21 +2098,34 @@ cd freqpilot
         cmp_r8_c: "⚠️ Thiếu cổng chặn kích hoạt nhầm",
       },
       en: {
+        access_contact: "Ask the maintainers about library access on GitHub ↗",
+        cl_top: "Highest long-window P&L",
+        sensitivity_label: "2D sensitivity",
+        view_evidence: "View in demo →",
+        highlight_status: "Backtest · Positive P&L",
+        metric_return: "Return (%)",
+        metric_win_rate: "Win rate",
+        metric_max_drawdown: "Max drawdown",
+        metric_expectancy_trade: "Expectancy / trade",
+        metric_protocol: "Protocol",
+        metric_cumulative_closed_trade_p_l_usdt: "Cumulative closed-trade P&L · USDT · 2026-04-01 → 2026-10-21",
+        metric_drawdown_of_account_equity: "Drawdown (% of account equity)",
+        metric_monthly_closed_trade_p_l_usdt: "Monthly closed-trade P&L (2026 · USDT)",
         nav_studio: "Demo",
         nav_compare: "Compare",
         nav_audit: "Leaderboard",
         nav_dossiers: "Pricing",
         nav_deep: "vs FreqUI",
-        nav_registry: "900+ Strategy Hub ↗",
+        nav_registry: "Private library · password ↗",
         nav_pulse: "Anomaly Radar ↗",
         nav_login: "Log in",
         nav_open_studio: "Open Studio →",
-        hero_badge: "● 18 Strategies Audited on 6.7 Months of Frozen Futures Data →",
+        hero_badge: "{total} strategies · {long} tested over 6.7 months · {short} screened for one month only →",
         hero_title: "Don't Trust Backtest Screenshots.<br/>Verify the <code>SHA-256</code> Frozen Bundle.",
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
         hero_cta_open: "🚀 Launch FreqPilot Studio →",
         hero_cta_demo: "✨ Try Web Studio Demo (No Install)",
-        hero_cta_starter: "🎁 Free Starter Bundle ($0)",
+        hero_cta_starter: "Open free sample results →",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Connect & Sign In to FreqPilot Studio",
         mod_sub: "Select your running FreqPilot instance, or try the instant Web Sandbox with zero installation:",
@@ -2139,23 +2144,23 @@ cd freqpilot
         sec_cmp_title: "Switching from Standard FreqUI or FreqUI Ultimate?",
         sec_cmp_sub: "Standard FreqUI is a bot monitor, not a research studio; meanwhile, the FreqUI Ultimate fork forces you off the official Freqtrade engine (returning <code>404</code> on official backends). FreqPilot gives you the best of both:",
         cmp_cta_btn: "Read Full Architecture & 8-Strategy Benchmark →",
-        sec1_title: "Public Audit Leaderboard: 15 Automated Discovery Strategies (291 Scanner Runs)",
+        sec1_title: "Public audit · {total} strategies",
         sec1_sub: "Executed under a single frozen protocol on <strong>official Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, <code>10,000 USDT</code> wallet, <code>1,000 USDT</code> stake, <code>0.05%</code> fee/side, zero parameter tuning):",
-        filter_all: "All Audited (15)",
-        filter_survived: "✓ Survived 6.7-Month Window (5)",
-        filter_dropped: "✕ Eliminated / Short-Only (10)",
+        filter_all: "All Audited ({total})",
+        filter_survived: "✓ Survived 6.7-Month Window ({survived})",
+        filter_dropped: "✕ Eliminated / Short-Only ({dropped})",
         sec3_title: "Cryptographically Verified Strategy Bundles (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot Studio is 100% free and open-source (GPL-3.0). Save hundreds of hours of screening and data auditing by importing pre-verified <code>freqpilot-10k-&lt;id&gt;.zip</code> bundles directly into your workspace.",
+        sec3_sub: "Open the public sample results in your browser. Whop lists the downloadable ZIP bundles for Studio.",
         p1_badge: "Open-Source + Free Starter",
         p1_title: "Starter Bundle & Studio",
         p1_unit: "/ free forever",
-        p1_list: "<li><strong>01 Frozen <code>SHA-256</code> Starter Bundle</strong> (<code>TrendCoreBagging1h</code> · <code>10,000 USDT</code> protocol) + bilingual Dossier to test <code>Archive Replay</code> instantly.</li><li>Full FreqPilot Studio source code on GitHub (GPL-3.0).</li><li>Access to 900+ screened strategies on <code>strategies.freqpilot.dev</code>.</li>",
-        p1_cta: "🎁 Get Free Starter Bundle ($0) →",
+        p1_list: "<li>Explore the public TrendCoreBagging1h results in the demo.</li><li>Whop offers the free Starter ZIP. The private library requires its own password.</li>",
+        p1_cta: "View Starter ZIP on Whop ($0) ↗",
         p1_gh: "GitHub Repository (GPL-3.0) ↗",
         p2_badge: "Best Value · One-Time Purchase",
         p2_title: "Verified Strategy Pack v1",
         p2_unit: "/ 5 frozen 10k bundles",
-        p2_list: "<li><strong>5x <code>freqpilot-10k-&lt;id&gt;.zip</code> archives</strong> (6.7m <code>5m</code> + actual funding frozen, <code>10,000 USDT</code> wallet): <code>RocketHunterSma501h</code> (+721 USDT), <code>TarsisVolTargetSma501h</code> (+648 USDT), <code>DikibagastEmaRsi1h</code> (+478 USDT), <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5x Bilingual <code>Dossier (.md)</code> specs</strong> + <code>RELEASE-MANIFEST-10K.json</code> + 1-click <code>SHA-256</code> verifier script.</li><li>Instant automated delivery via <strong>Whop</strong> · Import in 5 seconds.</li>",
+        p2_list: "<li><strong>5x <code>freqpilot-10k-&lt;id&gt;.zip</code> archives</strong> (6.7m <code>5m</code> + actual funding frozen, <code>10,000 USDT</code> wallet): <code>RocketHunterSma501h</code>, <code>TarsisVolTargetSma501h</code>, <code>DikibagastEmaRsi1h</code>, <code>BdrEmaRideFutures1h</code>, <code>TrendCoreBagging1h</code>.</li><li><strong>5x Bilingual <code>Dossier (.md)</code> specs</strong> + <code>RELEASE-MANIFEST-10K.json</code> + 1-click <code>SHA-256</code> verifier script.</li><li>Instant automated delivery via <strong>Whop</strong> · Import in 5 seconds.</li>",
         p2_cta: "⚡ Instant Access via Whop ($39) →",
         p_pay_methods: "Card · Apple Pay · PayPal · USDC/USDT",
         p3_badge: "Recurring · VIP Research Lab",
@@ -2172,12 +2177,6 @@ cd freqpilot
         sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 trades)",
         p2_sens_t: "🎛️ 2D Sensitivity Matrix (`cc6fd90d38` — 9/9 Positive Cells, 10k Capital)",
         p2_sens_p: "9 independent 6.7-month backtests (`DikibagastEmaRsi1h`, `10,000 USDT` wallet, `1,000 USDT` stake): the entire `ema_short × rsi_offset` neighborhood stayed profitable from `+279.89` to `+497.65 USDT` with MaxDD `≤ 1.91%`.",
-        p2_wfa_t: "🛡️ Walk-Forward &amp; Sealed Holdout vs. Hyperopt (`3215a26798`)",
-        p2_wfa_p: "Anti-overfitting verification at `10,000 USDT` scale: the untuned Baseline beat the Hyperopt-tuned candidate on both Window #1 OOS and the sealed Holdout (`2026-09-16 → 2026-10-21`):",
-        p2_wfa_tl: "Walk-Forward Window Split Timeline:",
-        p2_wfa_oos_sub: "Independent OOS",
-        p2_wfa_hold: "Sealed Holdout Comparison (`2026-09-16 → 2026-10-21`):",
-        p2_wfa_w1: "Window #1 OOS Comparison (`2026-08-04 → 2026-09-08`):",
         p3_flow_t: "🧭 State-Aware 11-Step Guided Research Flow",
         p3_flow_p: "The 4-card Context Strip &amp; Recommendation Banner verify source revision, candle/funding data, frozen ZIP integrity, and bias audits before unlocking the next step:",
         c1_h: "01 · SOURCE CODE",
@@ -2203,10 +2202,10 @@ cd freqpilot
         th_pnl: "Net P&amp;L (10,000 USDT Wallet)",
         th_trades: "Trades",
         th_class: "Classification",
-        grp_a_hdr: "GROUP A · STANDARD 6.7-MONTH PROTOCOL (<code>20260401–20261021</code> · <code>5m</code> Detail · <code>10,000 USDT</code> Wallet · <code>1,000 USDT</code> Stake · 10 Strategies)",
-        grp_b_hdr: "GROUP B · 1-MONTH SCREENING ONLY (<code>20260918–20261021</code> · <code>1m</code> Detail · Not ranked with 6.7m survivors · 5 Strategies)",
+        grp_a_hdr: "{long} strategies · 6.7-month backtest · 2026-04-01 → 2026-10-21 · 5m",
+        grp_b_hdr: "{short} strategies · One-month screening only · 2026-09-18 → 2026-10-21 · 1m",
         cl_2d: "★ Passed 9/9 2D Grid (10k)",
-        cl_wfa: "✓ Passed 9/9 2D &amp; Holdout (10k)",
+        cl_wfa: "9/9 positive sensitivity cells · Baseline beat candidate on holdout",
         cl_pos: "✓ Survived Positive 6.7m",
         cl_keep: "✓ Stayed Positive 6.7m",
         cl_neg1x: "✕ 1x Variant Negative (6.7m)",
@@ -2218,8 +2217,6 @@ cd freqpilot
         cl_1m_drop: "✕ Negative in 1m Screen",
         sec4_notice: "<b>Disclaimer &amp; Scope of Evidence:</b> FreqPilot is an open-source quantitative software &amp; technical auditing tool (hard-locked <code>dry_run=true</code>, <code>1x Isolated</code>), not financial advice or a guarantee of future returns. Frozen bundles seal Python source, parameters, and local feather candle/mark/8h funding data.",
         probe_checking: "Checking Studio server connection…",
-        hero_win_title_init: "DikibagastEmaRsi1h · 1h · 10,000 USDT Wallet · SHA-256: 355afab9d5",
-        hero_sha_init: "b9f8eb39c3 · 10,000 USDT Wallet (Stake 1,000) · lookahead: false",
         fw1_pill: "Gate 01 · Data Integrity",
         fw1_h: "Multi-Resolution Futures Data (5m + Mark + Funding)",
         fw1_p: "Never backtest without overnight funding fees. Every run locks the local Feather dataset with full coverage auditing:",
@@ -2269,21 +2266,49 @@ cd freqpilot
         cmp_r8_c: "⚠️ Lacks live-activation guardrails",
       },
       zh: {
+        p1_list: "<li>在演示中查看 TrendCoreBagging1h 的公开结果。</li><li>Whop 提供免费 Starter ZIP。私有策略库需要单独的密码。</li>",
+        access_contact: "在 GitHub 咨询维护者如何获得权限 ↗",
+        grp_a_hdr: "{long} 个策略 · 6.7 个月回测 · 2026-04-01 → 2026-10-21 · 5m",
+        grp_b_hdr: "{short} 个策略 · 仅 1 个月筛选 · 2026-09-18 → 2026-10-21 · 1m",
+        cl_top: "长期回测收益最高",
+        sensitivity_label: "二维敏感度",
+        view_evidence: "在演示中查看 →",
+        highlight_status: "回测 · 盈利",
+        th_strat: "策略",
+        th_tf: "周期",
+        th_pnl: "净盈亏（本金 10,000 USDT）",
+        th_trades: "交易数",
+        th_class: "分类",
+        cl_2d: "9/9 个敏感度单元格盈利",
+        cl_wfa: "9/9 个单元格盈利 · 留出期原始参数胜出",
+        cl_pos: "长期回测盈利",
+        cl_keep: "长期回测盈利",
+        cl_neg1x: "1x 版本长期亏损",
+        cl_flip: "长期结果转负",
+        cl_simp: "简化版本长期亏损",
+        cl_1m_neg: "短期盈利，长期亏损",
+        cl_single: "单仓版本长期亏损",
+        cl_15m: "仅一个月的 15m 数据",
+        cl_1m_drop: "一个月筛选期亏损",
+        u_trades: "笔交易",
+        sb_diki: "<b>DikibagastEmaRsi1h</b> (30 笔交易)",
+        sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 笔交易)",
+        sb_rocket: "<b>RocketHunterSma501h</b> (8 笔交易)",
         nav_studio: "演示",
         nav_compare: "对比",
         nav_audit: "榜单",
         nav_dossiers: "方案",
         nav_deep: "vs原版",
-        nav_registry: "900+策略库 ↗",
+        nav_registry: "私有策略库 · 密码 ↗",
         nav_pulse: "衍生品雷达 ↗",
         nav_login: "登录",
         nav_open_studio: "进入工作台 →",
-        hero_badge: "● 18 个公开策略已完成 6.7 个月冻结期货数据实证审计 →",
+        hero_badge: "{total} 个策略 · {long} 个回测 6.7 个月 · {short} 个仅筛选 1 个月 →",
         hero_title: "拒绝回测截图造假。<br/>用 <code>SHA-256</code> 冻结证据包说话。",
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
         hero_cta_open: "🚀 启动 FreqPilot 工作台 →",
         hero_cta_demo: "✨ 网页直接试用（免安装）",
-        hero_cta_starter: "🎁 免费领取体验包 ($0)",
+        hero_cta_starter: "查看免费样本结果 →",
         hero_cta_gh: "GitHub 开源 ↗",
         mod_title: "连接并登录 FreqPilot 工作台",
         mod_sub: "连接本地运行的 FreqPilot 节点，或直接打开免安装网页体验版：",
@@ -2302,35 +2327,63 @@ cd freqpilot
         sec_cmp_title: "正在使用原版 FreqUI 或 FreqUI Ultimate 分支版？",
         sec_cmp_sub: "原版 FreqUI 缺乏策略研发闭环工具；而 FreqUI Ultimate 强迫替换官方引擎（连接官方后端会报 <code>404</code>）。FreqPilot 完美兼具两者优势：",
         cmp_cta_btn: "查看完整架构与 8 策略对标报告 →",
-        sec1_title: "公开实证审计榜单：15 个自动发掘策略（源自 291 次扫描）",
+        sec1_title: "公开审核 · {total} 个策略",
         sec1_sub: "基于<strong>官方 Freqtrade 2026.9</strong> 统一冻结协议运行（<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>，逐仓 <code>1x</code>，<code>10,000 USDT</code> 本金，<code>1,000 USDT</code> 单笔，<code>0.05%</code> 手续费，零参数微调）：",
-        filter_all: "全部策略 (15)",
-        filter_survived: "✓ 通过 6.7 个月长周期检验 (5)",
-        filter_dropped: "✕ 长周期淘汰 / 短样本 (10)",
+        filter_all: "全部策略 ({total})",
+        filter_survived: "✓ 通过 6.7 个月长周期检验 ({survived})",
+        filter_dropped: "✕ 长周期淘汰 / 短样本 ({dropped})",
         sec3_title: "密码学签名策略档案包 (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot 工作台 100% 免费开源（GPL-3.0）。您可以直接获取经过 <code>SHA-256</code> 校验的 <code>freqpilot-10k-&lt;id&gt;.zip</code> 档案包，5 秒内一键导入本地复现。",
-        p1_cta: "🎁 免费领取 SHA-256 体验包 ($0) →",
+        sec3_sub: "在浏览器中打开公开样本结果。可下载的 Studio ZIP 包由 Whop 提供。",
+        p1_cta: "在 Whop 查看 Starter ZIP ($0) ↗",
         p2_cta: "⚡ 通过 Whop 立即获取全套 5 策略包 ($39) →",
         p3_cta: "🔒 加入 Quant Lab 会员 ($29/月) →",
         sec4_title: "三步在本地启动 FreqPilot",
         sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
       },
       ru: {
+        p1_list: "<li>Откройте результаты TrendCoreBagging1h в демо.</li><li>Бесплатный Starter ZIP доступен на Whop. Для частной библиотеки нужен отдельный пароль.</li>",
+        access_contact: "Спросить о доступе у автора на GitHub ↗",
+        grp_a_hdr: "{long} стратегий · тест за 6,7 месяца · 2026-04-01 → 2026-10-21 · 5m",
+        grp_b_hdr: "{short} стратегий · только месячный скрининг · 2026-09-18 → 2026-10-21 · 1m",
+        cl_top: "Лучшая прибыль за длинный период",
+        sensitivity_label: "Двумерная чувствительность",
+        view_evidence: "Открыть в демо →",
+        highlight_status: "Бэктест · Прибыль",
+        th_strat: "Стратегия",
+        th_tf: "Таймфрейм",
+        th_pnl: "Прибыль / убыток (капитал 10 000 USDT)",
+        th_trades: "Сделки",
+        th_class: "Статус",
+        cl_2d: "Прибыль в 9 из 9 ячеек",
+        cl_wfa: "9 из 9 ячеек в плюсе · базовые параметры лучше на отложенном периоде",
+        cl_pos: "Прибыль за длинный период",
+        cl_keep: "Прибыль за длинный период",
+        cl_neg1x: "Убыток версии 1x за длинный период",
+        cl_flip: "Убыток при расширении периода",
+        cl_simp: "Убыток упрощённой версии",
+        cl_1m_neg: "Прибыль за месяц, убыток за длинный период",
+        cl_single: "Убыток при одной позиции",
+        cl_15m: "Свечи 15m только за месяц",
+        cl_1m_drop: "Убыток при месячном скрининге",
+        u_trades: "сделок",
+        sb_diki: "<b>DikibagastEmaRsi1h</b> (30 сделок)",
+        sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 сделок)",
+        sb_rocket: "<b>RocketHunterSma501h</b> (8 сделок)",
         nav_studio: "Демо",
         nav_compare: "Сравнение",
         nav_audit: "Аудит",
         nav_dossiers: "Тарифы",
         nav_deep: "vs FreqUI",
-        nav_registry: "База 900+ ↗",
+        nav_registry: "Частная библиотека · пароль ↗",
         nav_pulse: "Радар ↗",
         nav_login: "Войти",
         nav_open_studio: "Открыть Studio →",
-        hero_badge: "● 18 стратегий проверены на 6,7 мес. замороженных данных →",
+        hero_badge: "{total} стратегий · {long} за 6,7 месяца · {short} только за месяц →",
         hero_title: "Не верьте скриншотам бэктестов.<br/>Проверяйте <code>SHA-256</code> пакет.",
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
         hero_cta_open: "🚀 Открыть FreqPilot Studio →",
         hero_cta_demo: "✨ Веб-демо Studio (Без установки)",
-        hero_cta_starter: "🎁 Бесплатный пакет ($0)",
+        hero_cta_starter: "Открыть бесплатный пример →",
         hero_cta_gh: "GitHub ↗",
         mod_title: "Подключение и вход в FreqPilot Studio",
         mod_sub: "Подключитесь к локальному серверу или откройте интерактивную веб-версию без установки:",
@@ -2349,35 +2402,63 @@ cd freqpilot
         sec_cmp_title: "Переходите с оригинального FreqUI или форка FreqUI Ultimate?",
         sec_cmp_sub: "В стандартном FreqUI нет исследовательской среды, а форк FreqUI Ultimate требует замены официального движка. FreqPilot объединяет лучшее:",
         cmp_cta_btn: "Подробное сравнение архитектуры и 8 стратегий →",
-        sec1_title: "Публичный аудит: 15 стратегий из 291 запуска сканера",
+        sec1_title: "Публичный аудит · {total} стратегий",
         sec1_sub: "Выполнено по единому замороженному протоколу на <strong>официальном Freqtrade 2026.9</strong> (<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, Isolated <code>1x</code>, депозит <code>10,000 USDT</code>, ставка <code>1,000 USDT</code>, комиссия <code>0.05%</code>, без подгонки параметров):",
-        filter_all: "Все (15)",
-        filter_survived: "✓ Прошли окно 6.7 мес. (5)",
-        filter_dropped: "✕ Отсеяны / короткое окно (10)",
+        filter_all: "Все ({total})",
+        filter_survived: "✓ Прошли окно 6.7 мес. ({survived})",
+        filter_dropped: "✕ Отсеяны / короткое окно ({dropped})",
         sec3_title: "Проверенные архивы стратегий (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot на 100% бесплатен и открыт (GPL-3.0). Импортируйте проверенные пакеты <code>freqpilot-10k-&lt;id&gt;.zip</code> в один клик и запускайте Archive Replay локально.",
-        p1_cta: "🎁 Бесплатный стартовый пакет ($0) →",
+        sec3_sub: "Просмотрите открытый пример в браузере. Архивы ZIP для Studio доступны на Whop.",
+        p1_cta: "Starter ZIP на Whop ($0) ↗",
         p2_cta: "⚡ Купить 5 проверенных пакетов на Whop ($39) →",
         p3_cta: "🔒 Подписка Quant Lab ($29/мес) →",
         sec4_title: "Запуск FreqPilot за 3 команды",
         sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
       },
       ko: {
+        p1_list: "<li>데모에서 TrendCoreBagging1h의 공개 결과를 확인하세요.</li><li>Whop에서 무료 Starter ZIP을 제공합니다. 비공개 라이브러리에는 별도 비밀번호가 필요합니다.</li>",
+        access_contact: "GitHub에서 관리자에게 접근 권한 문의 ↗",
+        grp_a_hdr: "전략 {long}개 · 6.7개월 백테스트 · 2026-04-01 → 2026-10-21 · 5m",
+        grp_b_hdr: "전략 {short}개 · 1개월 선별만 · 2026-09-18 → 2026-10-21 · 1m",
+        cl_top: "장기 수익 1위",
+        sensitivity_label: "2D 민감도",
+        view_evidence: "데모에서 보기 →",
+        highlight_status: "백테스트 · 수익",
+        th_strat: "전략",
+        th_tf: "시간봉",
+        th_pnl: "순손익 (자본 10,000 USDT)",
+        th_trades: "거래 수",
+        th_class: "분류",
+        cl_2d: "민감도 9칸 모두 수익",
+        cl_wfa: "민감도 9칸 수익 · 홀드아웃 기본값 우세",
+        cl_pos: "장기 백테스트 수익",
+        cl_keep: "장기 백테스트 수익",
+        cl_neg1x: "장기 1배 전략 손실",
+        cl_flip: "장기 구간 손실 전환",
+        cl_simp: "단순화한 장기 전략 손실",
+        cl_1m_neg: "단기 수익, 장기 손실",
+        cl_single: "단일 포지션 장기 손실",
+        cl_15m: "15분봉 1개월 선별만",
+        cl_1m_drop: "1개월 선별 손실",
+        u_trades: "거래",
+        sb_diki: "<b>DikibagastEmaRsi1h</b> (30 거래)",
+        sb_tarsis: "<b>TarsisVolTargetSma501h</b> (8 거래)",
+        sb_rocket: "<b>RocketHunterSma501h</b> (8 거래)",
         nav_studio: "데모",
         nav_compare: "비교",
         nav_audit: "리더보드",
         nav_dossiers: "요금제",
         nav_deep: "vs FreqUI",
-        nav_registry: "900+ 전략 허브 ↗",
+        nav_registry: "비공개 라이브러리 · 비밀번호 ↗",
         nav_pulse: "이상 징후 레이더 ↗",
         nav_login: "로그인",
         nav_open_studio: "스튜디오 열기 →",
-        hero_badge: "● 6.7개월 동결 선물 데이터로 검증된 18개 공개 전략 →",
+        hero_badge: "전략 {total}개 · 6.7개월 검증 {long}개 · 1개월 선별만 {short}개 →",
         hero_title: "백테스트 스크린샷을 믿지 마세요.<br/><code>SHA-256</code> 동결 번들을 검증하세요.",
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
         hero_cta_open: "🚀 FreqPilot 스튜디오 열기 →",
         hero_cta_demo: "✨ 웹 스튜디오 체험판 (무설치)",
-        hero_cta_starter: "🎁 무료 스타터 번들 ($0)",
+        hero_cta_starter: "무료 샘플 결과 보기 →",
         hero_cta_gh: "GitHub ↗",
         mod_title: "FreqPilot 스튜디오 연결 및 로그인",
         mod_sub: "실행 중인 로컬 서버에 연결하거나 설치 없이 웹 스튜디오 체험판을 바로 열어보세요:",
@@ -2396,14 +2477,14 @@ cd freqpilot
         sec_cmp_title: "순정 FreqUI 또는 FreqUI Ultimate 포크에서 전환하시나요?",
         sec_cmp_sub: "순정 FreqUI는 연구 도구가 부족하고, FreqUI Ultimate 포크는 공식 엔진 교체를 강제합니다. FreqPilot은 공식 2026.9 엔진 위에서 완벽한 연구 스튜디오를 제공합니다:",
         cmp_cta_btn: "아키텍처 및 8대 전략 비교 보고서 보기 →",
-        sec1_title: "공개 감사 리더보드: 291회 스캔에서 선별된 15개 전략",
+        sec1_title: "공개 검증 · 전략 {total}개",
         sec1_sub: "<strong>공식 Freqtrade 2026.9</strong> 단일 동결 프로토콜로 실행(<code>BTC/USDT:USDT</code> + <code>ETH/USDT:USDT</code>, 격리 <code>1x</code>, <code>10,000 USDT</code> 시드, <code>1,000 USDT</code> 스테이크, 편도 수수료 <code>0.05%</code>, 파라미터 튜닝 없음):",
-        filter_all: "전체 (15)",
-        filter_survived: "✓ 6.7개월 장기 구간 통과 (5)",
-        filter_dropped: "✕ 장기 구간 탈락 / 단기 (10)",
+        filter_all: "전체 ({total})",
+        filter_survived: "✓ 6.7개월 장기 구간 통과 ({survived})",
+        filter_dropped: "✕ 장기 구간 탈락 / 단기 ({dropped})",
         sec3_title: "암호화 검증된 전략 번들 (`Verified Dossiers`)",
-        sec3_sub: "FreqPilot 스튜디오는 100% 무료 오픈소스(GPL-3.0)입니다. <code>SHA-256</code> 검증된 <code>freqpilot-10k-&lt;id&gt;.zip</code> 번들을 5초 만에 가져와 직접 재검증하세요.",
-        p1_cta: "🎁 무료 스타터 번들 받기 ($0) →",
+        sec3_sub: "브라우저에서 공개 샘플 결과를 확인하세요. Studio용 ZIP 번들은 Whop에서 제공합니다.",
+        p1_cta: "Whop에서 Starter ZIP 보기 ($0) ↗",
         p2_cta: "⚡ Whop에서 5종 검증 번들 즉시 다운로드 ($39) →",
         p3_cta: "🔒 Quant Lab 멤버십 가입 ($29/월) →",
         sec4_title: "3단계 명령어로 로컬에서 FreqPilot 시작하기",
@@ -2413,15 +2494,23 @@ cd freqpilot
 
     function setSiteLang(lang) {
       const dict = SITE_I18N[lang] || SITE_I18N.en;
+      const table = document.getElementById("audit-table");
+      const count = selector => table.querySelectorAll(selector).length;
+      const counts = {
+        total: count("tr[data-group]"), long: count('[data-period="long"] tr[data-group]'),
+        short: count('[data-period="short"] tr[data-group]'),
+        survived: count('[data-group="survived"]'), dropped: count('[data-group="dropped"]')
+      };
       document.documentElement.lang = lang;
       const sel = document.getElementById('lang-select');
       if (sel && sel.value !== lang) sel.value = lang;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         const val = dict[key] || (lang !== 'vi' ? SITE_I18N.en[key] : null);
-        if (val) el.innerHTML = val;
+        if (val) el.innerHTML = val.replace(/\{(total|long|short|survived|dropped)\}/g, (_, key) => counts[key]);
       });
       try { localStorage.setItem('freqpilot.site.lang', lang); } catch {}
+      updateLanguageLinks(lang);
       if (typeof renderHeroCharts === 'function') renderHeroCharts(activeHeroKey);
     }
 
@@ -2546,14 +2635,13 @@ cd freqpilot
     }
 
     (function init() {
-      renderHeroCharts('diki');
       let savedStudio = null;
       try { savedStudio = localStorage.getItem("freqpilot.studio.url"); } catch {}
       document.getElementById("studio-url-input").value = savedStudio || defaultStudioHost();
       void probeStudioServer();
 
       const initial = detectInitialLang();
-      if (initial !== 'vi') setSiteLang(initial);
+      setSiteLang(initial);
     })();
   </script>
 </body>

@@ -1464,6 +1464,7 @@
     "runs": {
       "RocketHunterSma501h": {
         "id": "fd368e3110",
+        "revision": "484cebfefabdb02966797488d23a0fbd17011a1000b1e87d0d1dbed791ef8613",
         "sha256": "a97bd2aa06dc9820f0abbe9994753e6dda4bb65ac8a4018bf93c78118ee27a83",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1484,6 +1485,7 @@
       },
       "TarsisVolTargetSma501h": {
         "id": "f29c4c1d9a",
+        "revision": "71d5550cb1bb7719141356ea5c5eb6fdc518f46a66ad4021f6a4528c2bb9d474",
         "sha256": "d3a223a86af423d589d9ec11908a4f979e01089eed9ac5da85ee31462dead0ff",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1504,6 +1506,7 @@
       },
       "DikibagastEmaRsi1h": {
         "id": "b9f8eb39c3",
+        "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
         "sha256": "355afab9d5883dd75cb59fa0bf3ff262381e22ad0d1a5e6e347cccaabe428f25",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1524,6 +1527,7 @@
       },
       "BdrEmaRideFutures1h": {
         "id": "92ea977e05",
+        "revision": "1474053fd71fadb635b0018eb1ea2c1cfd3c96411f1fa6410132b18eefdd4896",
         "sha256": "9ab6887c4d2256d11fb17d47135e4912f3dae4074e29fc1670f529530caac13d",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1544,6 +1548,7 @@
       },
       "TrendCoreBagging1h": {
         "id": "b0692cd1ca",
+        "revision": "f1260f2655d0d1cec9988811ac867acd4f43be0f46528d826ff5d64e1c3ea855",
         "sha256": "2c5d5ff39e7212a534a98ba3ff22a26a3a7f2ad00547a6b6680f59fbc8c0eacc",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1564,6 +1569,7 @@
       },
       "CodexBotVibe4h": {
         "id": "916aad1ea4",
+        "revision": "c1e250bee2ccd79fcf65292247ccc624ca6827bee2f454c77fa84859c09981cb",
         "sha256": "2ae3b88a63f1933cfb714fe86461f225b3fd06a618effab704e1bfc1eaa6dbad",
         "timerange": "20260401-20261021",
         "detail": "5m",
@@ -1784,6 +1790,7 @@
       },
       "StarterFuturesResearch": {
         "id": "813a9807e1",
+        "revision": "b336e80227ea8a39d13f0592c2dd97496f130d0a7135f09c71095c1d97bb3fe6",
         "sha256": "44ac8d16221b0a9dd7b703f00f1bdd96c2d5a92bdd899cac0a58352044ef3fa2",
         "timerange": "20260918-20261021",
         "detail": "1m",
@@ -2211,6 +2218,8 @@
       "finished_at": "2026-11-01T10:27:03.273200+00:00"
     },
     "dikibagast_wfa_10k": {
+      "strategy": "DikibagastEmaRsi1h",
+      "revision": "b82e4ae101e57e49d60259b0a8bd9563ff9649a013899ecf37b71bc458a760ce",
       "id": "3215a26798d5424db99191b3e6e14296",
       "status": "success",
       "holdout_timerange": "20260916-20261021",

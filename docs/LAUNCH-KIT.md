@@ -83,7 +83,7 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
 ## 4. Bài Đăng Mở Màn Đã Đồng Bộ Chuẩn `10.000 USDT` Cho Reddit (`r/algotrading` & `r/freqtrade`)
 
 **Title:**
-> I built an open-source Research Studio on top of official Freqtrade 2026.9 (Sealed Holdout WFA, 2D Sensitivity Matrix, SHA-256 Frozen Bundles) and audited 15 public crypto strategies (from 291 scanner runs) over 6.7 months of 5m + funding data — here is what survived.
+> I built an open-source Research Studio on top of official Freqtrade 2026.9 (Sealed Holdout WFA, 2D Sensitivity Matrix, SHA-256 Frozen Bundles) and published the results of 10 long-window backtests and five one-month-only screens. [Public audit](https://freqpilot.dev/#audit)
 
 **Body:**
 > Most open-source strategy backtests fail in production for three reasons: unverified funding rates, 30-day cherry-picking, or Hyperopt curve-fitting without an untuned baseline comparison on a sealed holdout.
@@ -92,12 +92,12 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
 >
 > **Key findings from auditing 15 automated discovery candidates (`BTC/USDT:USDT` + `ETH/USDT:USDT`, Isolated `1x`, `10,000 USDT` wallet, `1,000 USDT` stake, `0.05%` fee/side, actual funding, zero parameter tuning):**
 > 1. **Why 1-month backtests lie:** `CodexBotVibe4h` (4h 20-bar breakout + daily EMA50/RSI14 filter) looked profitable on a short 33-day `1m` window, but flipped to **`-190.53 USDT` (`-1.91%`, 30 trades, PF `0.70`)** across the full 6.7-month `5m` window (`2026-04-01` to `2026-10-21`). Similarly, `CodeAlchemyLowPassFisher1h` flipped from positive on 1m to **`-235.51 USDT` (PF `0.52`)**.
-> 2. **2D Parameter Neighbor Continuity:** Only 5 of the 15 strategies survived the 6.7-month multi-regime window with zero lookahead/recursive bias (`RocketHunterSma501h` at **`+721.18 USDT`, PF `14.90`**, `TarsisVolTargetSma501h` at **`+648.03 USDT`, PF `13.49`**, and `DikibagastEmaRsi1h` at **`+478.54 USDT`, 30 trades, MaxDD `0.86%`, PF `3.69`** — where all 9/9 neighbor cells in its `3×3` 2D Sensitivity Matrix remained profitable).
+> 2. **2D Parameter Neighbor Continuity:** Five of the ten long-window strategies had positive net P&L (`RocketHunterSma501h` at **`+721.18 USDT`, 8 trades, PF `14.90`**, `TarsisVolTargetSma501h` at **`+648.03 USDT`, 8 trades, PF `13.49`**, and `DikibagastEmaRsi1h` at **`+478.54 USDT`, 30 trades, MaxDD `0.86%`, PF `3.69`** — where all 9/9 neighbor cells in its `3×3` 2D Sensitivity Matrix remained profitable).
 > 3. **Untuned Baseline vs. Hyperopt on Sealed Holdout:** In Walk-Forward validation on `DikibagastEmaRsi1h`, the untuned source-aligned baseline outperformed the Hyperopt-selected candidate on both Window #1 OOS and the sealed post-Hyperopt holdout window.
 >
 > Interactive web demo (no install needed), full leaderboard, and GPL-3.0 source code:
-> - Live Web Demo & Leaderboard: https://freqpilot.dev
-> - Public 900+ Strategy Screening Registry: https://strategies.freqpilot.dev
+> - Public benchmark table: https://freqpilot.dev/#audit
+> - Public Starter example: https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h#workspace
 > - GitHub Repository: https://github.com/mrcanlaco/freqpilot
 >
 > Feedback and critiques on the validation protocol are very welcome!
