@@ -28,3 +28,5 @@ jobs:
       - name: UI, offline backend and clean configuration checks
         shell: pwsh
         run: ./Check.ps1 -InstallDependencies
+      - name: Public site evidence and browser journeys
+        run: node --test ui/scripts/check-public-site.mjs

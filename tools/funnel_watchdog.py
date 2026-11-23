@@ -41,7 +41,7 @@ BROWSER_UA = (
 
 WEB_TARGETS = [
     ("freqpilot_landing", "https://freqpilot.dev/", "FreqPilot"),
-    ("strategy_library", "https://strategies.freqpilot.dev/", ""),
+    ("strategy_library", "https://strategies.freqpilot.dev/", 'action="/library-auth/login"'),
     ("peakpulse_radar", "https://pulse.freqpilot.dev/", ""),
 ]
 

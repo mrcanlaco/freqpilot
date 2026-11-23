@@ -6,11 +6,11 @@ Tài liệu này đã được đồng bộ **100% theo chuẩn kiểm toán `10
 
 ## 1. Tệp Sản Phẩm Đã Đóng Gói Sẵn Để Kéo Thả Lên Whop (`work/whop-ready/`)
 
-Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và hồ sơ song ngữ (EN/VI) đã được đóng gói và kiểm định khớp `SHA-256` 100% tại thư mục `E:\FreqPilot\freqpilot\work\whop-ready\`:
+Các tệp chuẩn bị cho Whop nằm trong `work/whop-ready/`. Trước khi gắn tệp vào sản phẩm Starter, kiểm tra cả các ZIP bên trong để xác nhận chỉ phân phối nội dung thuộc mẫu TrendCore, bao gồm cấu hình và nhật ký backtest. Ghi SHA-256 của đúng tệp giao cho khách. Nếu cần đóng gói lại, giữ nguyên bản backtest nguồn và tính SHA-256 mới cho tệp phân phối.
 
 | Gói Bán Trên Whop | Tệp Tải Lên Whop (`Files / Downloadables`) | Dung lượng | Nội dung bên trong |
 | :--- | :--- | :---: | :--- |
-| **1. Free Starter Bundle (`$0`)** *(Phễu thu Email tự động)* | `Whop-Product-1-Free-Starter-Bundle.zip` | `~5,49 MB` | `freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip` + `dossier-10k-TrendCoreBagging1h-b0692cd1ca.md` + `README-QUICKSTART.md` |
+| **1. Free Starter Bundle (`$0`)** | `Whop-Product-1-Free-Starter-Bundle.zip` | `~5,49 MB` | `freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip` + `dossier-10k-TrendCoreBagging1h-b0692cd1ca.md` + `README-QUICKSTART.md` |
 | **2. Verified Strategy Pack v1 (`$39` Mua 1 Lần)** | `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` | `~27,46 MB` | Trọn bộ **5 gói `.zip` chuẩn 10k** + **5 tài liệu `Dossier (.md)` song ngữ EN/VI** + `RELEASE-MANIFEST-10K.json` + `Verify-Bundles.ps1` + `README-PACK-V1.md` |
 | **3. Quant Lab Membership (`$29/tháng`)** *(Thuê bao định kỳ)* | Dùng chung `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` + gắn app **Telegram** của Whop | `~27,46 MB` | Mở khóa ngay Pack v1 + nhận 2–4 gói chiến lược mới/tháng + Báo cáo Paper 1x hàng tuần + Tự động thêm/thu hồi quyền vào nhóm Telegram VIP |
 
@@ -39,10 +39,10 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
    - **Tách riêng quyền truy cập Free vs Paid**:
      - Giữ app `Files` hiện tại (`exp_39ZIm4Hj840OUX`) cho gói **Free Starter (`$0`)** → chỉ kéo thả `Whop-Product-1-Free-Starter-Bundle.zip`.
      - Bấm **`+ Add app` → `Files`** tạo thêm 1 app Files thứ hai đặt tên **`Pro Strategy Pack Files`** và **chỉ gắn cho 2 gói trả phí (`$39` & `$29/tháng`)** → kéo thả `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` vào đó (để khách nhận gói `$0` không tải nhầm được gói `$39`).
-   - Toàn bộ 3 đường dẫn sản phẩm đã được điền sẵn vào `WHOP_CHECKOUT_CONFIG` trong `E:\FreqPilot\freqpilot\site\index.html`:
+   - Trang chủ và demo dùng chung `STARTER_WHOP_URL` trong `site/public-evidence.js`. Trang chủ khai báo ba sản phẩm trong `site/index.html`:
      ```js
      const WHOP_CHECKOUT_CONFIG = {
-       free_starter: "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/",
+       free_starter: STARTER_WHOP_URL,
        pack_v1: "https://whop.com/freqpilot/freqpilot-verified-strategy-pack-v1-10k-benchmark/",
        membership: "https://whop.com/freqpilot/freqpilot-quant-lab-membership/",
        store_url: "https://whop.com/freqpilot/"
@@ -83,7 +83,7 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
 ## 4. Bài Đăng Mở Màn Đã Đồng Bộ Chuẩn `10.000 USDT` Cho Reddit (`r/algotrading` & `r/freqtrade`)
 
 **Title:**
-> I built an open-source Research Studio on top of official Freqtrade 2026.9 (Sealed Holdout WFA, 2D Sensitivity Matrix, SHA-256 Frozen Bundles) and audited 15 public crypto strategies (from 291 scanner runs) over 6.7 months of 5m + funding data — here is what survived.
+> I built an open-source Research Studio on top of official Freqtrade 2026.9 (Sealed Holdout WFA, 2D Sensitivity Matrix, SHA-256 Frozen Bundles) and published the results of 10 long-window backtests and five one-month-only screens. [Public audit](https://freqpilot.dev/#audit)
 
 **Body:**
 > Most open-source strategy backtests fail in production for three reasons: unverified funding rates, 30-day cherry-picking, or Hyperopt curve-fitting without an untuned baseline comparison on a sealed holdout.
@@ -92,12 +92,13 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
 >
 > **Key findings from auditing 15 automated discovery candidates (`BTC/USDT:USDT` + `ETH/USDT:USDT`, Isolated `1x`, `10,000 USDT` wallet, `1,000 USDT` stake, `0.05%` fee/side, actual funding, zero parameter tuning):**
 > 1. **Why 1-month backtests lie:** `CodexBotVibe4h` (4h 20-bar breakout + daily EMA50/RSI14 filter) looked profitable on a short 33-day `1m` window, but flipped to **`-190.53 USDT` (`-1.91%`, 30 trades, PF `0.70`)** across the full 6.7-month `5m` window (`2026-04-01` to `2026-10-21`). Similarly, `CodeAlchemyLowPassFisher1h` flipped from positive on 1m to **`-235.51 USDT` (PF `0.52`)**.
-> 2. **2D Parameter Neighbor Continuity:** Only 5 of the 15 strategies survived the 6.7-month multi-regime window with zero lookahead/recursive bias (`RocketHunterSma501h` at **`+721.18 USDT`, PF `14.90`**, `TarsisVolTargetSma501h` at **`+648.03 USDT`, PF `13.49`**, and `DikibagastEmaRsi1h` at **`+478.54 USDT`, 30 trades, MaxDD `0.86%`, PF `3.69`** — where all 9/9 neighbor cells in its `3×3` 2D Sensitivity Matrix remained profitable).
+> 2. **2D Parameter Neighbor Continuity:** Five of the ten long-window strategies had positive net P&L (`RocketHunterSma501h` at **`+721.18 USDT`, 8 trades, PF `14.90`**, `TarsisVolTargetSma501h` at **`+648.03 USDT`, 8 trades, PF `13.49`**, and `DikibagastEmaRsi1h` at **`+478.54 USDT`, 30 trades, MaxDD `0.86%`, PF `3.69`** — where all 9/9 neighbor cells in its `3×3` 2D Sensitivity Matrix remained profitable).
 > 3. **Untuned Baseline vs. Hyperopt on Sealed Holdout:** In Walk-Forward validation on `DikibagastEmaRsi1h`, the untuned source-aligned baseline outperformed the Hyperopt-selected candidate on both Window #1 OOS and the sealed post-Hyperopt holdout window.
 >
 > Interactive web demo (no install needed), full leaderboard, and GPL-3.0 source code:
-> - Live Web Demo & Leaderboard: https://freqpilot.dev
-> - Public 900+ Strategy Screening Registry: https://strategies.freqpilot.dev
+> - Public benchmark table: https://freqpilot.dev/#audit
+> - View the public TrendCore sample: https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h&lang=en#workspace
+> - Sign up free on Whop to download one SHA-256 Starter bundle with the configuration and backtest logs. The full strategy library is for paying customers. [Get the free Starter](https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/)
 > - GitHub Repository: https://github.com/mrcanlaco/freqpilot
 >
 > Feedback and critiques on the validation protocol are very welcome!

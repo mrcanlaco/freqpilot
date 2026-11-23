@@ -11,7 +11,7 @@ Tài liệu này cung cấp sẵn nội dung **Copy-Paste 1 chạm** cho **Autom
 ```markdown
 Welcome to **FreqPilot Quant Lab**! 🧪
 
-Your **SHA-256 Verified Starter Bundle** (`TrendCoreBagging1h` — `10,000 USDT` benchmark) is unlocked in the **Files** tab on the left.
+Your free Whop registration gives you one **SHA-256 Verified Starter Bundle** in **Files**, including the configuration and backtest logs for the TrendCoreBagging1h benchmark. You can also view the public sample in your browser. The full strategy library is for paying customers. [View the TrendCore sample](https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h&lang=en#workspace)
 
 **Verify it on your own CPU in 60 seconds:**
 1. Download `Whop-Product-1-Free-Starter-Bundle.zip` from the **Files** app.
@@ -30,22 +30,22 @@ https://whop.com/freqpilot/freqpilot-verified-strategy-pack-v1-10k-benchmark/?ut
 *Cài đặt tại: Tab `Content` trong Whop Hub `FreqPilot` (hiển thị cho thành viên gói `$0`)*
 
 ### Tiêu đề:
-`Why 10 of 15 "Profitable" Crypto Strategies Failed Our 6.7-Month Multi-Regime Audit (And the 5 That Survived)`
+`What the Long-Window Backtests Showed Across Ten Strategies`
 
 ### Nội dung:
 ```markdown
 Most public Freqtrade strategies look great on a 30-day window and bleed out in live markets.
 
-When we ran **9,111+ strategy candidates** through our automated screening pipeline (`https://strategies.freqpilot.dev/?utm_source=whop_content&utm_medium=hub&utm_campaign=day2_education`) and stress-tested the top 15 automated discovery finalists on **6.7 months of 5m intrabar + 8h funding data (`2026-04-01` → `2026-10-21`, `10,000 USDT` wallet, `1x` Isolated)**:
+Ten strategies completed the 6.7-month BTC/ETH backtest on a 10,000 USDT wallet. The public table lists five more strategies screened only for one month. [See both groups](https://freqpilot.dev/#audit)
 
 - ❌ **`CodexBotVibe4h`**: Looked profitable on 1-month data → flipped to **`-190.53 USDT` (PF `0.70`)** over 6.7 months.
 - ❌ **`CodeAlchemyLowPassFisher1h`**: Flipped to **`-235.51 USDT` (PF `0.52`)** once historical funding & multi-regime chop were included.
 - ✅ **Only 5 strategies survived** with `lookahead-analysis = False`, `recursive-analysis = OK`, and positive net expectancy:
-  1. **`RocketHunterSma501h`** — **+721.18 USDT (`+7.21%`)** · MaxDD `0.51%` · PF `14.90`
-  2. **`TarsisVolTargetSma501h`** — **+648.03 USDT (`+6.48%`)** · MaxDD `0.51%` · PF `13.49` *(9/9 2D Sensitivity pass)*
+  1. **`RocketHunterSma501h`** — **+721.18 USDT (`+7.21%`)** · 8 trades · MaxDD `0.51%` · PF `14.90`
+  2. **`TarsisVolTargetSma501h`** — **+648.03 USDT (`+6.48%`)** · 8 trades · MaxDD `0.51%` · PF `13.49` *(9/9 2D Sensitivity pass)*
   3. **`DikibagastEmaRsi1h`** — **+478.54 USDT (`+4.79%`)** · 30 trades · MaxDD `0.86%` · PF `3.69` *(Beat Hyperopt on Sealed WFA Holdout)*
-  4. **`BdrEmaRideFutures1h`** — **+116.99 USDT (`+1.17%`)** · MaxDD `1.50%` · PF `1.78`
-  5. **`TrendCoreBagging1h`** — **+28.58 USDT (`+0.29%`)** · MaxDD `0.15%` · PF `2.90` *(Included in your Free Starter)*
+  4. **`BdrEmaRideFutures1h`** — **+116.99 USDT (`+1.17%`)** · 8 trades · MaxDD `1.50%` · PF `1.78`
+  5. **`TrendCoreBagging1h`** — **+28.58 USDT (`+0.29%`)** · 2 trades · MaxDD `0.15%` · PF `2.90` *(Included in your Free Starter)*
 
 ### Ready to inspect and replay all 5 survivors locally?
 - 📦 **One-Time Pack v1 ($39 — Lifetime access to all 5 SHA-256 10K ZIPs + Bilingual Dossiers + `Verify-Bundles.ps1`):**
