@@ -9,6 +9,7 @@ const summary = JSON.parse(await readFile(new URL('benchmarks/scanned-strategies
 const audit = summary.protocol_10k_audit;
 const proof = audit.dikibagast_wfa_10k;
 const origin = 'http://public-site.test';
+const starter = 'https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/';
 const langs = ['vi', 'en', 'zh', 'ru', 'ko'];
 const missing = ['Chưa có kết quả', 'No results yet', '暂无结果', 'Пока нет результатов', '아직 결과가 없습니다'];
 const demoNames = ['DikibagastEmaRsi1h', 'RocketHunterSma501h', 'TarsisVolTargetSma501h',
@@ -151,7 +152,28 @@ for (const lang of ['en', 'vi']) {
       assert.ok(await page.locator('#studio-modal.open').isVisible());
       await fits();
       await page.locator('#studio-modal .modal-close').click();
-      await page.locator('#starter-bundle [data-i18n="hero_cta_starter"]').click();
+      const card = page.locator('#starter-bundle');
+      assert.equal(await card.locator('a').count(), 2);
+      const details = lang === 'vi' ? /cấu hình và nhật ký backtest/ : /configuration and backtest logs/;
+      const paidAccess = lang === 'vi' ? /dành cho khách trả phí/ : /for paying customers/;
+      assert.match(await card.innerText(), details);
+      assert.match(await card.innerText(), paidAccess);
+      assert.match(await card.locator('#starter-download').innerText(), /Whop.*\$0/);
+      const gates = page.locator('a[data-i18n="nav_registry"]');
+      assert.equal(await gates.count(), 2);
+      for (const gate of await gates.all()) {
+        assert.equal(new URL(await gate.getAttribute('href')).origin, 'https://strategies.freqpilot.dev');
+        assert.match(await gate.textContent(), lang === 'vi' ? /Thư viện trả phí/ : /Paid library/);
+      }
+      const openWhop = async link => {
+        const waitForPopup = page.waitForEvent('popup');
+        await link.click();
+        const whop = await waitForPopup;
+        await whop.waitForURL(url => url.origin + url.pathname === starter);
+        await whop.close();
+      };
+      await openWhop(card.locator('#starter-download'));
+      await card.locator('[data-i18n="hero_cta_starter"]').click();
       assert.equal(await page.locator('#ws-name').innerText(), 'TrendCoreBagging1h');
       assert.match(await page.locator('#ctx3-val').innerText(), /\+28[.,]58 USDT · 2 (trades|lệnh)/);
       assert.match(await page.locator('#tab-content').innerText(), lang === 'vi' ? /Lãi \/ lỗ ròng/ : /Net P&L/);
@@ -159,17 +181,19 @@ for (const lang of ['en', 'vi']) {
       await page.locator('.step-btn').nth(7).click();
       assert.match(await page.locator('[data-walk]').innerText(), lang === 'vi' ? /Chưa có kết quả/ : /No results yet/);
       await fits();
-      await page.locator('#ws-download-btn').click();
-      assert.equal(new URL(page.url()).hash, '#starter-bundle');
-      assert.equal(await page.locator('html').getAttribute('lang'), lang);
-      await fits();
-      const popup = page.waitForEvent('popup');
-      await page.locator('#starter-bundle [data-i18n="p1_cta"]').click();
-      const whop = await popup;
-      await whop.waitForURL(/^https:\/\/whop\.com\/freqpilot\/freqpilot-free-starter-bundle-sha-256-verified\//);
-      await whop.close();
-      await page.locator('#starter-bundle [data-i18n="hero_cta_starter"]').click();
+      for (const link of await page.locator('#btn-buy-pack, #ws-download-btn, .sandbox-banner .primary').all()) {
+        assert.equal(await link.getAttribute('href'), starter);
+        assert.match(await link.innerText(), /Whop.*\$0/);
+      }
+      const banner = page.locator('.sandbox-banner');
+      assert.match(await banner.innerText(), details);
+      assert.match(await banner.innerText(), paidAccess);
+      await openWhop(page.locator('#ws-download-btn'));
+      assert.equal(await page.locator('#lang-select').inputValue(), lang);
+      assert.equal(await page.locator('#ws-name').innerText(), 'TrendCoreBagging1h');
       await page.locator('.strat-item').filter({ hasText: proof.strategy }).click();
+      assert.doesNotMatch(await banner.innerText(), details);
+      assert.equal(await page.locator('#btn-buy-pack').getAttribute('target'), '_self');
       await page.locator('.step-btn').nth(7).click();
       assert.match(await page.locator('[data-walk]').innerText(), /\+94[.,]44/);
       await fits();

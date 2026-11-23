@@ -22,7 +22,7 @@ Dikibagast's successful holdout record covers September 16 through October 21. T
 
 The leaderboard contains 15 distinct discovery strategies. Ten have a long-window backtest (April 1 through October 21, 5m detail), of which five had positive P&L. Five have only the shorter screen (September 18 through October 21, 1m detail). CodeAlchemy has both runs and appears once using its long-window result. The bundled StarterFuturesResearch control is outside the discovery list.
 
-From a fresh browser, the Starter card opened TrendCoreBagging1h with its public +28.58 USDT, two trades and the long test period. The live Whop product page offered a free Starter download. The live private library displayed a password form. GitHub Issues was enabled as a contact route. Post-registration library entitlement, credential delivery and the authorization owner still need product-owner confirmation. [Starter card](starter-vi.png) · [Public sample](sample-vi.png)
+From a fresh browser, the Starter card opened TrendCoreBagging1h with its public +28.58 USDT, two trades and the long test period. The second action opens free Whop registration for one SHA-256 Starter bundle containing the configuration and backtest logs. Starter requires no password from the project owner. The full library is reserved for paying customers. The public Whop page displayed “Join for free” and the private library displayed its password form to an anonymous visitor. Verification covered public entry points up to sign-up. [Whop Starter](https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/) · [Paid library](https://strategies.freqpilot.dev/) · [Starter card](starter-vi.png) · [Public sample](sample-vi.png)
 
 ## Browser checks
 

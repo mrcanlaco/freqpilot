@@ -25,6 +25,8 @@ from funnel_watchdog import _send_telegram
 FREQPILOT_ROOT = Path(r"E:\FreqPilot\freqpilot")
 OPS_DIR = FREQPILOT_ROOT / "work" / "ops"
 MANIFEST_10K = FREQPILOT_ROOT / "work" / "release-dossiers-10k" / "RELEASE-MANIFEST-10K.json"
+PUBLIC_SAMPLE = "https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h"
+FREE_STARTER = "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/"
 SYNC_STATUS = Path(r"E:\QuantResearch\strategy-library-sync\status.json")
 
 
@@ -77,8 +79,8 @@ Top 3 verified survivors (`lookahead-analysis = False`, `recursive-analysis = OK
 
 **Tweet 4/4:**
 Don't trust screenshots — verify the `SHA-256` archive on your own CPU in 5 seconds.
-• Free Open-Source Studio + `$0` Starter Bundle: https://freqpilot.dev/?utm_source=x_thread&utm_medium=social&utm_campaign=weekly_audit#pricing
-• Browse {candidates:,}+ screened strategies: https://strategies.freqpilot.dev/?utm_source=x_thread&utm_medium=social&utm_campaign=weekly_audit
+• View the public TrendCore sample: {PUBLIC_SAMPLE}&lang=en&utm_source=x_thread&utm_medium=social&utm_campaign=weekly_audit#workspace
+• Sign up free on Whop for the Starter ZIP, configuration and backtest logs: {FREE_STARTER}?utm_source=x_thread&utm_medium=social&utm_campaign=weekly_audit
 
 ---
 
@@ -88,8 +90,8 @@ Don't trust screenshots — verify the `SHA-256` archive on your own CPU in 5 se
 What {jobs:,} automated Freqtrade 2026.9 audit jobs taught us about 30-day backtest illusions (with reproducible SHA-256 bundles)
 
 **Footer Link to include in post/comment:**
-- Open-Source Studio & Free Reproducible Starter ZIP (`$0`): https://freqpilot.dev/?utm_source=reddit_post&utm_medium=organic&utm_campaign=weekly_audit#pricing
-- Public Strategy Evidence Library ({candidates:,} candidates): https://strategies.freqpilot.dev/?utm_source=reddit_post&utm_medium=organic&utm_campaign=weekly_audit
+- View the public TrendCore sample: {PUBLIC_SAMPLE}&lang=en&utm_source=reddit_post&utm_medium=organic&utm_campaign=weekly_audit#workspace
+- Sign up free on Whop for the SHA-256 Starter ZIP with the configuration and backtest logs: {FREE_STARTER}?utm_source=reddit_post&utm_medium=organic&utm_campaign=weekly_audit
 
 ---
 
@@ -99,15 +101,17 @@ What {jobs:,} automated Freqtrade 2026.9 audit jobs taught us about 30-day backt
 🧪 **FreqPilot Weekly Quant Audit Snapshot ({today})**
 • Screened Registry: **{candidates:,} candidates** ({jobs:,} benchmark jobs synced)
 • #1 Verified 10K Survivor: `{top1['strategy']}` (**+{top1['profit_usdt']:.2f} USDT**, MaxDD `{top1['max_drawdown_pct']:.2f}%`, PF `{top1['profit_factor']:.2f}`)
-• Grab the **$0 SHA-256 Starter Bundle** or unlock **All 5 Verified 10K Bundles ($39)**:
-👉 https://freqpilot.dev/?utm_source=telegram_channel&utm_medium=broadcast&utm_campaign=weekly_audit#pricing
+• View the public TrendCore sample: {PUBLIC_SAMPLE}&lang=en&utm_source=telegram_channel&utm_medium=broadcast&utm_campaign=weekly_audit#workspace
+• Get the **$0 SHA-256 Starter Bundle** with free Whop signup: {FREE_STARTER}?utm_source=telegram_channel&utm_medium=broadcast&utm_campaign=weekly_audit
+• View the five Verified 10K bundles ($39): https://freqpilot.dev/?lang=en&utm_source=telegram_channel&utm_medium=broadcast&utm_campaign=weekly_audit#verified-pack
 
 **[VI]**
 🧪 **Báo Cáo Kiểm Toán Chiến Lược Định Lượng Tuần ({today})**
 • Kho sàng lọc tự động: **{candidates:,} chiến lược** ({jobs:,} lô kiểm định chuẩn)
 • Quán quân chuẩn vốn `10.000 USDT`: `{top1['strategy']}` (**+{top1['profit_usdt']:.2f} USDT**, MaxDD `{top1['max_drawdown_pct']:.2f}%`, PF `{top1['profit_factor']:.2f}`)
-• Tải **Gói Mẫu Miễn Phí (`$0`)** hoặc mở khóa trọn bộ **5 Gói Chiến Lược Đóng Băng SHA-256 (`$39`)**:
-👉 https://freqpilot.dev/?utm_source=telegram_channel_vi&utm_medium=broadcast&utm_campaign=weekly_audit#pricing
+• Xem mẫu TrendCore công khai: {PUBLIC_SAMPLE}&lang=vi&utm_source=telegram_channel_vi&utm_medium=broadcast&utm_campaign=weekly_audit#workspace
+• Đăng ký miễn phí trên Whop để tải gói Starter SHA-256 ($0): {FREE_STARTER}?utm_source=telegram_channel_vi&utm_medium=broadcast&utm_campaign=weekly_audit
+• Xem bộ 5 gói Verified 10K ($39): https://freqpilot.dev/?lang=vi&utm_source=telegram_channel_vi&utm_medium=broadcast&utm_campaign=weekly_audit#verified-pack
 """
     out_md.write_text(content, encoding="utf-8")
 

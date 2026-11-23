@@ -110,6 +110,8 @@ const WALK_COPY = {
   ko: { missing: "아직 결과가 없습니다", job: "검증 실행", baseline: "기본 매개변수", candidate: "Hyperopt 후보", trades: "거래", source: "검증 출처 보기", train: "학습", holdout: "홀드아웃" }
 };
 
+const STARTER_WHOP_URL = "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/";
+
 function walkForwardFor(strategy) {
   return WALK_FORWARD.find(w => w.strategy === strategy.id && w.rev === strategy.rev
     && w.runId === strategy.runId && w.sha === strategy.sha && w.id === strategy.walkId);

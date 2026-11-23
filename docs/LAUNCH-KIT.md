@@ -6,11 +6,11 @@ Tài liệu này đã được đồng bộ **100% theo chuẩn kiểm toán `10
 
 ## 1. Tệp Sản Phẩm Đã Đóng Gói Sẵn Để Kéo Thả Lên Whop (`work/whop-ready/`)
 
-Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và hồ sơ song ngữ (EN/VI) đã được đóng gói và kiểm định khớp `SHA-256` 100% tại thư mục `E:\FreqPilot\freqpilot\work\whop-ready\`:
+Các tệp chuẩn bị cho Whop nằm trong `work/whop-ready/`. Trước khi gắn tệp vào sản phẩm Starter, kiểm tra cả các ZIP bên trong để xác nhận chỉ phân phối nội dung thuộc mẫu TrendCore, bao gồm cấu hình và nhật ký backtest. Ghi SHA-256 của đúng tệp giao cho khách. Nếu cần đóng gói lại, giữ nguyên bản backtest nguồn và tính SHA-256 mới cho tệp phân phối.
 
 | Gói Bán Trên Whop | Tệp Tải Lên Whop (`Files / Downloadables`) | Dung lượng | Nội dung bên trong |
 | :--- | :--- | :---: | :--- |
-| **1. Free Starter Bundle (`$0`)** *(Phễu thu Email tự động)* | `Whop-Product-1-Free-Starter-Bundle.zip` | `~5,49 MB` | `freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip` + `dossier-10k-TrendCoreBagging1h-b0692cd1ca.md` + `README-QUICKSTART.md` |
+| **1. Free Starter Bundle (`$0`)** | `Whop-Product-1-Free-Starter-Bundle.zip` | `~5,49 MB` | `freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip` + `dossier-10k-TrendCoreBagging1h-b0692cd1ca.md` + `README-QUICKSTART.md` |
 | **2. Verified Strategy Pack v1 (`$39` Mua 1 Lần)** | `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` | `~27,46 MB` | Trọn bộ **5 gói `.zip` chuẩn 10k** + **5 tài liệu `Dossier (.md)` song ngữ EN/VI** + `RELEASE-MANIFEST-10K.json` + `Verify-Bundles.ps1` + `README-PACK-V1.md` |
 | **3. Quant Lab Membership (`$29/tháng`)** *(Thuê bao định kỳ)* | Dùng chung `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` + gắn app **Telegram** của Whop | `~27,46 MB` | Mở khóa ngay Pack v1 + nhận 2–4 gói chiến lược mới/tháng + Báo cáo Paper 1x hàng tuần + Tự động thêm/thu hồi quyền vào nhóm Telegram VIP |
 
@@ -39,10 +39,10 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
    - **Tách riêng quyền truy cập Free vs Paid**:
      - Giữ app `Files` hiện tại (`exp_39ZIm4Hj840OUX`) cho gói **Free Starter (`$0`)** → chỉ kéo thả `Whop-Product-1-Free-Starter-Bundle.zip`.
      - Bấm **`+ Add app` → `Files`** tạo thêm 1 app Files thứ hai đặt tên **`Pro Strategy Pack Files`** và **chỉ gắn cho 2 gói trả phí (`$39` & `$29/tháng`)** → kéo thả `Whop-Product-2-Verified-Strategy-Pack-v1-10k.zip` vào đó (để khách nhận gói `$0` không tải nhầm được gói `$39`).
-   - Toàn bộ 3 đường dẫn sản phẩm đã được điền sẵn vào `WHOP_CHECKOUT_CONFIG` trong `E:\FreqPilot\freqpilot\site\index.html`:
+   - Trang chủ và demo dùng chung `STARTER_WHOP_URL` trong `site/public-evidence.js`. Trang chủ khai báo ba sản phẩm trong `site/index.html`:
      ```js
      const WHOP_CHECKOUT_CONFIG = {
-       free_starter: "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/",
+       free_starter: STARTER_WHOP_URL,
        pack_v1: "https://whop.com/freqpilot/freqpilot-verified-strategy-pack-v1-10k-benchmark/",
        membership: "https://whop.com/freqpilot/freqpilot-quant-lab-membership/",
        store_url: "https://whop.com/freqpilot/"
@@ -97,7 +97,8 @@ Thay vì phải tải lẻ tẻ từng tệp, toàn bộ gói sản phẩm và h
 >
 > Interactive web demo (no install needed), full leaderboard, and GPL-3.0 source code:
 > - Public benchmark table: https://freqpilot.dev/#audit
-> - Public Starter example: https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h#workspace
+> - View the public TrendCore sample: https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h&lang=en#workspace
+> - Sign up free on Whop to download one SHA-256 Starter bundle with the configuration and backtest logs. The full strategy library is for paying customers. [Get the free Starter](https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/)
 > - GitHub Repository: https://github.com/mrcanlaco/freqpilot
 >
 > Feedback and critiques on the validation protocol are very welcome!

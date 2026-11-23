@@ -11,7 +11,7 @@ Tài liệu này cung cấp sẵn nội dung **Copy-Paste 1 chạm** cho **Autom
 ```markdown
 Welcome to **FreqPilot Quant Lab**! 🧪
 
-Your **SHA-256 Verified Starter Bundle** (`TrendCoreBagging1h` — `10,000 USDT` benchmark) is unlocked in the **Files** tab on the left.
+Your free Whop registration gives you one **SHA-256 Verified Starter Bundle** in **Files**, including the configuration and backtest logs for the TrendCoreBagging1h benchmark. You can also view the public sample in your browser. The full strategy library is for paying customers. [View the TrendCore sample](https://freqpilot.dev/demo.html?strategy=TrendCoreBagging1h&lang=en#workspace)
 
 **Verify it on your own CPU in 60 seconds:**
 1. Download `Whop-Product-1-Free-Starter-Bundle.zip` from the **Files** app.

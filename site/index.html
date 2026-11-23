@@ -781,7 +781,7 @@
         <a href="#audit" data-i18n="nav_audit">Kiểm toán</a>
         <a href="#dossiers" data-i18n="nav_dossiers">Bảng giá</a>
         <a href="/compare.html" data-i18n="nav_deep">vs FreqUI</a>
-        <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_registry">Thư viện riêng ↗</a>
+        <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_registry">Thư viện trả phí ↗</a>
         <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=nav" target="_blank" rel="noopener" data-i18n="nav_pulse">Radar Phái Sinh ↗</a>
       </nav>
       <div class="nav-right">
@@ -812,7 +812,7 @@
       <div class="hero-actions">
         <button type="button" class="btn primary" onclick="quickLaunchStudio()" data-i18n="hero_cta_open">🚀 Mở FreqPilot Studio →</button>
         <a class="btn" href="/demo.html" style="border-color:rgba(16,185,129,0.5);color:var(--pos-bright)" data-i18n="hero_cta_demo">✨ Dùng Thử Studio Trên Web (Không cần cài)</a>
-        <a class="btn" href="/demo.html?strategy=TrendCoreBagging1h#workspace" style="border-color:rgba(56,189,248,0.45);color:var(--accent)" data-i18n="hero_cta_starter">Xem kết quả mẫu miễn phí →</a>
+        <a class="btn" href="/demo.html?strategy=TrendCoreBagging1h#workspace" style="border-color:rgba(56,189,248,0.45);color:var(--accent)" data-i18n="hero_cta_starter">Xem mẫu TrendCore công khai →</a>
         <a class="btn" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="hero_cta_gh">GitHub (GPL-3.0) ↗</a>
       </div>
 
@@ -1487,21 +1487,18 @@ Bằng chứng hiện tại trên máy:
       <div class="grid-3">
         <div class="price-card" id="starter-bundle">
           <div>
-            <span class="pill" data-i18n="p1_badge">Open-Source + Free Lead Magnet</span>
+            <span class="pill" data-i18n="p1_badge">Starter miễn phí</span>
             <h3 style="margin:10px 0 4px" data-i18n="p1_title">Starter Bundle &amp; Studio</h3>
             <div class="price-tag">$0 <small style="font-size:13px;font-weight:400;color:var(--fg-3)" data-i18n="p1_unit">/ miễn phí trọn đời</small></div>
             <ul class="price-list" data-i18n="p1_list">
-              <li><strong>01 Gói mẫu đóng băng <code>SHA-256</code></strong> (<code>TrendCoreBagging1h</code> · chuẩn vốn <code>10.000 USDT</code>) + hồ sơ song ngữ EN/VI để kiểm chứng <code>Archive Replay</code> ngay.</li>
-              <li>Toàn bộ mã nguồn FreqPilot Studio trên GitHub (GPL-3.0).</li>
-              <li>Thư viện riêng yêu cầu mật khẩu riêng.</li>
+              <li>Xem kết quả TrendCoreBagging1h ngay trong trình duyệt, không cần tài khoản.</li>
+              <li>Đăng ký miễn phí trên Whop để tải một gói Starter có mã SHA-256, cấu hình và nhật ký backtest.</li>
+              <li>Thư viện chiến lược đầy đủ dành cho khách trả phí.</li>
             </ul>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <a class="btn primary" href="/demo.html?strategy=TrendCoreBagging1h#workspace" data-i18n="hero_cta_starter">Xem kết quả mẫu miễn phí →</a>
-            <button type="button" class="btn" style="border-color:rgba(56,189,248,0.45);color:var(--accent);justify-content:center" onclick="openWhopCheckout('free_starter')" data-i18n="p1_cta">Mở gói Starter ZIP trên Whop ($0) ↗</button>
-            <a href="https://strategies.freqpilot.dev/" data-i18n="nav_registry">Thư viện riêng · mật khẩu ↗</a>
-            <a href="https://github.com/mrcanlaco/freqpilot/issues" data-i18n="access_contact">Hỏi chủ dự án về quyền thư viện trên GitHub ↗</a>
-            <a class="btn btn-ghost" style="justify-content:center;font-size:12.5px" href="https://github.com/mrcanlaco/freqpilot" target="_blank" rel="noopener" data-i18n="p1_gh">Mã Nguồn GitHub (GPL-3.0) ↗</a>
+            <a class="btn primary" href="/demo.html?strategy=TrendCoreBagging1h#workspace" data-i18n="hero_cta_starter">Xem mẫu TrendCore công khai →</a>
+            <a class="btn" id="starter-download" href="https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/" target="_blank" rel="noopener" data-i18n="p1_cta">Đăng ký Whop để tải Starter ($0) ↗</a>
           </div>
         </div>
 
@@ -1561,7 +1558,7 @@ cd freqpilot
     <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;font-size:13px">
       <a href="https://freqpilot.dev/" style="color:var(--fg);text-decoration:none;font-weight:600">📈 FreqPilot Studio</a>
       <span style="color:var(--fg-3)">·</span>
-      <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none" data-i18n="nav_registry">Thư viện riêng ↗</a>
+      <a href="https://strategies.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none" data-i18n="nav_registry">Thư viện trả phí ↗</a>
       <span style="color:var(--fg-3)">·</span>
       <a href="https://pulse.freqpilot.dev/?utm_source=freqpilot_dev&amp;utm_medium=footer" target="_blank" rel="noopener" style="color:var(--pos-bright);text-decoration:none">⚡ PeakPulse AI Anomaly Radar ↗</a>
       <span style="color:var(--fg-3)">·</span>
@@ -1588,7 +1585,7 @@ cd freqpilot
           ⚡ Proceed to Whop Instant Checkout →
         </a>
         <a class="btn" href="/demo.html?strategy=TrendCoreBagging1h#workspace" data-i18n="hero_cta_starter" style="justify-content:center;border-color:rgba(16,185,129,0.5);color:var(--pos-bright)">
-          Xem kết quả mẫu miễn phí →
+          Xem mẫu TrendCore công khai →
         </a>
       </div>
       <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg-3);line-height:1.5">
@@ -1646,23 +1643,13 @@ cd freqpilot
     // WHOP CHECKOUT CONFIGURATION (Paste your 3 Whop Plan / Checkout URLs here)
     // =========================================================================
     const WHOP_CHECKOUT_CONFIG = {
-      free_starter: "https://whop.com/freqpilot/freqpilot-free-starter-bundle-sha-256-verified/",
+      free_starter: STARTER_WHOP_URL,
       pack_v1: "https://whop.com/freqpilot/freqpilot-verified-strategy-pack-v1-10k-benchmark/",
       membership: "https://whop.com/freqpilot/freqpilot-quant-lab-membership/",
       store_url: "https://whop.com/freqpilot/"
     };
 
     const WHOP_BUNDLE_SPECS = {
-      free_starter: {
-        title: "🎁 Free Reproducible Starter Bundle ($0)",
-        desc: "Includes 1 full SHA-256 frozen 10,000 USDT bundle + bilingual EN/VI Dossier so you can test 1-click Archive Replay locally before upgrading:",
-        manifest: [
-          "• freqpilot-10k-TrendCoreBagging1h-b0692cd1ca.zip (+28.58 USDT · DD 0.15% · PF 2.90)",
-          "  SHA-256: 2c5d5ff39e7212a534a98ba3ff22a26a3a7f2ad00547a6b6680f59fbc8c0eacc",
-          "• dossier-10k-TrendCoreBagging1h-b0692cd1ca.md (EN + VI)"
-        ].join("\n"),
-        btnText: "🎁 Claim Free Starter Bundle on Whop ($0) →"
-      },
       pack_v1: {
         title: "⚡ Verified Strategy Pack v1 — $39 (One-Time)",
         desc: "All 5 survivors from 291 automated discovery runs on official Freqtrade 2026.9 (6.7m 5m+funding frozen protocol, 10,000 USDT wallet, 1x Isolated):",
@@ -1930,7 +1917,6 @@ cd freqpilot
 
     const SITE_I18N = {
       vi: {
-        access_contact: "Hỏi chủ dự án về quyền thư viện trên GitHub ↗",
         cl_top: "Lãi cao nhất kỳ dài",
         sensitivity_label: "Độ nhạy 2D",
         view_evidence: "Xem trong demo →",
@@ -1948,7 +1934,7 @@ cd freqpilot
         nav_audit: "Kiểm toán",
         nav_dossiers: "Bảng giá",
         nav_deep: "vs FreqUI",
-        nav_registry: "Thư viện riêng · mật khẩu ↗",
+        nav_registry: "Thư viện trả phí ↗",
         nav_pulse: "Radar Phái Sinh ↗",
         nav_login: "Đăng nhập",
         nav_open_studio: "Mở Studio →",
@@ -1957,7 +1943,7 @@ cd freqpilot
         hero_lead: "Phòng thí nghiệm định lượng trực quan trên <strong>Freqtrade 2026.9 chính thức</strong>: Biểu đồ Đường vốn & Underwater, Ma trận Độ nhạy 2D, Walk-Forward Holdout và Paper 1x.",
         hero_cta_open: "🚀 Mở FreqPilot Studio →",
         hero_cta_demo: "✨ Dùng Thử Studio Trên Web (Không cần cài)",
-        hero_cta_starter: "Xem kết quả mẫu miễn phí →",
+        hero_cta_starter: "Xem mẫu TrendCore công khai →",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Kết Nối & Đăng Nhập FreqPilot Studio",
         mod_sub: "Chọn máy chủ FreqPilot đang chạy trên máy của bạn (hoặc dùng ngay bản Web Demo không cần cài đặt):",
@@ -1986,9 +1972,8 @@ cd freqpilot
         p1_badge: "Open-Source + Gói Mẫu Miễn Phí",
         p1_title: "Starter Bundle & Studio",
         p1_unit: "/ miễn phí trọn đời",
-        p1_list: "<li>Xem kết quả công khai của TrendCoreBagging1h ngay trong demo.</li><li>Whop cung cấp gói Starter ZIP miễn phí. Thư viện riêng yêu cầu mật khẩu riêng.</li>",
-        p1_cta: "Mở gói Starter ZIP trên Whop ($0) ↗",
-        p1_gh: "Mã Nguồn GitHub (GPL-3.0) ↗",
+        p1_list: "<li>Xem kết quả TrendCoreBagging1h ngay trong trình duyệt, không cần tài khoản.</li><li>Đăng ký miễn phí trên Whop để tải một gói Starter có mã SHA-256, cấu hình và nhật ký backtest.</li><li>Thư viện chiến lược đầy đủ dành cho khách trả phí.</li>",
+        p1_cta: "Đăng ký Whop để tải Starter ($0) ↗",
         p2_badge: "Khuyên Dùng · Mua 1 Lần",
         p2_title: "Verified Strategy Pack v1",
         p2_unit: "/ trọn bộ 5 gói 10k",
@@ -2098,7 +2083,6 @@ cd freqpilot
         cmp_r8_c: "⚠️ Thiếu cổng chặn kích hoạt nhầm",
       },
       en: {
-        access_contact: "Ask the maintainers about library access on GitHub ↗",
         cl_top: "Highest long-window P&L",
         sensitivity_label: "2D sensitivity",
         view_evidence: "View in demo →",
@@ -2116,7 +2100,7 @@ cd freqpilot
         nav_audit: "Leaderboard",
         nav_dossiers: "Pricing",
         nav_deep: "vs FreqUI",
-        nav_registry: "Private library · password ↗",
+        nav_registry: "Paid library ↗",
         nav_pulse: "Anomaly Radar ↗",
         nav_login: "Log in",
         nav_open_studio: "Open Studio →",
@@ -2125,7 +2109,7 @@ cd freqpilot
         hero_lead: "Visual quantitative studio on <strong>official Freqtrade 2026.9</strong>: Interactive Equity & Underwater Curves, 2D Parameter Sensitivity Matrix, Walk-Forward Holdout & 1x Paper.",
         hero_cta_open: "🚀 Launch FreqPilot Studio →",
         hero_cta_demo: "✨ Try Web Studio Demo (No Install)",
-        hero_cta_starter: "Open free sample results →",
+        hero_cta_starter: "View the public TrendCore sample →",
         hero_cta_gh: "GitHub (GPL-3.0) ↗",
         mod_title: "Connect & Sign In to FreqPilot Studio",
         mod_sub: "Select your running FreqPilot instance, or try the instant Web Sandbox with zero installation:",
@@ -2154,9 +2138,8 @@ cd freqpilot
         p1_badge: "Open-Source + Free Starter",
         p1_title: "Starter Bundle & Studio",
         p1_unit: "/ free forever",
-        p1_list: "<li>Explore the public TrendCoreBagging1h results in the demo.</li><li>Whop offers the free Starter ZIP. The private library requires its own password.</li>",
-        p1_cta: "View Starter ZIP on Whop ($0) ↗",
-        p1_gh: "GitHub Repository (GPL-3.0) ↗",
+        p1_list: "<li>View the TrendCoreBagging1h results in your browser without an account.</li><li>Sign up for free on Whop to download one SHA-256-verified Starter bundle with the configuration and backtest logs.</li><li>The full strategy library is for paying customers.</li>",
+        p1_cta: "Join Whop to download Starter ($0) ↗",
         p2_badge: "Best Value · One-Time Purchase",
         p2_title: "Verified Strategy Pack v1",
         p2_unit: "/ 5 frozen 10k bundles",
@@ -2266,8 +2249,7 @@ cd freqpilot
         cmp_r8_c: "⚠️ Lacks live-activation guardrails",
       },
       zh: {
-        p1_list: "<li>在演示中查看 TrendCoreBagging1h 的公开结果。</li><li>Whop 提供免费 Starter ZIP。私有策略库需要单独的密码。</li>",
-        access_contact: "在 GitHub 咨询维护者如何获得权限 ↗",
+        p1_list: "<li>无需账号即可在浏览器中查看 TrendCoreBagging1h 的结果。</li><li>在 Whop 免费注册，即可下载一个经 SHA-256 校验的 Starter 包，内含配置和回测日志。</li><li>完整策略库仅向付费客户开放。</li>",
         grp_a_hdr: "{long} 个策略 · 6.7 个月回测 · 2026-04-01 → 2026-10-21 · 5m",
         grp_b_hdr: "{short} 个策略 · 仅 1 个月筛选 · 2026-09-18 → 2026-10-21 · 1m",
         cl_top: "长期回测收益最高",
@@ -2299,7 +2281,7 @@ cd freqpilot
         nav_audit: "榜单",
         nav_dossiers: "方案",
         nav_deep: "vs原版",
-        nav_registry: "私有策略库 · 密码 ↗",
+        nav_registry: "付费策略库 ↗",
         nav_pulse: "衍生品雷达 ↗",
         nav_login: "登录",
         nav_open_studio: "进入工作台 →",
@@ -2308,7 +2290,7 @@ cd freqpilot
         hero_lead: "基于<strong>官方 Freqtrade 2026.9</strong> 的可视化量化工作台：交互式净值与水下回撤曲线、2D 参数敏感度热力矩阵、Walk-Forward 对照及 1x 模拟盘。",
         hero_cta_open: "🚀 启动 FreqPilot 工作台 →",
         hero_cta_demo: "✨ 网页直接试用（免安装）",
-        hero_cta_starter: "查看免费样本结果 →",
+        hero_cta_starter: "查看 TrendCore 公开样本 →",
         hero_cta_gh: "GitHub 开源 ↗",
         mod_title: "连接并登录 FreqPilot 工作台",
         mod_sub: "连接本地运行的 FreqPilot 节点，或直接打开免安装网页体验版：",
@@ -2334,15 +2316,14 @@ cd freqpilot
         filter_dropped: "✕ 长周期淘汰 / 短样本 ({dropped})",
         sec3_title: "密码学签名策略档案包 (`Verified Dossiers`)",
         sec3_sub: "在浏览器中打开公开样本结果。可下载的 Studio ZIP 包由 Whop 提供。",
-        p1_cta: "在 Whop 查看 Starter ZIP ($0) ↗",
+        p1_cta: "免费注册 Whop 并下载 Starter ($0) ↗",
         p2_cta: "⚡ 通过 Whop 立即获取全套 5 策略包 ($39) →",
         p3_cta: "🔒 加入 Quant Lab 会员 ($29/月) →",
         sec4_title: "三步在本地启动 FreqPilot",
         sec4_sub: "全面兼容 Windows PowerShell 5.1、PowerShell 7 及 Linux/WSL2 + Docker Desktop。"
       },
       ru: {
-        p1_list: "<li>Откройте результаты TrendCoreBagging1h в демо.</li><li>Бесплатный Starter ZIP доступен на Whop. Для частной библиотеки нужен отдельный пароль.</li>",
-        access_contact: "Спросить о доступе у автора на GitHub ↗",
+        p1_list: "<li>Результаты TrendCoreBagging1h можно посмотреть в браузере без аккаунта.</li><li>Зарегистрируйтесь бесплатно на Whop, чтобы скачать один архив Starter с контрольной суммой SHA-256, конфигурацией и журналами бэктеста.</li><li>Полная библиотека стратегий доступна платным клиентам.</li>",
         grp_a_hdr: "{long} стратегий · тест за 6,7 месяца · 2026-04-01 → 2026-10-21 · 5m",
         grp_b_hdr: "{short} стратегий · только месячный скрининг · 2026-09-18 → 2026-10-21 · 1m",
         cl_top: "Лучшая прибыль за длинный период",
@@ -2374,7 +2355,7 @@ cd freqpilot
         nav_audit: "Аудит",
         nav_dossiers: "Тарифы",
         nav_deep: "vs FreqUI",
-        nav_registry: "Частная библиотека · пароль ↗",
+        nav_registry: "Платная библиотека ↗",
         nav_pulse: "Радар ↗",
         nav_login: "Войти",
         nav_open_studio: "Открыть Studio →",
@@ -2383,7 +2364,7 @@ cd freqpilot
         hero_lead: "Визуальная студия на <strong>официальном Freqtrade 2026.9</strong>: кривые капитала и просадки, 2D-матрица чувствительности, Walk-Forward Holdout и 1x Paper.",
         hero_cta_open: "🚀 Открыть FreqPilot Studio →",
         hero_cta_demo: "✨ Веб-демо Studio (Без установки)",
-        hero_cta_starter: "Открыть бесплатный пример →",
+        hero_cta_starter: "Открыть публичный пример TrendCore →",
         hero_cta_gh: "GitHub ↗",
         mod_title: "Подключение и вход в FreqPilot Studio",
         mod_sub: "Подключитесь к локальному серверу или откройте интерактивную веб-версию без установки:",
@@ -2409,15 +2390,14 @@ cd freqpilot
         filter_dropped: "✕ Отсеяны / короткое окно ({dropped})",
         sec3_title: "Проверенные архивы стратегий (`Verified Dossiers`)",
         sec3_sub: "Просмотрите открытый пример в браузере. Архивы ZIP для Studio доступны на Whop.",
-        p1_cta: "Starter ZIP на Whop ($0) ↗",
+        p1_cta: "Скачать Starter за $0 через Whop ↗",
         p2_cta: "⚡ Купить 5 проверенных пакетов на Whop ($39) →",
         p3_cta: "🔒 Подписка Quant Lab ($29/мес) →",
         sec4_title: "Запуск FreqPilot за 3 команды",
         sec4_sub: "Поддерживает Windows PowerShell 5.1, PowerShell 7 и Linux/WSL2 с Docker Desktop."
       },
       ko: {
-        p1_list: "<li>데모에서 TrendCoreBagging1h의 공개 결과를 확인하세요.</li><li>Whop에서 무료 Starter ZIP을 제공합니다. 비공개 라이브러리에는 별도 비밀번호가 필요합니다.</li>",
-        access_contact: "GitHub에서 관리자에게 접근 권한 문의 ↗",
+        p1_list: "<li>계정 없이 브라우저에서 TrendCoreBagging1h 결과를 확인하세요.</li><li>Whop에 무료로 가입하면 설정과 백테스트 로그가 들어 있는 SHA-256 검증 Starter 번들 한 개를 다운로드할 수 있습니다.</li><li>전체 전략 라이브러리는 유료 고객용입니다.</li>",
         grp_a_hdr: "전략 {long}개 · 6.7개월 백테스트 · 2026-04-01 → 2026-10-21 · 5m",
         grp_b_hdr: "전략 {short}개 · 1개월 선별만 · 2026-09-18 → 2026-10-21 · 1m",
         cl_top: "장기 수익 1위",
@@ -2449,7 +2429,7 @@ cd freqpilot
         nav_audit: "리더보드",
         nav_dossiers: "요금제",
         nav_deep: "vs FreqUI",
-        nav_registry: "비공개 라이브러리 · 비밀번호 ↗",
+        nav_registry: "유료 라이브러리 ↗",
         nav_pulse: "이상 징후 레이더 ↗",
         nav_login: "로그인",
         nav_open_studio: "스튜디오 열기 →",
@@ -2458,7 +2438,7 @@ cd freqpilot
         hero_lead: "<strong>공식 Freqtrade 2026.9</strong> 시각적 퀀트 스튜디오: 인터랙티브 수익·낙폭 곡선, 2D 민감도 히트맵, Walk-Forward Holdout 및 1x 페이퍼.",
         hero_cta_open: "🚀 FreqPilot 스튜디오 열기 →",
         hero_cta_demo: "✨ 웹 스튜디오 체험판 (무설치)",
-        hero_cta_starter: "무료 샘플 결과 보기 →",
+        hero_cta_starter: "TrendCore 공개 샘플 보기 →",
         hero_cta_gh: "GitHub ↗",
         mod_title: "FreqPilot 스튜디오 연결 및 로그인",
         mod_sub: "실행 중인 로컬 서버에 연결하거나 설치 없이 웹 스튜디오 체험판을 바로 열어보세요:",
@@ -2484,7 +2464,7 @@ cd freqpilot
         filter_dropped: "✕ 장기 구간 탈락 / 단기 ({dropped})",
         sec3_title: "암호화 검증된 전략 번들 (`Verified Dossiers`)",
         sec3_sub: "브라우저에서 공개 샘플 결과를 확인하세요. Studio용 ZIP 번들은 Whop에서 제공합니다.",
-        p1_cta: "Whop에서 Starter ZIP 보기 ($0) ↗",
+        p1_cta: "Whop 무료 가입 후 Starter 받기 ($0) ↗",
         p2_cta: "⚡ Whop에서 5종 검증 번들 즉시 다운로드 ($39) →",
         p3_cta: "🔒 Quant Lab 멤버십 가입 ($29/월) →",
         sec4_title: "3단계 명령어로 로컬에서 FreqPilot 시작하기",
@@ -2640,6 +2620,7 @@ cd freqpilot
       document.getElementById("studio-url-input").value = savedStudio || defaultStudioHost();
       void probeStudioServer();
 
+      document.getElementById("starter-download").href = buildTrackedWhopUrl(WHOP_CHECKOUT_CONFIG.free_starter, "free_starter");
       const initial = detectInitialLang();
       setSiteLang(initial);
     })();
